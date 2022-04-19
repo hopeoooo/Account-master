@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysOddsConfigureMapper">
+    
+    <resultMap type="SysOddsConfigure" id="SysOddsConfigureResult">
+    	<id     property="id"      column="id"      />
+        <result property="baccaratPump"    column="baccarat_pump"    />
+        <result property="baccaratBankerWin"     column="baccarat_banker_win"     />
+        <result property="baccaratPlayerWin"   column="baccarat_player_win"   />
+        <result property="baccaratTieWin"    column="baccarat_tie_win"    />
+        <result property="baccaratBankerPair"      column="baccarat_banker_pair"      />
+        <result property="baccaratPlayerPair"    column="baccarat_player_pair"    />
+        <result property="baccaratLarge"      column="baccarat_large"      />
+        <result property="baccaratSmall"    column="baccarat_small"    />
+        <result property="dragonWin"    column="dragon_win"    />
+        <result property="tigerWin"    column="tiger_win"    />
+        <result property="tieWin"    column="tie_win"    />
+        <result property="baccaratRollingRatioChip"    column="baccarat_rolling_ratio_chip"    />
+        <result property="baccaratRollingRatioCash"    column="baccarat_rolling_ratio_cash"    />
+        <result property="dragonTigerRatioChip"    column="dragon_tiger_ratio_chip"    />
+        <result property="dragonTigerRatioCash"    column="dragon_tiger_ratio_cash"    />
+        <result property="rollingCommissionRounding"    column="rolling_commission_rounding"    />
+        <result property="bankerWinPumpRounding"    column="banker_win_pump_rounding"    />
+    </resultMap>
+    
+    <sql id="selectOddsConfigureVo">
+        SELECT
+            id,
+            baccarat_pump,
+            baccarat_banker_win,
+            baccarat_player_win,
+            baccarat_tie_win,
+            baccarat_banker_pair,
+            baccarat_player_pair,
+            baccarat_large,
+            baccarat_small,
+            dragon_win,
+            tiger_win,
+            tie_win,
+            baccarat_rolling_ratio_chip,
+            baccarat_rolling_ratio_cash,
+            dragon_tiger_ratio_chip,
+            dragon_tiger_ratio_cash,
+            rolling_commission_rounding,
+            banker_win_pump_rounding
+        FROM
+            sys_odds_configure
+    </sql>
+
+    <select id="selectConfigInfo" resultMap="SysOddsConfigureResult">
+        <include refid="selectOddsConfigureVo"/>
+    </select>
+
+
+    <update id="updateOddsConfig" parameterType="SysOddsConfigure">
+        update sys_odds_configure
+        <set>
+            <if test="baccaratPump != null">baccarat_pump = #{baccaratPump},</if>
+            <if test="baccaratBankerWin != null">baccarat_banker_win = #{baccaratBankerWin},</if>
+            <if test="baccaratPlayerWin != null">baccarat_player_win = #{baccaratPlayerWin},</if>
+            <if test="baccaratTieWin != null">baccarat_tie_win = #{baccaratTieWin},</if>
+            <if test="baccaratBankerPair != null">baccarat_banker_pair = #{baccaratBankerPair},</if>
+            <if test="baccaratPlayerPair != null">baccarat_player_pair = #{baccaratPlayerPair},</if>
+            <if test="baccaratLarge != null">baccarat_large = #{baccaratLarge},</if>
+            <if test="baccaratSmall != null">baccarat_small = #{baccaratSmall},</if>
+            <if test="dragonWin != null">dragon_win = #{dragonWin},</if>
+            <if test="tigerWin != null">tiger_win = #{tigerWin},</if>
+            <if test="tieWin != null">tie_win = #{tieWin},</if>
+            <if test="baccaratRollingRatioChip != null">baccarat_rolling_ratio_chip = #{baccaratRollingRatioChip},</if>
+            <if test="baccaratRollingRatioCash != null">baccarat_rolling_ratio_cash = #{baccaratRollingRatioCash},</if>
+            <if test="dragonTigerRatioChip != null">dragon_tiger_ratio_chip = #{dragonTigerRatioChip},</if>
+            <if test="dragonTigerRatioCash != null">dragon_tiger_ratio_cash = #{dragonTigerRatioCash},</if>
+            <if test="rollingCommissionRounding != null">rolling_commission_rounding = #{rollingCommissionRounding},</if>
+            <if test="bankerWinPumpRounding != null">banker_win_pump_rounding = #{bankerWinPumpRounding},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
