@@ -57,9 +57,9 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包下controller生成API文档
-//                .apis(RequestHandlerSelectors.basePackage("com.manager.controller"))
+//                .apis(RequestHandlerSelectors.basePackage("com.account.controller"))
                 .apis(Predicates.or(
-                        RequestHandlerSelectors.basePackage("com.manager.controller.system")
+                        RequestHandlerSelectors.basePackage("com.account.controller.system")
                 ))
                 .paths(PathSelectors.any())
                 .build()
