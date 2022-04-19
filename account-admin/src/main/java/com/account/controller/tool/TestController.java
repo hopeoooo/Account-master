@@ -1,4 +1,4 @@
-package com.account.web.controller.tool;
+package com.account.controller.tool;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

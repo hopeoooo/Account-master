@@ -1,4 +1,4 @@
-package com.account.web.controller.monitor;
+package com.account.controller.monitor;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;

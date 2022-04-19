@@ -1,4 +1,4 @@
-package com.account.web.controller.monitor;
+package com.account.controller.monitor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

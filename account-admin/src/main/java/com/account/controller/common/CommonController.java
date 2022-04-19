@@ -1,4 +1,4 @@
-package com.account.web.controller.common;
+package com.account.controller.common;
 
 import java.util.ArrayList;
 import java.util.List;

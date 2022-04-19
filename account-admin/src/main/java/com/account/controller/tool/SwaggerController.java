@@ -1,4 +1,4 @@
-package com.account.web.controller.tool;
+package com.account.controller.tool;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

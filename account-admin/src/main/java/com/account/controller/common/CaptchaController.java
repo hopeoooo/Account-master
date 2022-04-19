@@ -1,4 +1,4 @@
-package com.account.web.controller.common;
+package com.account.controller.common;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

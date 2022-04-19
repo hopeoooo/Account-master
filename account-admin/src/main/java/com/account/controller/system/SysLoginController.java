@@ -1,4 +1,4 @@
-package com.account.web.controller.system;
+package com.account.controller.system;
 
 import java.util.List;
 import java.util.Set;
