@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysMembersMapper">
+
+
+    <select id="selectMembersList" parameterType="SysMembers" resultType="java.util.Map">
+        select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
+        create_time createTime,update_by updateBy,update_time updateTime,mark
+        from sys_members
+        <where>
+            <if test="card != null and card != ''">
+                AND card like concat('%', #{card}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+</mapper>
