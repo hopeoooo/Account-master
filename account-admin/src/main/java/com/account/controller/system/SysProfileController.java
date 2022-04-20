@@ -1,6 +1,9 @@
 package com.account.controller.system;
 
 import java.io.IOException;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping("/system/user/profile")
-@ApiIgnore
+@Api(tags = "个人信息")
 public class SysProfileController extends BaseController
 {
     @Autowired
@@ -95,6 +98,7 @@ public class SysProfileController extends BaseController
      */
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
+    @ApiOperation(value = "修改密码")
     public AjaxResult updatePwd(String oldPassword, String newPassword)
     {
         LoginUser loginUser = getLoginUser();
