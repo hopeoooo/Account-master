@@ -29,6 +29,7 @@ import com.account.framework.web.service.TokenService;
 import com.account.system.domain.SysUserRole;
 import com.account.system.service.ISysRoleService;
 import com.account.system.service.ISysUserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 角色信息
@@ -37,6 +38,7 @@ import com.account.system.service.ISysUserService;
  */
 @RestController
 @RequestMapping("/system/role")
+@ApiIgnore
 public class SysRoleController extends BaseController
 {
     @Autowired

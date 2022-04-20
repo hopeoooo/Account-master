@@ -22,6 +22,7 @@ import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.BusinessType;
 import com.account.common.utils.poi.ExcelUtil;
 import com.account.system.service.ISysDictTypeService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 数据字典信息
@@ -30,6 +31,7 @@ import com.account.system.service.ISysDictTypeService;
  */
 @RestController
 @RequestMapping("/system/dict/type")
+@ApiIgnore
 public class SysDictTypeController extends BaseController
 {
     @Autowired

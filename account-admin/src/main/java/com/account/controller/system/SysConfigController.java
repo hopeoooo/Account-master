@@ -2,6 +2,8 @@ package com.account.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +24,7 @@ import com.account.common.enums.BusinessType;
 import com.account.common.utils.poi.ExcelUtil;
 import com.account.system.domain.SysConfig;
 import com.account.system.service.ISysConfigService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 参数配置 信息操作处理
@@ -30,6 +33,7 @@ import com.account.system.service.ISysConfigService;
  */
 @RestController
 @RequestMapping("/system/config")
+@ApiIgnore
 public class SysConfigController extends BaseController
 {
     @Autowired

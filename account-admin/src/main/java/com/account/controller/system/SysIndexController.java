@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.account.common.config.AccountConfig;
 import com.account.common.utils.StringUtils;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 首页
@@ -12,6 +13,7 @@ import com.account.common.utils.StringUtils;
  * @author hope
  */
 @RestController
+@ApiIgnore
 public class SysIndexController
 {
     /** 系统基础配置 */

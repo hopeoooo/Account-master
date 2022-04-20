@@ -19,6 +19,7 @@ import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.BusinessType;
 import com.account.system.domain.SysNotice;
 import com.account.system.service.ISysNoticeService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 公告 信息操作处理
@@ -27,6 +28,7 @@ import com.account.system.service.ISysNoticeService;
  */
 @RestController
 @RequestMapping("/system/notice")
+@ApiIgnore
 public class SysNoticeController extends BaseController
 {
     @Autowired

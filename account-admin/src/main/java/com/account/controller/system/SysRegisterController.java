@@ -10,6 +10,7 @@ import com.account.common.core.domain.model.RegisterBody;
 import com.account.common.utils.StringUtils;
 import com.account.framework.web.service.SysRegisterService;
 import com.account.system.service.ISysConfigService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 注册验证
@@ -17,6 +18,7 @@ import com.account.system.service.ISysConfigService;
  * @author hope
  */
 @RestController
+@ApiIgnore
 public class SysRegisterController extends BaseController
 {
     @Autowired

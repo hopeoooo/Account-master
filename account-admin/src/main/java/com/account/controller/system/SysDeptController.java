@@ -22,6 +22,7 @@ import com.account.common.core.domain.entity.SysDept;
 import com.account.common.enums.BusinessType;
 import com.account.common.utils.StringUtils;
 import com.account.system.service.ISysDeptService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 部门信息
@@ -30,6 +31,7 @@ import com.account.system.service.ISysDeptService;
  */
 @RestController
 @RequestMapping("/system/dept")
+@ApiIgnore
 public class SysDeptController extends BaseController
 {
     @Autowired

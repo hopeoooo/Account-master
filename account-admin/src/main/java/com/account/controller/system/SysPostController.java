@@ -22,6 +22,7 @@ import com.account.common.enums.BusinessType;
 import com.account.common.utils.poi.ExcelUtil;
 import com.account.system.domain.SysPost;
 import com.account.system.service.ISysPostService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 岗位信息操作处理
@@ -30,6 +31,7 @@ import com.account.system.service.ISysPostService;
  */
 @RestController
 @RequestMapping("/system/post")
+@ApiIgnore
 public class SysPostController extends BaseController
 {
     @Autowired

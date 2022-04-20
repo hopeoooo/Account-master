@@ -24,6 +24,7 @@ import com.account.common.utils.StringUtils;
 import com.account.common.utils.poi.ExcelUtil;
 import com.account.system.service.ISysDictDataService;
 import com.account.system.service.ISysDictTypeService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 数据字典信息
@@ -32,6 +33,7 @@ import com.account.system.service.ISysDictTypeService;
  */
 @RestController
 @RequestMapping("/system/dict/data")
+@ApiIgnore
 public class SysDictDataController extends BaseController
 {
     @Autowired

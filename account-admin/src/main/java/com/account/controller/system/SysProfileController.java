@@ -23,6 +23,7 @@ import com.account.common.utils.StringUtils;
 import com.account.common.utils.file.FileUploadUtils;
 import com.account.framework.web.service.TokenService;
 import com.account.system.service.ISysUserService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 个人信息 业务处理
@@ -31,6 +32,7 @@ import com.account.system.service.ISysUserService;
  */
 @RestController
 @RequestMapping("/system/user/profile")
+@ApiIgnore
 public class SysProfileController extends BaseController
 {
     @Autowired

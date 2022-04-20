@@ -20,6 +20,7 @@ import com.account.common.core.domain.entity.SysMenu;
 import com.account.common.enums.BusinessType;
 import com.account.common.utils.StringUtils;
 import com.account.system.service.ISysMenuService;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 菜单信息
@@ -28,6 +29,7 @@ import com.account.system.service.ISysMenuService;
  */
 @RestController
 @RequestMapping("/system/menu")
+@ApiIgnore
 public class SysMenuController extends BaseController
 {
     @Autowired
