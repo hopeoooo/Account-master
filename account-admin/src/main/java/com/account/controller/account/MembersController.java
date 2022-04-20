@@ -1,11 +1,13 @@
 package com.account.controller.account;
 
 import com.account.common.core.controller.BaseController;
+import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.SysMembers;
+import com.account.system.domain.SysMembersSearch;
 import com.account.system.service.SysMembersService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,15 +29,53 @@ public class MembersController extends BaseController {
 
     @Autowired
     SysMembersService sysMembersService;
+
     /**
      * 获取会员列表
      */
     @PreAuthorize("@ss.hasPermi('account:mambers:list')")
     @GetMapping("/list")
     @ApiOperation(value = "获取会员列表")
-    public TableDataInfo list(SysMembers sysMembers) {
+    public TableDataInfo list(SysMembersSearch sysMembersSearch) {
         startPage();
-        List<Map> list = sysMembersService.selectMembersList(sysMembers);
+        List<Map> list = sysMembersService.selectMembersList(sysMembersSearch);
         return getDataTable(list);
+    }
+
+    /**
+     * 会员详情
+     */
+    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+    @GetMapping("/info")
+    @ApiOperation(value = "会员详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", dataType = "Long", required = true, paramType = "path")
+    })
+    public AjaxResult info(Long id) {
+        return AjaxResult.success(sysMembersService.selectMembersInfo(id));
+    }
+
+    /**
+     * 新增会员
+     */
+    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+    @GetMapping("/add")
+    @ApiOperation(value = "新增会员")
+    public AjaxResult add(SysMembers sysMembers) {
+        sysMembers.setCreateBy(SecurityUtils.getUsername());
+        sysMembersService.addMembers(sysMembers);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 编辑会员
+     */
+    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+    @GetMapping("/edit")
+    @ApiOperation(value = "编辑会员")
+    public AjaxResult edit(SysMembers sysMembers) {
+        sysMembers.setUpdateBy(SecurityUtils.getUsername());
+        sysMembersService.editMembers(sysMembers);
+        return AjaxResult.success();
     }
 }

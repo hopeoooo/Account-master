@@ -5,24 +5,132 @@
 <mapper namespace="com.account.system.mapper.SysMembersMapper">
 
 
-    <select id="selectMembersList" parameterType="SysMembers" resultType="java.util.Map">
+    <select id="selectMembersList" parameterType="SysMembersSearch" resultType="java.util.Map">
         select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
-        create_time createTime,update_by updateBy,update_time updateTime,mark
+        create_time createTime,remark
         from sys_members
         <where>
             <if test="card != null and card != ''">
-                AND card like concat('%', #{card}, '%')
+                AND (card like concat('%', #{card}, '%')
+                <if test="isChild == 1 ">
+                    or parent_card like concat('%', #{card}, '%')
+                </if>
+                )
+            </if>
+            <if test="name != null and name != ''">
+                AND name like concat('%', #{name}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone like concat('%', #{phone}, '%')
             </if>
             <if test="status != null and status != ''">
                 AND status = #{status}
             </if>
             <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-                and date_format(create_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+                and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
             </if>
             <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-                and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+                and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
             </if>
         </where>
     </select>
 
+    <insert id="addMembers">
+        insert into sys_members (
+        <if test="parentCard != null and parentCard != '' ">parent_card,</if>
+        <if test="card != null and card != '' ">card,</if>
+        <if test="name != null and name != '' ">name,</if>
+        <if test="phone != null and phone != '' ">phone,</if>
+        <if test="status != null ">status,</if>
+        <if test="cardType != null ">card_type,</if>
+        <if test="isAdmin != null ">is_admin,</if>
+        <if test="sex != null ">sex,</if>
+        <if test="createBy != null ">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="deposit != null ">deposit,</if>
+        <if test="repair != null ">repair,</if>
+        <if test="shareRatio != null ">share_ratio,</if>
+        <if test="rebateRatio != null ">rebate_ratio,</if>
+        <if test="isPump != null ">is_pump,</if>
+        <if test="isCash != null ">is_cash,</if>
+        <if test="isSettlement != null ">is_settlement,</if>
+        <if test="isOut != null ">is_out,</if>
+        <if test="baccaratRollingRatioChip != null ">baccarat_rolling_ratio_chip,</if>
+        <if test="baccaratRollingRatioCash != null ">baccarat_rolling_ratio_cash,</if>
+        <if test="dragonTigerRatioChip != null ">dragon_tiger_ratio_chip,</if>
+        <if test="dragonTigerRatioCash != null ">dragon_tiger_ratio_cash,</if>
+        create_time
+        )values(
+        <if test="parentCard != null and parentCard != '' ">#{parentCard},</if>
+        <if test="card != null and card != '' ">#{card},</if>
+        <if test="name != null and name != '' ">#{name},</if>
+        <if test="phone != null and phone != '' ">#{phone},</if>
+        <if test="status != null ">#{status},</if>
+        <if test="cardType != null">#{cardType},</if>
+        <if test="isAdmin != null ">#{isAdmin},</if>
+        <if test="sex != null ">#{sex},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="deposit != null ">#{deposit},</if>
+        <if test="repair != null ">#{repair},</if>
+        <if test="shareRatio != null ">#{shareRatio},</if>
+        <if test="rebateRatio != null ">#{rebateRatio},</if>
+        <if test="isPump != null ">#{isPump},</if>
+        <if test="isCash != null ">#{isCash},</if>
+        <if test="isSettlement != null ">#{isSettlement},</if>
+        <if test="isOut != null ">#{isOut},</if>
+        <if test="baccaratRollingRatioChip != null ">#{baccaratRollingRatioChip},</if>
+        <if test="baccaratRollingRatioCash != null ">#{baccaratRollingRatioCash},</if>
+        <if test="dragonTigerRatioChip != null ">#{dragonTigerRatioChip},</if>
+        <if test="dragonTigerRatioCash != null ">#{dragonTigerRatioCash},</if>
+        sysdate()
+        )
+    </insert>
+
+    <select id="selectMembersInfo" resultType="java.util.Map">
+        select deposit,
+               repair,
+               share_ratio                 shareRatio,
+               rebate_ratio                rebateRatio,
+               is_pump                     isPump,
+               is_cash                     isCash,
+               is_settlement               isSettlement,
+               is_out                      isOut,
+               baccarat_rolling_ratio_chip baccaratRollingRatioChip,
+               baccarat_rolling_ratio_cash baccaratRollingRatioCash,
+               dragon_tiger_ratio_chip     dragonTigerRatioChip,
+               dragon_tiger_ratio_cash     dragonTigerRatioCash
+        from sys_members
+        where id = #{id}
+    </select>
+
+    <update id="editMembers">
+        update sys_members
+        <set>
+            <if test="parentCard != null and parentCard != '' ">parent_card = #{parentCard},</if>
+            <if test="card != null and card != '' ">card = #{card},</if>
+            <if test="name != null and name != '' ">name = #{name},</if>
+            <if test="phone != null and phone != '' ">phone = #{phone},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="cardType != null ">card_type = #{cardType},</if>
+            <if test="isAdmin != null ">is_admin = #{isAdmin},</if>
+            <if test="sex != null ">sex = #{sex},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="deposit != null ">deposit = #{deposit},</if>
+            <if test="repair != null ">repair = #{repair},</if>
+            <if test="shareRatio != null ">share_ratio = #{shareRatio},</if>
+            <if test="rebateRatio != null ">rebate_ratio = #{rebateRatio},</if>
+            <if test="isPump != null ">is_pump = #{isPump},</if>
+            <if test="isCash != null ">is_cash = #{isCash},</if>
+            <if test="isSettlement != null ">is_settlement = #{isSettlement},</if>
+            <if test="isOut != null ">is_out = #{isOut},</if>
+            <if test="baccaratRollingRatioChip != null ">baccarat_rolling_ratio_chip = #{baccaratRollingRatioChip},</if>
+            <if test="baccaratRollingRatioCash != null ">baccarat_rolling_ratio_cash = #{baccaratRollingRatioCash},</if>
+            <if test="dragonTigerRatioChip != null ">dragon_tiger_ratio_chip = #{dragonTigerRatioChip},</if>
+            <if test="dragonTigerRatioCash != null ">dragon_tiger_ratio_cash = #{dragonTigerRatioCash},</if>
+            update_time = sysdate(),
+            update_by = #{updateBy}
+        </set>
+        where id = #{id}
+    </update>
 </mapper>
