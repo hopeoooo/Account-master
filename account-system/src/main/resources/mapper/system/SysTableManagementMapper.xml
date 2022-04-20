@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysTableManagementMapper">
+
+    <resultMap type="SysTableManagement" id="SysTableManagementResult">
+    	<id     property="id"      column="id"      />
+        <result property="gameId"    column="game_id"    />
+        <result property="gameName"     column="game_name"     />
+        <result property="chipPointBase"   column="chip_point_base"   />
+        <result property="cashPointBase"    column="cash_point_base"    />
+        <result property="insurancePointBase"      column="insurance_point_base"      />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"      column="update_time"      />
+    </resultMap>
+    <sql id="selectTableVo">
+        select id,game_id,game_name,chip_point_base,cash_point_base,insurance_point_base, create_by, create_time, update_by, update_time from sys_table_management
+    </sql>
+
+    <select id="selectTableList" parameterType="SysTableManagement" resultMap="SysTableManagementResult">
+        <include refid="selectTableVo"/>
+        <where>
+            <if test="gameId != null and gameId != ''">
+                AND game_id =#{gameId}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertTable" parameterType="SysTableManagement" >
+        INSERT INTO `sys_table_management`
+            (`game_id`, `game_name`, `chip_point_base`, `cash_point_base`, `insurance_point_base`, `create_by`, `create_time`, `update_time`)
+        values(
+        <if test="gameId != null and gameId != ''">#{gameId},</if>
+        <if test="gameName != null and gameName != ''">#{gameName},</if>
+        <if test="chipPointBase != null and chipPointBase != ''">#{chipPointBase},</if>
+        <if test="cashPointBase != null and cashPointBase != ''">#{cashPointBase},</if>
+        <if test="insurancePointBase != null and insurancePointBase != ''">#{insurancePointBase},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate(),sysdate()
+        )
+    </insert>
+
+
+    <update id="updateTable" parameterType="SysTableManagement">
+        update sys_table_management
+        <set>
+            <if test="gameId != null and gameId != 0">game_id = #{gameId},</if>
+            <if test="gameName != null and gameName != ''">game_name = #{gameName},</if>
+            <if test="chipPointBase != null and chipPointBase != ''">chip_point_base = #{chipPointBase},</if>
+            <if test="cashPointBase != null and cashPointBase != ''">cash_point_base = #{cashPointBase},</if>
+            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base = #{insurancePointBase},
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if></if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUserByIds" parameterType="Long">
+        delete from sys_table_management where id = #{id}
+    </delete>
+
+</mapper>

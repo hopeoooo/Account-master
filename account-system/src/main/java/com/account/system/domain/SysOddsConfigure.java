@@ -17,34 +17,34 @@ public class SysOddsConfigure extends BaseEntity {
     private BigDecimal baccaratPump;
 
     @ApiModelProperty(value = "百家乐-庄赢")
-    private BigDecimal baccaratBankerWin;
+    private String baccaratBankerWin;
 
     @ApiModelProperty( value ="百家乐-闲赢")
-    private BigDecimal baccaratPlayerWin;
+    private String baccaratPlayerWin;
 
     @ApiModelProperty(value ="百家乐-和赢")
-    private BigDecimal baccaratTieWin;
+    private String baccaratTieWin;
 
     @ApiModelProperty(value = "百家乐-庄对")
-    private BigDecimal baccaratBankerPair;
+    private String baccaratBankerPair;
 
     @ApiModelProperty(value ="百家乐-闲对")
-    private BigDecimal baccaratPlayerPair;
+    private String baccaratPlayerPair;
 
     @ApiModelProperty(value = "百家乐-大")
-    private BigDecimal baccaratLarge;
+    private String baccaratLarge;
 
     @ApiModelProperty(value = "百家乐-小")
-    private BigDecimal baccaratSmall;
+    private String baccaratSmall;
 
     @ApiModelProperty(value = "龙虎-龙赢")
-    private BigDecimal dragonWin;
+    private String dragonWin;
 
     @ApiModelProperty(value ="龙虎-虎赢")
-    private BigDecimal tigerWin;
+    private String tigerWin;
 
     @ApiModelProperty( value ="龙虎-和赢")
-    private BigDecimal tieWin;
+    private String tieWin;
 
     @ApiModelProperty(value = "百家乐洗码比例(筹码)")
     private BigDecimal baccaratRollingRatioChip;
@@ -56,7 +56,7 @@ public class SysOddsConfigure extends BaseEntity {
     @ApiModelProperty( value ="龙虎洗码比例(现金)")
     private BigDecimal dragonTigerRatioCash;
     @ApiModelProperty(value = "洗码佣金取整(0:未勾选 、1:已勾选)")
-    private BigDecimal rollingCommissionRounding;
+    private int rollingCommissionRounding;
     @ApiModelProperty( value ="庄赢抽水取整(0:未勾选 、1:已勾选)")
-    private BigDecimal bankerWinPumpRounding;
+    private int bankerWinPumpRounding;
 }
