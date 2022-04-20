@@ -46,8 +46,8 @@ spring:
     # 国际化资源文件路径
     basename: i18n/messages
   profiles:
-#    active: dev
-    active: test
+    active: dev
+#    active: test
   # 文件上传
   servlet:
      multipart:
@@ -68,7 +68,7 @@ token:
     # 令牌密钥
     secret: abcdefghijklmnopqrstuvwxyz
     # 令牌有效期（默认30分钟）
-    expireTime: 30
+    expireTime: 3000
 
 # MyBatis配置
 mybatis:

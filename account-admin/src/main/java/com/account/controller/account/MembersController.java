@@ -78,4 +78,18 @@ public class MembersController extends BaseController {
         sysMembersService.editMembers(sysMembers);
         return AjaxResult.success();
     }
+
+    /**
+     * 删除会员
+     */
+    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+    @GetMapping("/delete")
+    @ApiOperation(value = "删除会员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "ids", value = "用户id，多个用逗号拼接", dataType = "Long", required = true, paramType = "path")
+    })
+    public AjaxResult delete(String ids) {
+        sysMembersService.deleteMembers(ids);
+        return AjaxResult.success();
+    }
 }

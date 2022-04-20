@@ -2,7 +2,7 @@ package com.account.system.service.impl;
 
 import com.account.system.domain.SysTableManagement;
 import com.account.system.mapper.SysTableManagementMapper;
-import com.account.system.service.ISysTableManagementService;
+import com.account.system.service.SysTableManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * 桌台设置服务层实现
  */
 @Service
-public class SysTableManagementServiceImpl implements ISysTableManagementService {
+public class SysTableManagementServiceImpl implements SysTableManagementService {
     @Autowired
     private SysTableManagementMapper tableManagementMapper;
 

@@ -3,7 +3,7 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.system.domain.SysOddsConfigure;
-import com.account.system.service.ISysOddsConfigureService;
+import com.account.system.service.SysOddsConfigureService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "赔率设置")
 public class SysOddsConfigureController extends BaseController {
     @Autowired
-    private ISysOddsConfigureService oddsConfigureService;
+    private SysOddsConfigureService oddsConfigureService;
 
 
     @PreAuthorize("@ss.hasPermi('system:oddsConfig:list')")

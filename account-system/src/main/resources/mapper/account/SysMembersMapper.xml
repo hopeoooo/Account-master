@@ -133,4 +133,12 @@
         </set>
         where id = #{id}
     </update>
+
+    <delete id="deleteMembers">
+        delete from sys_members
+        where id in
+        <foreach collection="ids.split(',')" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

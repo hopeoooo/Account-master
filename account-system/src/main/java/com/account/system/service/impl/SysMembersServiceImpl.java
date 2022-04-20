@@ -40,4 +40,9 @@ public class SysMembersServiceImpl implements SysMembersService {
         sysMembersMapper.editMembers(sysMembers);
     }
 
+    @Override
+    public void deleteMembers(String ids) {
+        sysMembersMapper.deleteMembers(ids);
+    }
+
 }

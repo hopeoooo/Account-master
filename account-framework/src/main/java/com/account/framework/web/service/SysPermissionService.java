@@ -1,43 +1,35 @@
 package com.account.framework.web.service;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.account.common.core.domain.entity.SysUser;
+import com.account.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.account.common.core.domain.entity.SysUser;
-import com.account.system.service.ISysMenuService;
-import com.account.system.service.ISysRoleService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 用户权限处理
- * 
+ *
  * @author hope
  */
 @Component
-public class SysPermissionService
-{
+public class SysPermissionService {
     @Autowired
-    private ISysRoleService roleService;
-
-    @Autowired
-    private ISysMenuService menuService;
+    private SysRoleService roleService;
 
     /**
      * 获取角色数据权限
-     * 
+     *
      * @param user 用户信息
      * @return 角色权限信息
      */
-    public Set<String> getRolePermission(SysUser user)
-    {
+    public Set<String> getRolePermission(SysUser user) {
         Set<String> roles = new HashSet<String>();
         // 管理员拥有所有权限
-        if (user.isAdmin())
-        {
+        if (user.isAdmin()) {
             roles.add("admin");
-        }
-        else
-        {
+        } else {
             roles.addAll(roleService.selectRolePermissionByUserId(user.getUserId()));
         }
         return roles;
@@ -45,21 +37,17 @@ public class SysPermissionService
 
     /**
      * 获取菜单数据权限
-     * 
+     *
      * @param user 用户信息
      * @return 菜单权限信息
      */
-    public Set<String> getMenuPermission(SysUser user)
-    {
+    public Set<String> getMenuPermission(SysUser user) {
         Set<String> perms = new HashSet<String>();
         // 管理员拥有所有权限
-        if (user.isAdmin())
-        {
+        if (user.isAdmin()) {
             perms.add("*:*:*");
-        }
-        else
-        {
-            perms.addAll(menuService.selectMenuPermsByUserId(user.getUserId()));
+        } else {
+            perms.addAll(roleService.selectMenuPermsByUserId(user.getUserId()));
         }
         return perms;
     }

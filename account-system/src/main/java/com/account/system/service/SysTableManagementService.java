@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 桌台设置服务层
  */
-public interface ISysTableManagementService
+public interface SysTableManagementService
 {
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 

@@ -23,4 +23,6 @@ public interface SysMembersMapper {
     Map selectMembersInfo(@Param("id") Long id);
 
     void editMembers(SysMembers sysMembers);
+
+    void deleteMembers(@Param("ids") String ids);
 }

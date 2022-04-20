@@ -24,4 +24,6 @@ public interface SysMembersService {
     Map selectMembersInfo(Long id);
 
     void editMembers(SysMembers sysMembers);
+
+    void deleteMembers(String ids);
 }

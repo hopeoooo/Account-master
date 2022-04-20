@@ -6,7 +6,7 @@ import com.account.system.domain.SysOddsConfigure;
 /**
  * 赔率设置服务层
  */
-public interface ISysOddsConfigureService
+public interface SysOddsConfigureService
 {
     /**
      * 查询列表

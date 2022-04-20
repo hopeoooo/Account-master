@@ -1,424 +1,264 @@
 package com.account.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.account.common.annotation.DataScope;
+import com.account.common.constant.Constants;
 import com.account.common.constant.UserConstants;
+import com.account.common.core.domain.entity.SysMenu;
 import com.account.common.core.domain.entity.SysRole;
-import com.account.common.core.domain.entity.SysUser;
-import com.account.common.exception.ServiceException;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
-import com.account.common.utils.spring.SpringUtils;
-import com.account.system.domain.SysRoleDept;
-import com.account.system.domain.SysRoleMenu;
-import com.account.system.domain.SysUserRole;
-import com.account.system.mapper.SysRoleDeptMapper;
+import com.account.system.domain.vo.MetaVo;
+import com.account.system.domain.vo.RouterVo;
 import com.account.system.mapper.SysRoleMapper;
-import com.account.system.mapper.SysRoleMenuMapper;
-import com.account.system.mapper.SysUserRoleMapper;
-import com.account.system.service.ISysRoleService;
+import com.account.system.service.SysRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * 角色 业务层处理
- * 
+ *
  * @author hope
  */
 @Service
-public class SysRoleServiceImpl implements ISysRoleService
-{
+public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysRoleMapper roleMapper;
 
-    @Autowired
-    private SysRoleMenuMapper roleMenuMapper;
 
-    @Autowired
-    private SysUserRoleMapper userRoleMapper;
-
-    @Autowired
-    private SysRoleDeptMapper roleDeptMapper;
-
-    /**
-     * 根据条件分页查询角色数据
-     * 
-     * @param role 角色信息
-     * @return 角色数据集合信息
-     */
     @Override
-    @DataScope(deptAlias = "d")
-    public List<SysRole> selectRoleList(SysRole role)
-    {
-        return roleMapper.selectRoleList(role);
+    public List<SysRole> selectRoleList() {
+        return roleMapper.selectRoleList();
     }
 
-    /**
-     * 根据用户ID查询角色
-     * 
-     * @param userId 用户ID
-     * @return 角色列表
-     */
     @Override
-    public List<SysRole> selectRolesByUserId(Long userId)
-    {
-        List<SysRole> userRoles = roleMapper.selectRolePermissionByUserId(userId);
-        List<SysRole> roles = selectRoleAll();
-        for (SysRole role : roles)
-        {
-            for (SysRole userRole : userRoles)
-            {
-                if (role.getRoleId().longValue() == userRole.getRoleId().longValue())
-                {
-                    role.setFlag(true);
-                    break;
-                }
+    public int addRole(SysRole sysRole) {
+        if (roleMapper.selectRoleByName(sysRole.getRoleName()) != null) {
+            return 0;
+        }
+        return roleMapper.addRole(sysRole);
+    }
+
+    @Override
+    public Set<String> selectMenuPermsByUserId(Long userId) {
+        return roleMapper.selectMenuPermsByUserId(userId);
+    }
+
+    @Override
+    public Set<String> selectRolePermissionByUserId(Long userId) {
+        return roleMapper.selectRolePermissionByUserId(userId);
+    }
+
+    @Override
+    public List<SysMenu> selectMenuTreeByUserId(Long userId) {
+        List<SysMenu> menus = null;
+        if (SecurityUtils.isAdmin(userId)) {
+            menus = roleMapper.selectMenuTreeAll();
+        } else {
+            menus = roleMapper.selectMenuTreeByUserId(userId);
+        }
+        return getChildPerms(menus, 0);
+    }
+
+    @Override
+    public List<RouterVo> buildMenus(List<SysMenu> menus) {
+        List<RouterVo> routers = new LinkedList<RouterVo>();
+        for (SysMenu menu : menus) {
+            RouterVo router = new RouterVo();
+            router.setHidden("1".equals(menu.getVisible()));
+            router.setName(getRouteName(menu));
+            router.setPath(getRouterPath(menu));
+            router.setComponent(getComponent(menu));
+            router.setQuery(menu.getQuery());
+            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+            List<SysMenu> cMenus = menu.getChildren();
+            if (!cMenus.isEmpty() && cMenus.size() > 0 && UserConstants.TYPE_DIR.equals(menu.getMenuType())) {
+                router.setAlwaysShow(true);
+                router.setRedirect("noRedirect");
+                router.setChildren(buildMenus(cMenus));
+            } else if (isMenuFrame(menu)) {
+                router.setMeta(null);
+                List<RouterVo> childrenList = new ArrayList<RouterVo>();
+                RouterVo children = new RouterVo();
+                children.setPath(menu.getPath());
+                children.setComponent(menu.getComponent());
+                children.setName(StringUtils.capitalize(menu.getPath()));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+                children.setQuery(menu.getQuery());
+                childrenList.add(children);
+                router.setChildren(childrenList);
+            } else if (menu.getParentId().intValue() == 0 && isInnerLink(menu)) {
+                router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
+                router.setPath("/");
+                List<RouterVo> childrenList = new ArrayList<RouterVo>();
+                RouterVo children = new RouterVo();
+                String routerPath = innerLinkReplaceEach(menu.getPath());
+                children.setPath(routerPath);
+                children.setComponent(UserConstants.INNER_LINK);
+                children.setName(StringUtils.capitalize(routerPath));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
+                childrenList.add(children);
+                router.setChildren(childrenList);
             }
+            routers.add(router);
         }
-        return roles;
+        return routers;
     }
 
     /**
-     * 根据用户ID查询权限
-     * 
-     * @param userId 用户ID
-     * @return 权限列表
-     */
-    @Override
-    public Set<String> selectRolePermissionByUserId(Long userId)
-    {
-        List<SysRole> perms = roleMapper.selectRolePermissionByUserId(userId);
-        Set<String> permsSet = new HashSet<>();
-        for (SysRole perm : perms)
-        {
-            if (StringUtils.isNotNull(perm))
-            {
-                permsSet.addAll(Arrays.asList(perm.getRoleKey().trim().split(",")));
-            }
-        }
-        return permsSet;
-    }
-
-    /**
-     * 查询所有角色
-     * 
-     * @return 角色列表
-     */
-    @Override
-    public List<SysRole> selectRoleAll()
-    {
-        return SpringUtils.getAopProxy(this).selectRoleList(new SysRole());
-    }
-
-    /**
-     * 根据用户ID获取角色选择框列表
-     * 
-     * @param userId 用户ID
-     * @return 选中角色ID列表
-     */
-    @Override
-    public List<Long> selectRoleListByUserId(Long userId)
-    {
-        return roleMapper.selectRoleListByUserId(userId);
-    }
-
-    /**
-     * 通过角色ID查询角色
-     * 
-     * @param roleId 角色ID
-     * @return 角色对象信息
-     */
-    @Override
-    public SysRole selectRoleById(Long roleId)
-    {
-        return roleMapper.selectRoleById(roleId);
-    }
-
-    /**
-     * 校验角色名称是否唯一
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    public String checkRoleNameUnique(SysRole role)
-    {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
-        SysRole info = roleMapper.checkRoleNameUnique(role.getRoleName());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
-        {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
-
-    /**
-     * 校验角色权限是否唯一
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    public String checkRoleKeyUnique(SysRole role)
-    {
-        Long roleId = StringUtils.isNull(role.getRoleId()) ? -1L : role.getRoleId();
-        SysRole info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
-        if (StringUtils.isNotNull(info) && info.getRoleId().longValue() != roleId.longValue())
-        {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
-
-    /**
-     * 校验角色是否允许操作
-     * 
-     * @param role 角色信息
-     */
-    @Override
-    public void checkRoleAllowed(SysRole role)
-    {
-        if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
-        {
-            throw new ServiceException("不允许操作超级管理员角色");
-        }
-    }
-
-    /**
-     * 校验角色是否有数据权限
-     * 
-     * @param roleId 角色id
-     */
-    @Override
-    public void checkRoleDataScope(Long roleId)
-    {
-        if (!SysUser.isAdmin(SecurityUtils.getUserId()))
-        {
-            SysRole role = new SysRole();
-            role.setRoleId(roleId);
-            List<SysRole> roles = SpringUtils.getAopProxy(this).selectRoleList(role);
-            if (StringUtils.isEmpty(roles))
-            {
-                throw new ServiceException("没有权限访问角色数据！");
-            }
-        }
-    }
-
-    /**
-     * 通过角色ID查询角色使用数量
-     * 
-     * @param roleId 角色ID
-     * @return 结果
-     */
-    @Override
-    public int countUserRoleByRoleId(Long roleId)
-    {
-        return userRoleMapper.countUserRoleByRoleId(roleId);
-    }
-
-    /**
-     * 新增保存角色信息
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int insertRole(SysRole role)
-    {
-        // 新增角色信息
-        roleMapper.insertRole(role);
-        return insertRoleMenu(role);
-    }
-
-    /**
-     * 修改保存角色信息
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int updateRole(SysRole role)
-    {
-        // 修改角色信息
-        roleMapper.updateRole(role);
-        // 删除角色与菜单关联
-        roleMenuMapper.deleteRoleMenuByRoleId(role.getRoleId());
-        return insertRoleMenu(role);
-    }
-
-    /**
-     * 修改角色状态
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    public int updateRoleStatus(SysRole role)
-    {
-        return roleMapper.updateRole(role);
-    }
-
-    /**
-     * 修改数据权限信息
-     * 
-     * @param role 角色信息
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int authDataScope(SysRole role)
-    {
-        // 修改角色信息
-        roleMapper.updateRole(role);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDeptByRoleId(role.getRoleId());
-        // 新增角色和部门信息（数据权限）
-        return insertRoleDept(role);
-    }
-
-    /**
-     * 新增角色菜单信息
-     * 
-     * @param role 角色对象
-     */
-    public int insertRoleMenu(SysRole role)
-    {
-        int rows = 1;
-        // 新增用户与角色管理
-        List<SysRoleMenu> list = new ArrayList<SysRoleMenu>();
-        for (Long menuId : role.getMenuIds())
-        {
-            SysRoleMenu rm = new SysRoleMenu();
-            rm.setRoleId(role.getRoleId());
-            rm.setMenuId(menuId);
-            list.add(rm);
-        }
-        if (list.size() > 0)
-        {
-            rows = roleMenuMapper.batchRoleMenu(list);
-        }
-        return rows;
-    }
-
-    /**
-     * 新增角色部门信息(数据权限)
+     * 根据父节点的ID获取所有子节点
      *
-     * @param role 角色对象
+     * @param list     分类表
+     * @param parentId 传入的父节点ID
+     * @return String
      */
-    public int insertRoleDept(SysRole role)
-    {
-        int rows = 1;
-        // 新增角色与部门（数据权限）管理
-        List<SysRoleDept> list = new ArrayList<SysRoleDept>();
-        for (Long deptId : role.getDeptIds())
-        {
-            SysRoleDept rd = new SysRoleDept();
-            rd.setRoleId(role.getRoleId());
-            rd.setDeptId(deptId);
-            list.add(rd);
-        }
-        if (list.size() > 0)
-        {
-            rows = roleDeptMapper.batchRoleDept(list);
-        }
-        return rows;
-    }
-
-    /**
-     * 通过角色ID删除角色
-     * 
-     * @param roleId 角色ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteRoleById(Long roleId)
-    {
-        // 删除角色与菜单关联
-        roleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDeptByRoleId(roleId);
-        return roleMapper.deleteRoleById(roleId);
-    }
-
-    /**
-     * 批量删除角色信息
-     * 
-     * @param roleIds 需要删除的角色ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteRoleByIds(Long[] roleIds)
-    {
-        for (Long roleId : roleIds)
-        {
-            checkRoleAllowed(new SysRole(roleId));
-            checkRoleDataScope(roleId);
-            SysRole role = selectRoleById(roleId);
-            if (countUserRoleByRoleId(roleId) > 0)
-            {
-                throw new ServiceException(String.format("%1$s已分配,不能删除", role.getRoleName()));
+    public List<SysMenu> getChildPerms(List<SysMenu> list, int parentId) {
+        List<SysMenu> returnList = new ArrayList<SysMenu>();
+        for (Iterator<SysMenu> iterator = list.iterator(); iterator.hasNext(); ) {
+            SysMenu t = (SysMenu) iterator.next();
+            // 一、根据传入的某个父节点ID,遍历该父节点的所有子节点
+            if (t.getParentId() == parentId) {
+                recursionFn(list, t);
+                returnList.add(t);
             }
         }
-        // 删除角色与菜单关联
-        roleMenuMapper.deleteRoleMenu(roleIds);
-        // 删除角色与部门关联
-        roleDeptMapper.deleteRoleDept(roleIds);
-        return roleMapper.deleteRoleByIds(roleIds);
+        return returnList;
     }
 
     /**
-     * 取消授权用户角色
-     * 
-     * @param userRole 用户和角色关联信息
-     * @return 结果
+     * 递归列表
+     *
+     * @param list
+     * @param t
      */
-    @Override
-    public int deleteAuthUser(SysUserRole userRole)
-    {
-        return userRoleMapper.deleteUserRoleInfo(userRole);
-    }
-
-    /**
-     * 批量取消授权用户角色
-     * 
-     * @param roleId 角色ID
-     * @param userIds 需要取消授权的用户数据ID
-     * @return 结果
-     */
-    @Override
-    public int deleteAuthUsers(Long roleId, Long[] userIds)
-    {
-        return userRoleMapper.deleteUserRoleInfos(roleId, userIds);
-    }
-
-    /**
-     * 批量选择授权用户角色
-     * 
-     * @param roleId 角色ID
-     * @param userIds 需要授权的用户数据ID
-     * @return 结果
-     */
-    @Override
-    public int insertAuthUsers(Long roleId, Long[] userIds)
-    {
-        // 新增用户与角色管理
-        List<SysUserRole> list = new ArrayList<SysUserRole>();
-        for (Long userId : userIds)
-        {
-            SysUserRole ur = new SysUserRole();
-            ur.setUserId(userId);
-            ur.setRoleId(roleId);
-            list.add(ur);
+    private void recursionFn(List<SysMenu> list, SysMenu t) {
+        // 得到子节点列表
+        List<SysMenu> childList = getChildList(list, t);
+        t.setChildren(childList);
+        for (SysMenu tChild : childList) {
+            if (hasChild(list, tChild)) {
+                recursionFn(list, tChild);
+            }
         }
-        return userRoleMapper.batchUserRole(list);
+    }
+
+    /**
+     * 得到子节点列表
+     */
+    private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t) {
+        List<SysMenu> tlist = new ArrayList<SysMenu>();
+        Iterator<SysMenu> it = list.iterator();
+        while (it.hasNext()) {
+            SysMenu n = (SysMenu) it.next();
+            if (n.getParentId().longValue() == t.getMenuId().longValue()) {
+                tlist.add(n);
+            }
+        }
+        return tlist;
+    }
+
+    /**
+     * 判断是否有子节点
+     */
+    private boolean hasChild(List<SysMenu> list, SysMenu t) {
+        return getChildList(list, t).size() > 0;
+    }
+
+    /**
+     * 获取路由名称
+     *
+     * @param menu 菜单信息
+     * @return 路由名称
+     */
+    public String getRouteName(SysMenu menu) {
+        String routerName = StringUtils.capitalize(menu.getPath());
+        // 非外链并且是一级目录（类型为目录）
+        if (isMenuFrame(menu)) {
+            routerName = StringUtils.EMPTY;
+        }
+        return routerName;
+    }
+
+    /**
+     * 获取路由地址
+     *
+     * @param menu 菜单信息
+     * @return 路由地址
+     */
+    public String getRouterPath(SysMenu menu) {
+        String routerPath = menu.getPath();
+        // 内链打开外网方式
+        if (menu.getParentId().intValue() != 0 && isInnerLink(menu)) {
+            routerPath = innerLinkReplaceEach(routerPath);
+        }
+        // 非外链并且是一级目录（类型为目录）
+        if (0 == menu.getParentId().intValue() && UserConstants.TYPE_DIR.equals(menu.getMenuType())
+                && UserConstants.NO_FRAME.equals(menu.getIsFrame())) {
+            routerPath = "/" + menu.getPath();
+        }
+        // 非外链并且是一级目录（类型为菜单）
+        else if (isMenuFrame(menu)) {
+            routerPath = "/";
+        }
+        return routerPath;
+    }
+
+    /**
+     * 获取组件信息
+     *
+     * @param menu 菜单信息
+     * @return 组件信息
+     */
+    public String getComponent(SysMenu menu) {
+        String component = UserConstants.LAYOUT;
+        if (StringUtils.isNotEmpty(menu.getComponent()) && !isMenuFrame(menu)) {
+            component = menu.getComponent();
+        } else if (StringUtils.isEmpty(menu.getComponent()) && menu.getParentId().intValue() != 0 && isInnerLink(menu)) {
+            component = UserConstants.INNER_LINK;
+        } else if (StringUtils.isEmpty(menu.getComponent()) && isParentView(menu)) {
+            component = UserConstants.PARENT_VIEW;
+        }
+        return component;
+    }
+
+    /**
+     * 是否为菜单内部跳转
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isMenuFrame(SysMenu menu) {
+        return menu.getParentId().intValue() == 0 && UserConstants.TYPE_MENU.equals(menu.getMenuType())
+                && menu.getIsFrame().equals(UserConstants.NO_FRAME);
+    }
+
+    /**
+     * 是否为内链组件
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isInnerLink(SysMenu menu) {
+        return menu.getIsFrame().equals(UserConstants.NO_FRAME) && StringUtils.ishttp(menu.getPath());
+    }
+
+    /**
+     * 是否为parent_view组件
+     *
+     * @param menu 菜单信息
+     * @return 结果
+     */
+    public boolean isParentView(SysMenu menu) {
+        return menu.getParentId().intValue() != 0 && UserConstants.TYPE_DIR.equals(menu.getMenuType());
+    }
+
+    /**
+     * 内链域名特殊字符替换
+     *
+     * @return
+     */
+    public String innerLinkReplaceEach(String path) {
+        return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS},
+                new String[]{"", ""});
     }
 }

@@ -5,7 +5,7 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysTableManagement;
-import com.account.system.service.ISysTableManagementService;
+import com.account.system.service.SysTableManagementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 @Api(tags = "桌台管理")
 public class SysTableManagementController extends BaseController {
     @Autowired
-    private ISysTableManagementService tableManagementService;
+    private SysTableManagementService tableManagementService;
 
 
     @PreAuthorize("@ss.hasPermi('system:table:list')")
