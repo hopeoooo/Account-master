@@ -27,12 +27,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND game_id =#{gameId}
             </if>
         </where>
+        ORDER BY create_time desc
     </select>
 
 
     <insert id="insertTable" parameterType="SysTableManagement" >
         INSERT INTO `sys_table_management`
-            (`game_id`, `game_name`, `chip_point_base`, `cash_point_base`, `insurance_point_base`, `create_by`, `create_time`, `update_time`)
+            (
+        <if test="gameId != null and gameId != 0">game_id,</if>
+        <if test="gameName != nulland gameName != ''">game_name,</if>
+        <if test="chipPointBase != null and chipPointBase != ''">chip_point_base,</if>
+        <if test="cashPointBase != null and cashPointBase != ''">cash_point_base,</if>
+        <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time,update_time)
         values(
         <if test="gameId != null and gameId != ''">#{gameId},</if>
         <if test="gameName != null and gameName != ''">#{gameName},</if>
@@ -52,8 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gameName != null and gameName != ''">game_name = #{gameName},</if>
             <if test="chipPointBase != null and chipPointBase != ''">chip_point_base = #{chipPointBase},</if>
             <if test="cashPointBase != null and cashPointBase != ''">cash_point_base = #{cashPointBase},</if>
-            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base = #{insurancePointBase},
-            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if></if>
+            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base = #{insurancePointBase},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>
         where id = #{id}
