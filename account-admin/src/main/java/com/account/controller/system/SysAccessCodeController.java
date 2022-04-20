@@ -64,12 +64,13 @@ public class SysAccessCodeController extends BaseController {
         if (StringUtils.isNotNull(accessCode.getId()) && accessCode.getId() > 0) {
             //修改:金额累加
             accessCode.setUpdateBy(getUsername());
-            return toAjax( accessCodeService.updateAccessCode(accessCode));
+            accessCodeService.updateAccessCode(accessCode);
         } else {
             //添加
             accessCode.setCreateBy(getUsername());
-            return toAjax( accessCodeService.insertAccessCode(accessCode));
+            accessCodeService.insertAccessCode(accessCode);
         }
+        return AjaxResult.success("存码成功!");
     }
 
     @PreAuthorize("@ss.hasPermi('system:accessCode:updateCodeFetching')")
@@ -79,7 +80,7 @@ public class SysAccessCodeController extends BaseController {
         //判断金额是否足够
         SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getUserId());
         if (sysAccessCode==null){
-            return AjaxResult.error();
+            return AjaxResult.error("取码失败");
         }
         if (accessCode.getChipBalance().compareTo(sysAccessCode.getChipBalance())>0){
             return AjaxResult.error("余额不足");
@@ -90,6 +91,7 @@ public class SysAccessCodeController extends BaseController {
         }
         //取码:金额减
         accessCode.setUpdateBy(getUsername());
-        return toAjax(accessCodeService.updateAccessCode(accessCode));
+        accessCodeService.updateAccessCode(accessCode);
+        return AjaxResult.success("取码成功!");
     }
 }
