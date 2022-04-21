@@ -1,10 +1,8 @@
-package com.account.system.domain;
+package com.account.system.domain.search;
 
-import com.account.common.core.domain.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.math.BigDecimal;
 
 /**
  * 存取码查询条件
@@ -13,8 +11,8 @@ import java.math.BigDecimal;
 public class SysAccessCodeSearch{
 
 
-    @ApiModelProperty(value = "会员账号")
-    private String userName;
+    @ApiModelProperty(value = "会员卡号")
+    private String card;
 
     @ApiModelProperty(value = "过滤内部卡号(0:未勾选,1:勾选)")
     private Integer isAdmin;

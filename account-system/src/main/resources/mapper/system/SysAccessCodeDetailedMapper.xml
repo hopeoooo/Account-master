@@ -43,8 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
             AND m.is_admin = 0
         </if>
-        <if test="userName != null and userName != ''">
-            AND m.name like  concat('%', #{userName}, '%')
+        <if test="card != null and card != ''">
+            AND m.card = #{card}
         </if>
         <if test="type != null and type != ''">
             AND d.type = #{type}

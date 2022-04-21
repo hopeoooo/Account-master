@@ -2,8 +2,8 @@ package com.account.system.mapper;
 
 
 import com.account.system.domain.SysAccessCode;
-import com.account.system.domain.SysAccessCodeAddSearch;
-import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.search.SysAccessCodeAddSearch;
+import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 import org.apache.ibatis.annotations.Param;
 

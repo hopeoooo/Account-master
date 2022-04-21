@@ -2,9 +2,9 @@ package com.account.system.service.impl;
 
 import com.account.common.enums.AccessType;
 import com.account.system.domain.SysAccessCode;
-import com.account.system.domain.SysAccessCodeAddSearch;
+import com.account.system.domain.search.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeDetailed;
-import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.mapper.SysAccessCodeMapper;

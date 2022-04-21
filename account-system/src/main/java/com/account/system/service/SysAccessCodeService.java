@@ -1,8 +1,8 @@
 package com.account.system.service;
 
 import com.account.system.domain.SysAccessCode;
-import com.account.system.domain.SysAccessCodeAddSearch;
-import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.search.SysAccessCodeAddSearch;
+import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 
 import java.util.List;

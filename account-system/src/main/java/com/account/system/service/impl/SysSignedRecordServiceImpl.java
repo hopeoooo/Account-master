@@ -1,5 +1,7 @@
 package com.account.system.service.impl;
 
+import com.account.system.domain.SysSignedRecord;
+import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
 import com.account.system.mapper.SysSignedRecordMapper;
 import com.account.system.service.SysSignedRecordService;
@@ -18,7 +20,27 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
     private SysSignedRecordMapper signedRecordMapper;
 
     @Override
-    public List<SysSignedRecordVo> selectSignedRecordList() {
-        return signedRecordMapper.selectSignedRecordList();
+    public List<SysSignedRecordVo> selectSignedRecordList(String card, Integer isAdmin) {
+        return signedRecordMapper.selectSignedRecordList(card, isAdmin);
+    }
+
+    @Override
+    public Map selectSignedRecordTotal(String card, Integer isAdmin) {
+        return signedRecordMapper.selectSignedRecordTotal(card, isAdmin);
+    }
+
+    @Override
+    public SysSignedRecord selectSignedRecordInfo(Long id, Long userId) {
+        return signedRecordMapper.selectSignedRecordInfo(id, userId);
+    }
+
+    @Override
+    public int insertSigned(SysSignedRecordSearch signedRecordSearch) {
+        return signedRecordMapper.insertSigned(signedRecordSearch);
+    }
+
+    @Override
+    public int update(SysSignedRecordSearch signedRecordSearch) {
+        return signedRecordMapper.update(signedRecordSearch);
     }
 }
