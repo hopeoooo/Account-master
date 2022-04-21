@@ -1,4 +1,4 @@
-package com.account.system.domain;
+package com.account.system.domain.search;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,32 +8,26 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 存取码 :存码、取码条件
+ * 签单查询条件
  */
 @Data
-public class SysAccessCodeAddSearch{
+public class SysSignedRecordSearch {
 
-
-    @ApiModelProperty(value = "(1:存码,2:取码)")
-    private Integer mark;
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
     @ApiModelProperty(value ="id")
     private Long id;
 
+    @ApiModelProperty(value = "金额")
+    private BigDecimal amount;
+
     @ApiModelProperty(value ="用户Id")
     private Long userId;
 
-    @ApiModelProperty( value ="筹码")
-    private BigDecimal chipBalance;
 
-    @ApiModelProperty(value ="现金")
-    private BigDecimal cashBalance;
-
-    @ApiModelProperty(value = "总余额")
-    private BigDecimal totalBalance;
-
-    @ApiModelProperty(value = "备注")
-    private String remark;
+    @ApiModelProperty(value = "(1:签单,2:还单)")
+    private Integer mark;
 
     /**
      * 创建者
@@ -60,5 +54,6 @@ public class SysAccessCodeAddSearch{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("更新时间")
     private Date updateTime;
+
 
 }

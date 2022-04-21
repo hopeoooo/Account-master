@@ -7,8 +7,8 @@ import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysAccessCode;
-import com.account.system.domain.SysAccessCodeAddSearch;
-import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.search.SysAccessCodeAddSearch;
+import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.service.SysAccessCodeService;
 import io.swagger.annotations.Api;
@@ -33,10 +33,6 @@ public class SysAccessCodeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询存取码列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userName", value = "会员账号", required = false),
-            @ApiImplicitParam(name = "isAdmin", value = "过滤内部卡号(0否 1是)", required = false)
-    })
     public TableDataInfo list(SysAccessCodeSearch accessCodeSearch){
         startPage();
         startOrderBy();
@@ -55,7 +51,7 @@ public class SysAccessCodeController extends BaseController {
 
 
     @PreAuthorize("@ss.hasPermi('system:accessCode:saveCode')")
-    @PostMapping
+    @PostMapping("saveCode")
     @ApiOperation(value = "存码")
     public AjaxResult saveCode(@Validated @RequestBody SysAccessCodeAddSearch accessCode)
     {

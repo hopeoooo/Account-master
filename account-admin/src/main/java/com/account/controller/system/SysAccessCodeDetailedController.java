@@ -2,7 +2,7 @@ package com.account.controller.system;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.page.TableDataInfo;
-import com.account.system.domain.SysAccessCodeDetailedSearch;
+import com.account.system.domain.search.SysAccessCodeDetailedSearch;
 import com.account.system.domain.vo.SysAccessCodeDetailedVo;
 import com.account.system.service.SysAccessCodeDetailedService;
 import io.swagger.annotations.Api;

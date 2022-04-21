@@ -24,6 +24,82 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             sys_members m
         LEFT JOIN sys_signed_record s ON s.user_id = m.id
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="card != null and card != ''">
+                AND m.card = #{card}
+            </if>
+        </where>
         ORDER BY s.signed_amount desc
     </select>
+
+
+    <select id="selectSignedRecordTotal"  resultType="java.util.Map">
+        SELECT
+        SUM(s.signed_amount ) as signed_amount
+        FROM
+        sys_members m
+        LEFT JOIN sys_signed_record s ON s.user_id = m.id
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="card != null and card != ''">
+                AND m.card = #{card}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectSignedRecordInfo" parameterType="SysSignedRecord" resultMap="SysSignedRecordResult">
+        SELECT
+        s.id,
+        s.user_id,
+        s.signed_amount
+        FROM
+        sys_signed_record s
+        <where>
+            <if test="userId != null and userId != '' ">
+                and  s.user_id=#{userId}
+            </if>
+            <if test="id != null and id != '' ">
+                and  s.id=#{id}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertSigned" parameterType="SysSignedRecordSearch" >
+        INSERT INTO sys_signed_record
+        (
+        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="amount != null and amount != ''">signed_amount,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time,update_time )
+        values(
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="amount != null and amount != ''">#{amount},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate(),sysdate()
+        )
+    </insert>
+
+
+    <update id="update" parameterType="SysAccessCodeAddSearch" >
+        update sys_signed_record
+        <set>
+            <if test="mark==1">
+                <if test="amount != null and amount != ''">signed_amount=signed_amount+#{amount},</if>
+            </if>
+            <if test="mark==2">
+                <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
+            </if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id} and user_id=#{userId}
+    </update>
 </mapper>

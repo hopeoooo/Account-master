@@ -1,20 +1,14 @@
 package com.account.system.service.impl;
 
-import com.account.common.enums.AccessType;
-import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysAccessCodeDetailed;
-import com.account.system.domain.SysAccessCodeDetailedSearch;
-import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.search.SysAccessCodeDetailedSearch;
 import com.account.system.domain.vo.SysAccessCodeDetailedVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.service.SysAccessCodeDetailedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 /**

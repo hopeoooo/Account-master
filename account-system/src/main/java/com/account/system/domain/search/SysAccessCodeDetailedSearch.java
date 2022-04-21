@@ -1,4 +1,4 @@
-package com.account.system.domain;
+package com.account.system.domain.search;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class SysAccessCodeDetailedSearch {
 
-    @ApiModelProperty(value = "会员账号")
-    private String userName;
+    @ApiModelProperty(value = "会员账卡号")
+    private String card;
 
     @ApiModelProperty(value = "过滤内部卡号(0:未勾选,1:勾选)")
     private Integer isAdmin;

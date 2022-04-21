@@ -3,6 +3,7 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.service.SysTableManagementService;
@@ -36,18 +37,18 @@ public class SysTableManagementController extends BaseController {
     /**
      * 新增/修改桌台
      */
-    @PreAuthorize("@ss.hasPermi('system:table:add')")
+    @PreAuthorize("@ss.hasPermi('system:table:addOrUpdate')")
     @PostMapping("/addOrUpdate")
     @ApiOperation(value = "新增/编辑桌台")
     public AjaxResult add(@Validated @RequestBody SysTableManagement sysTableManagement)
     {
         //修改
         if(StringUtils.isNotNull(sysTableManagement.getId()) && sysTableManagement.getId()>0){
-            sysTableManagement.setUpdateBy(getUsername());
+            sysTableManagement.setUpdateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.updateTable(sysTableManagement));
         }else {
             //添加
-            sysTableManagement.setCreateBy(getUsername());
+            sysTableManagement.setCreateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.insertTable(sysTableManagement));
         }
     }

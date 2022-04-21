@@ -2,11 +2,10 @@ package com.account.system.service;
 
 
 import com.account.system.domain.SysAccessCodeDetailed;
-import com.account.system.domain.SysAccessCodeDetailedSearch;
+import com.account.system.domain.search.SysAccessCodeDetailedSearch;
 import com.account.system.domain.vo.SysAccessCodeDetailedVo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 存取码明细 服务层
