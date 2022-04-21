@@ -1,10 +1,15 @@
 package com.account.controller.account;
 
 import com.account.common.core.controller.BaseController;
+import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.domain.entity.SysUser;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.utils.SecurityUtils;
+import com.account.system.domain.SysUserSearch;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,10 +37,47 @@ public class UserController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:user:list')")
     @GetMapping("/list")
     @ApiOperation(value = "获取员工列表")
-    public TableDataInfo list(SysUser user) {
+    public TableDataInfo list(SysUserSearch user) {
         startPage();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
 
+    /**
+     * 新增员工
+     */
+    @PreAuthorize("@ss.hasPermi('account:user:list')")
+    @GetMapping("/add")
+    @ApiOperation(value = "新增会员")
+    public AjaxResult add(SysUser sysUser) {
+        sysUser.setCreateBy(SecurityUtils.getUsername());
+        userService.addUser(sysUser);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 编辑员工
+     */
+    @PreAuthorize("@ss.hasPermi('account:user:list')")
+    @GetMapping("/edit")
+    @ApiOperation(value = "编辑员工")
+    public AjaxResult edit(SysUser sysUser) {
+        sysUser.setUpdateBy(SecurityUtils.getUsername());
+        userService.editUser(sysUser);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 删除员工
+     */
+    @PreAuthorize("@ss.hasPermi('account:user:list')")
+    @GetMapping("/delete")
+    @ApiOperation(value = "删除员工")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "员工id", dataType = "Long", required = true, paramType = "path")
+    })
+    public AjaxResult delete(Long userId) {
+        userService.deleteUser(userId);
+        return AjaxResult.success();
+    }
 }

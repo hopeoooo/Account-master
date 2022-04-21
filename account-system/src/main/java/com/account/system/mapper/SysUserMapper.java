@@ -2,6 +2,8 @@ package com.account.system.mapper;
 
 import java.util.List;
 
+import com.account.system.domain.SysUserSearch;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import com.account.common.core.domain.entity.SysUser;
 
@@ -17,7 +19,7 @@ public interface SysUserMapper {
      * @param sysUser 用户信息
      * @return 用户信息集合信息
      */
-     List<SysUser> selectUserList(SysUser sysUser);
+     List<SysUser> selectUserList(SysUserSearch sysUser);
 
     /**
      * 通过用户名查询用户
@@ -36,4 +38,10 @@ public interface SysUserMapper {
      */
      int resetUserPwd(@Param("userName") String userName, @Param("password") String password);
 
+    void addUser(SysUser sysUser);
+
+    void editUser(SysUser sysUser);
+
+    @Delete("delete from sys_user where user_id = #{userId}")
+    void deleteUser(@Param("userId") Long userId);
 }
