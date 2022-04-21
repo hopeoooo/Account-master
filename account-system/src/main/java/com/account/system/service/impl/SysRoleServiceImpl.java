@@ -35,7 +35,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<Map> selectRoleByName(String roleName){
+    public List<Map> selectRoleByName(String roleName) {
         return roleMapper.selectRoleByName(roleName);
     }
 
@@ -144,6 +144,11 @@ public class SysRoleServiceImpl implements SysRoleService {
             rows = roleMapper.addRoleMenu(list);
         }
         return rows;
+    }
+
+    @Override
+    public List<Long> selectMenuListByRoleId(Long roleId) {
+        return roleMapper.selectMenuListByRoleId(roleId);
     }
 
     /**

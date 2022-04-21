@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,7 +45,7 @@ public class RoleController extends BaseController {
     @PostMapping("/add")
     @ApiOperation(value = "新增角色")
     public AjaxResult add(SysRole sysRole) {
-        if(StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))){
+        if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
             return AjaxResult.error("新增角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
         sysRole.setCreateBy(SecurityUtils.getUsername());
@@ -62,7 +59,7 @@ public class RoleController extends BaseController {
     @GetMapping("/delete")
     @ApiOperation(value = "删除角色")
     public AjaxResult delete(Long roleId) {
-        if(!StringUtils.isEmpty(roleService.selectUserByRoleId(roleId))){
+        if (!StringUtils.isEmpty(roleService.selectUserByRoleId(roleId))) {
             return AjaxResult.error("角色已分配,不能删除");
         }
         return toAjax(roleService.deleteRole(roleId));
@@ -75,7 +72,7 @@ public class RoleController extends BaseController {
     @PostMapping("/edit")
     @ApiOperation(value = "编辑角色")
     public AjaxResult edit(SysRole sysRole) {
-        if(StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))){
+        if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
             return AjaxResult.error("修改角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
         sysRole.setUpdateBy(SecurityUtils.getUsername());
@@ -92,4 +89,16 @@ public class RoleController extends BaseController {
         return AjaxResult.success(roleService.buildMenuTreeSelect());
     }
 
+    /**
+     * 角色菜单列表树
+     */
+    @PreAuthorize("@ss.hasPermi('account:role:list')")
+    @GetMapping(value = "/roleMenuTreeselect/{roleId}")
+    @ApiOperation(value = "获取角色菜单列表树")
+    public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId) {
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("checkedKeys", roleService.selectMenuListByRoleId(roleId));
+        ajax.put("menus", roleService.buildMenuTreeSelect());
+        return ajax;
+    }
 }

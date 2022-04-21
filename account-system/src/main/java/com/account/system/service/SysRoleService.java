@@ -36,4 +36,6 @@ public interface SysRoleService {
     List<TreeSelect> buildMenuTreeSelect();
 
     int editRole(SysRole sysRole);
+
+    List<Long> selectMenuListByRoleId(Long roleId);
 }
