@@ -17,10 +17,10 @@
                 AND nick_name like concat('%', #{nickName}, '%')
             </if>
             <if test="beginTime != null and beginTime != ''">
-                and date_format(join_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+                and date_format(join_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
             </if>
             <if test="endTime != null and endTime != ''">
-                and date_format(join_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+                and date_format(join_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
             </if>
         </where>
     </select>
