@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <insert id="insertSigned" parameterType="SysSignedRecordSearch" >
+    <insert id="insertSigned">
         INSERT INTO sys_signed_record
         (
         <if test="userId != null and userId != 0">user_id,</if>
@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="update" parameterType="SysAccessCodeAddSearch" >
+    <update id="update" >
         update sys_signed_record
         <set>
             <if test="mark==1">
@@ -98,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
             </if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>
         where id = #{id} and user_id=#{userId}

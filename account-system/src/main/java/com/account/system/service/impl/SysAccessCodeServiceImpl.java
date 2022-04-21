@@ -74,8 +74,6 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
      * @return
      */
     public int saveAccessCodeDetailed(SysAccessCodeAddSearch accessCode){
-        //查询用户信息
-        Map map = membersMapper.selectMembersInfo(accessCode.getUserId());
         SysAccessCode sysAccessCode = accessCodeMapper.selectAccessCodeInfo(accessCode.getId(),accessCode.getUserId());
         SysAccessCodeDetailed accessCodeDetailed=new SysAccessCodeDetailed();
         accessCodeDetailed.setUserId(accessCode.getUserId());

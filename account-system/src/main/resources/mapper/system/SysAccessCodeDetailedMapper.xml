@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <insert id="insertAccessCodeDetailed" parameterType="SysAccessCodeDetailed" >
+    <insert id="insertAccessCodeDetailed" >
         INSERT INTO sys_access_code_detailed
         (
         <if test="userId != null and userId != 0">user_id,</if>

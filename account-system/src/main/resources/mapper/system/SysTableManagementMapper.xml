@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <insert id="insertTable" parameterType="SysTableManagement" >
+    <insert id="insertTable">
         INSERT INTO `sys_table_management`
             (
         <if test="gameId != null and gameId != 0">game_id,</if>
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateTable" parameterType="SysTableManagement">
+    <update id="updateTable" >
         update sys_table_management
         <set>
             <if test="gameId != null and gameId != 0">game_id = #{gameId},</if>

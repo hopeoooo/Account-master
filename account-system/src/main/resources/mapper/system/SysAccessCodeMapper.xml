@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <insert id="insertAccessCode" parameterType="SysAccessCodeAddSearch" >
+    <insert id="insertAccessCode" >
         INSERT INTO sys_access_code
             (
         <if test="userId != null and userId != 0">user_id,</if>
@@ -92,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateAccessCode" parameterType="SysAccessCodeAddSearch" >
+    <update id="updateAccessCode">
         update sys_access_code
             <set>
                 <if test="mark==1">
