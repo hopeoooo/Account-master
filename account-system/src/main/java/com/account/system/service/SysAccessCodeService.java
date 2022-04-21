@@ -1,6 +1,7 @@
 package com.account.system.service;
 
 import com.account.system.domain.SysAccessCode;
+import com.account.system.domain.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeSearch;
 
 import java.util.List;
@@ -16,9 +17,9 @@ public interface SysAccessCodeService
 
     Map selectAccessCodeTotal(SysAccessCodeSearch accessCodeSearch) ;
 
-    SysAccessCode selectAccessCodeInfo(Long userId);
+    SysAccessCode selectAccessCodeInfo(Long id ,Long userId);
 
-     int insertAccessCode(SysAccessCodeSearch accessCode) ;
-     int updateAccessCode(SysAccessCodeSearch accessCode) ;
+     int insertAccessCode(SysAccessCodeAddSearch accessCode) ;
+     int updateAccessCode(SysAccessCodeAddSearch accessCode) ;
 
 }

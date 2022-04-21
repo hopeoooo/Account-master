@@ -2,7 +2,9 @@ package com.account.system.mapper;
 
 
 import com.account.system.domain.SysAccessCode;
+import com.account.system.domain.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeSearch;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -17,14 +19,14 @@ public interface SysAccessCodeMapper {
     Map selectAccessCodeTotal(SysAccessCodeSearch accessCodeSearch);
 
     /**
-     * 根据用户id查询
+     * 根据唯一id、用户id查询
      * @param userId
      * @return
      */
-    SysAccessCode selectAccessCodeInfo(Long userId);
+    SysAccessCode selectAccessCodeInfo(@Param("id")Long id, @Param("userId")Long userId);
 
-    int insertAccessCode(SysAccessCodeSearch accessCode) ;
+    int insertAccessCode(SysAccessCodeAddSearch accessCode) ;
 
-    int updateAccessCode(SysAccessCodeSearch accessCode) ;
+    int updateAccessCode(SysAccessCodeAddSearch accessCode) ;
 
 }

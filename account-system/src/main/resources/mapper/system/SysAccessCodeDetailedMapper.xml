@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysAccessCodeDetailedMapper">
+
+    <resultMap type="SysAccessCodeDetailed" id="SysAccessCodeDetailedResult">
+    	<id     property="id"      column="id"      />
+        <result property="userId"    column="user_id"    />
+        <result property="type"    column="type"    />
+        <result property="chipAmountBefore"      column="chip_amount_before"      />
+        <result property="chipAmount"      column="chip_amount"      />
+        <result property="chipAmountAfter"    column="chip_amount_after"    />
+        <result property="cashAmountBefore"      column="cash_amount_before"      />
+        <result property="cashAmount"      column="cash_amount"      />
+        <result property="cashAmountAfter"      column="cash_amount_after"      />
+        <result property="remark"      column="remark"      />
+        <result property="operationTime"      column="operation_time"      />
+        <result property="createBy"      column="create_by"      />
+    </resultMap>
+
+   <select id="selectAccessDetailedCodeList" parameterType="SysAccessCodeDetailedSearch"  resultType="com.account.system.domain.vo.SysAccessCodeDetailedVo">
+       SELECT
+           d.id,
+           m.`name` as userName,
+           m.card,
+           m.is_admin as isAdmin,
+           d.user_id as userId,
+           d.type,
+           d.chip_amount_before as chipAmountBefore,
+           d.chip_amount as chipAmount,
+           d.chip_amount_after as chipAmountAfter,
+           d.cash_amount_before as cashAmountBefore,
+           d.cash_amount as cashAmount,
+           d.cash_amount_after as cashAmountAfter,
+           d.remark,
+           d.operation_time as operationTime,
+           d.create_by as  createBy
+       FROM
+           sys_access_code_detailed d
+           LEFT JOIN sys_members m ON m.id = d.user_id
+    <where>
+        <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+            AND m.is_admin = 0
+        </if>
+        <if test="userName != null and userName != ''">
+            AND m.name like  concat('%', #{userName}, '%')
+        </if>
+        <if test="type != null and type != ''">
+            AND d.type = #{type}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND d.operation_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND d.operation_time <![CDATA[<=]]> #{endTime}
+        </if>
+    </where>
+       ORDER BY
+       d.operation_time desc
+    </select>
+
+
+    <insert id="insertAccessCodeDetailed" parameterType="SysAccessCodeDetailed" >
+        INSERT INTO sys_access_code_detailed
+        (
+        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="chipAmountBefore != null and chipAmountBefore != ''">chip_amount_before,</if>
+        <if test="chipAmount != null and chipAmount != ''">chip_amount,</if>
+        <if test="chipAmountAfter != null and chipAmountAfter != ''">chip_amount_after,</if>
+        <if test="cashAmountBefore != null and cashAmountBefore != ''">cash_amount_before,</if>
+        <if test="cashAmount != null and cashAmount != ''">cash_amount,</if>
+        <if test="cashAmountAfter != null and cashAmountAfter != ''">cash_amount_after,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time,operation_time )
+        values(
+        <if test="userId != null and userId != 0">#{userId},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="chipAmountBefore != null and chipAmountBefore != ''">#{chipAmountBefore},</if>
+        <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>
+        <if test="chipAmountAfter != null and chipAmountAfter != ''">#{chipAmountAfter},</if>
+        <if test="cashAmountBefore != null and cashAmountBefore != ''">#{cashAmountBefore},</if>
+        <if test="cashAmount != null and cashAmount != ''">#{cashAmount},</if>
+        <if test="cashAmountAfter != null and cashAmountAfter != ''">#{cashAmountAfter},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate(), sysdate()
+        )
+    </insert>
+</mapper>

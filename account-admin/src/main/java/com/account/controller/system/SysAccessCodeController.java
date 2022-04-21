@@ -3,9 +3,14 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.enums.AccessType;
+import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysAccessCode;
+import com.account.system.domain.SysAccessCodeAddSearch;
+import com.account.system.domain.SysAccessCodeDetailed;
 import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.service.SysAccessCodeDetailedService;
 import com.account.system.service.SysAccessCodeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +32,6 @@ import java.util.Map;
 public class SysAccessCodeController extends BaseController {
     @Autowired
     private SysAccessCodeService accessCodeService;
-
 
     @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @GetMapping("/list")
@@ -51,23 +57,31 @@ public class SysAccessCodeController extends BaseController {
     }
 
 
-    /**
-     * 新增/修改桌台
-     */
     @PreAuthorize("@ss.hasPermi('system:accessCode:saveCode')")
     @PostMapping
     @ApiOperation(value = "存码")
-    public AjaxResult saveCode(@Validated @RequestBody SysAccessCodeSearch accessCode)
+    public AjaxResult saveCode(@Validated @RequestBody SysAccessCodeAddSearch accessCode)
     {
-        int i = 0;
+        accessCode.setMark(AccessType.STORAGE_CODE.getCode());
         //存码
         if (StringUtils.isNotNull(accessCode.getId()) && accessCode.getId() > 0) {
+            //判断id是否存在
+            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(), accessCode.getUserId());
+            if (sysAccessCode==null){
+                return AjaxResult.error("存码失败!");
+            }
             //修改:金额累加
-            accessCode.setUpdateBy(getUsername());
+            accessCode.setCreateBy(SecurityUtils.getUsername());
+            accessCode.setUpdateBy(SecurityUtils.getUsername());
             accessCodeService.updateAccessCode(accessCode);
         } else {
+            //判断id是否存在
+            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null,accessCode.getUserId());
+            if (sysAccessCode!=null){
+                return AjaxResult.error("存码失败!");
+            }
             //添加
-            accessCode.setCreateBy(getUsername());
+            accessCode.setCreateBy(SecurityUtils.getUsername());
             accessCodeService.insertAccessCode(accessCode);
         }
         return AjaxResult.success("存码成功!");
@@ -76,21 +90,23 @@ public class SysAccessCodeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:accessCode:updateCodeFetching')")
     @PostMapping("/updateCodeFetching")
     @ApiOperation(value = "取码")
-    public AjaxResult updateCodeFetching(@Validated @RequestBody SysAccessCodeSearch accessCode){
+    public AjaxResult updateCodeFetching(@Validated @RequestBody SysAccessCodeAddSearch accessCode){
         //判断金额是否足够
-        SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getUserId());
+        SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getUserId());
+        accessCode.setMark(AccessType.CODE_FETCHING.getCode());
         if (sysAccessCode==null){
-            return AjaxResult.error("取码失败");
+            return AjaxResult.error("取码失败!");
         }
         if (accessCode.getChipBalance().compareTo(sysAccessCode.getChipBalance())>0){
-            return AjaxResult.error("余额不足");
+            return AjaxResult.error("余额不足!");
         }
 
         if (accessCode.getCashBalance().compareTo(sysAccessCode.getCashBalance())>0){
-            return AjaxResult.error("余额不足");
+            return AjaxResult.error("余额不足!");
         }
         //取码:金额减
-        accessCode.setUpdateBy(getUsername());
+        accessCode.setUpdateBy(SecurityUtils.getUsername());
+        accessCode.setCreateBy(SecurityUtils.getUsername());
         accessCodeService.updateAccessCode(accessCode);
         return AjaxResult.success("取码成功!");
     }

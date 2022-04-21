@@ -66,11 +66,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null and userId != '' ">
                and  a.user_id=#{userId}
             </if>
-
+            <if test="id != null and id != '' ">
+                and  a.id=#{id}
+            </if>
         </where>
     </select>
 
-    <insert id="insertAccessCode" parameterType="SysAccessCodeSearch" >
+    <insert id="insertAccessCode" parameterType="SysAccessCodeAddSearch" >
         INSERT INTO sys_access_code
             (
         <if test="userId != null and userId != 0">user_id,</if>
@@ -90,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateAccessCode" parameterType="SysAccessCodeSearch" >
+    <update id="updateAccessCode" parameterType="SysAccessCodeAddSearch" >
         update sys_access_code
             <set>
                 <if test="mark==1">
