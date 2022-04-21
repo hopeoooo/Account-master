@@ -35,7 +35,7 @@ public class SysUser extends BaseEntity {
     @ApiModelProperty("籍贯")
     private String address;
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty("角色id")
     private Long roleId;
 
     @ApiModelProperty("职位")

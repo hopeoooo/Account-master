@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysUserMapper">
+
+    <select id="selectUserList" parameterType="sysUserSearch" resultType="SysUser">
+        select user_id userId,nick_name nickName,user_name userName,
+        phonenumber,sex,address,post,join_time joinTime,brithday
+        from
+        sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                AND user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                AND nick_name like concat('%', #{nickName}, '%')
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(join_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(join_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserByUserName" parameterType="String" resultType="SysUser">
+        select user_id   userId,
+               user_name userName,
+               nick_name nickName,
+               phonenumber,
+               password,
+               sex,
+               create_by,
+               create_time,
+               remark,
+               role_id   roleId
+        from sys_user
+        where user_name = #{userName}
+    </select>
+
+    <update id="resetUserPwd" parameterType="SysUser">
+        update sys_user
+        set password = #{password}
+        where user_name = #{userName}
+    </update>
+
+    <insert id="addUser">
+        insert into sys_user (
+        <if test="userName != null and userName != '' ">user_name,</if>
+        <if test="nickName != null and nickName != '' ">nick_name,</if>
+        <if test="phonenumber != null and phonenumber != '' ">phonenumber,</if>
+        <if test="sex != null ">sex,</if>
+        <if test="password != null ">password,</if>
+        <if test="address != null ">address,</if>
+        <if test="post != null ">post,</if>
+        <if test="joinTime != null ">join_time,</if>
+        <if test="brithday != null ">brithday,</if>
+        <if test="roleId != null ">role_id,</if>
+        <if test="createBy != null and createBy != '' ">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="userName != null and userName != '' ">#{userName},</if>
+        <if test="nickName != null and nickName != '' ">#{nickName},</if>
+        <if test="phonenumber != null and phonenumber != '' ">#{phonenumber},</if>
+        <if test="sex != null ">#{sex},</if>
+        <if test="password != null ">#{password},</if>
+        <if test="address != null ">#{address},</if>
+        <if test="post != null ">#{post},</if>
+        <if test="joinTime != null ">#{joinTime},</if>
+        <if test="brithday != null ">#{brithday},</if>
+        <if test="roleId != null ">#{roleId},</if>
+        <if test="createBy != null and createBy != '' ">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="editUser">
+        update sys_user
+        <set>
+            <if test="userName != null and userName != '' ">user_name=#{userName},</if>
+            <if test="nickName != null and nickName != '' ">nick_name=#{userName},</if>
+            <if test="phonenumber != null and phonenumber != '' ">phonenumber=#{phonenumber},</if>
+            <if test="sex != null ">sex=#{sex},</if>
+            <if test="password != null ">password=#{password},</if>
+            <if test="address != null ">address=#{address},</if>
+            <if test="post != null ">post=#{post},</if>
+            <if test="joinTime != null ">join_time=#{joinTime},</if>
+            <if test="brithday != null ">brithday=#{brithday},</if>
+            <if test="roleId != null ">role_id=#{roleId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            update_time = sysdate(),
+            update_by = #{updateBy}
+        </set>
+        where user_id = #{userId}
+    </update>
+
+</mapper>

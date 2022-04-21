@@ -1,6 +1,9 @@
 package com.account.system.service.impl;
 
 import com.account.common.core.domain.entity.SysUser;
+import com.account.common.utils.SecurityUtils;
+import com.account.common.utils.StringUtils;
+import com.account.system.domain.SysUserSearch;
 import com.account.system.mapper.SysUserMapper;
 import com.account.system.service.SysUserService;
 import org.slf4j.Logger;
@@ -17,15 +20,14 @@ import java.util.List;
  */
 @Service
 public class SysUserServiceImpl implements SysUserService {
-    private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
     @Autowired
     private SysUserMapper userMapper;
 
 
     @Override
-    public List<SysUser> selectUserList(SysUser user) {
-        return null;
+    public List<SysUser> selectUserList(SysUserSearch user) {
+        return userMapper.selectUserList(user);
     }
 
     /**
@@ -41,6 +43,25 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public int resetUserPwd(String userName, String password) {
-        return userMapper.resetUserPwd(userName,password);
+        return userMapper.resetUserPwd(userName, password);
+    }
+
+    @Override
+    public void addUser(SysUser sysUser) {
+        sysUser.setPassword(SecurityUtils.encryptPassword(sysUser.getPassword()));
+        userMapper.addUser(sysUser);
+    }
+
+    @Override
+    public void editUser(SysUser sysUser) {
+        if(!StringUtils.isEmpty(sysUser.getPassword())){
+            sysUser.setPassword(SecurityUtils.encryptPassword(sysUser.getPassword()));
+        }
+        userMapper.editUser(sysUser);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        userMapper.deleteUser(userId);
     }
 }

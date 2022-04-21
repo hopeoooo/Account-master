@@ -1,16 +1,15 @@
 package com.account.controller.system;
 
-import com.account.common.annotation.Log;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.domain.model.LoginUser;
-import com.account.common.enums.BusinessType;
 import com.account.common.utils.SecurityUtils;
 import com.account.framework.web.service.TokenService;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +32,7 @@ public class SysProfileController extends BaseController {
     /**
      * 重置密码
      */
-    @Log(title = "个人信息", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('system:user:profile')")
     @PutMapping("/updatePwd")
     @ApiOperation(value = "修改密码")
     public AjaxResult updatePwd(String oldPassword, String newPassword) {
