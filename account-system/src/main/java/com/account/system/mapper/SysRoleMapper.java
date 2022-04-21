@@ -35,16 +35,18 @@ public interface SysRoleMapper {
 
     @Select("select user_id userId,user_name userName,nick_name nickName,phonenumber,password,sex,role_id roleId " +
             "from sys_user where role_id = #{roleId}")
-    List<Map> selectUserByRoleId(@Param("roleId")Long roleId);
+    List<Map> selectUserByRoleId(@Param("roleId") Long roleId);
 
     @Delete("delete from sys_role where role_id = #{roleId}")
-    int deleteRole(@Param("roleId")Long roleId);
+    int deleteRole(@Param("roleId") Long roleId);
 
     List<SysMenu> selectMenuList();
 
     void editRole(SysRole sysRole);
 
-    void deleteRoleMenu(@Param("roleId")Long roleId);
+    void deleteRoleMenu(@Param("roleId") Long roleId);
 
     int addRoleMenu(List<SysRoleMenu> list);
+
+    List<Long> selectMenuListByRoleId(@Param("roleId") Long roleId);
 }
