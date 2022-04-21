@@ -37,7 +37,7 @@ public class SysTableManagementController extends BaseController {
      * 新增/修改桌台
      */
     @PreAuthorize("@ss.hasPermi('system:table:add')")
-    @PostMapping
+    @PostMapping("/addOrUpdate")
     @ApiOperation(value = "新增/编辑桌台")
     public AjaxResult add(@Validated @RequestBody SysTableManagement sysTableManagement)
     {

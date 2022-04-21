@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysSignedRecordMapper">
+
+    <resultMap type="SysSignedRecord" id="SysSignedRecordResult">
+    	<id     property="id"      column="id"      />
+        <result property="userId"    column="user_id"    />
+        <result property="signedAmount"     column="signed_amount"     />
+        <result property="remark"      column="remark"      />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"      column="update_time"      />
+    </resultMap>
+    <select id="selectSignedRecordList"   resultType="com.account.system.domain.vo.SysSignedRecordVo">
+        SELECT
+            m.id as id,
+            m.`name` as userName,
+            m.card as card,
+            IFNULL(s.signed_amount,0) as signedAmount,
+            s.remark as remark
+        FROM
+            sys_members m
+        LEFT JOIN sys_signed_record s ON s.user_id = m.id
+        ORDER BY s.signed_amount desc
+    </select>
+</mapper>

@@ -3,6 +3,7 @@ package com.account.system.service;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.vo.SysAccessCodeVo;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 public interface SysAccessCodeService
 {
 
-    List<Map> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch);
+    List<SysAccessCodeVo> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch);
 
     Map selectAccessCodeTotal(SysAccessCodeSearch accessCodeSearch) ;
 

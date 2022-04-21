@@ -4,6 +4,7 @@ package com.account.system.mapper;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.vo.SysAccessCodeVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public interface SysAccessCodeMapper {
 
-    List<Map> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch);
+    List<SysAccessCodeVo> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch);
 
     Map selectAccessCodeTotal(SysAccessCodeSearch accessCodeSearch);
 

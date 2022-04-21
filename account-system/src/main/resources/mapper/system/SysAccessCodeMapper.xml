@@ -18,10 +18,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
 
-    <select id="selectAccessCodeList"  parameterType="SysAccessCodeSearch" resultType="java.util.Map">
+    <select id="selectAccessCodeList"  parameterType="SysAccessCodeSearch" resultType="com.account.system.domain.vo.SysAccessCodeVo">
     SELECT
         a.id AS id ,m.id AS userId,
-        m.name AS name,
+        m.name AS userName,
         m.card AS card,
         IFNULL( a.cash_balance, 0 ) as cashBalance,
         IFNULL( a.chip_balance, 0 ) as chipBalance,

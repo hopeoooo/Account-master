@@ -5,6 +5,7 @@ import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeDetailed;
 import com.account.system.domain.SysAccessCodeSearch;
+import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.mapper.SysAccessCodeMapper;
 import com.account.system.mapper.SysMembersMapper;
@@ -31,7 +32,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     private SysMembersMapper membersMapper;
 
     @Override
-    public List<Map> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch) {
+    public List<SysAccessCodeVo> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch) {
         return accessCodeMapper.selectAccessCodeList(accessCodeSearch);
     }
 

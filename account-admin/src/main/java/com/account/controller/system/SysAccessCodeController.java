@@ -8,9 +8,8 @@ import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysAccessCodeAddSearch;
-import com.account.system.domain.SysAccessCodeDetailed;
 import com.account.system.domain.SysAccessCodeSearch;
-import com.account.system.service.SysAccessCodeDetailedService;
+import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.service.SysAccessCodeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,8 +20,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +40,7 @@ public class SysAccessCodeController extends BaseController {
     public TableDataInfo list(SysAccessCodeSearch accessCodeSearch){
         startPage();
         startOrderBy();
-        List<Map> sysAccessCodeVos = accessCodeService.selectAccessCodeList(accessCodeSearch);
+        List<SysAccessCodeVo> sysAccessCodeVos = accessCodeService.selectAccessCodeList(accessCodeSearch);
         return getDataTable(sysAccessCodeVos);
     }
 
