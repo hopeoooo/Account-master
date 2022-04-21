@@ -6,6 +6,8 @@ import java.util.Set;
 
 import com.account.common.core.domain.entity.SysMenu;
 import com.account.common.core.domain.entity.SysRole;
+import com.account.system.domain.SysRoleMenu;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,7 +23,7 @@ public interface SysRoleMapper {
     int addRole(SysRole sysRole);
 
     @Select("select role_id roleId,role_name roleName,create_time createTime,remark from sys_role where role_name = #{roleName}")
-    Map selectRoleByName(@Param("roleName") String roleName);
+    List<Map> selectRoleByName(@Param("roleName") String roleName);
 
     Set<String> selectMenuPermsByUserId(@Param("userId") Long userId);
 
@@ -30,4 +32,19 @@ public interface SysRoleMapper {
     List<SysMenu> selectMenuTreeAll();
 
     List<SysMenu> selectMenuTreeByUserId(@Param("userId") Long userId);
+
+    @Select("select user_id userId,user_name userName,nick_name nickName,phonenumber,password,sex,role_id roleId " +
+            "from sys_user where role_id = #{roleId}")
+    List<Map> selectUserByRoleId(@Param("roleId")Long roleId);
+
+    @Delete("delete from sys_role where role_id = #{roleId}")
+    int deleteRole(@Param("roleId")Long roleId);
+
+    List<SysMenu> selectMenuList();
+
+    void editRole(SysRole sysRole);
+
+    void deleteRoleMenu(@Param("roleId")Long roleId);
+
+    int addRoleMenu(List<SysRoleMenu> list);
 }

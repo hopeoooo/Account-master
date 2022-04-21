@@ -2,10 +2,12 @@ package com.account.system.service.impl;
 
 import com.account.common.constant.Constants;
 import com.account.common.constant.UserConstants;
+import com.account.common.core.domain.TreeSelect;
 import com.account.common.core.domain.entity.SysMenu;
 import com.account.common.core.domain.entity.SysRole;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
+import com.account.system.domain.SysRoleMenu;
 import com.account.system.domain.vo.MetaVo;
 import com.account.system.domain.vo.RouterVo;
 import com.account.system.mapper.SysRoleMapper;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 角色 业务层处理
@@ -32,10 +35,12 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
+    public List<Map> selectRoleByName(String roleName){
+        return roleMapper.selectRoleByName(roleName);
+    }
+
+    @Override
     public int addRole(SysRole sysRole) {
-        if (roleMapper.selectRoleByName(sysRole.getRoleName()) != null) {
-            return 0;
-        }
         return roleMapper.addRole(sysRole);
     }
 
@@ -103,6 +108,42 @@ public class SysRoleServiceImpl implements SysRoleService {
             routers.add(router);
         }
         return routers;
+    }
+
+    @Override
+    public List selectUserByRoleId(Long roleId) {
+        return roleMapper.selectUserByRoleId(roleId);
+    }
+
+    @Override
+    public int deleteRole(Long roleId) {
+        return roleMapper.deleteRole(roleId);
+    }
+
+    @Override
+    public List<TreeSelect> buildMenuTreeSelect() {
+        List<SysMenu> menuList = roleMapper.selectMenuList();
+        List<SysMenu> menuTrees = buildMenuTree(menuList);
+        return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public int editRole(SysRole sysRole) {
+        roleMapper.editRole(sysRole);
+        roleMapper.deleteRoleMenu(sysRole.getRoleId());
+        int rows = 1;
+        // 新增用户与角色管理
+        List<SysRoleMenu> list = new ArrayList<SysRoleMenu>();
+        for (Long menuId : sysRole.getMenuIds()) {
+            SysRoleMenu rm = new SysRoleMenu();
+            rm.setRoleId(sysRole.getRoleId());
+            rm.setMenuId(menuId);
+            list.add(rm);
+        }
+        if (list.size() > 0) {
+            rows = roleMapper.addRoleMenu(list);
+        }
+        return rows;
     }
 
     /**
@@ -260,5 +301,31 @@ public class SysRoleServiceImpl implements SysRoleService {
     public String innerLinkReplaceEach(String path) {
         return StringUtils.replaceEach(path, new String[]{Constants.HTTP, Constants.HTTPS},
                 new String[]{"", ""});
+    }
+
+    /**
+     * 构建前端所需要树结构
+     *
+     * @param menus 菜单列表
+     * @return 树结构列表
+     */
+    public List<SysMenu> buildMenuTree(List<SysMenu> menus) {
+        List<SysMenu> returnList = new ArrayList<SysMenu>();
+        List<Long> tempList = new ArrayList<Long>();
+        for (SysMenu dept : menus) {
+            tempList.add(dept.getMenuId());
+        }
+        for (Iterator<SysMenu> iterator = menus.iterator(); iterator.hasNext(); ) {
+            SysMenu menu = (SysMenu) iterator.next();
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(menu.getParentId())) {
+                recursionFn(menus, menu);
+                returnList.add(menu);
+            }
+        }
+        if (returnList.isEmpty()) {
+            returnList = menus;
+        }
+        return returnList;
     }
 }

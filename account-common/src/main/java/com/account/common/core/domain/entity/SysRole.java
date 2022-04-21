@@ -20,4 +20,6 @@ public class SysRole extends BaseEntity {
     @ApiModelProperty("角色名称")
     private String roleName;
 
+    @ApiModelProperty("菜单组")
+    private Long[] menuIds;
 }

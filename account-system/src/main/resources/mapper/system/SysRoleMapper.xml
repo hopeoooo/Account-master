@@ -89,4 +89,34 @@
         order by m.parent_id, m.order_num
     </select>
 
+    <select id="selectMenuList" resultType="SysMenu">
+        select menu_id menuId, menu_name menuName, parent_id parentId, order_num orderNum,
+               path, component, `query`,
+               is_frame isFrame, is_cache isCache, menu_type menuType,
+               visible, status, ifnull(perms,'') as perms, icon, create_time createTime
+        from sys_menu
+        order by parent_id, order_num
+    </select>
+
+    <update id="editRole" parameterType="sysRole">
+        update sys_role
+        <set>
+            <if test="roleName != null and roleName != ''">role_name = #{roleName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteRoleMenu" parameterType="Long">
+        delete from sys_role_menu where role_id=#{roleId}
+    </delete>
+
+    <insert id="addRoleMenu">
+        insert into sys_role_menu(role_id, menu_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.roleId},#{item.menuId})
+        </foreach>
+    </insert>
 </mapper>
