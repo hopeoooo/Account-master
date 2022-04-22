@@ -37,4 +37,15 @@ public class SysTableManagement extends BaseEntity {
     @ApiModelProperty(value = "保险筹码点码基数")
     private BigDecimal insurancePointBase;
 
+    @ApiModelProperty(hidden = true)
+    private Long bootNum;
+
+    @ApiModelProperty(hidden = true)
+    private Long gameNum;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal chip;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal cash;
 }
