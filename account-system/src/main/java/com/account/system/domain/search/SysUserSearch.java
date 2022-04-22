@@ -23,14 +23,12 @@ public class SysUserSearch {
     /**
      * 开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("开始时间")
     private String beginTime;
 
     /**
      * 结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty("结束时间")
     private String endTime;
 

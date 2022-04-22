@@ -32,14 +32,12 @@ public class SysMembersSearch{
     /**
      * 开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("开始时间")
-    private Date beginTime;
+    private String beginTime;
 
     /**
      * 结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("结束时间")
-    private Date endTime;
+    private String endTime;
 }
