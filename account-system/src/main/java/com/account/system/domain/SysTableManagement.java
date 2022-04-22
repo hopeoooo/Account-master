@@ -16,6 +16,9 @@ public class SysTableManagement extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
+    @ApiModelProperty(value ="桌台Id")
+    private Long tableId;
+
     @ApiModelProperty(value ="游戏Id")
     private Long gameId;
 

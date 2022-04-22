@@ -12,6 +12,8 @@ public interface SysTableManagementService
 {
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
+    SysTableManagement selectTableInfo(Long tableId,Long gameId);
+
     int insertTable(SysTableManagement sysTableManagement);
 
     int updateTable(SysTableManagement sysTableManagement);

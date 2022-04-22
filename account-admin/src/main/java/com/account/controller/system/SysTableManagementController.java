@@ -47,6 +47,10 @@ public class SysTableManagementController extends BaseController {
             sysTableManagement.setUpdateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.updateTable(sysTableManagement));
         }else {
+            SysTableManagement sysTableManagement1 = tableManagementService.selectTableInfo(sysTableManagement.getTableId(),sysTableManagement.getGameId());
+            if  (sysTableManagement1!=null){
+                return AjaxResult.error("添加失败,桌台已存在!");
+            }
             //添加
             sysTableManagement.setCreateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.insertTable(sysTableManagement));

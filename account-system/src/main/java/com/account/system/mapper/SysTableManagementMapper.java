@@ -2,6 +2,7 @@ package com.account.system.mapper;
 
 
 import com.account.system.domain.SysTableManagement;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public interface SysTableManagementMapper {
 
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
+    SysTableManagement selectTableInfo(@Param("tableId")Long tableId, @Param("gameId")Long gameId);
 
      int insertTable(SysTableManagement sysTableManagement) ;
 
