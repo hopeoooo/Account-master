@@ -22,5 +22,5 @@ public interface BetService {
 
     String selectGameResult(SysTableManagement sysTableManagement);
 
-    void saveBet(String gameResult, JSONArray bets);
+    void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
 }

@@ -6,6 +6,7 @@ import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
 import com.account.common.utils.StringUtils;
 import com.account.common.utils.ip.IpUtils;
+import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysOddsConfigure;
 import com.account.system.domain.SysTableManagement;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 /**
  * @author hope
@@ -57,11 +59,6 @@ public class BetBaccaratController {
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
-        SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
-        sysGameResult.setGameResult(gameResult);
-        sysGameResult.setCreateBy(SecurityUtils.getUsername());
-        betService.saveGameResult(sysGameResult);
-
         //注单计算
         JSONArray bets = jsonObject.getJSONArray("bet");
         bets.forEach(b -> {
@@ -69,11 +66,19 @@ public class BetBaccaratController {
             String card = bet.getString("card");
             BigDecimal chip = betService.selectMembersChip(card);
             BigDecimal payout = payout(bet, gameResult);//派彩
-            if(0==bet.getInteger("type")){
-                chip = chip.add(payout);
-            }
+            if (0 == bet.getInteger("type")) chip = chip.add(payout);
             bet.put("chip", chip);
             bet.put("payout", payout);
+        });
+        AsyncManager.me().execute(new TimerTask() {
+            @Override
+            public void run() {
+                SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
+                sysGameResult.setGameResult(gameResult);
+                sysGameResult.setCreateBy(SecurityUtils.getUsername());
+                betService.saveGameResult(sysGameResult);
+                betService.updateGameNum(sysTableManagement.getId());
+            }
         });
 
         return AjaxResult.success(jsonObject);
@@ -97,7 +102,7 @@ public class BetBaccaratController {
         String gameResult = betService.selectGameResult(sysTableManagement);
         //注单录入
         JSONArray bets = jsonObject.getJSONArray("bet");
-        betService.saveBet(gameResult,bets);
+        betService.saveBet(sysTableManagement, gameResult, bets);
         return AjaxResult.success();
     }
 

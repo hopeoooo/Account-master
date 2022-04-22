@@ -6,7 +6,7 @@ import com.account.common.core.domain.entity.SysUser;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
-import com.account.system.domain.SysUserSearch;
+import com.account.system.domain.search.SysUserSearch;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

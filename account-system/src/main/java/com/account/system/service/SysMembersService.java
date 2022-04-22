@@ -1,7 +1,7 @@
 package com.account.system.service;
 
 import com.account.system.domain.SysMembers;
-import com.account.system.domain.SysMembersSearch;
+import com.account.system.domain.search.SysMembersSearch;
 
 import java.util.List;
 import java.util.Map;

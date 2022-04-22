@@ -1,8 +1,7 @@
 package com.account.system.mapper;
 
 import com.account.system.domain.SysMembers;
-import com.account.system.domain.SysMembersSearch;
-import io.swagger.models.auth.In;
+import com.account.system.domain.search.SysMembersSearch;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;

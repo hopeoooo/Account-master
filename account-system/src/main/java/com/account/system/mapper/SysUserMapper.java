@@ -2,7 +2,7 @@ package com.account.system.mapper;
 
 import java.util.List;
 
-import com.account.system.domain.SysUserSearch;
+import com.account.system.domain.search.SysUserSearch;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import com.account.common.core.domain.entity.SysUser;

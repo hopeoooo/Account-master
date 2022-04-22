@@ -3,7 +3,7 @@ package com.account.system.service;
 import java.util.List;
 
 import com.account.common.core.domain.entity.SysUser;
-import com.account.system.domain.SysUserSearch;
+import com.account.system.domain.search.SysUserSearch;
 
 /**
  * 用户 业务层

@@ -1,5 +1,7 @@
 package com.account.system.mapper;
 
+import com.account.system.domain.SysBet;
+import com.account.system.domain.SysBetInfo;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
 import org.apache.ibatis.annotations.Insert;
@@ -8,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author hope
@@ -32,6 +35,10 @@ public interface BetMpper {
     BigDecimal selectMembersChip(@Param("card") String card);
 
     @Select("select game_result from sys_game_result where game_id = #{gameId} " +
-            "and table_id = tableId and boot_num = #{bootNum} and game_num = #{gameNum} order by create_time desc limit 0,1")
+            "and table_id = #{tableId} and boot_num = #{bootNum} and game_num = #{gameNum} order by create_time desc limit 0,1")
     String selectGameResult(SysTableManagement sysTableManagement);
+
+    void saveBet(SysBet sysBet);
+
+    void saveBetInfos(List<SysBetInfo> list);
 }

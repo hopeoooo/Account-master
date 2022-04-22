@@ -3,11 +3,9 @@ package com.account.system.service.impl;
 import com.account.common.core.domain.entity.SysUser;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
-import com.account.system.domain.SysUserSearch;
+import com.account.system.domain.search.SysUserSearch;
 import com.account.system.mapper.SysUserMapper;
 import com.account.system.service.SysUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

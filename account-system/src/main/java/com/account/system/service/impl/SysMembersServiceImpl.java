@@ -1,7 +1,7 @@
 package com.account.system.service.impl;
 
 import com.account.system.domain.SysMembers;
-import com.account.system.domain.SysMembersSearch;
+import com.account.system.domain.search.SysMembersSearch;
 import com.account.system.mapper.SysMembersMapper;
 import com.account.system.service.SysMembersService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.BetMpper">
+
+    <insert id="saveBet" useGeneratedKeys="true" keyProperty="betId" keyColumn="bet_id" parameterType="sysBet">
+        insert into sys_bet (card, table_id, boot_num, game_num, type, game_id, game_result, create_by, create_time)
+        values (#{card}, #{tableId}, #{bootNum}, #{gameNum}, #{type}, #{gameId}, #{gameResult}, #{createBy}, sysdate())
+    </insert>
+
+    <insert id="saveBetInfos">
+        insert into sys_bet_info(bet_id,card,table_id,boot_num,game_num,
+        type,game_id,bet_option,bet_money,game_result,win_lose,create_time,create_by)
+        values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.betId},#{item.card},#{item.tableId},#{item.bootNum},#{item.gameNum}
+            ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},sysdate(),#{item.createBy})
+        </foreach>
+    </insert>
+
+</mapper>

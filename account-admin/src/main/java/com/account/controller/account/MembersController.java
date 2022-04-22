@@ -6,7 +6,7 @@ import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
-import com.account.system.domain.SysMembersSearch;
+import com.account.system.domain.search.SysMembersSearch;
 import com.account.system.service.SysMembersService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
