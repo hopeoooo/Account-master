@@ -28,4 +28,13 @@ public class SysGameResult extends BaseEntity {
     @ApiModelProperty(value ="游戏结果")
     private String gameResult;
 
+    public SysGameResult() {
+    }
+
+    public SysGameResult(SysTableManagement sysTableManagement) {
+        this.gameId = sysTableManagement.getGameId();
+        this.tableId = sysTableManagement.getTableId();
+        this.bootNum = sysTableManagement.getBootNum();
+        this.gameNum = sysTableManagement.getGameNum()+1;
+    }
 }

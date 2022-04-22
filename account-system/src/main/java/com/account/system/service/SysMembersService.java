@@ -26,4 +26,6 @@ public interface SysMembersService {
     void editMembers(SysMembers sysMembers);
 
     void deleteMembers(String ids);
+
+    SysMembers selectmembersByCard(String card);
 }

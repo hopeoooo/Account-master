@@ -4,6 +4,7 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
+import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysMembersSearch;
 import com.account.system.service.SysMembersService;
@@ -62,6 +63,9 @@ public class MembersController extends BaseController {
     @GetMapping("/add")
     @ApiOperation(value = "新增会员")
     public AjaxResult add(SysMembers sysMembers) {
+        if (StringUtils.isNotNull(sysMembersService.selectmembersByCard(sysMembers.getCard()))) {
+            return AjaxResult.error("新增会员'" + sysMembers.getCard() + "'失败，卡号已存在");
+        }
         sysMembers.setCreateBy(SecurityUtils.getUsername());
         sysMembersService.addMembers(sysMembers);
         return AjaxResult.success();

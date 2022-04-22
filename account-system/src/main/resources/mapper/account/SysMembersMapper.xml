@@ -141,4 +141,11 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectmembersByCard" resultType="sysMembers">
+        select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
+               create_time createTime,remark
+        from sys_members
+        where card = #{card}
+    </select>
 </mapper>

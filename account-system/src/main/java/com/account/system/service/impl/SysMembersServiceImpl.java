@@ -45,4 +45,9 @@ public class SysMembersServiceImpl implements SysMembersService {
         sysMembersMapper.deleteMembers(ids);
     }
 
+    @Override
+    public SysMembers selectmembersByCard(String card) {
+        return sysMembersMapper.selectmembersByCard(card);
+    }
+
 }

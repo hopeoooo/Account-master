@@ -5,6 +5,7 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.domain.entity.SysUser;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
+import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysUserSearch;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -50,6 +51,9 @@ public class UserController extends BaseController {
     @GetMapping("/add")
     @ApiOperation(value = "新增会员")
     public AjaxResult add(SysUser sysUser) {
+        if (StringUtils.isNotNull(userService.selectUserByUserName(sysUser.getUserName()))) {
+            return AjaxResult.error("新增会员'" + sysUser.getUserName() + "'失败，工号已存在");
+        }
         sysUser.setCreateBy(SecurityUtils.getUsername());
         userService.addUser(sysUser);
         return AjaxResult.success();

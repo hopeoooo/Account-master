@@ -25,4 +25,6 @@ public interface SysMembersMapper {
     void editMembers(SysMembers sysMembers);
 
     void deleteMembers(@Param("ids") String ids);
+
+    SysMembers selectmembersByCard(@Param("card") String card);
 }

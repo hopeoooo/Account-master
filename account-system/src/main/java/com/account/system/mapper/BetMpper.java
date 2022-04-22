@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
+
 /**
  * @author hope
  * @since 2022/4/22
@@ -25,4 +27,11 @@ public interface BetMpper {
 
     @Update("update sys_table_management set game_num=game_num+1 where id = #{id}")
     void updateGameNum(@Param("id") Long id);
+
+    @Select("select chip from sys_members where card = #{card}")
+    BigDecimal selectMembersChip(@Param("card") String card);
+
+    @Select("select game_result from sys_game_result where game_id = #{gameId} " +
+            "and table_id = tableId and boot_num = #{bootNum} and game_num = #{gameNum} order by create_time desc limit 0,1")
+    String selectGameResult(SysTableManagement sysTableManagement);
 }
