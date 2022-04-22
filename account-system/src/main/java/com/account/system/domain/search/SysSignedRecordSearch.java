@@ -26,7 +26,7 @@ public class SysSignedRecordSearch {
     private Long userId;
 
 
-    @ApiModelProperty(value = "(1:签单,2:还单)")
+    @ApiModelProperty(value = "(3:签单,4:还单)")
     private Integer mark;
 
     /**

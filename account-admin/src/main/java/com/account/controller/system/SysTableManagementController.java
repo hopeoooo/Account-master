@@ -49,20 +49,25 @@ public class SysTableManagementController extends BaseController {
         if (!b){
             return AjaxResult.error("请输入正确得ip地址!");
         }
+        SysTableManagement sysTableManagement1 = tableManagementService.selectTableInfo(null,sysTableManagement.getIp(),sysTableManagement.getId());
+        if  (sysTableManagement1!=null){
+            return AjaxResult.error("桌台ip已存在!");
+        }
+        SysTableManagement tableManagement = tableManagementService.selectTableInfo(sysTableManagement.getTableId(),null,sysTableManagement.getId());
+        if  (tableManagement!=null){
+            return AjaxResult.error("桌台编号已存在!");
+        }
         //修改
         if(StringUtils.isNotNull(sysTableManagement.getId()) && sysTableManagement.getId()>0){
             sysTableManagement.setUpdateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.updateTable(sysTableManagement));
         }else {
-            SysTableManagement sysTableManagement1 = tableManagementService.selectTableInfo(null,sysTableManagement.getIp(),null);
-            if  (sysTableManagement1!=null){
-                return AjaxResult.error("桌台ip已存在!");
-            }
             //添加
             sysTableManagement.setCreateBy(SecurityUtils.getUsername());
             return toAjax(tableManagementService.insertTable(sysTableManagement));
         }
     }
+
 
 
     /**

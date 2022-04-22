@@ -6,6 +6,7 @@ import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
+import com.account.system.mapper.SysMembersMapper;
 import com.account.system.mapper.SysSignedRecordDetailedMapper;
 import com.account.system.mapper.SysSignedRecordMapper;
 import com.account.system.service.SysSignedRecordService;
@@ -27,6 +28,9 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
     @Autowired
     private SysSignedRecordDetailedMapper signedRecordDetailedMapper;
 
+    @Autowired
+    private SysMembersMapper membersMapper;
+
     @Override
     public List<SysSignedRecordVo> selectSignedRecordList(String card, Integer isAdmin) {
         return signedRecordMapper.selectSignedRecordList(card, isAdmin);
@@ -46,9 +50,13 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
     @Transactional
     public int insertSigned(SysSignedRecordSearch signedRecordSearch) {
         int i = signedRecordMapper.insertSigned(signedRecordSearch);
-
         //保存签单明细
         saveSignedRecordDetailed(signedRecordSearch);
+
+        //更新用户筹码金额
+        if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
+            updateUserChipAmount(signedRecordSearch.getAmount(), CommonConst.NUMBER_1,signedRecordSearch.getUserId());
+        }
         return i;
     }
 
@@ -58,7 +66,22 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         int update = signedRecordMapper.update(signedRecordSearch);
         //保存签单明细
         saveSignedRecordDetailed(signedRecordSearch);
+        //更新用户筹码金额
+        if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
+            int number1 =signedRecordSearch.getMark()==AccessType.SIGNED.getCode() ? CommonConst.NUMBER_1: CommonConst.NUMBER_0;
+            updateUserChipAmount(signedRecordSearch.getAmount(), number1,signedRecordSearch.getUserId());
+        }
         return update;
+    }
+
+    /**
+     * 更新用户筹码金额
+     * @param chipAmount
+     * @param type 0:减、1:加
+     * @return
+     */
+    public int updateUserChipAmount(BigDecimal chipAmount,int type,Long userId){
+        return  membersMapper.updateChipAmount(userId, chipAmount, type);
     }
 
     /**
@@ -74,7 +97,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         signedRecordDetailed.setUserId(signedRecordSearch.getUserId());
         signedRecordDetailed.setOperationType(signedRecordSearch.getMark());
         BigDecimal signedAmount = sysSignedRecord!=null && sysSignedRecord.getSignedAmount() != null ? sysSignedRecord.getSignedAmount() :  BigDecimal.ZERO;
-        if (signedRecordSearch.getMark()== CommonConst.NUMBER_1){
+        if (signedRecordSearch.getMark() == AccessType.SIGNED.getCode()){
             signedRecordDetailed.setAmountBefore(signedAmount.subtract(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));
         }else {
             signedRecordDetailed.setAmountBefore(signedAmount.add(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));

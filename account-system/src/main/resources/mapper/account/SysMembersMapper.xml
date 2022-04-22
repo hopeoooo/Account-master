@@ -99,7 +99,8 @@
                baccarat_rolling_ratio_chip baccaratRollingRatioChip,
                baccarat_rolling_ratio_cash baccaratRollingRatioCash,
                dragon_tiger_ratio_chip     dragonTigerRatioChip,
-               dragon_tiger_ratio_cash     dragonTigerRatioCash
+               dragon_tiger_ratio_cash     dragonTigerRatioCash,
+               chip as chip
         from sys_members
         where id = #{id}
     </select>
@@ -141,11 +142,17 @@
             #{id}
         </foreach>
     </delete>
+    <update id="updateChipAmount">
+        update sys_members
+        <set>
+            <if test="type==1">
+                <if test="chipAmount != null and chipAmount != '' ">chip =chip + #{chipAmount}</if>
+            </if>
+            <if test="type==0">
+                <if test="chipAmount != null and chipAmount != '' ">chip =chip - #{chipAmount}</if>
+            </if>
+        </set>
+        where id = #{userId}
+    </update>
 
-    <select id="selectmembersByCard" resultType="sysMembers">
-        select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
-               create_time createTime,remark
-        from sys_members
-        where card = #{card}
-    </select>
 </mapper>
