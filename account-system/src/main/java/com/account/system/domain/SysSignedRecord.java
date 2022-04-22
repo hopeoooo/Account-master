@@ -21,7 +21,4 @@ public class SysSignedRecord extends BaseEntity {
     @ApiModelProperty( value ="签单额")
     private BigDecimal signedAmount;
 
-    @ApiModelProperty(value = "备注")
-    private String remark;
-
 }

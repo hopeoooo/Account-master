@@ -5,12 +5,9 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.AccessType;
-import com.account.common.utils.SecurityUtils;
-import com.account.common.utils.StringUtils;
-import com.account.system.domain.SysBusinessCashChip;
 import com.account.system.domain.search.SysBusinessCashChipAddSearch;
 import com.account.system.domain.vo.SysBusinessCashChipVo;
-import com.account.system.service.SysBusinessCashChipService;
+import com.account.system.service.SysMembersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +26,7 @@ import java.util.Map;
 @Api(tags = "买码换现管理")
 public class SysBusinessCashChipController extends BaseController {
     @Autowired
-    private SysBusinessCashChipService businessCashChipService;
+    private SysMembersService membersService;
 
     @PreAuthorize("@ss.hasPermi('system:businessCashChip:list')")
     @GetMapping("/list")
@@ -39,7 +37,7 @@ public class SysBusinessCashChipController extends BaseController {
     })
     public TableDataInfo list(String card, Integer isAdmin) {
         startPage();
-        List<SysBusinessCashChipVo> list = businessCashChipService.selectBusinessCashChipList(card, isAdmin);
+        List<Map>list = membersService.selectBusinessCashChipList(card, isAdmin);
         return getDataTable(list);
     }
 
@@ -51,7 +49,7 @@ public class SysBusinessCashChipController extends BaseController {
             @ApiImplicitParam(name = "isAdmin", value = "过滤内部卡号(0:未勾选,1:勾选)", required = false)
     })
     public AjaxResult total(String card, Integer isAdmin) {
-        Map map = businessCashChipService.selectBusinessCashChipTotal(card, isAdmin);
+        Map map = membersService.selectBusinessCashChipTotal(card, isAdmin);
         return AjaxResult.success(map);
     }
 
@@ -61,24 +59,7 @@ public class SysBusinessCashChipController extends BaseController {
     @ApiOperation(value = "买码")
     public AjaxResult addBuyCode(@Validated @RequestBody SysBusinessCashChipAddSearch businessCashChipAddSearch) {
         businessCashChipAddSearch.setMark(AccessType.BUY_CODE.getCode());
-        //修改
-        if (StringUtils.isNotNull(businessCashChipAddSearch.getId()) && businessCashChipAddSearch.getId() > 0) {
-            SysBusinessCashChip sysBusinessCashChip = businessCashChipService.selectBusinessCashChipInfo(businessCashChipAddSearch.getId(),businessCashChipAddSearch.getUserId());
-            if (sysBusinessCashChip==null){
-                return AjaxResult.error("买码失败!");
-            }
-            businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
-            businessCashChipAddSearch.setUpdateBy(SecurityUtils.getUsername());
-            businessCashChipService.update(businessCashChipAddSearch);
-        }else {
-            SysBusinessCashChip sysBusinessCashChip = businessCashChipService.selectBusinessCashChipInfo(null,businessCashChipAddSearch.getUserId());
-            if (sysBusinessCashChip!=null){
-                return AjaxResult.error("买码失败!");
-            }
-            //添加
-            businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
-            businessCashChipService.insert(businessCashChipAddSearch);
-        }
+        membersService.updateChipAmount(businessCashChipAddSearch.getId(), businessCashChipAddSearch.getChipAmount(), CommonConst.NUMBER_1);
         return AjaxResult.success("买码成功!");
     }
 
@@ -86,22 +67,18 @@ public class SysBusinessCashChipController extends BaseController {
     @PostMapping("/addCashExchange")
     @ApiOperation(value = "换现")
     public AjaxResult addCashExchange(@Validated @RequestBody SysBusinessCashChipAddSearch businessCashChipAddSearch) {
-
-        if (StringUtils.isNotNull(businessCashChipAddSearch.getIsCash()) && businessCashChipAddSearch.getIsCash()== CommonConst.NUMBER_0){
-            return AjaxResult.error("当前会员不可换现!");
-        }
         businessCashChipAddSearch.setMark(AccessType.CASH_EXCHANGE.getCode());
-        SysBusinessCashChip sysBusinessCashChip = businessCashChipService.selectBusinessCashChipInfo(null,businessCashChipAddSearch.getUserId());
-        if (sysBusinessCashChip == null) {
-            return AjaxResult.error("换现失败!");
+        //判断该会员是否可以换现
+        Map map = membersService.selectMembersInfo(businessCashChipAddSearch.getId());
+        int isCash = Integer.parseInt(map.get("isCash").toString());
+        if (isCash==CommonConst.NUMBER_0){
+            return AjaxResult.success("当前会员不可换现!");
         }
-        if (businessCashChipAddSearch.getChipAmount().compareTo(sysBusinessCashChip.getChipAmount()) > 0) {
-            return AjaxResult.error("余额不足!");
+        BigDecimal chip = new BigDecimal(map.get("chip").toString());
+        if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0){
+            return AjaxResult.success("余额不足!");
         }
-
-        businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
-        businessCashChipAddSearch.setUpdateBy(SecurityUtils.getUsername());
-        businessCashChipService.update(businessCashChipAddSearch);
+        membersService.updateChipAmount(businessCashChipAddSearch.getId(), businessCashChipAddSearch.getChipAmount(), CommonConst.NUMBER_0);
         return AjaxResult.success("换现成功!");
     }
 }

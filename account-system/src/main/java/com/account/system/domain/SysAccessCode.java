@@ -26,8 +26,4 @@ public class SysAccessCode extends BaseEntity {
 
     @ApiModelProperty(value = "总余额")
     private BigDecimal totalBalance;
-
-    @ApiModelProperty(value = "备注")
-    private String remark;
-
 }

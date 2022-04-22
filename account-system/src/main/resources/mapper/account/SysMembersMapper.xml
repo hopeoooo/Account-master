@@ -155,4 +155,41 @@
         where id = #{userId}
     </update>
 
+        <!--买码换现-->
+    <select id="selectBusinessCashChipList"  resultType="java.util.Map">
+        SELECT
+        m.id AS userId,
+        m.NAME AS userName,
+        m.card AS card,
+        m.chip AS chipAmount,
+        m.is_cash AS isCash,
+        m.is_out as isOut,
+        m.remark
+        FROM
+        sys_members m
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="card != null and card != ''">
+                AND m.card = #{card}
+            </if>
+        </where>
+    </select>
+    <!--买码换现总计-->
+    <select id="selectBusinessCashChipTotal"  resultType="java.util.Map">
+        SELECT
+        IFNULL(SUM(m.chip),0) AS chipAmount
+        FROM
+        sys_members m
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="card != null and card != ''">
+                AND m.card = #{card}
+            </if>
+        </where>
+    </select>
+
 </mapper>
