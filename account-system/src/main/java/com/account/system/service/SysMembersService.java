@@ -3,6 +3,7 @@ package com.account.system.service;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,10 @@ public interface SysMembersService {
     void deleteMembers(String ids);
 
     SysMembers selectmembersByCard(String card);
+
+    List<Map> selectBusinessCashChipList(String card, Integer isAdmin);
+
+    Map selectBusinessCashChipTotal(String card, Integer isAdmin);
+
+    int updateChipAmount( Long userId,  BigDecimal chipAmount, Integer type);
 }

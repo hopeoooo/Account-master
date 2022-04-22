@@ -10,7 +10,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="chipBalance"     column="chip_balance"     />
         <result property="cashBalance"   column="cash_balance"   />
         <result property="totalBalance"    column="total_balance"    />
-        <result property="remark"      column="remark"      />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
@@ -26,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         IFNULL( a.cash_balance, 0 ) as cashBalance,
         IFNULL( a.chip_balance, 0 ) as chipBalance,
         IFNULL( a.total_balance, 0 ) as totalBalance,
-        a.remark  as remark
+        m.remark  as remark
     FROM
         sys_members m
             LEFT JOIN sys_access_code a ON a.user_id = m.id
@@ -78,14 +77,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="userId != null and userId != 0">user_id,</if>
         <if test="chipBalance != null and chipBalance != ''">chip_balance,</if>
         <if test="cashBalance != null and cashBalance != ''">cash_balance,</if>
-        <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         total_balance,create_time,update_time )
         values(
         <if test="userId != null and userId != ''">#{userId},</if>
         <if test="chipBalance != null and chipBalance != ''">#{chipBalance},</if>
         <if test="cashBalance != null and cashBalance != ''">#{cashBalance},</if>
-        <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         #{totalBalance},sysdate(),sysdate()
         )
@@ -103,8 +100,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     <if test="chipBalance != null and chipBalance != ''">chip_balance=chip_balance-#{chipBalance},</if>
                     <if test="cashBalance != null and cashBalance != ''">cash_balance=cash_balance-#{cashBalance},</if>
                 </if>
-
-                <if test="remark != null and remark != ''">remark=#{remark},</if>
                 <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
                 total_balance=chip_balance+cash_balance, update_time = sysdate()
             </set>

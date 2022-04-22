@@ -8,7 +8,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	<id     property="id"      column="id"      />
         <result property="userId"    column="user_id"    />
         <result property="signedAmount"     column="signed_amount"     />
-        <result property="remark"      column="remark"      />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
@@ -20,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             m.`name` as userName,
             m.card as card,
             IFNULL(s.signed_amount,0) as signedAmount,
-            s.remark as remark
+            m.remark as remark
         FROM
             sys_members m
         LEFT JOIN sys_signed_record s ON s.user_id = m.id
@@ -75,13 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (
         <if test="userId != null and userId != 0">user_id,</if>
         <if test="amount != null and amount != ''">signed_amount,</if>
-        <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time )
         values(
         <if test="userId != null and userId != ''">#{userId},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
-        <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(),sysdate()
         )
@@ -97,7 +94,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mark==4">
                 <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
             </if>
-            <if test="remark != null and remark != ''">remark=#{remark},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>

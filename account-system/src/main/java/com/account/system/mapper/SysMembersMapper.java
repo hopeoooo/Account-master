@@ -1,5 +1,6 @@
 package com.account.system.mapper;
 
+import com.account.system.domain.SysBusinessCashChip;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +19,10 @@ public interface SysMembersMapper {
      * 查询参数配置列表
      */
     List<Map> selectMembersList(SysMembersSearch sysMembers);
+
+    List<Map> selectBusinessCashChipList(@Param("card")String card, @Param("isAdmin")Integer isAdmin);
+
+    Map selectBusinessCashChipTotal(@Param("card")String card, @Param("isAdmin")Integer isAdmin);
 
     void addMembers(SysMembers sysMembers);
 

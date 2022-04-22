@@ -18,12 +18,6 @@ public class SysBusinessCashChipAddSearch {
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value = "是否换现  0否 1是", required = true)
-    private Integer isCash;
-
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
-
     @ApiModelProperty(value = "已存筹码余额")
     private BigDecimal chipAmount;
 
@@ -35,7 +29,6 @@ public class SysBusinessCashChipAddSearch {
      */
     @ApiModelProperty("创建者")
     private String createBy;
-
 
     /**
      * 更新者
