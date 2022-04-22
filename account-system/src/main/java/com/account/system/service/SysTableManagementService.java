@@ -13,7 +13,7 @@ public interface SysTableManagementService
 {
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
-    SysTableManagement selectTableInfo(Long tableId,String ip,Long gameId);
+    SysTableManagement selectTableInfo(Long tableId,String ip,Long id);
 
     int insertTable(SysTableManagement sysTableManagement);
 

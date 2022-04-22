@@ -26,8 +26,8 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
     }
 
     @Override
-    public   SysTableManagement selectTableInfo(Long tableId,String ip,Long gameId){
-        return tableManagementMapper.selectTableInfo(tableId,ip,gameId);
+    public   SysTableManagement selectTableInfo(Long tableId,String ip,Long id){
+        return tableManagementMapper.selectTableInfo(tableId,ip,id);
     }
     @Override
     public int insertTable(SysTableManagement sysTableManagement) {

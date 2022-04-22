@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="chipPointBase"   column="chip_point_base"   />
         <result property="cashPointBase"    column="cash_point_base"    />
         <result property="insurancePointBase"      column="insurance_point_base"      />
+        <result property="isDelete"      column="is_delete"      />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
@@ -28,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gameId != null and gameId != ''">
                 AND game_id =#{gameId}
             </if>
+            and is_delete=0
         </where>
         ORDER BY create_time desc
     </select>
@@ -76,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteUserByIds" parameterType="Long">
-        delete from sys_table_management where id = #{id}
+        update sys_table_management set is_delete=1  where id = #{id}
     </delete>
 
 
@@ -89,10 +91,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tableId != null and tableId != '' ">
                 and table_id= #{tableId}
             </if>
-            <if test="gameId != null and gameId != ''">
-                AND game_id =#{gameId}
+            <if test="id != null and id != '' and id >0">
+                AND id !=#{id}
             </if>
         </where>
+        and is_delete=0
     </select>
 
 </mapper>

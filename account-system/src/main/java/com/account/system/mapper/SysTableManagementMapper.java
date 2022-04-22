@@ -14,7 +14,7 @@ public interface SysTableManagementMapper {
 
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
-    SysTableManagement selectTableInfo(@Param("tableId")Long tableId,@Param("ip")String ip,@Param("gameId")Long gameId);
+    SysTableManagement selectTableInfo(@Param("tableId")Long tableId,@Param("ip")String ip,@Param("id")Long id);
 
      int insertTable(SysTableManagement sysTableManagement) ;
 

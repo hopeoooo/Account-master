@@ -1,5 +1,6 @@
 package com.account.system.service.impl;
 
+import com.account.common.constant.CommonConst;
 import com.account.common.enums.AccessType;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.search.SysAccessCodeAddSearch;
@@ -55,6 +56,10 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         int i = accessCodeMapper.insertAccessCode(accessCode);
         //保存存取码明细
         saveAccessCodeDetailed(accessCode);
+        //更新用户筹码金额
+        if (accessCode.getChipBalance().compareTo(BigDecimal.ZERO)>0){
+            updateUserChipAmount(accessCode.getChipBalance(), CommonConst.NUMBER_1,accessCode.getUserId());
+        }
         return i;
     }
 
@@ -64,9 +69,23 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         int i = accessCodeMapper.updateAccessCode(accessCode);
         //保存存取码明细
         saveAccessCodeDetailed(accessCode);
+        //更新用户筹码金额
+        if (accessCode.getChipBalance().compareTo(BigDecimal.ZERO)>0){
+            int number1 =accessCode.getMark()==AccessType.STORAGE_CODE.getCode() ? CommonConst.NUMBER_1: CommonConst.NUMBER_0;
+            updateUserChipAmount(accessCode.getChipBalance(), number1,accessCode.getUserId());
+        }
         return i;
     }
 
+    /**
+     * 更新用户筹码金额
+     * @param chipAmount
+     * @param type 0:减、1:加
+     * @return
+     */
+    public int updateUserChipAmount(BigDecimal chipAmount,int type,Long userId){
+      return  membersMapper.updateChipAmount(userId, chipAmount, type);
+    }
 
     /**
      * 组装存取码明细数据

@@ -2,28 +2,30 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.account.system.mapper.SysSignedRecordMapper">
+<mapper namespace="com.account.system.mapper.SysBusinessCashChipMapper">
 
-    <resultMap type="SysSignedRecord" id="SysSignedRecordResult">
+    <resultMap type="SysBusinessCashChip" id="SysBusinessCashChipResult">
     	<id     property="id"      column="id"      />
         <result property="userId"    column="user_id"    />
-        <result property="signedAmount"     column="signed_amount"     />
+        <result property="chipAmount"     column="chip_amount"     />
         <result property="remark"      column="remark"      />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
         <result property="updateTime"      column="update_time"      />
     </resultMap>
-    <select id="selectSignedRecordList"   resultType="com.account.system.domain.vo.SysSignedRecordVo">
+
+    <select id="selectBusinessCashChipList"   resultType="com.account.system.domain.vo.SysBusinessCashChipVo">
         SELECT
-            m.id as id,
-            m.`name` as userName,
-            m.card as card,
-            IFNULL(s.signed_amount,0) as signedAmount,
-            s.remark as remark
+            b.id AS id,
+            m.id AS userId,
+            m.NAME AS userName,
+            m.card AS card,
+            b.chip_amount AS chipAmount,
+            m.is_cash AS isCash
         FROM
             sys_members m
-        LEFT JOIN sys_signed_record s ON s.user_id = m.id
+                LEFT JOIN sys_business_cash_chip b ON b.user_id = m.id
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -32,16 +34,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND m.card = #{card}
             </if>
         </where>
-        ORDER BY s.signed_amount desc
     </select>
 
-
-    <select id="selectSignedRecordTotal"  resultType="java.util.Map">
+    <select id="selectBusinessCashChipTotal"  resultType="java.util.Map">
         SELECT
-        IFNULL(SUM(s.signed_amount ),0) as signed_amount
+        IFNULL(SUM(b.chip_amount),0) AS chipAmount
         FROM
         sys_members m
-        LEFT JOIN sys_signed_record s ON s.user_id = m.id
+        LEFT JOIN sys_business_cash_chip b ON b.user_id = m.id
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -52,35 +52,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-
-    <select id="selectSignedRecordInfo" parameterType="SysSignedRecord" resultMap="SysSignedRecordResult">
+    <select id="selectBusinessCashChipInfo" parameterType="SysBusinessCashChip" resultMap="SysBusinessCashChipResult">
         SELECT
-        s.id,
-        s.user_id,
-        s.signed_amount
+        b.user_id ,b.chip_amount,b.remark
         FROM
-        sys_signed_record s
+        sys_business_cash_chip b
         <where>
             <if test="userId != null and userId != '' ">
-                and  s.user_id=#{userId}
+                and  b.user_id=#{userId}
             </if>
             <if test="id != null and id != '' ">
-                and  s.id=#{id}
+                and  b.id=#{id}
             </if>
         </where>
     </select>
 
-    <insert id="insertSigned">
-        INSERT INTO sys_signed_record
+    <insert id="insert" >
+        INSERT INTO sys_business_cash_chip
         (
         <if test="userId != null and userId != 0">user_id,</if>
-        <if test="amount != null and amount != ''">signed_amount,</if>
+        <if test="chipAmount != null and chipAmount != ''">chip_amount,</if>
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time )
         values(
         <if test="userId != null and userId != ''">#{userId},</if>
-        <if test="amount != null and amount != ''">#{amount},</if>
+        <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(),sysdate()
@@ -89,13 +86,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <update id="update" >
-        update sys_signed_record
+        update sys_business_cash_chip
         <set>
-            <if test="mark==3">
-                <if test="amount != null and amount != ''">signed_amount=signed_amount+#{amount},</if>
+            <if test="mark==5">
+                <if test="chipAmount != null and chipAmount != ''">chip_amount=chip_amount+#{chipAmount},</if>
             </if>
-            <if test="mark==4">
-                <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
+            <if test="mark==6">
+                <if test="chipAmount != null and chipAmount != ''">chip_amount=chip_amount-#{chipAmount},</if>
             </if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>

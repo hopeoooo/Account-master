@@ -3,13 +3,13 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysSignedRecord;
-import com.account.system.domain.SysTableManagement;
-import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
+import com.account.system.service.SysMembersService;
 import com.account.system.service.SysSignedRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -60,6 +60,7 @@ public class SysSignedRecordController extends BaseController {
     @PostMapping("/addSigned")
     @ApiOperation(value = "签单")
     public AjaxResult addSigned(@Validated @RequestBody SysSignedRecordSearch signedRecordSearch) {
+        signedRecordSearch.setMark(AccessType.SIGNED.getCode());
         //修改
         if (StringUtils.isNotNull(signedRecordSearch.getId()) && signedRecordSearch.getId() > 0) {
             SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getUserId());
@@ -93,6 +94,8 @@ public class SysSignedRecordController extends BaseController {
         if (signedRecordSearch.getAmount().compareTo(sysSignedRecord.getSignedAmount()) > 0) {
             return AjaxResult.error("请输入正确的金额!");
         }
+
+        signedRecordSearch.setMark(AccessType.RETURN_ORDER.getCode());
         signedRecordSearch.setUpdateBy(SecurityUtils.getUsername());
         //用于记录明细操作人
         signedRecordSearch.setCreateBy(SecurityUtils.getUsername());
