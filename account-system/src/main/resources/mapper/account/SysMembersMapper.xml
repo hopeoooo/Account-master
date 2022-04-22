@@ -55,6 +55,7 @@
         <if test="isCash != null ">is_cash,</if>
         <if test="isSettlement != null ">is_settlement,</if>
         <if test="isOut != null ">is_out,</if>
+        <if test="isBill != null ">is_bill,</if>
         <if test="baccaratRollingRatioChip != null ">baccarat_rolling_ratio_chip,</if>
         <if test="baccaratRollingRatioCash != null ">baccarat_rolling_ratio_cash,</if>
         <if test="dragonTigerRatioChip != null ">dragon_tiger_ratio_chip,</if>
@@ -79,6 +80,7 @@
         <if test="isCash != null ">#{isCash},</if>
         <if test="isSettlement != null ">#{isSettlement},</if>
         <if test="isOut != null ">#{isOut},</if>
+        <if test="isBill != null ">#{isBill},</if>
         <if test="baccaratRollingRatioChip != null ">#{baccaratRollingRatioChip},</if>
         <if test="baccaratRollingRatioCash != null ">#{baccaratRollingRatioCash},</if>
         <if test="dragonTigerRatioChip != null ">#{dragonTigerRatioChip},</if>

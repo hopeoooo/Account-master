@@ -65,6 +65,9 @@ public class SysMembers extends BaseEntity {
     @ApiModelProperty("是否可汇出 0否 1是")
     private Integer isOut;
 
+    @ApiModelProperty("是否走账 0否 1是")
+    private Integer isBill;
+
     @ApiModelProperty("百家乐洗码比例(筹码)")
     private BigDecimal baccaratRollingRatioChip;
 
