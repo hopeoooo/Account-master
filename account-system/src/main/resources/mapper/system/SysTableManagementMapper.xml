@@ -6,7 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysTableManagement" id="SysTableManagementResult">
     	<id     property="id"      column="id"      />
-    	<id     property="tableId"      column="table_id"      />
+        <id     property="tableId"      column="table_id"      />
+    	<id     property="ip"      column="ip"      />
         <result property="gameId"    column="game_id"    />
         <result property="gameName"     column="game_name"     />
         <result property="chipPointBase"   column="chip_point_base"   />
@@ -18,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"      column="update_time"      />
     </resultMap>
     <sql id="selectTableVo">
-        select id,table_id,game_id,game_name,chip_point_base,cash_point_base,insurance_point_base, create_by, create_time, update_by, update_time from sys_table_management
+        select id,ip,table_id,game_id,game_name,chip_point_base,cash_point_base,insurance_point_base, create_by, create_time, update_by, update_time from sys_table_management
     </sql>
 
     <select id="selectTableList" parameterType="SysTableManagement" resultMap="SysTableManagementResult">
@@ -35,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertTable">
         INSERT INTO `sys_table_management`
             (
+        <if test="ip != null and ip != ''">ip,</if>
         <if test="tableId != null and tableId != 0">table_id,</if>
         <if test="gameId != null and gameId != 0">game_id,</if>
         <if test="gameName != null and gameName != ''">game_name,</if>
@@ -44,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time)
         values(
+        <if test="ip != null and ip != ''">#{ip},</if>
         <if test="tableId != null and tableId != 0">#{tableId},</if>
         <if test="gameId != null and gameId != ''">#{gameId},</if>
         <if test="gameName != null and gameName != ''">#{gameName},</if>
@@ -59,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateTable" >
         update sys_table_management
         <set>
+            <if test="ip != null and ip != ''">ip = #{ip},</if>
             <if test="tableId != null and tableId != 0">table_id = #{tableId},</if>
             <if test="gameId != null and gameId != 0">game_id = #{gameId},</if>
             <if test="gameName != null and gameName != ''">game_name = #{gameName},</if>
@@ -79,8 +83,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectTableInfo"  resultMap="SysTableManagementResult">
         <include refid="selectTableVo"/>
         <where>
+            <if test="ip != null and ip != '' ">
+                and ip= #{ip}
+            </if>
             <if test="tableId != null and tableId != '' ">
-                and table_id=#{tableId}
+                and table_id= #{tableId}
             </if>
             <if test="gameId != null and gameId != ''">
                 AND game_id =#{gameId}

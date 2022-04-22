@@ -6,6 +6,9 @@ import com.account.system.service.SysTableManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 
@@ -23,8 +26,8 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
     }
 
     @Override
-    public   SysTableManagement selectTableInfo(Long tableId,Long gameId){
-        return tableManagementMapper.selectTableInfo(tableId,gameId);
+    public   SysTableManagement selectTableInfo(Long tableId,String ip,Long gameId){
+        return tableManagementMapper.selectTableInfo(tableId,ip,gameId);
     }
     @Override
     public int insertTable(SysTableManagement sysTableManagement) {
@@ -39,5 +42,17 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
     @Override
     public int deleteUserByIds(Long id){
         return tableManagementMapper.deleteUserByIds(id);
+    }
+
+
+    @Override
+    public boolean pingIp(String ip) throws IOException {
+        boolean doip = ip.matches("([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])" +
+                "(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}");
+        if (!doip){
+            return false;
+        }
+        InetAddress address = InetAddress.getByName(ip);
+        return address.isReachable(3000);
     }
 }
