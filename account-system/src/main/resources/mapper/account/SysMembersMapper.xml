@@ -56,6 +56,7 @@
         <if test="isSettlement != null ">is_settlement,</if>
         <if test="isOut != null ">is_out,</if>
         <if test="isBill != null ">is_bill,</if>
+        <if test="password != null and password != ''">password,</if>
         <if test="baccaratRollingRatioChip != null ">baccarat_rolling_ratio_chip,</if>
         <if test="baccaratRollingRatioCash != null ">baccarat_rolling_ratio_cash,</if>
         <if test="dragonTigerRatioChip != null ">dragon_tiger_ratio_chip,</if>
@@ -81,6 +82,7 @@
         <if test="isSettlement != null ">#{isSettlement},</if>
         <if test="isOut != null ">#{isOut},</if>
         <if test="isBill != null ">#{isBill},</if>
+        <if test="password != null and password != ''">#{password},</if>
         <if test="baccaratRollingRatioChip != null ">#{baccaratRollingRatioChip},</if>
         <if test="baccaratRollingRatioCash != null ">#{baccaratRollingRatioCash},</if>
         <if test="dragonTigerRatioChip != null ">#{dragonTigerRatioChip},</if>
@@ -102,7 +104,7 @@
                baccarat_rolling_ratio_cash baccaratRollingRatioCash,
                dragon_tiger_ratio_chip     dragonTigerRatioChip,
                dragon_tiger_ratio_cash     dragonTigerRatioCash,
-               chip as chip
+               chip as                     chip
         from sys_members
         where id = #{id}
     </select>
@@ -157,8 +159,8 @@
         where id = #{userId}
     </update>
 
-        <!--买码换现-->
-    <select id="selectBusinessCashChipList"  resultType="java.util.Map">
+    <!--买码换现-->
+    <select id="selectBusinessCashChipList" resultType="java.util.Map">
         SELECT
         m.id AS userId,
         m.NAME AS userName,
@@ -179,7 +181,7 @@
         </where>
     </select>
     <!--买码换现总计-->
-    <select id="selectBusinessCashChipTotal"  resultType="java.util.Map">
+    <select id="selectBusinessCashChipTotal" resultType="java.util.Map">
         SELECT
         IFNULL(SUM(m.chip),0) AS chipAmount
         FROM
