@@ -46,4 +46,7 @@ public interface BetMpper {
     @Select("select id, table_id tableId,boot_num bootNum,game_num gameNum, game_result gameResult from sys_game_result " +
             "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} ")
     List<Map> getGameResults(SysTableManagement sysTableManagement);
+
+    @Update("update sys_table_management set chip = chip + #{chip} ,cash = cash + #{cash} where id = #{id} ")
+    void updateTableManagement(@Param("id") Long id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash);
 }

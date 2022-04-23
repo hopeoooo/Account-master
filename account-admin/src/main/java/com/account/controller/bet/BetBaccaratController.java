@@ -113,12 +113,12 @@ public class BetBaccaratController {
             bet.put("chip", chip);
             bet.put("payout", payout);
         });
+        SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
+        sysGameResult.setGameResult(gameResult);
+        sysGameResult.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             @Override
             public void run() {
-                SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
-                sysGameResult.setGameResult(gameResult);
-                sysGameResult.setCreateBy(SecurityUtils.getUsername());
                 betService.saveGameResult(sysGameResult);
                 betService.updateGameNum(sysTableManagement.getId());
             }
