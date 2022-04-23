@@ -14,6 +14,7 @@ import com.account.system.mapper.SysRoleMapper;
 import com.account.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,8 +41,20 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
+    @Transactional
     public int addRole(SysRole sysRole) {
-        return roleMapper.addRole(sysRole);
+        roleMapper.addRole(sysRole);
+        List<SysRoleMenu> list = new ArrayList();
+        for (Long menuId : sysRole.getMenuIds()) {
+            SysRoleMenu rm = new SysRoleMenu();
+            rm.setRoleId(sysRole.getRoleId());
+            rm.setMenuId(menuId);
+            list.add(rm);
+        }
+        if (list.size() > 0) {
+            roleMapper.addRoleMenu(list);
+        }
+        return 1;
     }
 
     @Override
@@ -128,6 +141,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
+    @Transactional
     public int editRole(SysRole sysRole) {
         roleMapper.editRole(sysRole);
         roleMapper.deleteRoleMenu(sysRole.getRoleId());
