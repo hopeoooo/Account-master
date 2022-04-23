@@ -4,7 +4,7 @@ import com.account.common.constant.CommonConst;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
@@ -77,9 +77,8 @@ public class SysRemittanceController extends BaseController {
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
         }
-        remittanceSearch.setType(AccessType.IMPORT.getCode());
+        remittanceSearch.setType(ChipChangeEnum.IMPORT_CHIP.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
-        //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
         return AjaxResult.success("汇入成功!");
     }
@@ -91,7 +90,7 @@ public class SysRemittanceController extends BaseController {
         if (StringUtils.isNull(remittanceSearch.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
-        remittanceSearch.setType(AccessType.REMIT.getCode());
+        remittanceSearch.setType(ChipChangeEnum.OUT_EXCHANGE.getCode());
         //判断该会员是否可以汇出
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
@@ -114,7 +113,6 @@ public class SysRemittanceController extends BaseController {
                 return AjaxResult.success("余额不足!");
             }
         }
-        //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
         return AjaxResult.success("汇出成功!");
     }

@@ -23,7 +23,7 @@ public class SysRemittanceDetailed extends BaseEntity {
     @ApiModelProperty( value ="类型: 1:筹码,2:现金")
     private int operationType;
 
-    @ApiModelProperty( value ="操作类型: 7:汇入 8:汇出")
+    @ApiModelProperty( value ="操作类型: 11:汇入 12:汇出")
     private int type;
 
 

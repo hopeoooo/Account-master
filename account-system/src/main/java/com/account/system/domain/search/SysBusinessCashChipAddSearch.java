@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Data
 public class SysBusinessCashChipAddSearch {
 
-    @ApiModelProperty(value = "(5:买码,6:换现)")
+    @ApiModelProperty(value = "(13:买码,7:换现)")
     private Integer mark;
 
     @ApiModelProperty(value ="会员卡号")

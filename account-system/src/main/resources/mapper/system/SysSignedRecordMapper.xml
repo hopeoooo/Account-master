@@ -88,10 +88,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="update" >
         update sys_signed_record
         <set>
-            <if test="mark==3">
+            <if test="mark==5">
                 <if test="amount != null and amount != ''">signed_amount=signed_amount+#{amount},</if>
             </if>
-            <if test="mark==4">
+            <if test="mark==6">
                 <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
             </if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>

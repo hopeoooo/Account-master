@@ -175,9 +175,10 @@
         m.chip AS chipAmount,
         m.is_cash AS isCash,
         m.is_out as isOut,
-        m.remark
+        m.remark,s.signed_amount as signedAmount
         FROM
         sys_members m
+        LEFT JOIN sys_signed_record s on s.card=m.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0

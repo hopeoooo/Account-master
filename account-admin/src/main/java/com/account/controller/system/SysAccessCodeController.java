@@ -3,7 +3,7 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysAccessCode;
@@ -66,7 +66,7 @@ public class SysAccessCodeController extends BaseController {
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
         }
-        accessCode.setMark(AccessType.STORAGE_CODE.getCode());
+        accessCode.setMark(ChipChangeEnum.STORE_CHIP.getCode());
         SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null, accessCode.getCard());
         if (sysAccessCode==null){
             //添加
@@ -95,7 +95,7 @@ public class SysAccessCodeController extends BaseController {
         }
         //判断金额是否足够
         SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
-        accessCode.setMark(AccessType.CODE_FETCHING.getCode());
+        accessCode.setMark(ChipChangeEnum.TAKE_CHIP.getCode());
         if (sysAccessCode==null){
             return AjaxResult.error("取码失败!");
         }

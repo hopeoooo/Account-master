@@ -3,7 +3,7 @@ package com.account.controller.system;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
@@ -71,7 +71,7 @@ public class SysSignedRecordController extends BaseController {
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
         }
-        signedRecordSearch.setMark(AccessType.SIGNED.getCode());
+        signedRecordSearch.setMark(ChipChangeEnum.BORROW_CHIP.getCode());
         SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());
         if (sysSignedRecord==null){
             //添加
@@ -107,7 +107,7 @@ public class SysSignedRecordController extends BaseController {
             return AjaxResult.error("请输入正确的金额!");
         }
 
-        signedRecordSearch.setMark(AccessType.RETURN_ORDER.getCode());
+        signedRecordSearch.setMark(ChipChangeEnum.RETURN_CHIP.getCode());
         signedRecordSearch.setUpdateBy(SecurityUtils.getUsername());
         //用于记录明细操作人
         signedRecordSearch.setCreateBy(SecurityUtils.getUsername());

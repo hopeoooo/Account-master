@@ -18,7 +18,7 @@ public class SysRemittanceDetailedSearch {
     private Integer isAdmin;
 
 
-    @ApiModelProperty(value = "汇款类型(7:汇入,8:汇出)")
+    @ApiModelProperty(value = "汇款类型(11:汇入,12:汇出)")
     private Integer operationType;
 
 
