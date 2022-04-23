@@ -79,7 +79,6 @@ public class SysRemittanceController extends BaseController {
         }
         remittanceSearch.setType(AccessType.IMPORT.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
-        //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
         return AjaxResult.success("汇入成功!");
     }
@@ -114,7 +113,6 @@ public class SysRemittanceController extends BaseController {
                 return AjaxResult.success("余额不足!");
             }
         }
-        //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
         return AjaxResult.success("汇出成功!");
     }

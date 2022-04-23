@@ -3,6 +3,7 @@ package com.account.system.service.impl;
 import com.account.common.constant.CommonConst;
 import com.account.common.enums.AccessType;
 import com.account.system.domain.SysChipRecord;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.search.SysRemittanceDetailedSearch;
 import com.account.system.domain.search.SysRemittanceSearch;
@@ -51,7 +52,6 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
         if (i>0){
             //汇款明细
             remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
-
             //汇入为筹码则累加用户筹码余额
             if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
                 //添加筹码变动明细表
@@ -66,12 +66,18 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
      * @param remittanceSearch
      */
     public void addChipRecord( SysRemittanceSearch remittanceSearch){
+        SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
+        BigDecimal chip = sysMembers!=null && sysMembers.getChip() != null ? sysMembers.getChip() :  BigDecimal.ZERO;
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(remittanceSearch.getCard());
         chipRecord.setType(remittanceSearch.getType());
-        chipRecord.setBefore(BigDecimal.ZERO);
+        if (remittanceSearch.getType() == AccessType.IMPORT.getCode()){
+            chipRecord.setBefore(chip.subtract(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));
+        }else {
+            chipRecord.setBefore(chip.add(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));
+        }
         chipRecord.setChange(remittanceSearch.getAmount());
-        chipRecord.setAfter(BigDecimal.ZERO);
+        chipRecord.setAfter(chip);
         chipRecord.setCreateBy(remittanceSearch.getCreateBy());
         chipRecordMapper.addChipRecord(chipRecord);
     }
