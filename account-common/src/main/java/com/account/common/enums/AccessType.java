@@ -8,7 +8,10 @@ public enum AccessType
     SIGNED(3, "签单"),
     RETURN_ORDER(4, "还单"),
     BUY_CODE(5, "买码"),
-    CASH_EXCHANGE(6, "换现");
+    CASH_EXCHANGE(6, "换现"),
+    IMPORT(7 ,"汇入"),
+    REMIT(8, "汇出"),
+    ;
 
     private final int code;
     private final String info;
