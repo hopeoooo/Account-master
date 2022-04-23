@@ -6,9 +6,11 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
+import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.search.SysRemittanceSearch;
 import com.account.system.service.SysMembersService;
 import com.account.system.service.SysRemittanceDetailedService;
+import com.account.system.service.SysSignedRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,6 +32,10 @@ public class SysRemittanceController extends BaseController {
     private SysMembersService membersService;
     @Autowired
     private SysRemittanceDetailedService remittanceDetailedService;
+
+    @Autowired
+    private SysSignedRecordService signedRecordService;
+
 
     @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @GetMapping("/list")
@@ -82,6 +88,11 @@ public class SysRemittanceController extends BaseController {
         Map map = membersService.selectMembersInfo(remittanceSearch.getId());
         int isOut = Integer.parseInt(map.get("isOut").toString());
         if (isOut==CommonConst.NUMBER_0){
+            return AjaxResult.success("当前用户不可汇出!");
+        }
+        //判断会员是否有欠钱
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getId());
+        if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("当前用户不可汇出!");
         }
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());

@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysAccessCodeDetailed" id="SysAccessCodeDetailedResult">
     	<id     property="id"      column="id"      />
-        <result property="userId"    column="user_id"    />
+        <result property="card"    column="card"    />
         <result property="type"    column="type"    />
         <result property="chipAmountBefore"      column="chip_amount_before"      />
         <result property="chipAmount"      column="chip_amount"      />
@@ -25,7 +25,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            m.`name` as userName,
            m.card,
            m.is_admin as isAdmin,
-           d.user_id as userId,
            d.type,
            d.chip_amount_before as chipAmountBefore,
            d.chip_amount as chipAmount,
@@ -38,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            d.create_by as  createBy
        FROM
            sys_access_code_detailed d
-           LEFT JOIN sys_members m ON m.id = d.user_id
+           LEFT JOIN sys_members m ON m.card = d.card
     <where>
         <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
             AND m.is_admin = 0
@@ -64,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertAccessCodeDetailed" >
         INSERT INTO sys_access_code_detailed
         (
-        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="card != null and card != 0">card,</if>
         <if test="type != null and type != ''">type,</if>
         <if test="chipAmountBefore != null and chipAmountBefore != ''">chip_amount_before,</if>
         <if test="chipAmount != null and chipAmount != ''">chip_amount,</if>
@@ -76,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
         values(
-        <if test="userId != null and userId != 0">#{userId},</if>
+        <if test="card != null and card != 0">#{card},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="chipAmountBefore != null and chipAmountBefore != ''">#{chipAmountBefore},</if>
         <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>

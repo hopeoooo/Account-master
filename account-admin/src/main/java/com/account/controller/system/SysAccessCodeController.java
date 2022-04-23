@@ -53,11 +53,14 @@ public class SysAccessCodeController extends BaseController {
     @ApiOperation(value = "存码")
     public AjaxResult saveCode(@Validated @RequestBody SysAccessCodeAddSearch accessCode)
     {
+        if (StringUtils.isNull(accessCode.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
         accessCode.setMark(AccessType.STORAGE_CODE.getCode());
         //存码
         if (StringUtils.isNotNull(accessCode.getId()) && accessCode.getId() > 0) {
             //判断id是否存在
-            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(), accessCode.getUserId());
+            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(), accessCode.getCard());
             if (sysAccessCode==null){
                 return AjaxResult.error("存码失败!");
             }
@@ -66,8 +69,8 @@ public class SysAccessCodeController extends BaseController {
             accessCode.setUpdateBy(SecurityUtils.getUsername());
             accessCodeService.updateAccessCode(accessCode);
         } else {
-            //判断id是否存在
-            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null,accessCode.getUserId());
+            //判断卡号是否存在
+            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null,accessCode.getCard());
             if (sysAccessCode!=null){
                 return AjaxResult.error("存码失败!");
             }
@@ -82,8 +85,11 @@ public class SysAccessCodeController extends BaseController {
     @PostMapping("/updateCodeFetching")
     @ApiOperation(value = "取码")
     public AjaxResult updateCodeFetching(@Validated @RequestBody SysAccessCodeAddSearch accessCode){
+        if (StringUtils.isNull(accessCode.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
         //判断金额是否足够
-        SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getUserId());
+        SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
         accessCode.setMark(AccessType.CODE_FETCHING.getCode());
         if (sysAccessCode==null){
             return AjaxResult.error("取码失败!");

@@ -5,9 +5,11 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.AccessType;
+import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.search.SysBusinessCashChipAddSearch;
 import com.account.system.domain.vo.SysBusinessCashChipVo;
 import com.account.system.service.SysMembersService;
+import com.account.system.service.SysSignedRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,6 +29,11 @@ import java.util.Map;
 public class SysBusinessCashChipController extends BaseController {
     @Autowired
     private SysMembersService membersService;
+
+
+    @Autowired
+    private SysSignedRecordService signedRecordService;
+
 
     @PreAuthorize("@ss.hasPermi('system:businessCashChip:list')")
     @GetMapping("/list")
@@ -73,6 +80,11 @@ public class SysBusinessCashChipController extends BaseController {
         int isCash = Integer.parseInt(map.get("isCash").toString());
         if (isCash==CommonConst.NUMBER_0){
             return AjaxResult.success("当前会员不可换现!");
+        }
+        //判断会员是否有欠钱
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, businessCashChipAddSearch.getId());
+        if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
+            return AjaxResult.success("当前用户不可汇出!");
         }
         BigDecimal chip = new BigDecimal(map.get("chip").toString());
         if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0){

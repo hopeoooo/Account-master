@@ -3,6 +3,7 @@ package com.account.system.service.impl;
 import com.account.common.constant.CommonConst;
 import com.account.common.enums.AccessType;
 import com.account.system.domain.SysAccessCode;
+import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.search.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeDetailed;
 import com.account.system.domain.search.SysAccessCodeSearch;
@@ -43,8 +44,8 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     }
 
     @Override
-    public SysAccessCode selectAccessCodeInfo(Long id,Long userId) {
-        return accessCodeMapper.selectAccessCodeInfo(id,userId);
+    public SysAccessCode selectAccessCodeInfo(Long id,String card) {
+        return accessCodeMapper.selectAccessCodeInfo(id,card);
     }
 
     @Override
@@ -54,8 +55,10 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         BigDecimal chipBalance = accessCode.getChipBalance() == null ? BigDecimal.ZERO : accessCode.getChipBalance();
         accessCode.setTotalBalance(cashBalance.add(chipBalance));
         int i = accessCodeMapper.insertAccessCode(accessCode);
-        //保存存取码明细
-        saveAccessCodeDetailed(accessCode);
+        if(i>0){
+            //保存存取码明细
+            saveAccessCodeDetailed(accessCode);
+        }
         return i;
     }
 
@@ -63,8 +66,10 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     @Transactional
     public int updateAccessCode(SysAccessCodeAddSearch accessCode) {
         int i = accessCodeMapper.updateAccessCode(accessCode);
-        //保存存取码明细
-        saveAccessCodeDetailed(accessCode);
+        if(i>0){
+            //保存存取码明细
+            saveAccessCodeDetailed(accessCode);
+        }
         return i;
     }
 
@@ -75,10 +80,13 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
      * @return
      */
     public int saveAccessCodeDetailed(SysAccessCodeAddSearch accessCode){
-        SysAccessCode sysAccessCode = accessCodeMapper.selectAccessCodeInfo(accessCode.getId(),accessCode.getUserId());
+        //存取码明细
+        SysAccessCode sysAccessCode = accessCodeMapper.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
         SysAccessCodeDetailed accessCodeDetailed=new SysAccessCodeDetailed();
-        accessCodeDetailed.setUserId(accessCode.getUserId());
+        accessCodeDetailed.setCard(accessCode.getCard());
         accessCodeDetailed.setType(accessCode.getMark());
+        accessCodeDetailed.setCreateBy(accessCode.getCreateBy());
+        accessCodeDetailed.setRemark(accessCode.getRemark());
         //筹码
         if (accessCode.getChipBalance()!=null && accessCode.getChipBalance().compareTo(BigDecimal.ZERO)>0){
             BigDecimal chipBalance = sysAccessCode!=null && sysAccessCode.getChipBalance() != null ? sysAccessCode.getChipBalance() :  BigDecimal.ZERO;
@@ -89,6 +97,8 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             }
             accessCodeDetailed.setChipAmount(accessCode.getChipBalance());
             accessCodeDetailed.setChipAmountAfter(chipBalance);
+            //异步添加筹码变动明细表
+            //addChipRecord(accessCodeDetailed,sysAccessCode.getC);
         }
         //现金
         if (accessCode.getCashBalance()!=null && accessCode.getCashBalance().compareTo(BigDecimal.ZERO)>0) {
@@ -101,8 +111,17 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             accessCodeDetailed.setCashAmount(accessCode.getCashBalance());
             accessCodeDetailed.setCashAmountAfter(cashBalance);
         }
-        accessCodeDetailed.setCreateBy(accessCode.getCreateBy());
-        accessCodeDetailed.setRemark(accessCode.getRemark());
        return  accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
+    }
+
+
+    public void addChipRecord(SysAccessCodeDetailed accessCodeDetailed){
+        SysChipRecord chipRecord=new SysChipRecord();
+        chipRecord.setCard(accessCodeDetailed.getCard());
+        chipRecord.setType(accessCodeDetailed.getType());
+        chipRecord.setBefore(accessCodeDetailed.getChipAmountBefore());
+        chipRecord.setChange(accessCodeDetailed.getChipAmount());
+        chipRecord.setAfter(accessCodeDetailed.getChipAmountAfter());
+        chipRecord.setCreateBy(accessCodeDetailed.getCreateBy());
     }
 }

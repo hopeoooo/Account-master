@@ -21,10 +21,10 @@ public interface SysAccessCodeMapper {
 
     /**
      * 根据唯一id、用户id查询
-     * @param userId
+     * @param card
      * @return
      */
-    SysAccessCode selectAccessCodeInfo(@Param("id")Long id, @Param("userId")Long userId);
+    SysAccessCode selectAccessCodeInfo(@Param("id")Long id, @Param("card")String card);
 
     int insertAccessCode(SysAccessCodeAddSearch accessCode) ;
 
