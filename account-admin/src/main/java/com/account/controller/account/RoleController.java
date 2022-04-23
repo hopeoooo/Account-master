@@ -44,7 +44,7 @@ public class RoleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:role:list')")
     @PostMapping("/add")
     @ApiOperation(value = "新增角色")
-    public AjaxResult add(SysRole sysRole) {
+    public AjaxResult add(@RequestBody SysRole sysRole) {
         if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
             return AjaxResult.error("新增角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
@@ -71,7 +71,7 @@ public class RoleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:role:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "编辑角色")
-    public AjaxResult edit(SysRole sysRole) {
+    public AjaxResult edit(@RequestBody SysRole sysRole) {
         if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
             return AjaxResult.error("修改角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
