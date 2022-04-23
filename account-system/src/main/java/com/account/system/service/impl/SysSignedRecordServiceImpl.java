@@ -2,10 +2,13 @@ package com.account.system.service.impl;
 
 import com.account.common.constant.CommonConst;
 import com.account.common.enums.AccessType;
+import com.account.system.domain.SysAccessCodeDetailed;
+import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
+import com.account.system.mapper.SysChipRecordMapper;
 import com.account.system.mapper.SysMembersMapper;
 import com.account.system.mapper.SysSignedRecordDetailedMapper;
 import com.account.system.mapper.SysSignedRecordMapper;
@@ -30,6 +33,9 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
 
     @Autowired
     private SysMembersMapper membersMapper;
+
+    @Autowired
+    private SysChipRecordMapper chipRecordMapper;
 
     @Override
     public List<SysSignedRecordVo> selectSignedRecordList(String card, Integer isAdmin) {
@@ -93,7 +99,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
      * @param signedRecordSearch
      * @return
      */
-    public int saveSignedRecordDetailed(SysSignedRecordSearch signedRecordSearch){
+    public void saveSignedRecordDetailed(SysSignedRecordSearch signedRecordSearch){
         //查询签单数据
         SysSignedRecord sysSignedRecord = signedRecordMapper.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getCard());
 
@@ -111,7 +117,26 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
 
         signedRecordDetailed.setCreateBy(signedRecordSearch.getCreateBy());
         signedRecordDetailed.setRemark(signedRecordSearch.getRemark());
-        return  signedRecordDetailedMapper.insertSignedRecordDetailed(signedRecordDetailed);
+        signedRecordDetailedMapper.insertSignedRecordDetailed(signedRecordDetailed);
+        //添加筹码变动明细表
+        addChipRecord(signedRecordDetailed);
+    }
+
+
+
+    /**
+     * 组装筹码明细变动数据
+     * @param signedRecordDetailed
+     */
+    public void addChipRecord( SysSignedRecordDetailed signedRecordDetailed){
+        SysChipRecord chipRecord=new SysChipRecord();
+        chipRecord.setCard(signedRecordDetailed.getCard());
+        chipRecord.setType(signedRecordDetailed.getType());
+        chipRecord.setBefore(signedRecordDetailed.getAmountBefore());
+        chipRecord.setChange(signedRecordDetailed.getAmount());
+        chipRecord.setAfter(signedRecordDetailed.getAmountAfter());
+        chipRecord.setCreateBy(signedRecordDetailed.getCreateBy());
+        chipRecordMapper.addChipRecord(chipRecord);
     }
 
 }

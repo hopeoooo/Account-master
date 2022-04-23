@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Insert;
  */
 public interface SysChipRecordMapper {
 
-    @Insert("insert into sys_chip_record (card,type,before,change,after,create_time,create_by) " +
+    @Insert("INSERT INTO sys_chip_record ( `card`, `type`, `before`, `change`, `after`, `create_time`, `create_by` ) " +
             "values (#{card},#{type},#{before},#{change},#{after},sysdate(),#{createBy}) ")
     void addChipRecord(SysChipRecord sysChipRecord);
 

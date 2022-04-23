@@ -10,6 +10,7 @@ import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.mapper.SysAccessCodeMapper;
+import com.account.system.mapper.SysChipRecordMapper;
 import com.account.system.mapper.SysMembersMapper;
 import com.account.system.service.SysAccessCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     @Autowired
     private SysAccessCodeDetailedMapper accessCodeDetailedMapper;
     @Autowired
-    private SysMembersMapper membersMapper;
+    private SysChipRecordMapper chipRecordMapper;
 
     @Override
     public List<SysAccessCodeVo> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch) {
@@ -79,7 +80,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
      * @param accessCode
      * @return
      */
-    public int saveAccessCodeDetailed(SysAccessCodeAddSearch accessCode){
+    public void saveAccessCodeDetailed(SysAccessCodeAddSearch accessCode){
         //存取码明细
         SysAccessCode sysAccessCode = accessCodeMapper.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
         SysAccessCodeDetailed accessCodeDetailed=new SysAccessCodeDetailed();
@@ -97,8 +98,8 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             }
             accessCodeDetailed.setChipAmount(accessCode.getChipBalance());
             accessCodeDetailed.setChipAmountAfter(chipBalance);
-            //异步添加筹码变动明细表
-            //addChipRecord(accessCodeDetailed,sysAccessCode.getC);
+            //添加筹码变动明细表
+            addChipRecord(accessCodeDetailed);
         }
         //现金
         if (accessCode.getCashBalance()!=null && accessCode.getCashBalance().compareTo(BigDecimal.ZERO)>0) {
@@ -111,10 +112,14 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             accessCodeDetailed.setCashAmount(accessCode.getCashBalance());
             accessCodeDetailed.setCashAmountAfter(cashBalance);
         }
-       return  accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
+        accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
     }
 
 
+    /**
+     * 组装筹码明细变动数据
+     * @param accessCodeDetailed
+     */
     public void addChipRecord(SysAccessCodeDetailed accessCodeDetailed){
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(accessCodeDetailed.getCard());
@@ -123,5 +128,6 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         chipRecord.setChange(accessCodeDetailed.getChipAmount());
         chipRecord.setAfter(accessCodeDetailed.getChipAmountAfter());
         chipRecord.setCreateBy(accessCodeDetailed.getCreateBy());
+        chipRecordMapper.addChipRecord(chipRecord);
     }
 }

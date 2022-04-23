@@ -1,13 +1,21 @@
 package com.account.system.service.impl;
 
+import com.account.common.constant.CommonConst;
+import com.account.common.enums.AccessType;
+import com.account.system.domain.SysChipRecord;
+import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.search.SysRemittanceDetailedSearch;
 import com.account.system.domain.search.SysRemittanceSearch;
 import com.account.system.domain.vo.SysRemittanceDetailedVo;
+import com.account.system.mapper.SysChipRecordMapper;
 import com.account.system.mapper.SysRemittanceDetailedMapper;
+import com.account.system.service.SysMembersService;
 import com.account.system.service.SysRemittanceDetailedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +27,11 @@ import java.util.Map;
 public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedService {
     @Autowired
     private SysRemittanceDetailedMapper remittanceDetailedMapper;
+    @Autowired
+    private SysMembersService membersService;
+
+    @Autowired
+    private SysChipRecordMapper chipRecordMapper;
 
     @Override
     public List<SysRemittanceDetailedVo> selectRemittanceDetailedList(SysRemittanceDetailedSearch remittanceDetailedSearch) {
@@ -31,7 +44,35 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     }
 
     @Override
+    @Transactional
     public int insertRemittanceDetailed(SysRemittanceSearch remittanceSearch) {
-        return remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
+        int type = remittanceSearch.getType() == AccessType.IMPORT.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+        int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
+        if (i>0){
+            //汇款明细
+            remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
+
+            //汇入为筹码则累加用户筹码余额
+            if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
+                //添加筹码变动明细表
+                addChipRecord(remittanceSearch);
+            }
+        }
+        return i;
+    }
+
+    /**
+     * 组装筹码明细变动数据
+     * @param remittanceSearch
+     */
+    public void addChipRecord( SysRemittanceSearch remittanceSearch){
+        SysChipRecord chipRecord=new SysChipRecord();
+        chipRecord.setCard(remittanceSearch.getCard());
+        chipRecord.setType(remittanceSearch.getType());
+        chipRecord.setBefore(BigDecimal.ZERO);
+        chipRecord.setChange(remittanceSearch.getAmount());
+        chipRecord.setAfter(BigDecimal.ZERO);
+        chipRecord.setCreateBy(remittanceSearch.getCreateBy());
+        chipRecordMapper.addChipRecord(chipRecord);
     }
 }

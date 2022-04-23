@@ -72,12 +72,12 @@ public class SysRemittanceController extends BaseController {
         if (StringUtils.isNull(remittanceSearch.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
-        remittanceSearch.setType(AccessType.IMPORT.getCode());
-        //汇入为筹码则累加用户筹码余额
-        if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
-            membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), CommonConst.NUMBER_1);
-            //添加筹码变动明细表
+        //判断该会员是否可以汇出
+        SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
         }
+        remittanceSearch.setType(AccessType.IMPORT.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
         //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
@@ -113,8 +113,6 @@ public class SysRemittanceController extends BaseController {
             if (remittanceSearch.getAmount().compareTo(chip)>0){
                 return AjaxResult.success("余额不足!");
             }
-            membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), CommonConst.NUMBER_0);
-            //添加筹码变动明细表
         }
         //添加汇款明细表
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
