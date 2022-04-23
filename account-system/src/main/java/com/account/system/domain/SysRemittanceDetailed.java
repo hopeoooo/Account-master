@@ -17,14 +17,14 @@ public class SysRemittanceDetailed extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
     @ApiModelProperty( value ="类型: 1:筹码,2:现金")
-    private int type;
+    private int operationType;
 
     @ApiModelProperty( value ="操作类型: 7:汇入 8:汇出")
-    private int operationType;
+    private int type;
 
 
     @ApiModelProperty(value = "变动金额")

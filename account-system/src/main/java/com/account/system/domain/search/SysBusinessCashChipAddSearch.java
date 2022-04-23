@@ -15,21 +15,19 @@ public class SysBusinessCashChipAddSearch {
     @ApiModelProperty(value = "(5:买码,6:换现)")
     private Integer mark;
 
-    @ApiModelProperty(value ="id")
-    private Long id;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
     @ApiModelProperty(value = "已存筹码余额")
     private BigDecimal chipAmount;
 
     @ApiModelProperty(value = "备注")
     private String remark;
-
     /**
      * 创建者
      */
     @ApiModelProperty("创建者")
     private String createBy;
-
     /**
      * 更新者
      */

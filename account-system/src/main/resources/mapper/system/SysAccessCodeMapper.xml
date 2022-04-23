@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
                 total_balance=chip_balance+cash_balance, update_time = sysdate()
             </set>
-        where id = #{id} and card=#{card}
+        where card=#{card}
     </update>
 
 

@@ -6,6 +6,8 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
+import com.account.common.utils.StringUtils;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.search.SysRemittanceSearch;
 import com.account.system.service.SysMembersService;
@@ -67,10 +69,13 @@ public class SysRemittanceController extends BaseController {
     @PostMapping("/addImport")
     @ApiOperation(value = "汇入")
     public AjaxResult addImport(@Validated @RequestBody SysRemittanceSearch remittanceSearch) {
-        remittanceSearch.setOperationType(AccessType.IMPORT.getCode());
+        if (StringUtils.isNull(remittanceSearch.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
+        remittanceSearch.setType(AccessType.IMPORT.getCode());
         //汇入为筹码则累加用户筹码余额
-        if (remittanceSearch.getType()==CommonConst.NUMBER_1){
-            membersService.updateChipAmount(remittanceSearch.getId(), remittanceSearch.getAmount(), CommonConst.NUMBER_1);
+        if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
+            membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), CommonConst.NUMBER_1);
             //添加筹码变动明细表
         }
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
@@ -83,26 +88,32 @@ public class SysRemittanceController extends BaseController {
     @PostMapping("/addRemit")
     @ApiOperation(value = "汇出")
     public AjaxResult addRemit(@Validated @RequestBody SysRemittanceSearch remittanceSearch) {
-        remittanceSearch.setOperationType(AccessType.REMIT.getCode());
+        if (StringUtils.isNull(remittanceSearch.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
+        remittanceSearch.setType(AccessType.REMIT.getCode());
         //判断该会员是否可以汇出
-        Map map = membersService.selectMembersInfo(remittanceSearch.getId());
-        int isOut = Integer.parseInt(map.get("isOut").toString());
+        SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
+        }
+        int isOut = sysMembers.getIsOut();
         if (isOut==CommonConst.NUMBER_0){
             return AjaxResult.success("当前用户不可汇出!");
         }
         //判断会员是否有欠钱
-        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getId());
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getCard());
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("当前用户不可汇出!");
         }
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
         //汇出为筹码则校验,减用户筹码余额
-        if (remittanceSearch.getType()==CommonConst.NUMBER_1){
-            BigDecimal chip = new BigDecimal(map.get("chip").toString());
+        if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
+            BigDecimal chip = sysMembers.getChip();
             if (remittanceSearch.getAmount().compareTo(chip)>0){
                 return AjaxResult.success("余额不足!");
             }
-            membersService.updateChipAmount(remittanceSearch.getId(), remittanceSearch.getAmount(), CommonConst.NUMBER_0);
+            membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), CommonConst.NUMBER_0);
             //添加筹码变动明细表
         }
         //添加汇款明细表

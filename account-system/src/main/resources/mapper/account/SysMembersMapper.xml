@@ -156,12 +156,12 @@
                 <if test="chipAmount != null and chipAmount != '' ">chip =chip - #{chipAmount}</if>
             </if>
         </set>
-        where id = #{userId}
+        where card = #{card}
     </update>
 
     <select id="selectmembersByCard" resultType="SysMembers">
         select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
-        create_time createTime,remark
+        create_time createTime,remark,chip,	is_cash as isCash,	is_out as isOut
         from sys_members
         where card = #{card}
     </select>

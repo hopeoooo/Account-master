@@ -21,7 +21,7 @@ public class SysSignedRecordDetailedVo{
 
 
     @ApiModelProperty( value ="操作类型: 1:还单 2:签单")
-    private int operationType;
+    private int type;
 
     @ApiModelProperty( value ="金额类型: 1:筹码")
     private int amountType;

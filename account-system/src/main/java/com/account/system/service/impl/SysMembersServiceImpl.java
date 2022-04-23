@@ -63,14 +63,14 @@ public class SysMembersServiceImpl implements SysMembersService {
 
     /**
      *
-     * @param userId
+     * @param card
      * @param chipAmount 操作金额
      * @param type 0:减,1:加
      * @return
      */
     @Override
-    public int updateChipAmount(Long userId, BigDecimal chipAmount, Integer type) {
-        return sysMembersMapper.updateChipAmount( userId,  chipAmount,  type);
+    public int updateChipAmount(String card, BigDecimal chipAmount, Integer type) {
+        return sysMembersMapper.updateChipAmount( card,  chipAmount,  type);
     }
 
     @Override

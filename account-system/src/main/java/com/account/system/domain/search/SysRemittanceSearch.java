@@ -13,16 +13,16 @@ import java.math.BigDecimal;
 public class SysRemittanceSearch {
 
     @ApiModelProperty(value = "(7:汇入,8:汇出)")
-    private Integer operationType;
+    private Integer type;
 
-    @ApiModelProperty(value ="id")
-    private Long id;
+    @ApiModelProperty(value = "会员账卡号")
+    private String card;
 
     @ApiModelProperty(value = "余额")
     private BigDecimal amount;
 
     @ApiModelProperty(value = "(1:筹码,2:现金)")
-    private Integer type;
+    private Integer operationType;
 
     @ApiModelProperty(value = "备注")
     private String remark;

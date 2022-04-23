@@ -7,10 +7,12 @@ import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysAccessCode;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysAccessCodeAddSearch;
 import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.service.SysAccessCodeService;
+import com.account.system.service.SysMembersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ import java.util.Map;
 public class SysAccessCodeController extends BaseController {
     @Autowired
     private SysAccessCodeService accessCodeService;
+
+    @Autowired
+    private SysMembersService membersService;
 
     @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @GetMapping("/list")
@@ -56,27 +61,22 @@ public class SysAccessCodeController extends BaseController {
         if (StringUtils.isNull(accessCode.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
+        //判断该卡号是否存在
+        SysMembers sysMembers = membersService.selectmembersByCard(accessCode.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
+        }
         accessCode.setMark(AccessType.STORAGE_CODE.getCode());
-        //存码
-        if (StringUtils.isNotNull(accessCode.getId()) && accessCode.getId() > 0) {
-            //判断id是否存在
-            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(), accessCode.getCard());
-            if (sysAccessCode==null){
-                return AjaxResult.error("存码失败!");
-            }
+        SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null, accessCode.getCard());
+        if (sysAccessCode==null){
+            //添加
+            accessCode.setCreateBy(SecurityUtils.getUsername());
+            accessCodeService.insertAccessCode(accessCode);
+        }else {
             //修改:金额累加
             accessCode.setCreateBy(SecurityUtils.getUsername());
             accessCode.setUpdateBy(SecurityUtils.getUsername());
             accessCodeService.updateAccessCode(accessCode);
-        } else {
-            //判断卡号是否存在
-            SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(null,accessCode.getCard());
-            if (sysAccessCode!=null){
-                return AjaxResult.error("存码失败!");
-            }
-            //添加
-            accessCode.setCreateBy(SecurityUtils.getUsername());
-            accessCodeService.insertAccessCode(accessCode);
         }
         return AjaxResult.success("存码成功!");
     }
@@ -87,6 +87,11 @@ public class SysAccessCodeController extends BaseController {
     public AjaxResult updateCodeFetching(@Validated @RequestBody SysAccessCodeAddSearch accessCode){
         if (StringUtils.isNull(accessCode.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
+        }
+        //判断该卡号是否存在
+        SysMembers sysMembers = membersService.selectmembersByCard(accessCode.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
         }
         //判断金额是否足够
         SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());

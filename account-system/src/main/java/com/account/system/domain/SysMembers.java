@@ -82,4 +82,6 @@ public class SysMembers extends BaseEntity {
 
     @ApiModelProperty("龙虎洗码比例(现金)")
     private BigDecimal dragonTigerRatioCash;
+    @ApiModelProperty("用户筹码余额")
+    private BigDecimal chip;
 }

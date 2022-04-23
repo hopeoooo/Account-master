@@ -17,11 +17,11 @@ public class SysSignedRecordDetailed extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
     @ApiModelProperty( value ="操作类型: 4:还单 3:签单")
-    private int operationType;
+    private int type;
 
     @ApiModelProperty( value ="金额类型: 1:筹码")
     private int amountType;

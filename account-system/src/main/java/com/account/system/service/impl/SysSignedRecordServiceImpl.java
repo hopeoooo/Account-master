@@ -42,20 +42,22 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
     }
 
     @Override
-    public SysSignedRecord selectSignedRecordInfo(Long id, Long userId) {
-        return signedRecordMapper.selectSignedRecordInfo(id, userId);
+    public SysSignedRecord selectSignedRecordInfo(Long id, String  card) {
+        return signedRecordMapper.selectSignedRecordInfo(id, card);
     }
 
     @Override
     @Transactional
     public int insertSigned(SysSignedRecordSearch signedRecordSearch) {
         int i = signedRecordMapper.insertSigned(signedRecordSearch);
-        //保存签单明细
-        saveSignedRecordDetailed(signedRecordSearch);
+        if(i>0){
+            //保存签单明细
+            saveSignedRecordDetailed(signedRecordSearch);
 
-        //更新用户筹码金额
-        if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
-            updateUserChipAmount(signedRecordSearch.getAmount(), CommonConst.NUMBER_1,signedRecordSearch.getUserId());
+            //更新用户筹码金额
+            if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
+                updateUserChipAmount(signedRecordSearch.getAmount(), CommonConst.NUMBER_1,signedRecordSearch.getCard());
+            }
         }
         return i;
     }
@@ -63,15 +65,17 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
     @Override
     @Transactional
     public int update(SysSignedRecordSearch signedRecordSearch) {
-        int update = signedRecordMapper.update(signedRecordSearch);
-        //保存签单明细
-        saveSignedRecordDetailed(signedRecordSearch);
-        //更新用户筹码金额
-        if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
-            int number1 =signedRecordSearch.getMark()==AccessType.SIGNED.getCode() ? CommonConst.NUMBER_1: CommonConst.NUMBER_0;
-            updateUserChipAmount(signedRecordSearch.getAmount(), number1,signedRecordSearch.getUserId());
+        int i = signedRecordMapper.update(signedRecordSearch);
+        if(i>0) {
+            //保存签单明细
+            saveSignedRecordDetailed(signedRecordSearch);
+            //更新用户筹码金额
+            if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+                int number1 = signedRecordSearch.getMark() == AccessType.SIGNED.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+                updateUserChipAmount(signedRecordSearch.getAmount(), number1, signedRecordSearch.getCard());
+            }
         }
-        return update;
+        return i;
     }
 
     /**
@@ -80,7 +84,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
      * @param type 0:减、1:加
      * @return
      */
-    public int updateUserChipAmount(BigDecimal chipAmount,int type,Long userId){
+    public int updateUserChipAmount(BigDecimal chipAmount,int type,String userId){
         return  membersMapper.updateChipAmount(userId, chipAmount, type);
     }
 
@@ -91,11 +95,11 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
      */
     public int saveSignedRecordDetailed(SysSignedRecordSearch signedRecordSearch){
         //查询签单数据
-        SysSignedRecord sysSignedRecord = signedRecordMapper.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getUserId());
+        SysSignedRecord sysSignedRecord = signedRecordMapper.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getCard());
 
         SysSignedRecordDetailed signedRecordDetailed=new SysSignedRecordDetailed();
-        signedRecordDetailed.setUserId(signedRecordSearch.getUserId());
-        signedRecordDetailed.setOperationType(signedRecordSearch.getMark());
+        signedRecordDetailed.setCard(signedRecordSearch.getCard());
+        signedRecordDetailed.setType(signedRecordSearch.getMark());
         BigDecimal signedAmount = sysSignedRecord!=null && sysSignedRecord.getSignedAmount() != null ? sysSignedRecord.getSignedAmount() :  BigDecimal.ZERO;
         if (signedRecordSearch.getMark() == AccessType.SIGNED.getCode()){
             signedRecordDetailed.setAmountBefore(signedAmount.subtract(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));

@@ -22,7 +22,7 @@ public interface SysSignedRecordService
     Map selectSignedRecordTotal(String card, Integer isAdmin);
 
 
-    SysSignedRecord selectSignedRecordInfo(Long id, Long userId);
+    SysSignedRecord selectSignedRecordInfo(Long id, String  card);
     /**
      * 添加
      * @return

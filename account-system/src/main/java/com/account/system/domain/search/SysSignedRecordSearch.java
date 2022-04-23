@@ -22,8 +22,8 @@ public class SysSignedRecordSearch {
     @ApiModelProperty(value = "金额")
     private BigDecimal amount;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
 
     @ApiModelProperty(value = "(3:签单,4:还单)")

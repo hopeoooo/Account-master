@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysRemittanceDetailed" id="SysRemittanceDetailedResult">
     	<id     property="id"      column="id"      />
-        <result property="userId"    column="user_id"    />
+        <result property="card"    column="card"    />
         <result property="operationType"      column="operation_type"      />
         <result property="type"    column="type"    />
         <result property="amount"      column="amount"      />
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             d.create_by as  createBy
         FROM
             sys_remittance_detailed d
-                LEFT JOIN sys_members m ON m.id = d.user_id
+                LEFT JOIN sys_members m ON m.card = d.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         IFNULL( SUM( d.amount ), 0 ) as amount
         FROM
         sys_remittance_detailed d
-        LEFT JOIN sys_members m ON m.id = d.user_id
+        LEFT JOIN sys_members m ON m.card = d.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertRemittanceDetailed" >
         INSERT INTO sys_remittance_detailed
         (
-        <if test="id != null and id != 0">user_id,</if>
+        <if test="card != null and card != 0">card,</if>
         <if test="operationType != null and operationType != 0">operation_type,</if>
         <if test="type != null and type != ''">type,</if>
         <if test="amount != null and amount != ''">amount,</if>
@@ -93,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
         values(
-        <if test="id != null and id != 0">#{id},</if>
+        <if test="card != null and card != 0">#{card},</if>
         <if test="operationType != null and operationType != 0">#{operationType},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
