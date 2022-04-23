@@ -1,8 +1,7 @@
 package com.account.system.service.impl;
 
 import com.account.common.constant.CommonConst;
-import com.account.common.enums.AccessType;
-import com.account.system.domain.SysAccessCodeDetailed;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.SysSignedRecordDetailed;
@@ -77,7 +76,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
             saveSignedRecordDetailed(signedRecordSearch);
             //更新用户筹码金额
             if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO) > 0) {
-                int number1 = signedRecordSearch.getMark() == AccessType.SIGNED.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+                int number1 = signedRecordSearch.getMark() == ChipChangeEnum.BORROW_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
                 updateUserChipAmount(signedRecordSearch.getAmount(), number1, signedRecordSearch.getCard());
             }
         }
@@ -107,7 +106,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         signedRecordDetailed.setCard(signedRecordSearch.getCard());
         signedRecordDetailed.setType(signedRecordSearch.getMark());
         BigDecimal signedAmount = sysSignedRecord!=null && sysSignedRecord.getSignedAmount() != null ? sysSignedRecord.getSignedAmount() :  BigDecimal.ZERO;
-        if (signedRecordSearch.getMark() == AccessType.SIGNED.getCode()){
+        if (signedRecordSearch.getMark() == ChipChangeEnum.BORROW_CHIP.getCode()){
             signedRecordDetailed.setAmountBefore(signedAmount.subtract(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));
         }else {
             signedRecordDetailed.setAmountBefore(signedAmount.add(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));

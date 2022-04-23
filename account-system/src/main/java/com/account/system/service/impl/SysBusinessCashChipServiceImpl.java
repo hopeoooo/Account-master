@@ -1,25 +1,18 @@
 package com.account.system.service.impl;
 
 import com.account.common.constant.CommonConst;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysBusinessCashChipAddSearch;
-import com.account.system.domain.search.SysRemittanceDetailedSearch;
-import com.account.system.domain.search.SysRemittanceSearch;
-import com.account.system.domain.vo.SysRemittanceDetailedVo;
 import com.account.system.mapper.SysChipRecordMapper;
-import com.account.system.mapper.SysRemittanceDetailedMapper;
 import com.account.system.service.SysBusinessCashChipService;
 import com.account.system.service.SysMembersService;
-import com.account.system.service.SysRemittanceDetailedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -38,7 +31,7 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
     @Override
     @Transactional
     public int addBuyCode(SysBusinessCashChipAddSearch businessCashChipAddSearch) {
-        int mark = businessCashChipAddSearch.getMark() == AccessType.BUY_CODE.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+        int mark = businessCashChipAddSearch.getMark() == ChipChangeEnum.BUY_CODE.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
         int i = membersService.updateChipAmount(businessCashChipAddSearch.getCard(), businessCashChipAddSearch.getChipAmount(), mark);
         if (i>0){
             addChipRecord(businessCashChipAddSearch);
@@ -55,7 +48,7 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
         chipRecord.setCard(businessCashChipAddSearch.getCard());
         chipRecord.setType(businessCashChipAddSearch.getMark());
         BigDecimal chip = sysMembers!=null && sysMembers.getChip() != null ? sysMembers.getChip() :  BigDecimal.ZERO;
-        if (businessCashChipAddSearch.getMark() == AccessType.BUY_CODE.getCode()){
+        if (businessCashChipAddSearch.getMark() == ChipChangeEnum.BUY_CODE.getCode()){
             chipRecord.setBefore(chip.subtract(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount()));
         }else {
             chipRecord.setBefore(chip.add(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount()));

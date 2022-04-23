@@ -1,10 +1,9 @@
 package com.account.system.service.impl;
 
 import com.account.common.constant.CommonConst;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.SysMembers;
-import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.search.SysRemittanceDetailedSearch;
 import com.account.system.domain.search.SysRemittanceSearch;
 import com.account.system.domain.vo.SysRemittanceDetailedVo;
@@ -47,7 +46,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     @Override
     @Transactional
     public int insertRemittanceDetailed(SysRemittanceSearch remittanceSearch) {
-        int type = remittanceSearch.getType() == AccessType.IMPORT.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+        int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
         int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
         if (i>0){
             //汇款明细
@@ -71,7 +70,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(remittanceSearch.getCard());
         chipRecord.setType(remittanceSearch.getType());
-        if (remittanceSearch.getType() == AccessType.IMPORT.getCode()){
+        if (remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode()){
             chipRecord.setBefore(chip.subtract(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));
         }else {
             chipRecord.setBefore(chip.add(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));

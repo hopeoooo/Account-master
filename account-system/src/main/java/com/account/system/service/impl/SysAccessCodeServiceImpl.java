@@ -1,7 +1,6 @@
 package com.account.system.service.impl;
 
-import com.account.common.constant.CommonConst;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.search.SysAccessCodeAddSearch;
@@ -11,7 +10,6 @@ import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.mapper.SysAccessCodeMapper;
 import com.account.system.mapper.SysChipRecordMapper;
-import com.account.system.mapper.SysMembersMapper;
 import com.account.system.service.SysAccessCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,7 +89,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         //筹码
         if (accessCode.getChipBalance()!=null && accessCode.getChipBalance().compareTo(BigDecimal.ZERO)>0){
             BigDecimal chipBalance = sysAccessCode!=null && sysAccessCode.getChipBalance() != null ? sysAccessCode.getChipBalance() :  BigDecimal.ZERO;
-            if (accessCode.getMark()==AccessType.STORAGE_CODE.getCode()){
+            if (accessCode.getMark()== ChipChangeEnum.STORE_CHIP.getCode()){
                 accessCodeDetailed.setChipAmountBefore(chipBalance.subtract(accessCode.getChipBalance()==null ?BigDecimal.ZERO:accessCode.getChipBalance()));
             }else {
                 accessCodeDetailed.setChipAmountBefore(chipBalance.add(accessCode.getChipBalance()==null ?BigDecimal.ZERO:accessCode.getChipBalance()));
@@ -104,7 +102,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         //现金
         if (accessCode.getCashBalance()!=null && accessCode.getCashBalance().compareTo(BigDecimal.ZERO)>0) {
             BigDecimal cashBalance = sysAccessCode!=null &&  sysAccessCode.getCashBalance() != null ? sysAccessCode.getCashBalance() : BigDecimal.ZERO;
-            if (accessCode.getMark()==AccessType.STORAGE_CODE.getCode()){
+            if (accessCode.getMark()==ChipChangeEnum.STORE_CHIP.getCode()){
                 accessCodeDetailed.setCashAmountBefore(cashBalance.subtract(accessCode.getCashBalance()==null ?BigDecimal.ZERO:accessCode.getCashBalance()));
             }else {
                 accessCodeDetailed.setCashAmountBefore(cashBalance.add(accessCode.getCashBalance()==null ?BigDecimal.ZERO:accessCode.getCashBalance()));

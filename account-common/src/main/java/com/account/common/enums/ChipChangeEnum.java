@@ -16,7 +16,8 @@ public enum ChipChangeEnum {
     BET_RECORD_CHIP(9, "注单补录"),
     SETTLEMENT_CHIP(10, "洗码结算"),
     IMPORT_CHIP(11, "汇入"),
-    OUT_EXCHANGE(12, "汇出");
+    OUT_EXCHANGE(12, "汇出"),
+    BUY_CODE(13, "买码");
 
     private final int code;
     private final String info;

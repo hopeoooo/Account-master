@@ -4,7 +4,7 @@ import com.account.common.constant.CommonConst;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
-import com.account.common.enums.AccessType;
+import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
@@ -71,7 +71,7 @@ public class SysBusinessCashChipController extends BaseController {
         if (StringUtils.isNull(businessCashChipAddSearch.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
-        businessCashChipAddSearch.setMark(AccessType.BUY_CODE.getCode());
+        businessCashChipAddSearch.setMark(ChipChangeEnum.BUY_CODE.getCode());
         businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
         businessCashChipService.addBuyCode(businessCashChipAddSearch);
         return AjaxResult.success("买码成功!");
@@ -84,7 +84,7 @@ public class SysBusinessCashChipController extends BaseController {
         if (StringUtils.isNull(businessCashChipAddSearch.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
-        businessCashChipAddSearch.setMark(AccessType.CASH_EXCHANGE.getCode());
+        businessCashChipAddSearch.setMark(ChipChangeEnum.CASH_OUT_CHIP.getCode());
         //判断该会员是否可以换现
         SysMembers sysMembers = membersService.selectmembersByCard(businessCashChipAddSearch.getCard());
         if (sysMembers==null){
