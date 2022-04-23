@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -22,6 +23,11 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     @Override
     public List<SysRemittanceDetailedVo> selectRemittanceDetailedList(SysRemittanceDetailedSearch remittanceDetailedSearch) {
         return remittanceDetailedMapper.selectRemittanceDetailedList(remittanceDetailedSearch);
+    }
+
+    @Override
+    public Map selectRemittanceDetailedTotal(SysRemittanceDetailedSearch remittanceDetailedSearch) {
+        return remittanceDetailedMapper.selectRemittanceDetailedTotal(remittanceDetailedSearch);
     }
 
     @Override
