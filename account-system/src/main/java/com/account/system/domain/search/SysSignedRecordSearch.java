@@ -26,7 +26,7 @@ public class SysSignedRecordSearch {
     private String card;
 
 
-    @ApiModelProperty(value = "(3:签单,4:还单)")
+    @ApiModelProperty(value = "(5:签单,6:还单)")
     private Integer mark;
 
     /**

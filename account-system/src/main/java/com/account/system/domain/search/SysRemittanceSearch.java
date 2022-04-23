@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Data
 public class SysRemittanceSearch {
 
-    @ApiModelProperty(value = "(7:汇入,8:汇出)")
+    @ApiModelProperty(value = "(11:汇入,12:汇出)")
     private Integer type;
 
     @ApiModelProperty(value = "会员账卡号")

@@ -20,7 +20,7 @@ public class SysSignedRecordDetailed extends BaseEntity {
     @ApiModelProperty(value ="会员卡号")
     private String card;
 
-    @ApiModelProperty( value ="操作类型: 4:还单 3:签单")
+    @ApiModelProperty( value ="操作类型: 6:还单 5:签单")
     private int type;
 
     @ApiModelProperty( value ="金额类型: 1:筹码")
