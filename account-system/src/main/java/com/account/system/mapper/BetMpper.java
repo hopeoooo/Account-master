@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hope
@@ -41,4 +42,8 @@ public interface BetMpper {
     void saveBet(SysBet sysBet);
 
     void saveBetInfos(List<SysBetInfo> list);
+
+    @Select("select id, table_id tableId,boot_num bootNum,game_num gameNum, game_result gameResult from sys_game_result " +
+            "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} ")
+    List<Map> getGameResults(SysTableManagement sysTableManagement);
 }

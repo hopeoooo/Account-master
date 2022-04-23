@@ -5,6 +5,8 @@ import com.account.system.domain.SysTableManagement;
 import com.alibaba.fastjson.JSONArray;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hope
@@ -23,4 +25,6 @@ public interface BetService {
     String selectGameResult(SysTableManagement sysTableManagement);
 
     void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
+
+    List<Map> getGameResults(SysTableManagement sysTableManagement);
 }

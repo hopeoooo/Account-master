@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
 
 /**
@@ -54,8 +57,31 @@ public class BetBaccaratController {
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
-        return AjaxResult.success();
+        Map map = new HashMap();
+        map.put("tableId", sysTableManagement.getTableId());
+        map.put("bootNum", sysTableManagement.getBootNum());
+        map.put("gameNum", sysTableManagement.getGameNum());
+        map.put("chip", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip()));
+        map.put("cash", sysTableManagement.getCashPointBase().add(sysTableManagement.getCash()));
+        map.put("total", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
+                .add(sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())));
+        return AjaxResult.success(map);
     }
+
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PostMapping("/game")
+    @ApiOperation(value = "赛果列表")
+    public AjaxResult game() {
+        //根据ip获取台桌信息
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        List<Map> list = betService.getGameResults(sysTableManagement);
+        return AjaxResult.success(list);
+    }
+
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
     @PostMapping("/open")

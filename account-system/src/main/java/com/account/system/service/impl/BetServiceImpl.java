@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hope
@@ -75,6 +76,11 @@ public class BetServiceImpl implements BetService {
             }
         });
 
+    }
+
+    @Override
+    public List<Map> getGameResults(SysTableManagement sysTableManagement) {
+        return betMpper.getGameResults(sysTableManagement);
     }
 
     //计算注单
