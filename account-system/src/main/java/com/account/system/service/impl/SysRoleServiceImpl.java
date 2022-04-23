@@ -36,7 +36,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<Map> selectRoleByName(String roleName) {
+    public SysRole selectRoleByName(String roleName) {
         return roleMapper.selectRoleByName(roleName);
     }
 
@@ -130,6 +130,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public int deleteRole(Long roleId) {
+        roleMapper.deleteRoleMenu(roleId);
         return roleMapper.deleteRole(roleId);
     }
 

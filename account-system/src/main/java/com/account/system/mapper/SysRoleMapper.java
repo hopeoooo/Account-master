@@ -23,7 +23,7 @@ public interface SysRoleMapper {
     int addRole(SysRole sysRole);
 
     @Select("select role_id roleId,role_name roleName,create_time createTime,remark from sys_role where role_name = #{roleName}")
-    List<Map> selectRoleByName(@Param("roleName") String roleName);
+    SysRole selectRoleByName(@Param("roleName") String roleName);
 
     Set<String> selectMenuPermsByUserId(@Param("userId") Long userId);
 

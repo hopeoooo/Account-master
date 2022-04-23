@@ -102,7 +102,7 @@
         update sys_role
         <set>
             <if test="roleName != null and roleName != ''">role_name = #{roleName},</if>
-            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>

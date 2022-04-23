@@ -45,7 +45,7 @@ public class RoleController extends BaseController {
     @PostMapping("/add")
     @ApiOperation(value = "新增角色")
     public AjaxResult add(@RequestBody SysRole sysRole) {
-        if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
+        if (StringUtils.isNotNull(roleService.selectRoleByName(sysRole.getRoleName()))) {
             return AjaxResult.error("新增角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
         sysRole.setCreateBy(SecurityUtils.getUsername());
@@ -72,7 +72,8 @@ public class RoleController extends BaseController {
     @PostMapping("/edit")
     @ApiOperation(value = "编辑角色")
     public AjaxResult edit(@RequestBody SysRole sysRole) {
-        if (StringUtils.isNotEmpty(roleService.selectRoleByName(sysRole.getRoleName()))) {
+        SysRole oldRole = roleService.selectRoleByName(sysRole.getRoleName());
+        if (StringUtils.isNotNull(oldRole) && oldRole.getRoleId() != sysRole.getRoleId()) {
             return AjaxResult.error("修改角色'" + sysRole.getRoleName() + "'失败，角色名称已存在");
         }
         sysRole.setUpdateBy(SecurityUtils.getUsername());

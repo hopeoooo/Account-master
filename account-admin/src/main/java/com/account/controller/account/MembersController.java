@@ -78,6 +78,10 @@ public class MembersController extends BaseController {
     @GetMapping("/edit")
     @ApiOperation(value = "编辑会员")
     public AjaxResult edit(SysMembers sysMembers) {
+        SysMembers oldMembers = sysMembersService.selectmembersByCard(sysMembers.getCard());
+        if (StringUtils.isNotNull(oldMembers) && sysMembers.getId() != oldMembers.getId()) {
+            return AjaxResult.error("修改会员'" + sysMembers.getCard() + "'失败，卡号已存在");
+        }
         sysMembers.setUpdateBy(SecurityUtils.getUsername());
         sysMembersService.editMembers(sysMembers);
         return AjaxResult.success();

@@ -21,6 +21,7 @@ public class SysMembersServiceImpl implements SysMembersService {
 
     @Autowired
     SysMembersMapper sysMembersMapper;
+
     @Override
     public List<Map> selectMembersList(SysMembersSearch sysMembers) {
         return sysMembersMapper.selectMembersList(sysMembers);
@@ -53,24 +54,23 @@ public class SysMembersServiceImpl implements SysMembersService {
 
     @Override
     public List<Map> selectBusinessCashChipList(String card, Integer isAdmin) {
-        return sysMembersMapper.selectBusinessCashChipList(card,isAdmin);
+        return sysMembersMapper.selectBusinessCashChipList(card, isAdmin);
     }
 
     @Override
     public Map selectBusinessCashChipTotal(String card, Integer isAdmin) {
-        return sysMembersMapper.selectBusinessCashChipTotal(card,isAdmin);
+        return sysMembersMapper.selectBusinessCashChipTotal(card, isAdmin);
     }
 
     /**
-     *
      * @param card
      * @param chipAmount 操作金额
-     * @param type 0:减,1:加
+     * @param type       0:减,1:加
      * @return
      */
     @Override
     public int updateChipAmount(String card, BigDecimal chipAmount, Integer type) {
-        return sysMembersMapper.updateChipAmount( card,  chipAmount,  type);
+        return sysMembersMapper.updateChipAmount(card, chipAmount, type);
     }
 
     @Override

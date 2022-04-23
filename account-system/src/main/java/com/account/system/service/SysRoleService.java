@@ -17,7 +17,7 @@ public interface SysRoleService {
 
     List<SysRole> selectRoleList();
 
-    List<Map> selectRoleByName(String roleName);
+    SysRole selectRoleByName(String roleName);
 
     int addRole(SysRole sysRole);
 
