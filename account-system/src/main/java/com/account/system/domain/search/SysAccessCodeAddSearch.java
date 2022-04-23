@@ -20,8 +20,8 @@ public class SysAccessCodeAddSearch{
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="卡号")
+    private  String card;
 
     @ApiModelProperty( value ="筹码")
     private BigDecimal chipBalance;

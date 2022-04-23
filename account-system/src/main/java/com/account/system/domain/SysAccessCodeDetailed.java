@@ -17,8 +17,8 @@ public class SysAccessCodeDetailed extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
     @ApiModelProperty( value ="操作类型: 1:存码 2:取码")
     private int type;

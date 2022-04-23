@@ -19,10 +19,6 @@ public class SysAccessCodeDetailedVo {
     @ApiModelProperty("卡号")
     private String card;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
-
-
     @ApiModelProperty("姓名")
     private String userName;
 

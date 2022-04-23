@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="SysSignedRecordDetailed" id="SysSignedRecordDetailedResult">
     	<id     property="id"      column="id"      />
         <result property="userId"    column="user_id"    />
-        <result property="operationType"    column="operation_type"    />
+        <result property="type"    column="type"    />
         <result property="amountType"    column="amount_type"    />
         <result property="amountBefore"      column="amount_before"      />
         <result property="amount"      column="amount"      />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             m.card as card,
             m.`name` as userName,
-            d.operation_type as operationType,
+        d.type AS type,
             d.amount_before as amountBefore,
             d.amount as amount,
             d.amount_after as amountAfter,
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             d.remark  as remark
         FROM
             sys_signed_record_detailed d
-                LEFT JOIN sys_members m ON m.id = d.user_id
+                LEFT JOIN sys_members m ON m.card = d.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -39,8 +39,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="card != null and card != ''">
                 AND m.card = #{card}
             </if>
-            <if test="operationType != null and operationType != ''">
-                AND d.operation_type = #{operationType}
+            <if test="type != null and type != ''">
+                AND d.type = #{type}
             </if>
             <if test="startTime != null and startTime != ''">
                 AND d.operation_time <![CDATA[>=]]> #{startTime}
@@ -54,8 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSignedRecordDetailed" >
         INSERT INTO sys_signed_record_detailed
         (
-        <if test="userId != null and userId != 0">user_id,</if>
-        <if test="operationType != null and operationType != 0">operation_type,</if>
+        <if test="card != null and card != 0">card,</if>
+        <if test="type != null and type != 0">type,</if>
         <if test="amountType != null and amountType != ''">amount_type,</if>
         <if test="amountBefore != null and amountBefore != ''">amount_before,</if>
         <if test="amount != null and amount != ''">amount,</if>
@@ -64,8 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
         values(
-        <if test="userId != null and userId != 0">#{userId},</if>
-        <if test="operationType != null and operationType != 0">#{operationType},</if>
+        <if test="card != null and card != 0">#{card},</if>
+        <if test="type != null and type != 0">#{type},</if>
         <if test="amountType != null and amountType != ''">#{amountType},</if>
         <if test="amountBefore != null and amountBefore != ''">#{amountBefore},</if>
         <if test="amount != null and amount != ''">#{amount},</if>

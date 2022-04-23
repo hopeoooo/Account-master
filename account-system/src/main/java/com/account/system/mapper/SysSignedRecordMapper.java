@@ -25,7 +25,7 @@ public interface SysSignedRecordMapper {
     Map selectSignedRecordTotal(@Param("card")String card, @Param("isAdmin")Integer isAdmin);
 
 
-    SysSignedRecord selectSignedRecordInfo(@Param("id")Long id, @Param("userId")Long userId);
+    SysSignedRecord selectSignedRecordInfo(@Param("id")Long id, @Param("card")String card);
 
 
     /**

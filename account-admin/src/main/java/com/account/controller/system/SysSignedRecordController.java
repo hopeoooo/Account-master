@@ -6,6 +6,7 @@ import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.AccessType;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysSignedRecord;
 import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
@@ -29,6 +30,8 @@ import java.util.Map;
 public class SysSignedRecordController extends BaseController {
     @Autowired
     private SysSignedRecordService signedRecordService;
+    @Autowired
+    private SysMembersService membersService;
 
     @PreAuthorize("@ss.hasPermi('system:signed:list')")
     @GetMapping("/list")
@@ -60,24 +63,25 @@ public class SysSignedRecordController extends BaseController {
     @PostMapping("/addSigned")
     @ApiOperation(value = "签单")
     public AjaxResult addSigned(@Validated @RequestBody SysSignedRecordSearch signedRecordSearch) {
+        if (StringUtils.isNull(signedRecordSearch.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
+        //判断该卡号是否存在
+        SysMembers sysMembers = membersService.selectmembersByCard(signedRecordSearch.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
+        }
         signedRecordSearch.setMark(AccessType.SIGNED.getCode());
-        //修改
-        if (StringUtils.isNotNull(signedRecordSearch.getId()) && signedRecordSearch.getId() > 0) {
-            SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getUserId());
-            if (sysSignedRecord == null) {
-                return AjaxResult.error("签单失败!");
-            }
-            signedRecordSearch.setUpdateBy(SecurityUtils.getUsername());
-            signedRecordSearch.setCreateBy(SecurityUtils.getUsername());
-            signedRecordService.update(signedRecordSearch);
-        } else {
-            SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getUserId());
-            if (sysSignedRecord != null) {
-                return AjaxResult.error("签单失败!");
-            }
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());
+        if (sysSignedRecord==null){
             //添加
             signedRecordSearch.setCreateBy(SecurityUtils.getUsername());
             signedRecordService.insertSigned(signedRecordSearch);
+        }else {
+            //修改
+            signedRecordSearch.setUpdateBy(SecurityUtils.getUsername());
+            signedRecordSearch.setCreateBy(SecurityUtils.getUsername());
+            signedRecordService.update(signedRecordSearch);
         }
         return AjaxResult.success("签单成功!");
     }
@@ -87,7 +91,15 @@ public class SysSignedRecordController extends BaseController {
     @PostMapping("/addReturnOrder")
     @ApiOperation(value = "还单")
     public AjaxResult addReturnOrder(@Validated @RequestBody SysSignedRecordSearch signedRecordSearch) {
-        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(signedRecordSearch.getId(), signedRecordSearch.getUserId());
+        if (StringUtils.isNull(signedRecordSearch.getCard())){
+            return AjaxResult.error("参数错误,卡号为空!");
+        }
+        //判断该卡号是否存在
+        SysMembers sysMembers = membersService.selectmembersByCard(signedRecordSearch.getCard());
+        if (sysMembers==null){
+            return AjaxResult.success("当前卡号不存在!");
+        }
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());
         if (sysSignedRecord == null) {
             return AjaxResult.error("还单失败!");
         }

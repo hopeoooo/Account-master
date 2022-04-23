@@ -18,7 +18,7 @@ public interface SysAccessCodeService
 
     Map selectAccessCodeTotal(SysAccessCodeSearch accessCodeSearch) ;
 
-    SysAccessCode selectAccessCodeInfo(Long id ,Long userId);
+    SysAccessCode selectAccessCodeInfo(Long id ,String card);
 
      int insertAccessCode(SysAccessCodeAddSearch accessCode) ;
      int updateAccessCode(SysAccessCodeAddSearch accessCode) ;

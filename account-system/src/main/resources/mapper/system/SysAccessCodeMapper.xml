@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysAccessCode" id="SysAccessCodeResult">
     	<id     property="id"      column="id"      />
-        <result property="userId"    column="user_id"    />
+        <result property="card"    column="card"    />
         <result property="chipBalance"     column="chip_balance"     />
         <result property="cashBalance"   column="cash_balance"   />
         <result property="totalBalance"    column="total_balance"    />
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.remark  as remark
     FROM
         sys_members m
-            LEFT JOIN sys_access_code a ON a.user_id = m.id
+        LEFT JOIN sys_access_code a ON a.card = m.card
     <where>
         <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
             AND m.is_admin = 0
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             SUM( IFNULL( a.total_balance, 0 ) ) AS totalBalance
         FROM
             sys_members m
-                LEFT JOIN sys_access_code a ON a.user_id = m.id
+        LEFT JOIN sys_access_code a ON a.card = m.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -60,10 +60,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectAccessCodeInfo" parameterType="SysAccessCode" resultMap="SysAccessCodeResult">
-        select a.user_id,a.chip_balance,a.cash_balance,a.total_balance from sys_access_code a
+        select a.card,a.chip_balance,a.cash_balance,a.total_balance from sys_access_code a
         <where>
-            <if test="userId != null and userId != '' ">
-               and  a.user_id=#{userId}
+            <if test="card != null and card != '' ">
+               and  a.card=#{card}
             </if>
             <if test="id != null and id != '' ">
                 and  a.id=#{id}
@@ -74,13 +74,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertAccessCode" >
         INSERT INTO sys_access_code
             (
-        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="card != null and card != 0">card,</if>
         <if test="chipBalance != null and chipBalance != ''">chip_balance,</if>
         <if test="cashBalance != null and cashBalance != ''">cash_balance,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         total_balance,create_time,update_time )
         values(
-        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="card != null and card != ''">#{card},</if>
         <if test="chipBalance != null and chipBalance != ''">#{chipBalance},</if>
         <if test="cashBalance != null and cashBalance != ''">#{cashBalance},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
                 total_balance=chip_balance+cash_balance, update_time = sysdate()
             </set>
-        where id = #{id} and user_id=#{userId}
+        where card=#{card}
     </update>
 
 

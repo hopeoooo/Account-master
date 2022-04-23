@@ -15,8 +15,8 @@ public class SysAccessCode extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
-    @ApiModelProperty(value ="用户Id")
-    private Long userId;
+    @ApiModelProperty(value ="会员卡号")
+    private String card;
 
     @ApiModelProperty( value ="已存筹码余额")
     private BigDecimal chipBalance;
