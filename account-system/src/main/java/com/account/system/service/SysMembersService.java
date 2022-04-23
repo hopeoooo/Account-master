@@ -35,4 +35,6 @@ public interface SysMembersService {
     Map selectBusinessCashChipTotal(String card, Integer isAdmin);
 
     int updateChipAmount( Long userId,  BigDecimal chipAmount, Integer type);
+
+    Map getOddsConfig();
 }

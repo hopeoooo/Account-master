@@ -73,4 +73,9 @@ public class SysMembersServiceImpl implements SysMembersService {
         return sysMembersMapper.updateChipAmount( userId,  chipAmount,  type);
     }
 
+    @Override
+    public Map getOddsConfig() {
+        return sysMembersMapper.getOddsConfig();
+    }
+
 }

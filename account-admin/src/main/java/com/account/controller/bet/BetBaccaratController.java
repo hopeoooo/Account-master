@@ -15,14 +15,18 @@ import com.account.system.service.SysOddsConfigureService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TimerTask;
 
 /**
@@ -39,6 +43,19 @@ public class BetBaccaratController {
 
     @Autowired
     SysOddsConfigureService sysOddsConfigureService;
+
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PostMapping("/info")
+    @ApiOperation(value = "桌台信息")
+    public AjaxResult info() {
+        //根据ip获取台桌信息
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        return AjaxResult.success();
+    }
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
     @PostMapping("/open")

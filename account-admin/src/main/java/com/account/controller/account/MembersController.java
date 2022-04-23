@@ -96,4 +96,15 @@ public class MembersController extends BaseController {
         sysMembersService.deleteMembers(ids);
         return AjaxResult.success();
     }
+
+    /**
+     * 获取默认洗码比例
+     */
+    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+    @GetMapping("/odds")
+    @ApiOperation(value = "获取默认洗码比例")
+    public AjaxResult odds() {
+        return AjaxResult.success(sysMembersService.getOddsConfig());
+    }
+
 }

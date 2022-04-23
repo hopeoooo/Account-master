@@ -4,6 +4,7 @@ import com.account.system.domain.SysBusinessCashChip;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,4 +36,11 @@ public interface SysMembersMapper {
     int updateChipAmount(@Param("userId") Long userId, @Param("chipAmount") BigDecimal chipAmount,@Param("type")Integer type);
 
     SysMembers selectmembersByCard(@Param("card") String card);
+
+    @Select("SELECT baccarat_rolling_ratio_chip baccaratRollingRatioChip, " +
+            "baccarat_rolling_ratio_cash baccaratRollingRatioCash, " +
+            "dragon_tiger_ratio_chip dragonTigerRatioChip, " +
+            "dragon_tiger_ratio_cash dragonTigerRatioCash " +
+            "FROM sys_odds_configure limit 0,1")
+    Map getOddsConfig();
 }
