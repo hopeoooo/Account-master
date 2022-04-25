@@ -27,8 +27,6 @@ public interface SysRoleMapper {
 
     Set<String> selectMenuPermsByUserId(@Param("userId") Long userId);
 
-    Set<String> selectRolePermissionByUserId(@Param("userId") Long userId);
-
     List<SysMenu> selectMenuTreeAll();
 
     List<SysMenu> selectMenuTreeByUserId(@Param("userId") Long userId);

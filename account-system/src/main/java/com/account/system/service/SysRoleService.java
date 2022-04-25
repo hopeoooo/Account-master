@@ -23,8 +23,6 @@ public interface SysRoleService {
 
     Set<String> selectMenuPermsByUserId(Long userId);
 
-    Set<String> selectRolePermissionByUserId(Long userId);
-
     List<SysMenu> selectMenuTreeByUserId(Long userId);
 
     List<RouterVo> buildMenus(List<SysMenu> menus);

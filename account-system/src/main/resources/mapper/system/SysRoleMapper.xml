@@ -34,13 +34,6 @@
           and u.user_id = #{userId}
     </select>
 
-    <select id="selectRolePermissionByUserId">
-        select distinct r.role_id, r.role_name, r.create_time, r.remark
-        from sys_role r
-                 left join sys_user u on u.role_id = r.role_id
-        WHERE u.user_id = #{userId}
-    </select>
-
     <select id="selectMenuTreeAll" resultType="SysMenu">
         select distinct m.menu_id menuId,
                         m.parent_id parentId,
@@ -63,7 +56,7 @@
         order by m.parent_id, m.order_num
     </select>
 
-    <select id="selectMenuTreeByUserId" parameterType="String" resultType="SysMenu">
+    <select id="selectMenuTreeByUserId" parameterType="Long" resultType="SysMenu">
         select distinct m.menu_id menuId,
                         m.parent_id parentId,
                         m.menu_name menuName,

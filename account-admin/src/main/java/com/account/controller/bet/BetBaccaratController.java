@@ -157,7 +157,7 @@ public class BetBaccaratController {
         // 5：闲对 8：庄对
         // 9：大 6：小
         // 0: 闲保险 3:庄保险
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "3", "0"};
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
                 sysOddsConfigure.getBaccaratTieWin(),
@@ -176,10 +176,24 @@ public class BetBaccaratController {
                 }
             }
         }
-        for (int i = odds.length; i < betOption.length; i++) {
-            BigDecimal amount = bet.getBigDecimal(betOption[i]);
-            if (amount != null) {
-                payout = payout.add(amount);
+
+        //3:庄保险
+        BigDecimal banker = bet.getBigDecimal("3");
+        if (banker != null) {
+            if (gameResult.contains("1")) {
+                payout = payout.add(banker);
+            } else {
+                payout = payout.subtract(banker);
+            }
+        }
+
+        //0: 闲保险
+        BigDecimal player = bet.getBigDecimal("0");
+        if (player != null) {
+            if (gameResult.contains("4")) {
+                payout = payout.add(player);
+            } else {
+                payout = payout.subtract(player);
             }
         }
 

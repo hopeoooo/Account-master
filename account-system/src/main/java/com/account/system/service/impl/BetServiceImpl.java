@@ -141,7 +141,7 @@ public class BetServiceImpl implements BetService {
         // 5：闲对 8：庄对
         // 9：大 6：小
         // 0: 闲保险 3:庄保险
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "3", "0"};
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
                 sysOddsConfigure.getBaccaratTieWin(),
@@ -170,22 +170,58 @@ public class BetServiceImpl implements BetService {
                 }
             }
         }
-        for (int i = odds.length; i < betOption.length; i++) {
-            BigDecimal amount = bet.getBigDecimal(betOption[i]);
-            if (amount != null) {
-                SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
-                sysBetInfo.setBetOption(betOption[i]);
-                sysBetInfo.setBetMoney(amount);
-                sysBetInfo.setWinLose(amount);
-                list.add(sysBetInfo);
+        //3:庄保险
+        BigDecimal banker = bet.getBigDecimal("3");
+        if (banker != null) {
+            SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
+            sysBetInfo.setBetOption("3");
+            sysBetInfo.setBetMoney(banker);
+            if (sysBet.getGameResult().contains("1")) {
+                sysBetInfo.setWinLose(banker);
                 if (isChip) {
                     membersChip = membersChip.add(sysBetInfo.getWinLose());
                     tableChip = tableChip.subtract(sysBetInfo.getWinLose());
                 } else {
                     tableCash = tableCash.subtract(sysBetInfo.getWinLose());
                 }
+            } else {
+                sysBetInfo.setWinLose(new BigDecimal(0).subtract(banker));
+                if (isChip) {
+                    membersChip = membersChip.subtract(sysBetInfo.getWinLose());
+                    tableChip = tableChip.add(sysBetInfo.getWinLose());
+                } else {
+                    tableCash = tableCash.add(sysBetInfo.getWinLose());
+                }
             }
+            list.add(sysBetInfo);
         }
+
+        //0: 闲保险
+        BigDecimal player = bet.getBigDecimal("0");
+        if (player != null) {
+            SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
+            sysBetInfo.setBetOption("0");
+            sysBetInfo.setBetMoney(player);
+            if (sysBet.getGameResult().contains("4")) {
+                sysBetInfo.setWinLose(player);
+                if (isChip) {
+                    membersChip = membersChip.add(sysBetInfo.getWinLose());
+                    tableChip = tableChip.subtract(sysBetInfo.getWinLose());
+                } else {
+                    tableCash = tableCash.subtract(sysBetInfo.getWinLose());
+                }
+            } else {
+                sysBetInfo.setWinLose(new BigDecimal(0).subtract(player));
+                if (isChip) {
+                    membersChip = membersChip.subtract(sysBetInfo.getWinLose());
+                    tableChip = tableChip.add(sysBetInfo.getWinLose());
+                } else {
+                    tableCash = tableCash.add(sysBetInfo.getWinLose());
+                }
+            }
+            list.add(sysBetInfo);
+        }
+
         map.put("list", list);
         map.put("membersChip", membersChip);
         map.put("tableChip", tableChip);
