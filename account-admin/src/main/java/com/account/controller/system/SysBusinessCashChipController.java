@@ -51,7 +51,7 @@ public class SysBusinessCashChipController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:businessCashChip:total')")
+    @PreAuthorize("@ss.hasPermi('system:businessCashChip:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
     @ApiImplicitParams({
@@ -64,7 +64,7 @@ public class SysBusinessCashChipController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:businessCashChip:addBuyCode')")
+    @PreAuthorize("@ss.hasPermi('system:businessCashChip:list')")
     @PostMapping("/addBuyCode")
     @ApiOperation(value = "买码")
     public AjaxResult addBuyCode(@Validated @RequestBody SysBusinessCashChipAddSearch businessCashChipAddSearch) {
@@ -77,7 +77,7 @@ public class SysBusinessCashChipController extends BaseController {
         return AjaxResult.success("买码成功!");
     }
 
-    @PreAuthorize("@ss.hasPermi('system:businessCashChip:addCashExchange')")
+    @PreAuthorize("@ss.hasPermi('system:businessCashChip:list')")
     @PostMapping("/addCashExchange")
     @ApiOperation(value = "换现")
     public AjaxResult addCashExchange(@Validated @RequestBody SysBusinessCashChipAddSearch businessCashChipAddSearch) {

@@ -32,7 +32,7 @@ public class SysOddsConfigureController extends BaseController {
     /**
      * 修改赔率设置
      */
-    @PreAuthorize("@ss.hasPermi('system:oddsConfig:update')")
+    @PreAuthorize("@ss.hasPermi('system:oddsConfig:list')")
     @PostMapping
     @ApiOperation(value = "修改赔率设置")
     public AjaxResult update(@Validated @RequestBody SysOddsConfigure oddsConfigure)

@@ -31,7 +31,7 @@ public class SysRemittanceDetailedController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:remittanceDetailed:total')")
+    @PreAuthorize("@ss.hasPermi('system:remittanceDetailed:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
     public AjaxResult total(SysRemittanceDetailedSearch remittanceDetailedSearch){

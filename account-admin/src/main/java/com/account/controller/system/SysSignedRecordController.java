@@ -46,7 +46,7 @@ public class SysSignedRecordController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:signed:total')")
+    @PreAuthorize("@ss.hasPermi('system:signed:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
     @ApiImplicitParams({
@@ -59,7 +59,7 @@ public class SysSignedRecordController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:signed:addSigned')")
+    @PreAuthorize("@ss.hasPermi('system:signed:list')")
     @PostMapping("/addSigned")
     @ApiOperation(value = "签单")
     public AjaxResult addSigned(@Validated @RequestBody SysSignedRecordSearch signedRecordSearch) {
@@ -87,7 +87,7 @@ public class SysSignedRecordController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:signed:addReturnOrder')")
+    @PreAuthorize("@ss.hasPermi('system:signed:list')")
     @PostMapping("/addReturnOrder")
     @ApiOperation(value = "还单")
     public AjaxResult addReturnOrder(@Validated @RequestBody SysSignedRecordSearch signedRecordSearch) {
