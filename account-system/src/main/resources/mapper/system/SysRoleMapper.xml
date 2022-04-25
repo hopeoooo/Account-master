@@ -25,11 +25,12 @@
     </insert>
 
     <select id="selectMenuPermsByUserId" parameterType="Long" resultType="String">
-        select distinct m.perms
+        select distinct substring_index(substring_index(m.perms, ',', b.help_topic_id + 1), ',', - 1) perms
         from sys_menu m
                  left join sys_role_menu rm on m.menu_id = rm.menu_id
                  left join sys_user u on rm.role_id = u.role_id
                  left join sys_role r on r.role_id = u.role_id
+                 left mysql.help_topic b ON b.help_topic_id &lt; (length(m.perms) - length(REPLACE(m.perms, ',', '')) + 1)
         where m.status = '0'
           and u.user_id = #{userId}
     </select>

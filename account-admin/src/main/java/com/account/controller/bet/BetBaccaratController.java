@@ -8,7 +8,6 @@ import com.account.common.utils.StringUtils;
 import com.account.common.utils.ip.IpUtils;
 import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.SysGameResult;
-import com.account.system.domain.SysOddsConfigure;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.service.BetService;
 import com.account.system.service.SysOddsConfigureService;
@@ -43,9 +42,6 @@ public class BetBaccaratController {
 
     @Autowired
     BetService betService;
-
-    @Autowired
-    SysOddsConfigureService sysOddsConfigureService;
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
     @PostMapping("/info")
@@ -108,16 +104,16 @@ public class BetBaccaratController {
             JSONObject bet = (JSONObject) b;
             String card = bet.getString("card");
             BigDecimal chip = betService.selectMembersChip(card);
-            BigDecimal payout = payout(bet, gameResult);//派彩
+            BigDecimal payout = betService.getPayOut(bet,gameResult);//派彩
             if (0 == bet.getInteger("type")) chip = chip.add(payout);
             bet.put("chip", chip);
             bet.put("payout", payout);
         });
+        //异步 保存赛果 修改局数
         SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
         sysGameResult.setGameResult(gameResult);
         sysGameResult.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
-            @Override
             public void run() {
                 betService.saveGameResult(sysGameResult);
                 betService.updateGameNum(sysTableManagement.getId());
@@ -149,54 +145,4 @@ public class BetBaccaratController {
         return AjaxResult.success();
     }
 
-    //计算派奖
-    private BigDecimal payout(JSONObject bet, String gameResult) {
-        BigDecimal payout = new BigDecimal(0);//派彩
-        SysOddsConfigure sysOddsConfigure = sysOddsConfigureService.selectConfigInfo();
-        // 1：闲 4：庄 7：和
-        // 5：闲对 8：庄对
-        // 9：大 6：小
-        // 0: 闲保险 3:庄保险
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6"};
-        String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
-                sysOddsConfigure.getBaccaratBankerWin(),
-                sysOddsConfigure.getBaccaratTieWin(),
-                sysOddsConfigure.getBaccaratPlayerPair(),
-                sysOddsConfigure.getBaccaratBankerPair(),
-                sysOddsConfigure.getBaccaratLarge(),
-                sysOddsConfigure.getBaccaratSmall(),
-        };
-        for (int i = 0; i < odds.length; i++) {
-            BigDecimal amount = bet.getBigDecimal(betOption[i]);
-            if (amount != null) {
-                if (gameResult.contains(betOption[i])) {
-                    payout = payout.add(amount.multiply(new BigDecimal(odds[i])));
-                } else {
-                    payout = payout.subtract(amount);
-                }
-            }
-        }
-
-        //3:庄保险
-        BigDecimal banker = bet.getBigDecimal("3");
-        if (banker != null) {
-            if (gameResult.contains("1")) {
-                payout = payout.add(banker);
-            } else {
-                payout = payout.subtract(banker);
-            }
-        }
-
-        //0: 闲保险
-        BigDecimal player = bet.getBigDecimal("0");
-        if (player != null) {
-            if (gameResult.contains("4")) {
-                payout = payout.add(player);
-            } else {
-                payout = payout.subtract(player);
-            }
-        }
-
-        return payout;
-    }
 }

@@ -3,6 +3,7 @@ package com.account.system.service;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface BetService {
     void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
 
     List<Map> getGameResults(SysTableManagement sysTableManagement);
+
+    BigDecimal getPayOut(JSONObject bet, String gameResult);
 }

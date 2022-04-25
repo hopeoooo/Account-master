@@ -68,9 +68,8 @@ public class BetServiceImpl implements BetService {
     @Override
     @Transactional
     public void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets) {
-        BigDecimal zero = new BigDecimal(0);
-        final BigDecimal[] tableChip = {zero};
-        final BigDecimal[] tableCash = {zero};
+        final BigDecimal[] tableChip = {BigDecimal.ZERO};
+        final BigDecimal[] tableCash = {BigDecimal.ZERO};
         bets.forEach(b -> {
             //添加注单
             JSONObject bet = (JSONObject) b;
@@ -98,7 +97,7 @@ public class BetServiceImpl implements BetService {
             }
 
             BigDecimal membersChip = (BigDecimal) map.get("membersChip");
-            if (membersChip.compareTo(zero) != 0) {
+            if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
                 //生成 筹码帐变记录
                 BigDecimal chip = betMpper.selectMembersChip(sysBet.getCard());
                 SysChipRecord sysChipRecord = new SysChipRecord();
@@ -117,7 +116,7 @@ public class BetServiceImpl implements BetService {
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip);
             }
         });
-        if (tableChip[0].compareTo(zero) != 0 || tableCash[0].compareTo(zero) != 0) {
+        if (tableChip[0].compareTo(BigDecimal.ZERO) != 0 || tableCash[0].compareTo(BigDecimal.ZERO) != 0) {
             //修改 桌台 累计
             betMpper.updateTableManagement(sysTableManagement.getId(), tableChip[0], tableCash[0]);
         }
@@ -129,19 +128,34 @@ public class BetServiceImpl implements BetService {
         return betMpper.getGameResults(sysTableManagement);
     }
 
-    //计算注单
+    @Override
+    public BigDecimal getPayOut(JSONObject bet, String gameResult) {
+        SysBet sysBet = new SysBet();
+        sysBet.setCard(bet.getString("card"));
+        sysBet.setGameResult(gameResult);
+        sysBet.setType(bet.getInteger("type"));
+        sysBet.setCreateBy(SecurityUtils.getUsername());
+        Map map = getBetInfos(bet, sysBet, BigDecimal.ZERO, BigDecimal.ZERO);
+        BigDecimal payout = (BigDecimal) map.get("tableChip");
+        if (payout.compareTo(BigDecimal.ZERO) != 0) {
+            return payout;
+        } else {
+            payout = (BigDecimal) map.get("tableCash");
+        }
+        return payout;
+    }
+
+    /**
+     * 1：闲 4：庄 7：和 || 5：闲对 8：庄对 || 9：大 6：小 || 0: 闲保险 3:庄保险
+     */
     private Map getBetInfos(JSONObject bet, SysBet sysBet, BigDecimal tableChip, BigDecimal tableCash) {
         Map map = new HashMap();
-        List<SysBetInfo> list = new ArrayList<>();
+        List<SysBetInfo> list = new ArrayList<>();//注单明细
+        BigDecimal membersChip = BigDecimal.ZERO;//会员总筹码输赢
 
-        BigDecimal membersChip = new BigDecimal(0);//会员总筹码输赢
-        boolean isChip = 0 == sysBet.getType();
+        boolean isChip = 0 == sysBet.getType(); //是否为筹码下注
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
-        // 1：闲 4：庄 7：和
-        // 5：闲对 8：庄对
-        // 9：大 6：小
-        // 0: 闲保险 3:庄保险
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6"};
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
                 sysOddsConfigure.getBaccaratTieWin(),
@@ -150,16 +164,40 @@ public class BetServiceImpl implements BetService {
                 sysOddsConfigure.getBaccaratLarge(),
                 sysOddsConfigure.getBaccaratSmall(),
         };
-        for (int i = 0; i < odds.length; i++) {
-            BigDecimal amount = bet.getBigDecimal(betOption[i]);
+        String gameResult = sysBet.getGameResult();
+        for (int i = 0; i < betOption.length; i++) {
+            String option = betOption[i];
+            BigDecimal amount = bet.getBigDecimal(option);
             if (amount != null) {
                 SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
                 sysBetInfo.setBetOption(betOption[i]);
                 sysBetInfo.setBetMoney(amount);
-                if (sysBet.getGameResult().contains(betOption[i])) {
-                    sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                if ("1".equals(option) || "4".equals(option)) {//庄 闲
+                    if (gameResult.contains(option)) {
+                        sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                    } else if (gameResult.contains(betOption[3])) {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO);
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
+                } else if ("0".equals(option)) { //闲保险
+                    if (gameResult.contains("4")) {
+                        sysBetInfo.setWinLose(amount);
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
+                } else if ("3".equals(option)) { //庄保险
+                    if (gameResult.contains("1")) {
+                        sysBetInfo.setWinLose(amount);
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
                 } else {
-                    sysBetInfo.setWinLose(new BigDecimal(0).subtract(amount));
+                    if (gameResult.contains(option)) {
+                        sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
                 }
                 list.add(sysBetInfo);
                 if (isChip) {
@@ -170,30 +208,25 @@ public class BetServiceImpl implements BetService {
                 }
             }
         }
+
         //3:庄保险
         BigDecimal banker = bet.getBigDecimal("3");
         if (banker != null) {
             SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
             sysBetInfo.setBetOption("3");
             sysBetInfo.setBetMoney(banker);
-            if (sysBet.getGameResult().contains("1")) {
+            if (gameResult.contains("1")) {
                 sysBetInfo.setWinLose(banker);
-                if (isChip) {
-                    membersChip = membersChip.add(sysBetInfo.getWinLose());
-                    tableChip = tableChip.subtract(sysBetInfo.getWinLose());
-                } else {
-                    tableCash = tableCash.subtract(sysBetInfo.getWinLose());
-                }
             } else {
                 sysBetInfo.setWinLose(new BigDecimal(0).subtract(banker));
-                if (isChip) {
-                    membersChip = membersChip.subtract(sysBetInfo.getWinLose());
-                    tableChip = tableChip.add(sysBetInfo.getWinLose());
-                } else {
-                    tableCash = tableCash.add(sysBetInfo.getWinLose());
-                }
             }
             list.add(sysBetInfo);
+            if (isChip) {
+                membersChip = membersChip.add(sysBetInfo.getWinLose());
+                tableChip = tableChip.subtract(sysBetInfo.getWinLose());
+            } else {
+                tableCash = tableCash.subtract(sysBetInfo.getWinLose());
+            }
         }
 
         //0: 闲保险
@@ -204,22 +237,16 @@ public class BetServiceImpl implements BetService {
             sysBetInfo.setBetMoney(player);
             if (sysBet.getGameResult().contains("4")) {
                 sysBetInfo.setWinLose(player);
-                if (isChip) {
-                    membersChip = membersChip.add(sysBetInfo.getWinLose());
-                    tableChip = tableChip.subtract(sysBetInfo.getWinLose());
-                } else {
-                    tableCash = tableCash.subtract(sysBetInfo.getWinLose());
-                }
             } else {
                 sysBetInfo.setWinLose(new BigDecimal(0).subtract(player));
-                if (isChip) {
-                    membersChip = membersChip.subtract(sysBetInfo.getWinLose());
-                    tableChip = tableChip.add(sysBetInfo.getWinLose());
-                } else {
-                    tableCash = tableCash.add(sysBetInfo.getWinLose());
-                }
             }
             list.add(sysBetInfo);
+            if (isChip) {
+                membersChip = membersChip.add(sysBetInfo.getWinLose());
+                tableChip = tableChip.subtract(sysBetInfo.getWinLose());
+            } else {
+                tableCash = tableCash.subtract(sysBetInfo.getWinLose());
+            }
         }
 
         map.put("list", list);
