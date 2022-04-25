@@ -52,7 +52,7 @@ public class SysRemittanceController extends BaseController {
         return getDataTable(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:remittance:total')")
+    @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
     @ApiImplicitParams({
@@ -65,7 +65,7 @@ public class SysRemittanceController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:remittance:addImport')")
+    @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @PostMapping("/addImport")
     @ApiOperation(value = "汇入")
     public AjaxResult addImport(@Validated @RequestBody SysRemittanceSearch remittanceSearch) {
@@ -83,7 +83,7 @@ public class SysRemittanceController extends BaseController {
         return AjaxResult.success("汇入成功!");
     }
 
-    @PreAuthorize("@ss.hasPermi('system:remittance:addRemit')")
+    @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @PostMapping("/addRemit")
     @ApiOperation(value = "汇出")
     public AjaxResult addRemit(@Validated @RequestBody SysRemittanceSearch remittanceSearch) {

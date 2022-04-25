@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND d.operation_time <![CDATA[<=]]> #{endTime}
             </if>
         </where>
+        ORDER BY d.operation_time desc
     </select>
 
     <insert id="insertSignedRecordDetailed" >

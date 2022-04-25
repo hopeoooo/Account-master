@@ -44,7 +44,7 @@ public class SysAccessCodeController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:accessCode:total')")
+    @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
     public AjaxResult total(SysAccessCodeSearch accessCodeSearch){
@@ -53,7 +53,7 @@ public class SysAccessCodeController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:accessCode:saveCode')")
+    @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @PostMapping("saveCode")
     @ApiOperation(value = "存码")
     public AjaxResult saveCode(@Validated @RequestBody SysAccessCodeAddSearch accessCode)
@@ -81,7 +81,7 @@ public class SysAccessCodeController extends BaseController {
         return AjaxResult.success("存码成功!");
     }
 
-    @PreAuthorize("@ss.hasPermi('system:accessCode:updateCodeFetching')")
+    @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @PostMapping("/updateCodeFetching")
     @ApiOperation(value = "取码")
     public AjaxResult updateCodeFetching(@Validated @RequestBody SysAccessCodeAddSearch accessCode){
