@@ -45,4 +45,117 @@
         </foreach>
     </insert>
 
+
+
+    <select id="selectBetInfoList"  resultType="com.account.system.domain.vo.BetInfoVo">
+        SELECT
+            bt.bet_id as betId,
+            bt.card,
+            bt.table_id AS tableId,
+            bt.boot_num AS bootNum,
+            bt.game_num AS gameNum,
+            bt.type,
+            SUM(b.bet_money) as betMoney,
+            bt.game_result AS gameResult,
+            SUM(b.win_lose) as winLose,
+            bt.create_time AS createTime,
+            bt.create_by AS createBy
+        FROM
+            sys_bet bt
+                LEFT JOIN sys_bet_info b on b.bet_id=bt.bet_id
+
+        <where>
+            <if test="card != null and card != ''">
+                AND bt.card = #{card}
+            </if>
+
+            <if test="tableId != null and tableId != ''">
+                AND bt.table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND bt.game_id = #{gameId}
+            </if>
+
+            <if test="type != null and type != ''">
+                AND bt.type = #{type}
+            </if>
+
+            <if test="bootNum != null and bootNum != ''">
+                AND bt.boot_num = #{bootNum}
+            </if>
+            <if test="gameNum != null and gameNum != ''">
+                AND bt.game_num = #{gameNum}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND bt.create_by = #{createBy}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND bt.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND bt.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY bt.bet_id
+    </select>
+
+    <select id="selectBetOptionList" resultType="com.account.system.domain.vo.BetInfoOptionVo">
+        SELECT
+            b.bet_id as betId,
+            b.bet_option as betOption,
+            b.bet_money as betMoney
+        FROM
+            sys_bet_info b
+        <where>
+            b.bet_id in
+            <foreach collection="betIds" index="index" item="betId"
+                     open="(" separator="," close=")">
+                #{betId}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="selectBetTotal"  resultType="java.util.Map">
+        SELECT
+            SUM( b.bet_money ) AS betMoney,
+            SUM( b.win_lose ) AS winLose
+        FROM
+        sys_bet bt
+        LEFT JOIN sys_bet_info b on b.bet_id=bt.bet_id
+        <where>
+            <if test="card != null and card != ''">
+                AND bt.card = #{card}
+            </if>
+
+            <if test="tableId != null and tableId != ''">
+                AND bt.table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND bt.game_id = #{gameId}
+            </if>
+
+            <if test="type != null and type != ''">
+                AND bt.type = #{type}
+            </if>
+
+            <if test="bootNum != null and bootNum != ''">
+                AND bt.boot_num = #{bootNum}
+            </if>
+            <if test="gameNum != null and gameNum != ''">
+                AND bt.game_num = #{gameNum}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND bt.create_by = #{createBy}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND bt.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND bt.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+    </select>
+
 </mapper>

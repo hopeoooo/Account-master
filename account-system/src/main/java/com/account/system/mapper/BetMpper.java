@@ -4,6 +4,9 @@ import com.account.system.domain.SysBet;
 import com.account.system.domain.SysBetInfo;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
+import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.vo.BetInfoOptionVo;
+import com.account.system.domain.vo.BetInfoVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -46,6 +49,13 @@ public interface BetMpper {
     @Select("select id, table_id tableId,boot_num bootNum,game_num gameNum, game_result gameResult from sys_game_result " +
             "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} ")
     List<Map> getGameResults(SysTableManagement sysTableManagement);
+
+
+    List<BetInfoVo> selectBetInfoList(BetSearch betSearch);
+
+    List<BetInfoOptionVo>selectBetOptionList(@Param("betIds")List<Long> betIds);
+
+    Map selectBetTotal(BetSearch betSearch);
 
     @Update("update sys_table_management set chip = chip + #{chip} ,cash = cash + #{cash},insurance = insurance + #{insurance} where id = #{id} ")
     void updateTableManagement(@Param("id") Long id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance);
