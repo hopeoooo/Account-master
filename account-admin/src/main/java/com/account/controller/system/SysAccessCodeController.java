@@ -99,11 +99,11 @@ public class SysAccessCodeController extends BaseController {
         if (sysAccessCode==null){
             return AjaxResult.error("取码失败!");
         }
-        if (accessCode.getChipBalance().compareTo(sysAccessCode.getChipBalance())>0){
+        if (accessCode.getChipAmount().compareTo(sysAccessCode.getChipBalance())>0){
             return AjaxResult.error("余额不足!");
         }
 
-        if (accessCode.getCashBalance().compareTo(sysAccessCode.getCashBalance())>0){
+        if (accessCode.getCashAmount().compareTo(sysAccessCode.getCashBalance())>0){
             return AjaxResult.error("余额不足!");
         }
         //取码:金额减

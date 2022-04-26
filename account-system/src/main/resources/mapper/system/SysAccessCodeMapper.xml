@@ -75,14 +75,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INSERT INTO sys_access_code
             (
         <if test="card != null and card != 0">card,</if>
-        <if test="chipBalance != null and chipBalance != ''">chip_balance,</if>
-        <if test="cashBalance != null and cashBalance != ''">cash_balance,</if>
+        <if test="chipAmount != null and chipAmount != ''">chip_balance,</if>
+        <if test="cashAmount != null and cashAmount != ''">cash_balance,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         total_balance,create_time,update_time )
         values(
         <if test="card != null and card != ''">#{card},</if>
-        <if test="chipBalance != null and chipBalance != ''">#{chipBalance},</if>
-        <if test="cashBalance != null and cashBalance != ''">#{cashBalance},</if>
+        <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>
+        <if test="cashAmount != null and cashAmount != ''">#{cashAmount},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         #{totalBalance},sysdate(),sysdate()
         )
@@ -93,12 +93,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_access_code
             <set>
                 <if test="mark==1">
-                    <if test="chipBalance != null and chipBalance != ''">chip_balance=chip_balance+#{chipBalance},</if>
-                    <if test="cashBalance != null and cashBalance != ''">cash_balance=cash_balance+#{cashBalance},</if>
+                    <if test="chipAmount != null and chipAmount != ''">chip_balance=chip_balance+#{chipAmount},</if>
+                    <if test="cashAmount != null and cashAmount != ''">cash_balance=cash_balance+#{cashAmount},</if>
                 </if>
                 <if test="mark==2">
-                    <if test="chipBalance != null and chipBalance != ''">chip_balance=chip_balance-#{chipBalance},</if>
-                    <if test="cashBalance != null and cashBalance != ''">cash_balance=cash_balance-#{cashBalance},</if>
+                    <if test="chipAmount != null and chipAmount != ''">chip_balance=chip_balance-#{chipAmount},</if>
+                    <if test="cashAmount != null and cashAmount != ''">cash_balance=cash_balance-#{cashAmount},</if>
                 </if>
                 <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
                 total_balance=chip_balance+cash_balance, update_time = sysdate()
