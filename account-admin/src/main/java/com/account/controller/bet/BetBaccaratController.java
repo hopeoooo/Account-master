@@ -141,7 +141,13 @@ public class BetBaccaratController {
         String gameResult = betService.selectGameResult(sysTableManagement);
         //注单录入
         JSONArray bets = jsonObject.getJSONArray("bet");
-        betService.saveBet(sysTableManagement, gameResult, bets);
+        sysTableManagement.setCreateBy(SecurityUtils.getUsername());
+        AsyncManager.me().execute(new TimerTask() {
+            @Override
+            public void run() {
+                betService.saveBet(sysTableManagement, gameResult, bets);
+            }
+        });
         return AjaxResult.success();
     }
 

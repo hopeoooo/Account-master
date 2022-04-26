@@ -17,6 +17,14 @@ public class SysBetInfo extends SysBet{
 
     private BigDecimal winLose;
 
+    private BigDecimal water;
+
+    private BigDecimal waterAmount;
+
+    private BigDecimal tie;
+
+    private BigDecimal pump;
+
     public SysBetInfo() {
     }
 }

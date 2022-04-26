@@ -11,11 +11,37 @@
 
     <insert id="saveBetInfos">
         insert into sys_bet_info(bet_id,card,table_id,boot_num,game_num,
-        type,game_id,bet_option,bet_money,game_result,win_lose,create_time,create_by)
+        type,game_id,bet_option,bet_money,game_result,win_lose,create_time,
+        water,water_amount,pump,create_by)
         values
         <foreach item="item" index="index" collection="list" separator=",">
             (#{item.betId},#{item.card},#{item.tableId},#{item.bootNum},#{item.gameNum}
-            ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},sysdate(),#{item.createBy})
+            ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},sysdate(),
+            <choose>
+             <when test="item.water != null">
+                 #{item.water},
+             </when>
+             <otherwise>
+                 0,
+             </otherwise>
+            </choose>
+            <choose>
+                <when test="item.waterAmount != null">
+                    #{item.waterAmount},
+                </when>
+                <otherwise>
+                    0,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.pump != null">
+                    #{item.pump},
+                </when>
+                <otherwise>
+                    0,
+                </otherwise>
+            </choose>
+             #{item.createBy})
         </foreach>
     </insert>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysWaterMapper">
+
+    <insert id="saveMembersWater">
+        insert into sys_members_water (card, water, water_amount, create_time)
+        values (#{card}, #{water}, #{waterAmount}, sysdate())
+        ON DUPLICATE KEY UPDATE
+        water = values(water) + #{water},
+        water_amount = values(water_amount) + #{waterAmount},
+        update_time = sysdate()
+    </insert>
+
+
+</mapper>
