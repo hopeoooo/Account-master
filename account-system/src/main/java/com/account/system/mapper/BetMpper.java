@@ -22,7 +22,7 @@ public interface BetMpper {
 
     @Select("select id, table_id tableId,game_id gameId,chip_point_base chipPointBase,cash_point_base cashPointBase " +
             ",insurance_point_base insurancePointBase,boot_num bootNum" +
-            ",game_num gameNum,chip,cash from sys_table_management where ip = #{ip} limit 0,1")
+            ",game_num gameNum,chip,cash,insurance from sys_table_management where ip = #{ip} limit 0,1")
     SysTableManagement getTableByIp(@Param("ip") String ip);
 
     @Insert("insert into sys_game_result (game_id,table_id,boot_num,game_num,game_result,create_time,create_by) " +
@@ -47,6 +47,6 @@ public interface BetMpper {
             "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} ")
     List<Map> getGameResults(SysTableManagement sysTableManagement);
 
-    @Update("update sys_table_management set chip = chip + #{chip} ,cash = cash + #{cash} where id = #{id} ")
-    void updateTableManagement(@Param("id") Long id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash);
+    @Update("update sys_table_management set chip = chip + #{chip} ,cash = cash + #{cash},insurance = insurance + #{insurance} where id = #{id} ")
+    void updateTableManagement(@Param("id") Long id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance);
 }

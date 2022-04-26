@@ -1,5 +1,6 @@
 package com.account.system.service;
 
+import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
 import com.alibaba.fastjson.JSONArray;
@@ -30,4 +31,8 @@ public interface BetService {
     List<Map> getGameResults(SysTableManagement sysTableManagement);
 
     BigDecimal getPayOut(JSONObject bet, String gameResult);
+
+    Map pointChip(Reckon reckon, SysTableManagement sysTableManagement);
+
+    Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement);
 }

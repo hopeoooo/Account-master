@@ -7,10 +7,10 @@ import com.account.common.utils.ServletUtils;
 import com.account.common.utils.StringUtils;
 import com.account.common.utils.ip.IpUtils;
 import com.account.framework.manager.AsyncManager;
+import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.service.BetService;
-import com.account.system.service.SysOddsConfigureService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -127,7 +127,7 @@ public class BetBaccaratController {
     @GetMapping("/input")
     @ApiOperation(value = "录入")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
+            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
                     dataType = "string", required = true, paramType = "path")
     })
     public AjaxResult input(String json) {
@@ -151,4 +151,21 @@ public class BetBaccaratController {
         return AjaxResult.success();
     }
 
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @GetMapping("/reckon")
+    @ApiOperation(value = "点码||收码 计算差距")
+    public AjaxResult reckon(Reckon reckon) {
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        Map map;
+        if(reckon.getType()==0){
+            map = betService.pointChip(reckon,sysTableManagement);
+        }else {
+            map = betService.receiptChip(reckon,sysTableManagement);
+        }
+        return AjaxResult.success(map);
+    }
 }
