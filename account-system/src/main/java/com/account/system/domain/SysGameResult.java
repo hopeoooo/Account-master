@@ -13,6 +13,9 @@ public class SysGameResult extends BaseEntity {
     @ApiModelProperty(value ="id")
     private Long id;
 
+    @ApiModelProperty(value ="标记号")
+    private Long version;
+
     @ApiModelProperty(value ="桌台Id")
     private Long tableId;
 
@@ -34,6 +37,7 @@ public class SysGameResult extends BaseEntity {
     public SysGameResult(SysTableManagement sysTableManagement) {
         this.gameId = sysTableManagement.getGameId();
         this.tableId = sysTableManagement.getTableId();
+        this.version = sysTableManagement.getVersion();
         this.bootNum = sysTableManagement.getBootNum();
         this.gameNum = sysTableManagement.getGameNum()+1;
     }

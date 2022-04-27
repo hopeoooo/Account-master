@@ -28,8 +28,6 @@ public interface BetService {
 
     BigDecimal selectMembersChip(String card);
 
-    String selectGameResult(SysTableManagement sysTableManagement);
-
     void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
 
     List<Map> getGameResults(SysTableManagement sysTableManagement);
@@ -49,4 +47,6 @@ public interface BetService {
     void editChip(Reckon reckon, SysTableManagement sysTableManagement);
 
     void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
+
+    void updateGameResult(SysGameResult sysGameResult);
 }

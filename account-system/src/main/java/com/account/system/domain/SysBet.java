@@ -16,6 +16,8 @@ public class SysBet extends BaseEntity {
 
     private Long tableId;
 
+    private Long version;
+
     private Long bootNum;
 
     private Long gameNum;

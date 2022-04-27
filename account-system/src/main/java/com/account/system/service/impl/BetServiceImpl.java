@@ -65,11 +65,6 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public String selectGameResult(SysTableManagement sysTableManagement) {
-        return betMapper.selectGameResult(sysTableManagement);
-    }
-
-    @Override
     @Transactional
     public void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets) {
         final BigDecimal[] tableChip = {BigDecimal.ZERO};
@@ -230,14 +225,48 @@ public class BetServiceImpl implements BetService {
         sysPorint.setInsuranceAdd((sysTableManagement.getInsuranceAdd()).add(reckon.getInsuranceAdd() != null ? reckon.getInsuranceAdd() : BigDecimal.ZERO)
                 .subtract(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO));
         sysPorint.setWater(betMapper.getWater(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
-        sysPorint.setChipWin(betMapper.getChipWin(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
+        sysPorint.setChipWin(betMapper.getWinLose(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
         sysPorint.setInsuranceWin(betMapper.getInsuranceWin(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
         betMapper.savePorint(sysPorint);
     }
 
     @Override
     public void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        //TODO
         betMapper.receiptEditChip(sysTableManagement.getId());
+    }
+
+    /**
+     * 修改路珠
+     */
+    @Transactional
+    public void updateGameResult(SysGameResult sysGameResult) {
+        SysGameResult gameResult = betMapper.selectGameResult(sysGameResult);
+        List<SysBetInfo> list = betMapper.getBets(gameResult);
+        list.forEach(sysBetInfo -> {
+            SysBet sysBet = new SysBet();
+            sysBet.setBetId(sysBetInfo.getBetId());
+            sysBet.setUpdateBy(SecurityUtils.getUsername());
+            sysBet.setCard(sysBetInfo.getCard());
+            sysBet.setGameId(gameResult.getGameId());
+            sysBet.setTableId(gameResult.getTableId());
+            sysBet.setBootNum(gameResult.getBootNum());
+            sysBet.setGameNum(gameResult.getGameNum());
+            sysBet.setGameResult(gameResult.getGameResult());
+            sysBet.setType(sysBetInfo.getType());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(sysBetInfo.getBetOption(),sysBetInfo.getBetMoney());
+            Map map = getBetInfos(jsonObject, sysBet);
+            betMapper.updateBet(sysBet);
+
+            //添加 注单明细
+            List betInfos = (List) map.get("list");
+            if (betInfos.size() > 0) {
+                betMapper.updateBetInfos(betInfos);
+            }
+        });
+
+        betMapper.updateGameResult(sysGameResult);
     }
 
     /**
@@ -370,11 +399,6 @@ public class BetServiceImpl implements BetService {
                             sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
                         }
                     }
-                }
-                if (isChip && sysBetInfo.getType() == null) {
-                    sysBetInfo.setType(0);
-                } else {
-                    sysBetInfo.setType(1);
                 }
                 list.add(sysBetInfo);
                 if (isChip) {

@@ -38,6 +38,9 @@ public class SysTableManagement extends BaseEntity {
     private BigDecimal insurancePointBase;
 
     @ApiModelProperty(hidden = true)
+    private Long version;
+
+    @ApiModelProperty(hidden = true)
     private Long bootNum;
 
     @ApiModelProperty(hidden = true)

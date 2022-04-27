@@ -55,6 +55,7 @@ public class BetBaccaratController {
         }
         Map map = new HashMap();
         map.put("tableId", sysTableManagement.getTableId());
+        map.put("version", sysTableManagement.getVersion());
         map.put("bootNum", sysTableManagement.getBootNum());
         map.put("gameNum", sysTableManagement.getGameNum());
         map.put("chip", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip()));
@@ -76,6 +77,21 @@ public class BetBaccaratController {
         }
         List<Map> list = betService.getGameResults(sysTableManagement);
         return AjaxResult.success(list);
+    }
+
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PostMapping("/update")
+    @ApiOperation(value = "路珠修改")
+    public AjaxResult update(SysGameResult sysGameResult) {
+        //根据ip获取台桌信息
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        sysGameResult.setUpdateBy(SecurityUtils.getUsername());
+        betService.updateGameResult(sysGameResult);
+        return AjaxResult.success();
     }
 
 

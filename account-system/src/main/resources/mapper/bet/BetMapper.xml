@@ -5,17 +5,17 @@
 <mapper namespace="com.account.system.mapper.BetMapper">
 
     <insert id="saveBet" useGeneratedKeys="true" keyProperty="betId" keyColumn="bet_id" parameterType="sysBet">
-        insert into sys_bet (card, table_id, boot_num, game_num, type, game_id, game_result, create_by, create_time)
-        values (#{card}, #{tableId}, #{bootNum}, #{gameNum}, #{type}, #{gameId}, #{gameResult}, #{createBy}, sysdate())
+        insert into sys_bet (card, table_id, version, boot_num, game_num, type, game_id, game_result, create_by, create_time)
+        values (#{card}, #{tableId}, #{version}, #{bootNum}, #{gameNum}, #{type}, #{gameId}, #{gameResult}, #{createBy}, sysdate())
     </insert>
 
     <insert id="saveBetInfos">
-        insert into sys_bet_info(bet_id,card,table_id,boot_num,game_num,
+        insert into sys_bet_info(bet_id,card,table_id,verion,boot_num,game_num,
         type,game_id,bet_option,bet_money,game_result,win_lose,create_time,
         water,water_amount,pump,create_by)
         values
         <foreach item="item" index="index" collection="list" separator=",">
-            (#{item.betId},#{item.card},#{item.tableId},#{item.bootNum},#{item.gameNum}
+            (#{item.betId},#{item.card},#{item.tableId},#{item.version},#{item.bootNum},#{item.gameNum}
             ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},sysdate(),
             <choose>
              <when test="item.water != null">
@@ -164,4 +164,22 @@
         values (#{tableId}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
                 #{insuranceGap}, #{insuranceAdd}, #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
     </insert>
+
+    <update id="updateBetInfos">
+        <foreach item="item" index="index" collection="list" separator=",">
+            update sys_bet_info
+            <set>
+                <if test="item.gameResult!=''">game_result = #{item.gameResult},</if>
+                <if test="item.type!=''">type = #{item.type},</if>
+                <if test="item.winLose!=''">win_lose = #{item.winLose},</if>
+                <if test="item.water!=''">water = #{item.water},</if>
+                <if test="item.water_amount!=''">water_amount = #{item.waterAmount},</if>
+                <if test="item.tie!=''">tie = #{item.tie},</if>
+                <if test="item.pump!=''">pump = #{item.pump},</if>
+                update_time = #{item.updateTime},
+                update_by = #{item.updateBy}
+            </set>
+            where bet_id = #{betId}
+        </foreach>
+    </update>
 </mapper>

@@ -22,11 +22,12 @@ public interface BetMapper {
 
     @Select("select id, table_id tableId,game_id gameId,chip_point_base chipPointBase,cash_point_base cashPointBase " +
             ",insurance_point_base insurancePointBase,boot_num bootNum" +
-            ",game_num gameNum,chip,cash,insurance,chip_add chipAdd,insurance_add insuranceAdd from sys_table_management where ip = #{ip} limit 0,1")
+            ",game_num gameNum,chip,cash,insurance,chip_add chipAdd,insurance_add insuranceAdd ,version " +
+            "from sys_table_management where ip = #{ip} limit 0,1")
     SysTableManagement getTableByIp(@Param("ip") String ip);
 
-    @Insert("insert into sys_game_result (game_id,table_id,boot_num,game_num,game_result,create_time,create_by) " +
-            "values (#{gameId},#{tableId},#{bootNum},#{gameNum},#{gameResult},sysdate(),#{createBy}) ")
+    @Insert("insert into sys_game_result (game_id,table_id,version,boot_num,game_num,game_result,create_time,create_by) " +
+            "values (#{gameId},#{tableId},#{version},#{bootNum},#{gameNum},#{gameResult},sysdate(),#{createBy}) ")
     void saveGameResult(SysGameResult sysGameResult);
 
     @Update("update sys_table_management set game_num=game_num+1 where id = #{id}")
@@ -35,18 +36,17 @@ public interface BetMapper {
     @Select("select chip from sys_members where card = #{card}")
     BigDecimal selectMembersChip(@Param("card") String card);
 
-    @Select("select game_result from sys_game_result where game_id = #{gameId} " +
-            "and table_id = #{tableId} and boot_num = #{bootNum} and game_num = #{gameNum} order by create_time desc limit 0,1")
-    String selectGameResult(SysTableManagement sysTableManagement);
+    @Select("select id,table_id tableId,version,boot_num bootNum,game_num gameNum, game_result gameResult,version,game_id gameId from sys_game_result " +
+            "where id=#{id} order by create_time desc limit 0,1")
+    SysGameResult selectGameResult(SysGameResult sysGameResult);
 
     void saveBet(SysBet sysBet);
 
     void saveBetInfos(List<SysBetInfo> list);
 
-    @Select("select id, table_id tableId,boot_num bootNum,game_num gameNum, game_result gameResult from sys_game_result " +
-            "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} ")
+    @Select("select id, table_id tableId,version,boot_num bootNum,game_num gameNum, game_result gameResult,version from sys_game_result " +
+            "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} and version = #{version}")
     List<Map> getGameResults(SysTableManagement sysTableManagement);
-
 
     List<BetInfoVo> selectBetInfoList(BetSearch betSearch);
 
@@ -62,7 +62,8 @@ public interface BetMapper {
             ",chip_add= chip_add+#{chipAdd},insurance_add= insurance_add+#{insuranceAdd} where id = #{id}")
     void updateAdd(@Param("id") Long id, @Param("chipAdd") BigDecimal chipAdd, @Param("insuranceAdd") BigDecimal insuranceAdd);
 
-    @Update("update sys_table_management set chip_add= 0,insurance_add= 0,chip=0,cash=0,insurance=0 where id = #{id}")
+    @Update("update sys_table_management set chip_add= 0,insurance_add= 0,chip=0,cash=0,insurance=0," +
+            " game_num=0,boot_num = 1,version = version+1 where id = #{id}")
     void receiptEditChip(@Param("id") Long id);
 
     void savePorint(SysPorint sysPorint);
@@ -70,10 +71,21 @@ public interface BetMapper {
     @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} ")
     BigDecimal getWater(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 0")
-    BigDecimal getChipWin(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2")
+    BigDecimal getWinLose(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
 
     @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2")
     BigDecimal getInsuranceWin(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
 
+    @Update("update sys_game_result set game_relust = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where id = #{id}")
+    void updateGameResult(SysGameResult sysGameResult);
+
+    @Select("select bet_id betId,card,bet_option betOption,type,bet_money betMoney from sys_bet_info " +
+            "where table_id = #{tableId} and version = #{version} and boot_num = #{bootNum} and game_num = #{gameNum}")
+    List<SysBetInfo> getBets(SysGameResult sysGameResult);
+
+    @Update("update sys_bet set game_relust = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where bet_id = #{betId}")
+    void updateBet(SysBet sysBet);
+
+    void updateBetInfos(List betInfos);
 }
