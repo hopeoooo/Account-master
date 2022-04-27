@@ -35,4 +35,8 @@ public interface BetService {
     Map pointChip(Reckon reckon, SysTableManagement sysTableManagement);
 
     Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement);
+
+    void editChip(Reckon reckon, SysTableManagement sysTableManagement);
+
+    void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
 }

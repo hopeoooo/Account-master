@@ -21,7 +21,7 @@ public class SysBet extends BaseEntity {
     private Long gameNum;
 
     //0 筹码 1现金
-    private int type;
+    private Integer type;
 
     private Long gameId;
 

@@ -26,7 +26,7 @@ import java.util.Map;
 public class BetServiceImpl implements BetService {
 
     @Autowired
-    BetMpper betMpper;
+    BetMapper betMapper;
 
     @Autowired
     SysMembersMapper sysMembersMapper;
@@ -42,27 +42,27 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public SysTableManagement getTableByIp(String ip) {
-        return betMpper.getTableByIp(ip);
+        return betMapper.getTableByIp(ip);
     }
 
     @Override
     public void saveGameResult(SysGameResult sysGameResult) {
-        betMpper.saveGameResult(sysGameResult);
+        betMapper.saveGameResult(sysGameResult);
     }
 
     @Override
     public void updateGameNum(Long id) {
-        betMpper.updateGameNum(id);
+        betMapper.updateGameNum(id);
     }
 
     @Override
     public BigDecimal selectMembersChip(String card) {
-        return betMpper.selectMembersChip(card);
+        return betMapper.selectMembersChip(card);
     }
 
     @Override
     public String selectGameResult(SysTableManagement sysTableManagement) {
-        return betMpper.selectGameResult(sysTableManagement);
+        return betMapper.selectGameResult(sysTableManagement);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BetServiceImpl implements BetService {
             sysBet.setGameResult(gameResult);
             sysBet.setType(bet.getInteger("type"));
             sysBet.setCreateBy(sysTableManagement.getCreateBy());
-            betMpper.saveBet(sysBet);
+            betMapper.saveBet(sysBet);
 
             Map map = getBetInfos(bet, sysBet);
 
@@ -95,13 +95,13 @@ public class BetServiceImpl implements BetService {
             //添加 注单明细
             List list = (List) map.get("list");
             if (list.size() > 0) {
-                betMpper.saveBetInfos(list);
+                betMapper.saveBetInfos(list);
             }
 
             BigDecimal membersChip = (BigDecimal) map.get("membersChip");
             if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
                 //生成 筹码帐变记录
-                BigDecimal chip = betMpper.selectMembersChip(sysBet.getCard());
+                BigDecimal chip = betMapper.selectMembersChip(sysBet.getCard());
                 SysChipRecord sysChipRecord = new SysChipRecord();
                 if (membersChip.compareTo(new BigDecimal(0)) > 0) {//赢
                     sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
@@ -127,14 +127,14 @@ public class BetServiceImpl implements BetService {
         });
         if (tableChip[0].compareTo(BigDecimal.ZERO) != 0 || tableCash[0].compareTo(BigDecimal.ZERO) != 0 || tableInsurance[0].compareTo(BigDecimal.ZERO) != 0) {
             //修改 桌台 累计
-            betMpper.updateTableManagement(sysTableManagement.getId(), tableChip[0], tableCash[0], tableInsurance[0]);
+            betMapper.updateTableManagement(sysTableManagement.getId(), tableChip[0], tableCash[0], tableInsurance[0]);
         }
 
     }
 
     @Override
     public List<Map> getGameResults(SysTableManagement sysTableManagement) {
-        return betMpper.getGameResults(sysTableManagement);
+        return betMapper.getGameResults(sysTableManagement);
     }
 
     @Override
@@ -160,14 +160,16 @@ public class BetServiceImpl implements BetService {
     public Map pointChip(Reckon reckon, SysTableManagement sysTableManagement) {
         Map map = new HashMap();
         BigDecimal chipGap = reckon.getChip().subtract(sysTableManagement.getChipPointBase()).subtract(sysTableManagement.getChip())
-                        .subtract(reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
-                        .add(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO);
+                .subtract(reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
+                .add(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO)
+                .subtract(sysTableManagement.getChipAdd());
 
         BigDecimal cashGap = reckon.getCash().subtract(sysTableManagement.getCashPointBase()).add(sysTableManagement.getCash());
 
         BigDecimal insuranceGap = reckon.getInsurance().subtract(sysTableManagement.getInsurancePointBase()).subtract(sysTableManagement.getInsurance())
                 .subtract(reckon.getInsuranceAdd() != null ? reckon.getInsuranceAdd() : BigDecimal.ZERO)
-                .add(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO);
+                .add(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO)
+                .subtract(sysTableManagement.getInsuranceAdd());
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
@@ -175,18 +177,63 @@ public class BetServiceImpl implements BetService {
         return map;
     }
 
-    @Override
+    /**
+     * 收码
+     */
     public Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement) {
-        Map map = pointChip(reckon,sysTableManagement);
+        Map map = pointChip(reckon, sysTableManagement);
         BigDecimal chipReceipt = reckon.getChip().subtract(sysTableManagement.getChipPointBase())
                 .subtract(reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
-                .add(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO);
+                .add(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO)
+                .subtract(sysTableManagement.getChipAdd());
 
         BigDecimal cashReceipt = reckon.getCash().subtract(sysTableManagement.getCashPointBase());
 
         map.put("chipReceipt", chipReceipt);
         map.put("cashReceipt", cashReceipt);
         return map;
+    }
+
+    /**
+     * 点码 确认修改
+     */
+    @Transactional
+    public void editChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        BigDecimal chipAdd = (reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO);
+        BigDecimal insuranceAdd = (reckon.getInsuranceAdd() != null ? reckon.getInsuranceAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO);
+        betMapper.updateAdd(sysTableManagement.getId(), chipAdd, insuranceAdd);
+
+        SysPorint sysPorint = new SysPorint();
+        sysPorint.setCreateBy(SecurityUtils.getUsername());
+        sysPorint.setTableId(sysTableManagement.getTableId());
+        sysPorint.setBootNum(sysTableManagement.getBootNum());
+
+        sysPorint.setSysChip(sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
+                .add(sysTableManagement.getChipAdd()).add(reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO));
+        sysPorint.setPersonChip(reckon.getChip());
+        sysPorint.setChipGap(sysPorint.getPersonChip().subtract(sysPorint.getSysChip()));
+        sysPorint.setChipAdd((sysTableManagement.getChipAdd()).add(reckon.getChipAdd() != null ? reckon.getChipAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getChipSub() != null ? reckon.getChipSub() : BigDecimal.ZERO));
+
+        sysPorint.setSysInsurance(sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance())
+                .add(sysTableManagement.getInsuranceAdd()).add(reckon.getInsuranceAdd() != null ? reckon.getInsuranceAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO));
+        sysPorint.setPersonInsurance(reckon.getInsurance());
+        sysPorint.setInsuranceGap(sysPorint.getPersonInsurance().subtract(sysPorint.getSysInsurance()));
+        sysPorint.setInsuranceAdd((sysTableManagement.getInsuranceAdd()).add(reckon.getInsuranceAdd() != null ? reckon.getInsuranceAdd() : BigDecimal.ZERO)
+                .subtract(reckon.getInsuranceSub() != null ? reckon.getInsuranceSub() : BigDecimal.ZERO));
+        sysPorint.setWater(betMapper.getWater(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
+        sysPorint.setChipWin(betMapper.getChipWin(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
+        sysPorint.setInsuranceWin(betMapper.getInsuranceWin(sysTableManagement.getTableId(), sysTableManagement.getBootNum()));
+        betMapper.savePorint(sysPorint);
+    }
+
+    @Override
+    public void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        betMapper.receiptEditChip(sysTableManagement.getId());
     }
 
     /**
@@ -255,6 +302,7 @@ public class BetServiceImpl implements BetService {
                         }
                     }
                 } else if ("0".equals(option)) { //闲保险
+                    sysBetInfo.setType(2);
                     if (gameResult.contains("4")) {
                         sysBetInfo.setWinLose(amount);
                     } else {
@@ -269,6 +317,7 @@ public class BetServiceImpl implements BetService {
                     }
                     tableInsurance = tableInsurance.multiply(sysBetInfo.getWinLose());
                 } else if ("3".equals(option)) { //庄保险
+                    sysBetInfo.setType(2);
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount);
                     } else {
@@ -295,6 +344,11 @@ public class BetServiceImpl implements BetService {
                             sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
                         }
                     }
+                }
+                if (isChip && sysBetInfo.getType() == null) {
+                    sysBetInfo.setType(0);
+                } else {
+                    sysBetInfo.setType(1);
                 }
                 list.add(sysBetInfo);
                 if (isChip) {

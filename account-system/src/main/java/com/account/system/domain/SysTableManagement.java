@@ -51,4 +51,10 @@ public class SysTableManagement extends BaseEntity {
 
     @ApiModelProperty(hidden = true)
     private BigDecimal insurance;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal chipAdd;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal insuranceAdd;
 }

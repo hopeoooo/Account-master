@@ -109,17 +109,6 @@ public class BetBaccaratController {
             bet.put("chip", chip);
             bet.put("payout", payout);
         });
-        //异步 保存赛果 修改局数
-        SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
-        sysGameResult.setGameResult(gameResult);
-        sysGameResult.setCreateBy(SecurityUtils.getUsername());
-        AsyncManager.me().execute(new TimerTask() {
-            public void run() {
-                betService.saveGameResult(sysGameResult);
-                betService.updateGameNum(sysTableManagement.getId());
-            }
-        });
-
         return AjaxResult.success(jsonObject);
     }
 
@@ -127,7 +116,7 @@ public class BetBaccaratController {
     @GetMapping("/input")
     @ApiOperation(value = "录入")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
+            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
                     dataType = "string", required = true, paramType = "path")
     })
     public AjaxResult input(String json) {
@@ -138,14 +127,22 @@ public class BetBaccaratController {
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
-        String gameResult = betService.selectGameResult(sysTableManagement);
+        String gameResult = jsonObject.getString("gameResult");
+        if (StringUtils.isEmpty(ResultEnum.getResultEnum(gameResult))) {
+            return AjaxResult.error("赛果格式错误");
+        }
         //注单录入
         JSONArray bets = jsonObject.getJSONArray("bet");
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
+        SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
+        sysGameResult.setGameResult(gameResult);
+        sysGameResult.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             @Override
             public void run() {
                 betService.saveBet(sysTableManagement, gameResult, bets);
+                betService.saveGameResult(sysGameResult);
+                betService.updateGameNum(sysTableManagement.getId());
             }
         });
         return AjaxResult.success();
@@ -167,5 +164,22 @@ public class BetBaccaratController {
             map = betService.receiptChip(reckon,sysTableManagement);
         }
         return AjaxResult.success(map);
+    }
+
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @GetMapping("/edit")
+    @ApiOperation(value = "点码||收码 确认修改")
+    public AjaxResult edit(Reckon reckon) {
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        if(reckon.getType()==0){
+            betService.editChip(reckon,sysTableManagement);
+        }else {
+            betService.receiptEditChip(reckon,sysTableManagement);
+        }
+        return AjaxResult.success();
     }
 }
