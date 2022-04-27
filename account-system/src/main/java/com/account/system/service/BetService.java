@@ -1,8 +1,12 @@
 package com.account.system.service;
 
+import com.account.system.domain.SysBetInfo;
 import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
+import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.vo.BetInfoOptionVo;
+import com.account.system.domain.vo.BetInfoVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -36,7 +40,9 @@ public interface BetService {
 
     Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement);
 
-    void editChip(Reckon reckon, SysTableManagement sysTableManagement);
 
-    void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
+    List<BetInfoVo> selectBetInfoList(BetSearch betSearch);
+
+    Map<Long, List<BetInfoOptionVo>> selectBetOptionList(List<Long> betIds);
+    Map selectBetTotal(BetSearch betSearch);
 }

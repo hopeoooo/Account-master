@@ -24,10 +24,10 @@ public class SysAccessCodeAddSearch{
     private  String card;
 
     @ApiModelProperty( value ="筹码")
-    private BigDecimal chipBalance;
+    private BigDecimal chipAmount;
 
     @ApiModelProperty(value ="现金")
-    private BigDecimal cashBalance;
+    private BigDecimal cashAmount;
 
     @ApiModelProperty(value = "总余额")
     private BigDecimal totalBalance;

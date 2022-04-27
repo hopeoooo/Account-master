@@ -4,6 +4,13 @@ import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.*;
 import com.account.system.mapper.*;
+import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.vo.BetInfoOptionVo;
+import com.account.system.domain.vo.BetInfoVo;
+import com.account.system.mapper.BetMpper;
+import com.account.system.mapper.SysChipRecordMapper;
+import com.account.system.mapper.SysMembersMapper;
+import com.account.system.mapper.SysOddsConfigureMapper;
 import com.account.system.service.BetService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -13,10 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author hope
@@ -234,6 +240,28 @@ public class BetServiceImpl implements BetService {
     @Override
     public void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement) {
         betMapper.receiptEditChip(sysTableManagement.getId());
+    }
+
+    /**
+     * 注单记录
+     * @return
+     */
+    @Override
+    public List<BetInfoVo> selectBetInfoList(BetSearch betSearch) {
+        List<BetInfoVo> betInfoVos = betMpper.selectBetInfoList(betSearch);
+        return betInfoVos;
+    }
+
+    @Override
+    public Map<Long, List<BetInfoOptionVo>> selectBetOptionList(List<Long> betIds) {
+        List<BetInfoOptionVo> betInfos = betMpper.selectBetOptionList(betIds);
+        Map<Long, List<BetInfoOptionVo>> map = betInfos.stream().collect(Collectors.groupingBy(BetInfoOptionVo::getBetId));
+        return map;
+    }
+
+    @Override
+    public Map selectBetTotal(BetSearch betSearch) {
+        return betMpper.selectBetTotal(betSearch);
     }
 
     /**
