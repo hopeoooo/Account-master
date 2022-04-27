@@ -40,9 +40,13 @@ public interface BetService {
 
     Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement);
 
-
     List<BetInfoVo> selectBetInfoList(BetSearch betSearch);
 
     Map<Long, List<BetInfoOptionVo>> selectBetOptionList(List<Long> betIds);
+
     Map selectBetTotal(BetSearch betSearch);
+
+    void editChip(Reckon reckon, SysTableManagement sysTableManagement);
+
+    void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
 }
