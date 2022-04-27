@@ -5,6 +5,7 @@ import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.alibaba.fastjson.JSONArray;
@@ -49,4 +50,12 @@ public interface BetService {
     void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
 
     void updateGameResult(SysGameResult sysGameResult);
+
+    /**
+     * 查询客户日报表列表
+     * @return
+     */
+    List<Map> selectDailyReportList(ReportSearch reportSearch );
+
+    Map selectDailyReportTotal(ReportSearch reportSearch );
 }

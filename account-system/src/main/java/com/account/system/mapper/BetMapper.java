@@ -2,6 +2,7 @@ package com.account.system.mapper;
 
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import org.apache.ibatis.annotations.Insert;
@@ -88,4 +89,8 @@ public interface BetMapper {
     void updateBet(SysBet sysBet);
 
     void updateBetInfos(List betInfos);
+    List<Map> selectDailyReportList(ReportSearch reportSearch );
+
+    Map selectDailyReportTotal(ReportSearch reportSearch);
+
 }

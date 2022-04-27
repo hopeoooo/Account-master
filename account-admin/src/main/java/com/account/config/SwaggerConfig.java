@@ -61,7 +61,8 @@ public class SwaggerConfig {
                 .apis(Predicates.or(
                         RequestHandlerSelectors.basePackage("com.account.controller.system"),
                         RequestHandlerSelectors.basePackage("com.account.controller.account"),
-                        RequestHandlerSelectors.basePackage("com.account.controller.bet")
+                        RequestHandlerSelectors.basePackage("com.account.controller.bet"),
+                        RequestHandlerSelectors.basePackage("com.account.controller.report")
                 ))
                 .paths(PathSelectors.any())
                 .build()

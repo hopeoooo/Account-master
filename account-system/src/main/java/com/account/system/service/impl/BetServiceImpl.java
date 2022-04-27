@@ -4,6 +4,7 @@ import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.mapper.*;
@@ -267,6 +268,16 @@ public class BetServiceImpl implements BetService {
         });
 
         betMapper.updateGameResult(sysGameResult);
+    }
+
+    @Override
+    public List<Map> selectDailyReportList(ReportSearch reportSearch ) {
+        return betMapper.selectDailyReportList(reportSearch );
+    }
+
+    @Override
+    public Map selectDailyReportTotal(ReportSearch reportSearch) {
+        return betMapper.selectDailyReportTotal(reportSearch);
     }
 
     /**
