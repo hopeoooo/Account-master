@@ -8,8 +8,8 @@
         insert into sys_members_water (card, water, water_amount, create_time)
         values (#{card}, #{water}, #{waterAmount}, sysdate())
         ON DUPLICATE KEY UPDATE
-        water = values(water) + #{water},
-        water_amount = values(water_amount) + #{waterAmount},
+        water = water + #{water},
+        water_amount = water_amount + #{waterAmount},
         update_time = sysdate()
     </insert>
 

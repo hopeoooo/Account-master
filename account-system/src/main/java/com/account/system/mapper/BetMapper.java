@@ -68,24 +68,35 @@ public interface BetMapper {
 
     void savePorint(SysPorint sysPorint);
 
-    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} ")
-    BigDecimal getWater(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} ")
+    BigDecimal getWater(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2")
-    BigDecimal getWinLose(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version}")
+    BigDecimal getWinLose(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2")
-    BigDecimal getInsuranceWin(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum);
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version}")
+    BigDecimal getInsuranceWin(SysTableManagement sysTableManagement);
 
-    @Update("update sys_game_result set game_relust = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where id = #{id}")
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and version = #{version} ")
+    BigDecimal getReceiptWater(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type != 2 and version = #{version}")
+    BigDecimal getReceiptWinLose(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version}")
+    BigDecimal getReceiptInsuranceWin(SysTableManagement sysTableManagement);
+
+    @Update("update sys_game_result set game_result = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where id = #{id}")
     void updateGameResult(SysGameResult sysGameResult);
 
-    @Select("select bet_id betId,card,bet_option betOption,type,bet_money betMoney from sys_bet_info " +
+    @Select("select bet_id betId,card,bet_option betOption,type,bet_money betMoney,water,water_amount waterAmount from sys_bet_info " +
             "where table_id = #{tableId} and version = #{version} and boot_num = #{bootNum} and game_num = #{gameNum}")
     List<SysBetInfo> getBets(SysGameResult sysGameResult);
 
-    @Update("update sys_bet set game_relust = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where bet_id = #{betId}")
+    @Update("update sys_bet set game_result = #{gameResult},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
     void updateBet(SysBet sysBet);
 
     void updateBetInfos(List betInfos);
+
+    void saveReceipt(SysReceipt sysReceipt);
 }
