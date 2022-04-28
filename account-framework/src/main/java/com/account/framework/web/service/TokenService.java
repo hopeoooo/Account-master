@@ -108,6 +108,7 @@ public class TokenService
     public String createToken(LoginUser loginUser)
     {
         String token = IdUtils.fastUUID();
+        deleteToken(loginUser);
         loginUser.setToken(token);
         setUserAgent(loginUser);
         refreshToken(loginUser);
@@ -134,6 +135,14 @@ public class TokenService
     }
 
     /**
+     * 删除旧令牌
+     */
+    public void deleteToken(LoginUser loginUser) {
+        String userKey = redisCache.getCacheObject(Constants.LOGIN_TOKEN_KEY + loginUser.getUsername());
+        delLoginUser(userKey);
+    }
+
+    /**
      * 刷新令牌有效期
      *
      * @param loginUser 登录信息
@@ -145,6 +154,7 @@ public class TokenService
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
         redisCache.setCacheObject(userKey, loginUser, expireTime, TimeUnit.MINUTES);
+        redisCache.setCacheObject(Constants.LOGIN_TOKEN_KEY + loginUser.getUsername(), loginUser.getToken());
     }
 
     /**
