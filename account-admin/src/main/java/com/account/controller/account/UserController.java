@@ -6,6 +6,7 @@ import com.account.common.core.domain.entity.SysUser;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
+import com.account.framework.web.service.TokenService;
 import com.account.system.domain.search.SysUserSearch;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -71,6 +72,8 @@ public class UserController extends BaseController {
         return AjaxResult.success();
     }
 
+    @Autowired
+    TokenService tokenService;
     /**
      * 删除员工
      */
@@ -82,6 +85,7 @@ public class UserController extends BaseController {
     })
     public AjaxResult delete(Long userId) {
         userService.deleteUser(userId);
+        tokenService.deleteToken(userId);
         return AjaxResult.success();
     }
 }
