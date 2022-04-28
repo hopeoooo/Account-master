@@ -224,4 +224,51 @@
         values (#{tableId}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, 0, #{insuranceAdd},#{water},
                 #{win}, #{insuranceWin},#{createBy},sysdate())
     </insert>
+
+    <select id="selectDailyReportList" resultType="java.util.Map">
+        SELECT
+        m.card as card,
+        m.`name` as name ,
+        date_format(b.create_time,'%Y-%m-%d') as date ,
+        SUM( b.win_lose ) as winLose,
+        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLose,
+        SUM( b.water ) as water,
+        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWater
+        FROM
+        sys_bet_info b
+        LEFT JOIN sys_members m ON m.card = b.card
+        <where>
+            <if test="card != null and card != ''">
+                AND b.card = #{card}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY m.card,date_format(b.create_time,'%Y-%m-%d')
+        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc
+    </select>
+
+    <select id="selectDailyReportTotal"  resultType="java.util.Map">
+        SELECT
+            SUM( b.win_lose ) AS winLose,
+            SUM( b.water ) AS water
+        FROM
+            sys_bet_info b
+        <where>
+            <if test="card != null and card != ''">
+                AND b.card = #{card}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+    </select>
+
 </mapper>
