@@ -21,4 +21,6 @@ public interface SysTableManagementMapper {
      int updateTable(SysTableManagement sysTableManagement) ;
 
     int deleteUserByIds(Long id);
+
+    List<Map> selectTableIdInfo();
 }

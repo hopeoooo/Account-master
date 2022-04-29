@@ -22,4 +22,6 @@ public interface SysTableManagementService
     int deleteUserByIds(Long id);
 
     boolean pingIp(String ip) throws IOException;
+
+    List<Map> selectTableIdInfo();
 }

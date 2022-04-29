@@ -53,6 +53,7 @@ public class SysWaterController extends BaseController {
     })
     public TableDataInfo list(String card, Integer isAdmin, Integer cardType) {
         startPage();
+        startOrderBy();
         List<SysMaterVo> list = membersService.selectWaterList(card, isAdmin,cardType);
 
         SysOddsConfigure OddsConfigureList = oddsConfigureService.selectConfigInfo();

@@ -34,6 +34,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY create_time desc
     </select>
 
+    <select id="selectTableIdInfo"  resultType="java.util.Map">
+        SELECT
+            t.table_id as tableId
+        FROM
+            sys_table_management t
+    </select>
+
 
     <insert id="insertTable">
         INSERT INTO `sys_table_management`

@@ -5,6 +5,7 @@ import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.search.ReportSearch;
+import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.mapper.*;
@@ -392,6 +393,11 @@ public class BetServiceImpl implements BetService {
             });
             betMapper.updateBet(sysBet);
         }
+    }
+
+    @Override
+    public List<Map> selectWinLoseList(WinLoseReportSearch reportSearch) {
+        return betMapper.selectWinLoseList(reportSearch);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.account.system.mapper;
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.search.ReportSearch;
+import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import org.apache.ibatis.annotations.Insert;
@@ -125,4 +126,7 @@ public interface BetMapper {
             " where id = #{id}")
     void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip,
                        @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+
+
+    List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 }

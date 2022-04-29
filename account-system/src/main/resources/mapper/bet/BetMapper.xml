@@ -272,4 +272,55 @@
         </where>
     </select>
 
+
+    <select id="selectWinLoseList"  resultType="java.util.Map">
+        SELECT
+            m.card,
+            m.NAME,
+            IFNULL( SUM( b.bet_money ), 0 ) as betMoney,
+            IFNULL( SUM( b.water ), 0 ) as water,
+            IFNULL( SUM( b.water_amount ), 0 ) as waterAmount,
+            IFNULL( SUM( b.tie ), 0 ) as tie,
+            IFNULL( SUM( b.pump ), 0 ) as pump ,
+            IFNULL( SUM( b.win_lose ), 0 ) as winLose
+        FROM
+            sys_members m
+                LEFT JOIN sys_bet_info b ON b.card = m.card
+        <where>
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
+            </if>
+
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="tableId != null and tableId != ''">
+                AND b.table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND b.game_id = #{gameId}
+            </if>
+
+            <if test="operationType != null and operationType != ''">
+                AND b.type = #{operationType}
+            </if>
+
+            <if test="startTime != null and startTime != ''">
+                AND b.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND b.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY
+            m.card
+        ORDER BY SUM( b.bet_money ) desc
+    </select>
+
 </mapper>

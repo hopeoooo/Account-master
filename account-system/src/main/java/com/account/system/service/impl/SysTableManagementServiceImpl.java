@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -54,5 +55,10 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
         }
         InetAddress address = InetAddress.getByName(ip);
         return address.isReachable(3000);
+    }
+
+    @Override
+    public List<Map> selectTableIdInfo() {
+        return tableManagementMapper.selectTableIdInfo();
     }
 }

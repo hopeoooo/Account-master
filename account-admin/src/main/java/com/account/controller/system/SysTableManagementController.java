@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/system/table")
@@ -33,6 +34,16 @@ public class SysTableManagementController extends BaseController {
     public TableDataInfo list(SysTableManagement sysTableManagement){
         startPage();
         List<SysTableManagement> list = tableManagementService.selectTableList(sysTableManagement);
+        return getDataTable(list);
+    }
+
+
+
+    @PreAuthorize("@ss.hasPermi('system:table:list')")
+    @GetMapping("/tableIdComboBoxInfo")
+    @ApiOperation(value = "桌台下拉框")
+    public TableDataInfo tableIdComboBoxInfo(){
+        List<Map> list = tableManagementService.selectTableIdInfo();
         return getDataTable(list);
     }
 
