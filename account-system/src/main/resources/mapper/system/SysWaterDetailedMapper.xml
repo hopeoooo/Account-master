@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysWaterDetailedMapper">
+
+    <select id="selectWaterDetailedList" parameterType="SysAccessCodeDetailedSearch"  resultType="com.account.system.domain.vo.SysWaterDetailedVo">
+        SELECT
+        m.card AS card,
+        m.`name` AS name,
+        w.operation_type AS operationType,
+        w.water AS water,
+        w.water_amount AS waterAmount,
+        w.actual_water_amount AS actualWaterAmount,
+        w.deadline AS deadline,
+        w.create_time AS createTime,
+        w.remark as remark,
+        w.create_by AS createBy
+        FROM
+        sys_water_detailed w
+        LEFT JOIN sys_members m ON m.card = w.card
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
+            </if>
+
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
+
+            <if test="startTime != null and startTime != ''">
+                AND w.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND w.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        ORDER BY
+        w.create_time desc
+    </select>
+
+    <select id="selectWaterDetailedTotal" resultType="java.util.Map">
+        SELECT
+        IFNULL(SUM(w.water),0) as sumWater,
+        IFNULL(SUM(w.water_amount),0) as sumWaterAmount
+        FROM
+        sys_water_detailed w
+        LEFT JOIN sys_members m ON m.card = w.card
+        <where>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
+            </if>
+
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND w.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND w.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertWaterDetailed" >
+        INSERT INTO sys_water_detailed
+        (
+        <if test="card != null and card != 0">card,</if>
+        <if test="operationType != null and operationType != ''">operation_type,</if>
+        <if test="water != null and water != ''">water,</if>
+        <if test="waterAmount != null and waterAmount != ''">water_amount,</if>
+        <if test="actualWaterAmount != null and actualWaterAmount != ''">actual_water_amount,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time,deadline )
+        values(
+        <if test="card != null and card != 0">#{card},</if>
+        <if test="operationType != null and operationType != ''">#{operationType},</if>
+        <if test="water != null and water != ''">#{water},</if>
+        <if test="waterAmount != null and waterAmount != ''">#{waterAmount},</if>
+        <if test="actualWaterAmount != null and actualWaterAmount != ''">#{actualWaterAmount},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate(), sysdate()
+        )
+    </insert>
+
+
+    <insert id="insertWaterDetailedList" >
+        <foreach item="item" index="index" collection="list" separator=";">
+        INSERT INTO sys_water_detailed
+        (
+        <if test="item.card != null and item.card != 0">card,</if>
+        <if test="item.operationType != null and item.operationType != ''">operation_type,</if>
+        <if test="item.water != null and item.water != ''">water,</if>
+        <if test="item.waterAmount != null and item.waterAmount != ''">water_amount,</if>
+        <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">actual_water_amount,</if>
+        <if test="item.remark != null and item.remark != ''">remark,</if>
+        <if test="item.createBy != null and item.createBy != ''">create_by,</if>
+        create_time,deadline )
+        values
+            (
+            <if test="item.card != null and item.card != 0">#{item.card},</if>
+            <if test="item.operationType != null and item.operationType != ''">#{item.operationType},</if>
+            <if test="item.water != null and item.water != ''">#{item.water},</if>
+            <if test="item.waterAmount != null and item.waterAmount != ''">#{item.waterAmount},</if>
+            <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">#{item.actualWaterAmount},</if>
+            <if test="item.remark != null and item.remark != ''">#{item.remark},</if>
+            <if test="item.createBy != null and item.createBy != ''">#{item.createBy},</if>
+            sysdate(), sysdate()
+            )
+        </foreach>
+    </insert>
+</mapper>

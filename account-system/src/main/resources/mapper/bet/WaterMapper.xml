@@ -13,5 +13,41 @@
         update_time = sysdate()
     </insert>
 
+    <update id="updateMembersWater">
+        update sys_members_water
+        <set>
+        water = water - #{water},
+        water_amount = water_amount - #{waterAmount},
+        update_time = sysdate(),
+        update_by = #{updateBy}
+        </set>
+        where card=#{card}
+    </update>
+
+    <update id="updateMembersWaterList">
+        <foreach item="item" index="index" collection="list" separator=";">
+            UPDATE `sys_members_water`
+            <set>
+                <if test="item != null">
+                    `water` = `water` - #{item.water},
+                    `water_amount` = `water_amount` - #{item.waterAmount},
+                    `update_time` = sysdate(),
+                    `update_by` = #{item.updateBy}
+                </if>
+            </set>
+            WHERE `card`=#{item.card}
+        </foreach>
+    </update>
+
+    <select id="selectMembersWaterInfo"  resultType="java.util.Map">
+
+        SELECT
+            m.card as card,
+            m.water as water,
+            m.water_amount  as waterAmount
+        FROM
+            sys_members_water m
+        where m.card=#{card}
+    </select>
 
 </mapper>

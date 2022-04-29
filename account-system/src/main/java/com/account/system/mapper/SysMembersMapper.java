@@ -2,6 +2,7 @@ package com.account.system.mapper;
 
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
+import com.account.system.domain.vo.SysMaterVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -46,5 +47,10 @@ public interface SysMembersMapper {
 
     @Update(" update sys_members set chip = chip + #{chip} where card = #{card}")
     int updateMembersChip(@Param("card") String card, @Param("chip") BigDecimal chip);
+
+
+    List<SysMaterVo> selectWaterList(@Param("card")String card, @Param("isAdmin")Integer isAdmin, @Param("cardType")Integer cardType);
+
+    Map selectWaterTotal(@Param("card")String card, @Param("isAdmin")Integer isAdmin, @Param("cardType")Integer cardType);
 
 }

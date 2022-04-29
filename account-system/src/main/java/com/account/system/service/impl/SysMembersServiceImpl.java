@@ -2,6 +2,7 @@ package com.account.system.service.impl;
 
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
+import com.account.system.domain.vo.SysMaterVo;
 import com.account.system.mapper.SysMembersMapper;
 import com.account.system.service.SysMembersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,16 @@ public class SysMembersServiceImpl implements SysMembersService {
     @Override
     public Map getOddsConfig() {
         return sysMembersMapper.getOddsConfig();
+    }
+
+    @Override
+    public List<SysMaterVo> selectWaterList(String card, Integer isAdmin, Integer cardType) {
+        return sysMembersMapper.selectWaterList(card,isAdmin,cardType);
+    }
+
+    @Override
+    public Map selectWaterTotal(String card, Integer isAdmin,Integer cardType) {
+        return sysMembersMapper.selectWaterTotal(card,isAdmin,cardType);
     }
 
 }
