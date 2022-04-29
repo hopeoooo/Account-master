@@ -187,6 +187,7 @@
                 AND m.card = #{card}
             </if>
         </where>
+        ORDER BY  m.chip desc
     </select>
     <!--买码换现总计-->
     <select id="selectBusinessCashChipTotal" resultType="java.util.Map">
@@ -230,6 +231,7 @@
             </if>
 
         </where>
+        ORDER BY w.water desc
     </select>
 
 
