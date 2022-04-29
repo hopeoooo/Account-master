@@ -77,7 +77,7 @@ public class SysRemittanceController extends BaseController {
         //判断该会员是否可以汇出
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.success("汇入失败!");
         }
         remittanceSearch.setType(ChipChangeEnum.IMPORT_CHIP.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());

@@ -101,6 +101,11 @@ public class SysWaterController extends BaseController {
         if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
             return AjaxResult.success("该会员不可结算洗码!");
         }
+        //判断会员是否有欠钱
+        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, waterSearch.getCard());
+        if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
+            return AjaxResult.success("该会员不可结算洗码!");
+        }
 
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
         BigDecimal water = new BigDecimal(map.get("water").toString());
@@ -128,25 +133,25 @@ public class SysWaterController extends BaseController {
             //判断该卡号是否存在
             SysMembers sysMembers = membersService.selectmembersByCard(info.getCard());
             if (sysMembers==null){
-                return AjaxResult.success("结算洗码失败!");
+                return AjaxResult.success("结算失败!");
             }
             if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
-                return AjaxResult.success("结算洗码失败!");
+                return AjaxResult.success("结算失败!");
             }
             //判断会员是否有欠钱
             SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, info.getCard());
             if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
-                return AjaxResult.success("结算洗码失败!");
+                return AjaxResult.success("结算失败!");
             }
 
             Map map = membersWaterService.selectMembersWaterInfo(info.getCard());
             BigDecimal water = new BigDecimal(map.get("water").toString());
             BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
             if (water.compareTo(BigDecimal.ZERO)==0 || waterAmount.compareTo(BigDecimal.ZERO)==0){
-                return AjaxResult.success("结算洗码失败!");
+                return AjaxResult.success("结算失败!");
             }
             if (info.getWater().compareTo(water)>0  || info.getWaterAmount().compareTo(waterAmount)>0){
-                return AjaxResult.success("结算洗码失败!");
+                return AjaxResult.success("结算失败!");
             }
             info.setCreateBy(SecurityUtils.getUsername());
             info.setUpdateBy(SecurityUtils.getUsername());
