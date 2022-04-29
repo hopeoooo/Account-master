@@ -1,5 +1,6 @@
 package com.account.system.domain;
 
+import com.account.common.core.domain.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -8,22 +9,13 @@ import lombok.Data;
  * 注单修改
  */
 @Data
-public class BetUpdate {
+public class BetUpdate extends BaseEntity {
 
     @ApiModelProperty("游戏类型")
     private Long gameId;
 
-    @ApiModelProperty("标记号")
-    private Long version;
-
-    @ApiModelProperty("台号")
-    private Long tableId;
-
-    @ApiModelProperty("靴号")
-    private Long bootNum;
-
-    @ApiModelProperty("局号")
-    private Long gameNum;
+    @ApiModelProperty("注单id")
+    private Long betId;
 
     @ApiModelProperty("卡号")
     private String card;

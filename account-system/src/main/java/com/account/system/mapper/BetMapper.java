@@ -91,8 +91,8 @@ public interface BetMapper {
     void updateGameResult(SysGameResult sysGameResult);
 
     @Select("select bet_id betId,card,bet_option betOption,type,bet_money betMoney,water,water_amount waterAmount from sys_bet_info " +
-            "where table_id = #{tableId} and version = #{version} and boot_num = #{bootNum} and game_num = #{gameNum}")
-    List<SysBetInfo> getBets(SysGameResult sysGameResult);
+            "where bet_id = #{betId}")
+    List<SysBetInfo> getBets(@Param("betId") Long betId);
 
     @Update("update sys_bet set game_result = #{gameResult},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
     void updateBet(SysBet sysBet);

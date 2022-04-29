@@ -366,6 +366,35 @@ public class BetServiceImpl implements BetService {
     }
 
     /**
+     * 注单修改
+     */
+    public void updateBet(BetUpdate betUpdate) {
+        if(betUpdate.getGameId()==1){
+            SysBet sysBet = new SysBet();
+            sysBet.setBetId(betUpdate.getBetId());
+            sysBet.setUpdateBy(betUpdate.getUpdateBy());
+            sysBet.setCard(betUpdate.getCard());
+            sysBet.setType(betUpdate.getType());
+            sysBet.setGameResult(betUpdate.getGameResult());
+            List<SysBetInfo> list = betMapper.getBets(betUpdate.getBetId());
+            list.forEach(sysBetInfo -> {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(sysBetInfo.getBetOption(),sysBetInfo.getBetMoney());
+                Map map = getBetInfos(jsonObject, sysBet);
+                //添加 注单明细
+                List<SysBetInfo> betInfos = (List) map.get("list");
+                betMapper.updateBetInfos(betInfos);
+                BigDecimal oldWater = sysBetInfo.getWater();
+                BigDecimal oldWaterAmount = sysBetInfo.getWaterAmount();
+                BigDecimal newWater = betInfos.get(0).getWater()==null?BigDecimal.ZERO:betInfos.get(0).getWater();
+                BigDecimal newWaterAmount = betInfos.get(0).getWaterAmount()==null?BigDecimal.ZERO:betInfos.get(0).getWaterAmount();
+                sysWaterMapper.saveMembersWater(sysBetInfo.getCard(),newWater.subtract(oldWater),newWaterAmount.subtract(oldWaterAmount));
+            });
+            betMapper.updateBet(sysBet);
+        }
+    }
+
+    /**
      * 注单记录
      *
      * @return

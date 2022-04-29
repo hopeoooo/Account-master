@@ -51,7 +51,7 @@ public class BetBaccaratController {
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip);
         if (StringUtils.isNull(sysTableManagement)) {
-            return AjaxResult.error("ip地址错误");
+            return AjaxResult.error("ip地址错误 ip:"+ip);
         }
         Map map = new HashMap();
         map.put("tableId", sysTableManagement.getTableId());

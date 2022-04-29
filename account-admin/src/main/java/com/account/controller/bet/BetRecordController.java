@@ -3,11 +3,10 @@ package com.account.controller.bet;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.BetRepair;
 import com.account.system.domain.BetUpdate;
-import com.account.system.domain.SysBetInfo;
 import com.account.system.domain.search.BetSearch;
-import com.account.system.domain.search.SysAccessCodeSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.service.BetService;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,11 +73,12 @@ public class BetRecordController  extends BaseController {
         return AjaxResult.success();
     }
 
-//    @PreAuthorize("@ss.hasPermi('bet:record:list')")
-//    @PostMapping("/edit")
-//    @ApiOperation(value = "注单修改")
-//    public AjaxResult edit(BetUpdate betUpdate){
-////        betService.updateBet(betUpdate);
-//        return AjaxResult.success();
-//    }
+    @PreAuthorize("@ss.hasPermi('bet:record:list')")
+    @PostMapping("/edit")
+    @ApiOperation(value = "注单修改")
+    public AjaxResult edit(BetUpdate betUpdate){
+        betUpdate.setUpdateBy(SecurityUtils.getUsername());
+        betService.updateBet(betUpdate);
+        return AjaxResult.success();
+    }
 }

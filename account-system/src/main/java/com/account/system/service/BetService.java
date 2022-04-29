@@ -57,4 +57,6 @@ public interface BetService {
     Map selectDailyReportTotal(ReportSearch reportSearch );
 
     void repairBet(BetRepair betRepair);
+
+    void updateBet(BetUpdate betUpdate);
 }
