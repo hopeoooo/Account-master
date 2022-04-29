@@ -73,7 +73,7 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
             waterDetailed.setWater(info.getWater());
             waterDetailed.setWaterAmount(info.getWaterAmount());
             waterDetailed.setActualWaterAmount(info.getActualWaterAmount());
-            waterDetailed.setRemark(info.getRemark());
+            waterDetailed.setRemark("批量结算");
             waterDetailed.setCreateBy(info.getCreateBy());
             list.add(waterDetailed);
         });

@@ -166,7 +166,7 @@
         where card = #{card}
     </select>
 
-    <!--买码换现-->
+    <!--买码换现 、汇款-->
     <select id="selectBusinessCashChipList" resultType="java.util.Map">
         SELECT
         m.id AS userId,
@@ -175,7 +175,8 @@
         m.chip AS chipAmount,
         m.is_cash AS isCash,
         m.is_out as isOut,
-        m.remark,s.signed_amount as signedAmount
+        m.remark,
+        IFNULL(s.signed_amount,0) as signedAmount
         FROM
         sys_members m
         LEFT JOIN sys_signed_record s on s.card=m.card

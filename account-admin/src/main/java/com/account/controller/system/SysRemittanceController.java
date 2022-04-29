@@ -52,6 +52,7 @@ public class SysRemittanceController extends BaseController {
         return getDataTable(list);
     }
 
+/*
     @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
@@ -63,6 +64,7 @@ public class SysRemittanceController extends BaseController {
         Map map = membersService.selectBusinessCashChipTotal(card, isAdmin);
         return AjaxResult.success(map);
     }
+*/
 
 
     @PreAuthorize("@ss.hasPermi('system:remittance:list')")
