@@ -45,10 +45,10 @@ public class SysTableManagementController extends BaseController {
     @ApiOperation(value = "新增/编辑桌台")
     public AjaxResult add(@Validated @RequestBody SysTableManagement sysTableManagement) throws IOException {
         //校验ip是否是正确得
-        boolean b = tableManagementService.pingIp(sysTableManagement.getIp());
+      /*  boolean b = tableManagementService.pingIp(sysTableManagement.getIp());
         if (!b){
             return AjaxResult.error("请输入正确得ip地址!");
-        }
+        }*/
         SysTableManagement sysTableManagement1 = tableManagementService.selectTableInfo(null,sysTableManagement.getIp(),sysTableManagement.getId());
         if  (sysTableManagement1!=null){
             return AjaxResult.error("桌台ip已存在!");
