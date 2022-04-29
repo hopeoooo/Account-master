@@ -1,9 +1,6 @@
 package com.account.system.service;
 
-import com.account.system.domain.SysBetInfo;
-import com.account.system.domain.Reckon;
-import com.account.system.domain.SysGameResult;
-import com.account.system.domain.SysTableManagement;
+import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
@@ -58,4 +55,6 @@ public interface BetService {
     List<Map> selectDailyReportList(ReportSearch reportSearch );
 
     Map selectDailyReportTotal(ReportSearch reportSearch );
+
+    void repairBet(BetRepair betRepair);
 }

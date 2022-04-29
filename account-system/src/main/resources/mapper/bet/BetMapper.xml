@@ -51,6 +51,7 @@
         SELECT
             bt.bet_id as betId,
             bt.card,
+            bt.version,
             bt.table_id AS tableId,
             bt.boot_num AS bootNum,
             bt.game_num AS gameNum,
@@ -159,14 +160,14 @@
     </select>
 
     <insert id="savePorint">
-        insert into sys_porint ( table_id, boot_num, sys_chip, person_chip, chip_gap, chip_add, sys_insurance, person_insurance,
+        insert into sys_porint ( table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add, sys_insurance, person_insurance,
                                  insurance_gap,insurance_add,water,chip_win,insurance_win,create_by,create_time)
-        values (#{tableId}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
+        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
                 #{insuranceGap}, #{insuranceAdd}, #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
     </insert>
 
     <update id="updateBetInfos">
-        <foreach item="item" index="index" collection="list" separator=",">
+        <foreach item="item" index="index" collection="list" separator=";">
             update sys_bet_info
             <set>
                 <if test="item.gameResult!=''">game_result = #{item.gameResult},</if>
@@ -219,9 +220,9 @@
     </update>
 
     <insert id="saveReceipt">
-        insert into sys_receipt ( table_id, chip, cash, insurance, chip_add, cash_add, insurance_add, water,
+        insert into sys_receipt ( table_id, version, chip, cash, insurance, chip_add, cash_add, insurance_add, water,
                                   win,insurance_win,create_by,create_time)
-        values (#{tableId}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, 0, #{insuranceAdd},#{water},
+        values (#{tableId}, #{version}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, 0, #{insuranceAdd},#{water},
                 #{win}, #{insuranceWin},#{createBy},sysdate())
     </insert>
 

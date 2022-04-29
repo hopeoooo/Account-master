@@ -22,6 +22,8 @@ public class BetInfoVo {
 
     @ApiModelProperty("台号")
     private Long tableId;
+    @ApiModelProperty("标记号")
+    private Long version;
     @ApiModelProperty("靴号")
     private Long bootNum;
     @ApiModelProperty("局号")

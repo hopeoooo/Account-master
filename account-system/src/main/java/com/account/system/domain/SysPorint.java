@@ -22,6 +22,9 @@ public class SysPorint extends BaseEntity {
     @ApiModelProperty("靴号")
     private Long bootNum;
 
+    @ApiModelProperty("标记号")
+    private Long version;
+
     @ApiModelProperty("系统点码数")
     private BigDecimal sysChip;
 

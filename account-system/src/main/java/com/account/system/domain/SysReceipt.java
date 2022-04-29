@@ -19,6 +19,9 @@ public class SysReceipt extends BaseEntity {
     @ApiModelProperty("台号")
     private Long tableId;
 
+    @ApiModelProperty("标记号")
+    private Long version;
+
     @ApiModelProperty("筹码-收")
     private BigDecimal chip;
 

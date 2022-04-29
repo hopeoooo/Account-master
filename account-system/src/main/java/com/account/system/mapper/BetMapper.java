@@ -51,7 +51,7 @@ public interface BetMapper {
 
     List<BetInfoVo> selectBetInfoList(BetSearch betSearch);
 
-    List<BetInfoOptionVo>selectBetOptionList(@Param("betIds")List<Long> betIds);
+    List<BetInfoOptionVo> selectBetOptionList(@Param("betIds") List<Long> betIds);
 
     Map selectBetTotal(BetSearch betSearch);
 
@@ -101,7 +101,28 @@ public interface BetMapper {
 
     void saveReceipt(SysReceipt sysReceipt);
 
-    List<Map> selectDailyReportList(ReportSearch reportSearch );
+    List<Map> selectDailyReportList(ReportSearch reportSearch);
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
+
+    @Select("select id from sys_porint where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} limit 0,1")
+    SysPorint getPorint(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum, @Param("version") Long version);
+
+    @Select("select id from sys_receipt where table_id = #{tableId} and version = #{version} limit 0,1")
+    SysReceipt getReceipt(@Param("tableId") Long tableId, @Param("version") Long version);
+
+    @Update("update sys_porint set sys_chip = sys_chip + #{chip},chip_gap = chip_gap + #{chip}," +
+            " sys_insurance = sys_insurance + #{insurance},insurance_gap = insurance_gap + #{insurance}," +
+            " chip_win = chip_win - #{cash},insurance_win = insurance_win - #{insurance}," +
+            " water = water + #{water},update_time = sysdate()" +
+            " where id = #{id}")
+    void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip,
+                      @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+
+    @Update("update sys_receipt set chip = chip + #{chip},cash = cash + #{cash}," +
+            " insurance = insurance + #{insurance},win = win - #{cash}," +
+            " insurance_win = insurance_win - #{insurance},water = water + #{water},update_time = sysdate()" +
+            " where id = #{id}")
+    void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip,
+                       @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
 }
