@@ -24,7 +24,7 @@ public class WinLoseReportSearch {
     private Long gameId;
 
     @ApiModelProperty(value = "币种类型(0:筹码,1:现金)")
-    private int operationType;
+    private Integer operationType;
 
     @ApiModelProperty(value = "包含子卡号(0:未勾选,1:勾选)")
     private Integer cardType;

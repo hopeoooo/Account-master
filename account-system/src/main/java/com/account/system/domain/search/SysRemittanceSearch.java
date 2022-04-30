@@ -22,7 +22,7 @@ public class SysRemittanceSearch {
     private BigDecimal amount;
 
     @ApiModelProperty(value = "(0:筹码,1:现金)")
-    private int operationType;
+    private Integer operationType;
 
     @ApiModelProperty(value = "备注")
     private String remark;

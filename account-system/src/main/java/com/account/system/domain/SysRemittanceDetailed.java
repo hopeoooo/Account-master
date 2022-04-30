@@ -21,10 +21,10 @@ public class SysRemittanceDetailed extends BaseEntity {
     private String card;
 
     @ApiModelProperty( value ="类型: 0:筹码,1:现金")
-    private int operationType;
+    private Integer operationType;
 
     @ApiModelProperty( value ="操作类型: 11:汇入 12:汇出")
-    private int type;
+    private Integer type;
 
 
     @ApiModelProperty(value = "变动金额")
