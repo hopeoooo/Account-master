@@ -23,7 +23,7 @@ public class SysSignedRecordDetailedVo{
     @ApiModelProperty( value ="操作类型: 1:还单 2:签单")
     private int type;
 
-    @ApiModelProperty( value ="金额类型: 1:筹码")
+    @ApiModelProperty( value ="金额类型: 0:筹码")
     private int amountType;
 
     @ApiModelProperty(value ="变动前金额")

@@ -19,7 +19,7 @@ public class SysWaterDetailedVo {
     @ApiModelProperty("姓名")
     private String name;
 
-    @ApiModelProperty(value = "类型: 1:筹码,2:现金")
+    @ApiModelProperty(value = "类型: 0:筹码,1:现金")
     private int operationType;
 
     @ApiModelProperty(value = "结算洗码量")

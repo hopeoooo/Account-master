@@ -86,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INSERT INTO sys_remittance_detailed
         (
         <if test="card != null and card != 0">card,</if>
-        <if test="operationType != null and operationType != 0">operation_type,</if>
+        <if test="operationType != null ">operation_type,</if>
         <if test="type != null and type != ''">type,</if>
         <if test="amount != null and amount != ''">amount,</if>
         <if test="remark != null and remark != ''">remark,</if>
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         create_time,operation_time )
         values(
         <if test="card != null and card != 0">#{card},</if>
-        <if test="operationType != null and operationType != 0">#{operationType},</if>
+        <if test="operationType != null ">#{operationType},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
         <if test="remark != null and remark != ''">#{remark},</if>

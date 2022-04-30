@@ -79,7 +79,7 @@
         INSERT INTO sys_water_detailed
         (
         <if test="card != null and card != 0">card,</if>
-        <if test="operationType != null and operationType != ''">operation_type,</if>
+        <if test="operationType != null ">operation_type,</if>
         <if test="water != null and water != ''">water,</if>
         <if test="waterAmount != null and waterAmount != ''">water_amount,</if>
         <if test="actualWaterAmount != null and actualWaterAmount != ''">actual_water_amount,</if>
@@ -88,7 +88,7 @@
         create_time,deadline )
         values(
         <if test="card != null and card != 0">#{card},</if>
-        <if test="operationType != null and operationType != ''">#{operationType},</if>
+        <if test="operationType != null ">#{operationType},</if>
         <if test="water != null and water != ''">#{water},</if>
         <if test="waterAmount != null and waterAmount != ''">#{waterAmount},</if>
         <if test="actualWaterAmount != null and actualWaterAmount != ''">#{actualWaterAmount},</if>
@@ -104,7 +104,7 @@
         INSERT INTO sys_water_detailed
         (
         <if test="item.card != null and item.card != 0">card,</if>
-        <if test="item.operationType != null and item.operationType != ''">operation_type,</if>
+        <if test="item.operationType != null ">operation_type,</if>
         <if test="item.water != null and item.water != ''">water,</if>
         <if test="item.waterAmount != null and item.waterAmount != ''">water_amount,</if>
         <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">actual_water_amount,</if>
@@ -114,7 +114,7 @@
         values
             (
             <if test="item.card != null and item.card != 0">#{item.card},</if>
-            <if test="item.operationType != null and item.operationType != ''">#{item.operationType},</if>
+            <if test="item.operationType != null ">#{item.operationType},</if>
             <if test="item.water != null and item.water != ''">#{item.water},</if>
             <if test="item.waterAmount != null and item.waterAmount != ''">#{item.waterAmount},</if>
             <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">#{item.actualWaterAmount},</if>

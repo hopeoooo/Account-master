@@ -24,8 +24,8 @@ public class SysWaterSearch {
     @ApiModelProperty("实际结算洗码费")
     private BigDecimal actualWaterAmount;
 
-    @ApiModelProperty(value = "(1:筹码,2:现金)")
-    private Integer operationType;
+    @ApiModelProperty(value = "(0:筹码,1:现金)")
+    private int operationType;
 
     @ApiModelProperty(value = "备注")
     private String remark;

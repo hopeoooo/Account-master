@@ -18,7 +18,7 @@ public class SysWaterDetailed extends BaseEntity {
     @ApiModelProperty("卡号")
     private String card;
 
-    @ApiModelProperty(value = "类型: 1:筹码,2:现金")
+    @ApiModelProperty(value = "类型: 0:筹码,1:现金")
     private Integer operationType;
 
     @ApiModelProperty(value = "结算洗码量")

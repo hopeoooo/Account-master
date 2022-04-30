@@ -22,7 +22,7 @@ public class SysRemittanceDetailedSearch {
     private Integer operationType;
 
 
-    @ApiModelProperty(value = "货币类型(1:筹码,2:现金)")
+    @ApiModelProperty(value = "货币类型(0:筹码,1:现金)")
     private Integer type;
 
 
