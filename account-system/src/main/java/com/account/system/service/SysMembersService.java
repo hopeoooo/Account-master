@@ -43,4 +43,6 @@ public interface SysMembersService {
     List<SysMaterVo> selectWaterList(String card, Integer isAdmin, Integer cardType);
 
     Map selectWaterTotal(String card, Integer isAdmin,Integer cardType);
+
+    Map selectMembersCount(SysMembersSearch sysMembersSearch);
 }

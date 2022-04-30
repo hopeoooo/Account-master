@@ -89,4 +89,9 @@ public class SysMembersServiceImpl implements SysMembersService {
         return sysMembersMapper.selectWaterTotal(card,isAdmin,cardType);
     }
 
+    @Override
+    public Map selectMembersCount(SysMembersSearch sysMembersSearch) {
+        return sysMembersMapper.selectMembersCount(sysMembersSearch);
+    }
+
 }

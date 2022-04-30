@@ -50,7 +50,7 @@ public class UserController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('account:user:list')")
     @GetMapping("/add")
-    @ApiOperation(value = "新增会员")
+    @ApiOperation(value = "新增员工")
     public AjaxResult add(SysUser sysUser) {
         if (StringUtils.isNotNull(userService.selectUserByUserName(sysUser.getUserName()))) {
             return AjaxResult.error("新增会员'" + sysUser.getUserName() + "'失败，工号已存在");

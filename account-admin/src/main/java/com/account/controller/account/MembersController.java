@@ -37,10 +37,11 @@ public class MembersController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:mambers:list')")
     @GetMapping("/list")
     @ApiOperation(value = "获取会员列表")
-    public TableDataInfo list(SysMembersSearch sysMembersSearch) {
+    public AjaxResult list(SysMembersSearch sysMembersSearch) {
         startPage();
         List<Map> list = sysMembersService.selectMembersList(sysMembersSearch);
-        return getDataTable(list);
+        Map map = sysMembersService.selectMembersCount(sysMembersSearch);
+        return AjaxResult.success().put("list",getDataTable(list)).put("count",map);
     }
 
     /**

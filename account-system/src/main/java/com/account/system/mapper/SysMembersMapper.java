@@ -54,4 +54,5 @@ public interface SysMembersMapper {
 
     Map selectWaterTotal(@Param("card")String card, @Param("isAdmin")Integer isAdmin, @Param("cardType")Integer cardType);
 
+    Map selectMembersCount(SysMembersSearch sysMembersSearch);
 }

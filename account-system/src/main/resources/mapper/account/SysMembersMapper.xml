@@ -9,30 +9,112 @@
         select id,card,name, phone,status,card_type cardType,is_admin isAdmin,sex,create_by createBy,
         create_time createTime,remark
         from sys_members
-        <where>
-            <if test="card != null and card != ''">
-                AND (card like concat('%', #{card}, '%')
-                <if test="isChild == 1 ">
-                    or parent_card like concat('%', #{card}, '%')
+        where card in (
+            select card from
+            sys_members
+            <where>
+                <if test="card != null and card != ''">
+                    AND card = #{card}
                 </if>
-                )
-            </if>
-            <if test="name != null and name != ''">
-                AND name like concat('%', #{name}, '%')
-            </if>
-            <if test="phone != null and phone != ''">
-                AND phone like concat('%', #{phone}, '%')
-            </if>
-            <if test="status != null and status != ''">
-                AND status = #{status}
-            </if>
-            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-                and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
-            </if>
-            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-                and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
-            </if>
-        </where>
+                <if test="name != null and name != ''">
+                    AND name = #{name}
+                </if>
+                <if test="phone != null and phone != ''">
+                    AND phone= #{phone}
+                </if>
+                <if test="status != null and status != ''">
+                    AND status = #{status}
+                </if>
+                <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+                </if>
+                <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+                </if>
+            </where>
+        )
+        <if test="isChild == 1 ">or parent_card in (
+            select card from
+            sys_members
+            <where>
+                <if test="card != null and card != ''">
+                    AND card = #{card}
+                </if>
+                <if test="name != null and name != ''">
+                    AND name = #{name}
+                </if>
+                <if test="phone != null and phone != ''">
+                    AND phone= #{phone}
+                </if>
+                <if test="status != null and status != ''">
+                    AND status = #{status}
+                </if>
+                <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+                </if>
+                <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+                </if>
+            </where>
+            )
+        </if>
+    </select>
+
+    <select id="selectMembersCount" resultType="map">
+        select sum(IF(card_type=0,1,0)) parentCount,
+                sum(IF(card_type=1,1,0)) childCount,
+                sum(deposit) depositCount,
+                sum(repair) repairCount
+        from sys_members
+        where card in (
+            select card from
+            sys_members
+            <where>
+                <if test="card != null and card != ''">
+                    AND card = #{card}
+                </if>
+                <if test="name != null and name != ''">
+                    AND name = #{name}
+                </if>
+                <if test="phone != null and phone != ''">
+                    AND phone= #{phone}
+                </if>
+                <if test="status != null and status != ''">
+                    AND status = #{status}
+                </if>
+                <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+                </if>
+                <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+                </if>
+            </where>
+        )
+        <if test="isChild == 1 ">or parent_card in (
+            select card from
+            sys_members
+            <where>
+                <if test="card != null and card != ''">
+                    AND card = #{card}
+                </if>
+                <if test="name != null and name != ''">
+                    AND name = #{name}
+                </if>
+                <if test="phone != null and phone != ''">
+                    AND phone= #{phone}
+                </if>
+                <if test="status != null and status != ''">
+                    AND status = #{status}
+                </if>
+                <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &gt;= date_format(#{beginTime},'%y%m%d %H%i%s')
+                </if>
+                <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                    and date_format(create_time,'%y%m%d %H%i%s') &lt;= date_format(#{endTime},'%y%m%d %H%i%s')
+                </if>
+            </where>
+            )
+        </if>
     </select>
 
     <insert id="addMembers">
