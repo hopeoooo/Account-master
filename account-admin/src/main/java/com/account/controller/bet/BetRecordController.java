@@ -4,6 +4,7 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
+import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.BetRepair;
 import com.account.system.domain.BetUpdate;
 import com.account.system.domain.search.BetSearch;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +80,12 @@ public class BetRecordController extends BaseController {
     @ApiOperation(value = "注单修改")
     public AjaxResult edit(BetUpdate betUpdate){
         betUpdate.setUpdateBy(SecurityUtils.getUsername());
-        betService.updateBet(betUpdate);
+        AsyncManager.me().execute(new TimerTask() {
+            public void run() {
+                betService.updateBet(betUpdate);
+            }
+        });
+
         return AjaxResult.success();
     }
 }

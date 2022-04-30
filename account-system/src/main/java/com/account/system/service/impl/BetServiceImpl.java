@@ -470,7 +470,6 @@ public class BetServiceImpl implements BetService {
 
     /**
      * 注单修改
-     * 会员洗码 筹码余额 筹码变动明细 点码明细 收码明细
      */
     public void updateBet(BetUpdate betUpdate) {
         if (betUpdate.getGameId() == 1) {
@@ -482,7 +481,6 @@ public class BetServiceImpl implements BetService {
             }
 
             List<SysBetInfo> list = betMapper.getBets(betUpdate.getBetId());
-
 
             BigDecimal[] tableChip = {BigDecimal.ZERO};
             BigDecimal[] tableCash = {BigDecimal.ZERO};
@@ -510,7 +508,6 @@ public class BetServiceImpl implements BetService {
                     tableInsurance[0] = tableInsurance[0].add(oldBetInfo.getWinLose());
                 }
             });
-
 
             SysBetInfo betInfo = list.get(0);
             SysBet sysBet = new SysBet();
