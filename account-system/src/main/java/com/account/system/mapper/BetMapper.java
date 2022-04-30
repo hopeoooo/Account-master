@@ -92,4 +92,8 @@ public interface BetMapper {
 
 
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
+
+    List<Map> selectTablePlumbingList(@Param("startTime") String startTime,@Param("endTime") String endTime);
+
+    Map selectTablePlumbingTotal(@Param("startTime") String startTime,@Param("endTime") String endTime);
 }

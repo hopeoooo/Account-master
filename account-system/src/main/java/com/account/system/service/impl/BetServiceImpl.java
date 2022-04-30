@@ -479,6 +479,16 @@ public class BetServiceImpl implements BetService {
         return betMapper.selectWinLoseList(reportSearch);
     }
 
+    @Override
+    public List<Map> selectTablePlumbingList(String startTime, String endTime) {
+        return betMapper.selectTablePlumbingList(startTime,endTime);
+    }
+
+    @Override
+    public Map selectTablePlumbingTotal(String startTime, String endTime) {
+        return betMapper.selectTablePlumbingTotal(startTime,endTime);
+    }
+
     /**
      * 注单记录
      *

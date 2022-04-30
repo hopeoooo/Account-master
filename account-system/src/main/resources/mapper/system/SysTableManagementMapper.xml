@@ -66,6 +66,7 @@
             t.table_id as tableId
         FROM
             sys_table_management t
+        where  t.is_delete=0
     </select>
 
 

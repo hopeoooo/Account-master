@@ -278,6 +278,7 @@
             sys_members m
                 LEFT JOIN sys_bet_info b ON b.card = m.card
         <where>
+              and b.type !=2
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
                     AND m.card = #{card}
@@ -314,4 +315,50 @@
         ORDER BY SUM( b.bet_money ) desc
     </select>
 
+
+
+    <select id="selectTablePlumbingList"  resultType="java.util.Map">
+        SELECT
+            t.table_id as tableId ,
+            CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as chipWinLose,
+            CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as cashWinLose,
+            IFNULL(-SUM(b.win_lose),0)as winLose,
+            IFNULL(SUM(b.water),0)as water
+        FROM
+            sys_table_management t
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id and  b.type !=2
+        <where>
+            AND  t.is_delete=0
+            <if test="startTime != null and startTime != ''">
+                AND b.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND b.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY
+            t.table_id
+        ORDER BY t.table_id asc
+    </select>
+
+
+    <select id="selectTablePlumbingTotal"  resultType="java.util.Map">
+        SELECT
+        CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as sumChipWinLose,
+        CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as sumCashWinLose,
+        IFNULL(-SUM(b.win_lose),0)as sumWinLose,
+        IFNULL(SUM(b.water),0)as sumWater
+        FROM
+        sys_table_management t
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id and  b.type !=2
+        <where>
+            AND  t.is_delete=0
+            <if test="startTime != null and startTime != ''">
+                AND b.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND b.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+    </select>
 </mapper>

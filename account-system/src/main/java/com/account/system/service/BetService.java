@@ -63,4 +63,14 @@ public interface BetService {
      * @return
      */
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
+
+    /**
+     * 台面上下水报表
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map> selectTablePlumbingList(String startTime,String endTime);
+
+    Map selectTablePlumbingTotal(String startTime,String endTime);
 }
