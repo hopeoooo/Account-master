@@ -11,6 +11,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="betId!=null">,#{betId}</if>)
     </insert>
 
+
+    <insert id="addChipRecordList">
+        <foreach item="item" index="index" collection="list" separator=";">
+        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time)
+        values (#{item.card},#{item.type},#{item.before},#{item.change},#{item.after},#{item.createBy},sysdate())
+        </foreach>
+    </insert>
+
+
     <select id="selectChipRecordList"  resultType="java.util.Map">
         SELECT
         c.card,

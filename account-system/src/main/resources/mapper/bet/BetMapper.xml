@@ -276,9 +276,9 @@
             IFNULL( SUM( b.win_lose ), 0 ) as winLose
         FROM
             sys_members m
-                LEFT JOIN sys_bet_info b ON b.card = m.card
+                LEFT JOIN sys_bet_info b ON b.card = m.card  and b.type !=2
         <where>
-              and b.type !=2
+
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
                     AND m.card = #{card}

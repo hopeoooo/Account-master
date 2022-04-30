@@ -1,7 +1,12 @@
 package com.account.system.service.impl;
 
+import com.account.common.constant.CommonConst;
+import com.account.common.enums.ChipChangeEnum;
+import com.account.system.domain.SysChipRecord;
+import com.account.system.domain.SysSignedRecordDetailed;
 import com.account.system.domain.SysWaterDetailed;
 import com.account.system.domain.search.SysWaterSearch;
+import com.account.system.mapper.SysChipRecordMapper;
 import com.account.system.mapper.SysWaterDetailedMapper;
 import com.account.system.mapper.SysWaterMapper;
 import com.account.system.service.SysMembersWaterService;
@@ -26,12 +31,22 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
     @Autowired
     SysWaterDetailedMapper waterDetailedMapper;
 
+    @Autowired
+    private SysChipRecordMapper chipRecordMapper;
+
+    @Autowired
+    private SysMembersWaterService membersWaterService;
+
     @Override
     @Transactional
     public int updateMembersWater(SysWaterSearch waterSearch) {
         int i = waterMapper.updateMembersWater(waterSearch);
         if (i>0){
             addWaterDetailed(waterSearch);
+            if(waterSearch.getOperationType()== CommonConst.NUMBER_0){
+                //添加筹码变动明细
+                chipRecordMapper.addChipRecord(addChipRecord(waterSearch));
+            }
         }
         return i;
     }
@@ -66,6 +81,7 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
 
     public void addWaterDetailedList(List<SysWaterSearch> waterSearch){
         List<SysWaterDetailed> list =new ArrayList<>();
+        List<SysChipRecord> chipList =new ArrayList<>();
         waterSearch.forEach(info ->{
             SysWaterDetailed waterDetailed=new SysWaterDetailed();
             waterDetailed.setCard(info.getCard());
@@ -76,8 +92,36 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
             waterDetailed.setRemark("批量结算");
             waterDetailed.setCreateBy(info.getCreateBy());
             list.add(waterDetailed);
+            if (info.getOperationType()== CommonConst.NUMBER_0){
+                SysChipRecord sysChipRecord = addChipRecord(info);
+                chipList.add(sysChipRecord);
+            }
         });
         //添加洗码明细
         waterDetailedMapper.insertWaterDetailedList(list);
+
+        if (waterSearch.get(0).getOperationType()== CommonConst.NUMBER_0){
+            //添加筹码变动明细
+            chipRecordMapper.addChipRecordList(chipList);
+        }
+
+    }
+
+
+    /**
+     * 组装筹码明细变动数据
+     * @param waterSearch
+     */
+    public SysChipRecord addChipRecord(SysWaterSearch waterSearch){
+        Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
+        BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
+        SysChipRecord chipRecord=new SysChipRecord();
+        chipRecord.setCard(waterSearch.getCard());
+        chipRecord.setType(ChipChangeEnum.SETTLEMENT_CHIP.getCode());
+        chipRecord.setBefore(waterAmount.add(waterSearch.getWaterAmount()));
+        chipRecord.setChange(waterSearch.getWaterAmount());
+        chipRecord.setAfter(waterAmount);
+        chipRecord.setCreateBy(waterSearch.getCreateBy());
+        return  chipRecord;
     }
 }
