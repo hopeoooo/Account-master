@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 桌台管理设置数据层
@@ -15,7 +16,7 @@ public interface SysTableManagementMapper {
 
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
-    SysTableManagement selectTableInfo(@Param("tableId") Long tableId, @Param("ip") String ip, @Param("id") Long id);
+
     Map selectTableTotal(SysTableManagement sysTableManagement);
 
     SysTableManagement selectTableInfo(@Param("tableId")Long tableId,@Param("ip")String ip,@Param("id")Long id);
