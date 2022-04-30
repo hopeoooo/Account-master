@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="card != null and card != ''">
                 AND m.card = #{card}
             </if>
-            <if test="operationType != null and operationType != ''">
+            <if test="operationType != null ">
                 AND d.operation_type = #{operationType}
             </if>
             <if test="type != null and type != ''">

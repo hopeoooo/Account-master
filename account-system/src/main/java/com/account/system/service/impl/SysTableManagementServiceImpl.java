@@ -27,6 +27,11 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
     }
 
     @Override
+    public Map selectTableTotal(SysTableManagement sysTableManagement) {
+        return tableManagementMapper.selectTableTotal(sysTableManagement);
+    }
+
+    @Override
     public   SysTableManagement selectTableInfo(Long tableId,String ip,Long id){
         return tableManagementMapper.selectTableInfo(tableId,ip,id);
     }

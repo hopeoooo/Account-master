@@ -8,6 +8,8 @@ import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.service.SysTableManagementService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +39,13 @@ public class SysTableManagementController extends BaseController {
         return getDataTable(list);
     }
 
-
+    @PreAuthorize("@ss.hasPermi('system:table:list')")
+    @GetMapping("/total")
+    @ApiOperation(value = "总计")
+    public AjaxResult total(SysTableManagement sysTableManagement){
+        Map map = tableManagementService.selectTableTotal(sysTableManagement);
+        return AjaxResult.success(map);
+    }
 
     @PreAuthorize("@ss.hasPermi('system:table:list')")
     @GetMapping("/tableIdComboBoxInfo")

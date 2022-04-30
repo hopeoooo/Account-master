@@ -307,7 +307,7 @@
                 AND b.game_id = #{gameId}
             </if>
 
-            <if test="operationType != null and operationType != ''">
+            <if test="operationType != null ">
                 AND b.type = #{operationType}
             </if>
 
