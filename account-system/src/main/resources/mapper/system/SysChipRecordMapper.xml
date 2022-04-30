@@ -66,4 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where card = #{card} and bet_id = #{betId}
     </update>
 
+    <delete id="deleteChipRecord">
+        delete from sys_chip_record where card = #{card} and bet_id = #{betId}
+    </delete>
 </mapper>

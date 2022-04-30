@@ -16,7 +16,9 @@ public interface SysChipRecordMapper {
 
     List<Map> selectChipRecordList(SysChipRecordSearch chipRecordSearch);
 
-    SysChipRecord selectChipRecord(@Param("card") String card,@Param("betId") Long betId);
+    SysChipRecord selectChipRecord(@Param("card") String card, @Param("betId") Long betId);
 
     void updateChipRecord(SysChipRecord sysChipRecord);
+
+    void deleteChipRecord(@Param("card") String card, @Param("betId") Long betId);
 }

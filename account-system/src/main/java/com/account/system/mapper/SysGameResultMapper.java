@@ -1,9 +1,8 @@
 package com.account.system.mapper;
 
-import com.account.system.domain.SysBetInfo;
-import com.account.system.domain.SysGameResult;
-import com.account.system.domain.SysTableManagement;
+import com.account.system.domain.*;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -32,4 +31,18 @@ public interface SysGameResultMapper {
     @Update("update sys_game_result set game_result = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where id = #{id}")
     void updateGameResult(SysGameResult sysGameResult);
 
+    @Select("select game_result gameResult,id from sys_game_result where game_id = #{gameId} and table_id = #{tableId} " +
+            "and boot_num = #{bootNum} and version = #{version} and game_num = #{gameNum}")
+    SysGameResult selectGameResult(BetRepair betRepair);
+
+    @Select("select g.game_result gameResult,id " +
+            " from sys_game_result g" +
+            " left join sys_bet b" +
+            " on g.table_id=b.table_id " +
+            " and g.game_id=b.game_id " +
+            " and g.boot_num=b.boot_num " +
+            " and g.version=b.version " +
+            " and g.game_num=b.game_num" +
+            " where b.bet_id = #{betId}")
+    SysGameResult selectGameResultByBetId(@Param("betId") Long betId);
 }

@@ -6,10 +6,7 @@ import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,8 +47,6 @@ public interface BetMapper {
     @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version}")
     BigDecimal getReceiptInsuranceWin(SysTableManagement sysTableManagement);
 
-    @Select("select bet_id betId,card,bet_option betOption,type,bet_money betMoney,water,water_amount waterAmount from sys_bet_info " +
-            "where bet_id = #{betId}")
     List<SysBetInfo> getBets(@Param("betId") Long betId);
 
     @Update("update sys_bet set game_result = #{gameResult},type = #{type},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
@@ -65,12 +60,6 @@ public interface BetMapper {
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 
-    @Select("select id from sys_porint where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} limit 0,1")
-    SysPorint getPorint(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum, @Param("version") Long version);
-
-    @Select("select id from sys_receipt where table_id = #{tableId} and version = #{version} limit 0,1")
-    SysReceipt getReceipt(@Param("tableId") Long tableId, @Param("version") Long version);
-
     List<SysBetInfo> getBetsByResult(SysGameResult gameResult);
 
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
@@ -78,4 +67,7 @@ public interface BetMapper {
     List<Map> selectTablePlumbingList(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
     Map selectTablePlumbingTotal(@Param("startTime") String startTime,@Param("endTime") String endTime);
+
+    @Delete("delete from sys_bet_info where bet_id = #{betId}")
+    void deleteBetInfo(@Param("betId") Long betId);
 }

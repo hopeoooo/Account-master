@@ -6,7 +6,16 @@
 
     <insert id="saveBet" useGeneratedKeys="true" keyProperty="betId" keyColumn="bet_id" parameterType="sysBet">
         insert into sys_bet (card, table_id, version, boot_num, game_num, type, game_id, game_result, create_by, create_time)
-        values (#{card}, #{tableId}, #{version}, #{bootNum}, #{gameNum}, #{type}, #{gameId}, #{gameResult}, #{createBy}, sysdate())
+        values (#{card}, #{tableId}, #{version}, #{bootNum}, #{gameNum}, #{type}, #{gameId}, #{gameResult}, #{createBy},
+            <choose>
+                <when test="createTime != null">
+                    #{createTime}
+                </when>
+                <otherwise>
+                    sysdate()
+                </otherwise>
+            </choose>
+        )
     </insert>
 
     <insert id="saveBetInfos">
@@ -16,7 +25,15 @@
         values
         <foreach item="item" index="index" collection="list" separator=",">
             (#{item.betId},#{item.card},#{item.tableId},#{item.version},#{item.bootNum},#{item.gameNum}
-            ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},sysdate(),
+            ,#{item.type},#{item.gameId},#{item.betOption},#{item.betMoney},#{item.gameResult},#{item.winLose},
+            <choose>
+                <when test="item.createTime != null">
+                    #{item.createTime},
+                </when>
+                <otherwise>
+                    sysdate(),
+                </otherwise>
+            </choose>
             <choose>
              <when test="item.water != null">
                  #{item.water},
@@ -338,7 +355,30 @@
           and version = #{version}
           and boot_num = #{bootNum}
           and game_num = #{gameNum}
-        order by create_time desc
+    </select>
+
+    <select id="getBets" resultType="SysBetInfo">
+        select bet_id       betId,
+               card,
+               table_id     tableId,
+               version,
+               boot_num     bootNum,
+               game_num     gameNum,
+               game_result  gameResult,
+               version,
+               game_id      gameId,
+               type,
+               bet_option   betOption,
+               bet_money    betMoney,
+               win_lose     winLose,
+               water        water,
+               water_amount waterAmount,
+               tie,
+               pump,
+               create_time createTime,
+               create_by createBy
+        from sys_bet_info
+        where bet_id = #{betId}
     </select>
 
 

@@ -37,4 +37,7 @@ public class BetRepair {
     @ApiModelProperty("开牌结果")
     private String gameResult;
 
+    @ApiModelProperty("下注时间")
+    private String optionTime;
+
 }

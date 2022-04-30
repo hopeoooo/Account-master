@@ -38,4 +38,12 @@ public class SysBet extends BaseEntity {
         this.gameNum = gameNum;
         this.gameResult = gameResult;
     }
+
+    public SysBet(Long tableId, Long bootNum, Long gameNum, String gameResult,Long version) {
+        this.tableId = tableId;
+        this.bootNum = bootNum;
+        this.gameNum = gameNum;
+        this.gameResult = gameResult;
+        this.version = version;
+    }
 }

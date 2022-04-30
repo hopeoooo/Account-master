@@ -18,10 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,7 +112,7 @@ public class BetServiceImpl implements BetService {
             SysChipRecord sysChipRecord = sysChipRecordMapper.selectChipRecord(sysBet.getCard(), sysBet.getBetId());
             BigDecimal change = checkDecimal((BigDecimal) chipRecord.get(sysBetInfo.getBetId()));
             change = change.add((BigDecimal) map.get("membersChip"));
-            chipRecord.put(sysBetInfo.getBetId(),change);
+            chipRecord.put(sysBetInfo.getBetId(), change);
             if (change.compareTo(new BigDecimal(0)) > 0) {//赢
                 sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
             } else {
@@ -129,17 +128,17 @@ public class BetServiceImpl implements BetService {
             BigDecimal tableInsurance = (BigDecimal) map.get("tableInsurance");
             if (sysBetInfo.getType() == 0) {
                 tableChip = tableChip.add(sysBetInfo.getWinLose());
-            }else if(sysBetInfo.getType() == 1){
+            } else if (sysBetInfo.getType() == 1) {
                 tableCash = tableCash.add(sysBetInfo.getWinLose());
-            }else if(sysBetInfo.getType() == 2){
+            } else if (sysBetInfo.getType() == 2) {
                 tableInsurance = tableInsurance.add(sysBetInfo.getWinLose());
             }
             if (tableChip.compareTo(BigDecimal.ZERO) != 0
                     || tableCash.compareTo(BigDecimal.ZERO) != 0
                     || tableInsurance.compareTo(BigDecimal.ZERO) != 0
                     || water.compareTo(BigDecimal.ZERO) != 0) {
-                SysPorint sysPorint = betMapper.getPorint(gameResult.getTableId(), gameResult.getBootNum(), gameResult.getVersion());
-                SysReceipt sysReceipt = betMapper.getReceipt(gameResult.getTableId(), gameResult.getVersion());
+                SysPorint sysPorint = porintMapper.getPorint(gameResult.getTableId(), gameResult.getBootNum(), gameResult.getVersion());
+                SysReceipt sysReceipt = receiptMapper.getReceipt(gameResult.getTableId(), gameResult.getVersion());
                 if (sysPorint != null) {
                     porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
                 }
@@ -213,9 +212,9 @@ public class BetServiceImpl implements BetService {
         });
 
         //修改桌台累计
-        if (tableChip[0].compareTo(BigDecimal.ZERO) != 0|| tableCash[0].compareTo(BigDecimal.ZERO) != 0
+        if (tableChip[0].compareTo(BigDecimal.ZERO) != 0 || tableCash[0].compareTo(BigDecimal.ZERO) != 0
                 || tableInsurance[0].compareTo(BigDecimal.ZERO) != 0) {
-            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getId(),tableChip[0], tableCash[0], tableInsurance[0]));
+            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getId(), tableChip[0], tableCash[0], tableInsurance[0]));
         }
         //记录赛果
         SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
@@ -385,22 +384,30 @@ public class BetServiceImpl implements BetService {
     @Transactional
     public void repairBet(BetRepair betRepair) {
         if (betRepair.getGameId() == 1) {
+            //判断赛果是否修改
+            SysGameResult sysGameResult = sysGameResultMapper.selectGameResult(betRepair);
+            if (sysGameResult != null && !betRepair.getGameResult().equals(sysGameResult.getGameResult())) {
+                sysGameResult.setGameResult(betRepair.getGameResult());
+                updateGameResult(sysGameResult);
+            }
+
             BigDecimal tableChip = BigDecimal.ZERO;
             BigDecimal tableCash = BigDecimal.ZERO;
             BigDecimal tableInsurance = BigDecimal.ZERO;
 
             //添加注单
-            SysBet sysBet = new SysBet();
+            SysBet sysBet = new SysBet(betRepair.getTableId(), betRepair.getBootNum(), betRepair.getGameNum(), betRepair.getGameResult(), betRepair.getVersion());
             sysBet.setCard(betRepair.getCard());
             sysBet.setGameId(betRepair.getGameId());
-            sysBet.setTableId(betRepair.getTableId());
-            sysBet.setBootNum(betRepair.getBootNum());
-            sysBet.setGameNum(betRepair.getGameNum());
-            sysBet.setGameResult(betRepair.getGameResult());
             sysBet.setType(betRepair.getType());
             sysBet.setCreateBy(SecurityUtils.getUsername());
-            sysBet.setVersion(betRepair.getVersion());
+            try {
+                sysBet.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(betRepair.getOptionTime()));
+            } catch (ParseException e) {
+                sysBet.setCreateTime(new Date());
+            }
             betMapper.saveBet(sysBet);
+
             JSONObject bet = JSONObject.parseObject(betRepair.getOption());
             Map map = getBaccaratBetInfos(bet, sysBet);
 
@@ -446,8 +453,8 @@ public class BetServiceImpl implements BetService {
                     || tableCash.compareTo(BigDecimal.ZERO) != 0
                     || tableInsurance.compareTo(BigDecimal.ZERO) != 0
                     || water.compareTo(BigDecimal.ZERO) != 0) {
-                SysPorint sysPorint = betMapper.getPorint(betRepair.getTableId(), betRepair.getBootNum(), betRepair.getVersion());
-                SysReceipt sysReceipt = betMapper.getReceipt(betRepair.getTableId(), betRepair.getVersion());
+                SysPorint sysPorint = porintMapper.getPorint(betRepair.getTableId(), betRepair.getBootNum(), betRepair.getVersion());
+                SysReceipt sysReceipt = receiptMapper.getReceipt(betRepair.getTableId(), betRepair.getVersion());
                 if (sysPorint != null) {
                     porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
                 }
@@ -467,26 +474,111 @@ public class BetServiceImpl implements BetService {
      */
     public void updateBet(BetUpdate betUpdate) {
         if (betUpdate.getGameId() == 1) {
+            //判断赛果是否修改
+            SysGameResult sysGameResult = sysGameResultMapper.selectGameResultByBetId(betUpdate.getBetId());
+            if (sysGameResult != null && !betUpdate.getGameResult().equals(sysGameResult.getGameResult())) {
+                sysGameResult.setGameResult(betUpdate.getGameResult());
+                updateGameResult(sysGameResult);
+            }
+
+            List<SysBetInfo> list = betMapper.getBets(betUpdate.getBetId());
+
+
+            BigDecimal[] tableChip = {BigDecimal.ZERO};
+            BigDecimal[] tableCash = {BigDecimal.ZERO};
+            BigDecimal[] tableInsurance = {BigDecimal.ZERO};
+            BigDecimal[] water = {BigDecimal.ZERO};
+            list.forEach(oldBetInfo -> {
+                //修改 洗码
+                if (oldBetInfo.getWater().compareTo(BigDecimal.ZERO) != 0) {
+                    sysWaterMapper.saveMembersWater(oldBetInfo.getCard(), BigDecimal.ZERO.subtract(oldBetInfo.getWater())
+                            , BigDecimal.ZERO.subtract(oldBetInfo.getWaterAmount()));
+                    water[0] = water[0].add(oldBetInfo.getWater());
+                }
+                //修改会员现有筹码
+                if (oldBetInfo.getType() != 1 && oldBetInfo.getWinLose().compareTo(BigDecimal.ZERO) != 0) {
+                    sysMembersMapper.updateMembersChip(oldBetInfo.getCard(), BigDecimal.ZERO.subtract(oldBetInfo.getWinLose()));
+                }
+                //删除 筹码帐变记录
+                sysChipRecordMapper.deleteChipRecord(oldBetInfo.getCard(), oldBetInfo.getBetId());
+                //记录桌台累计
+                if (oldBetInfo.getType() == 0) {
+                    tableChip[0] = tableChip[0].add(oldBetInfo.getWinLose());
+                } else if (oldBetInfo.getType() == 1) {
+                    tableCash[0] = tableCash[0].add(oldBetInfo.getWinLose());
+                } else if (oldBetInfo.getType() == 2) {
+                    tableInsurance[0] = tableInsurance[0].add(oldBetInfo.getWinLose());
+                }
+            });
+
+
+            SysBetInfo betInfo = list.get(0);
             SysBet sysBet = new SysBet();
             sysBet.setBetId(betUpdate.getBetId());
             sysBet.setUpdateBy(betUpdate.getUpdateBy());
             sysBet.setCard(betUpdate.getCard());
             sysBet.setType(betUpdate.getType());
             sysBet.setGameResult(betUpdate.getGameResult());
-            List<SysBetInfo> list = betMapper.getBets(betUpdate.getBetId());
-            list.forEach(sysBetInfo -> {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(sysBetInfo.getBetOption(), sysBetInfo.getBetMoney());
-                Map map = getBaccaratBetInfos(jsonObject, sysBet);
-                //添加 注单明细
-                List<SysBetInfo> betInfos = (List) map.get("list");
-                betMapper.updateBetInfos(betInfos.get(0));
-                BigDecimal oldWater = sysBetInfo.getWater();
-                BigDecimal oldWaterAmount = sysBetInfo.getWaterAmount();
-                BigDecimal newWater = betInfos.get(0).getWater() == null ? BigDecimal.ZERO : betInfos.get(0).getWater();
-                BigDecimal newWaterAmount = betInfos.get(0).getWaterAmount() == null ? BigDecimal.ZERO : betInfos.get(0).getWaterAmount();
-                sysWaterMapper.saveMembersWater(sysBetInfo.getCard(), newWater.subtract(oldWater), newWaterAmount.subtract(oldWaterAmount));
-            });
+            sysBet.setCreateTime(betInfo.getCreateTime());
+            sysBet.setCreateBy(betInfo.getCreateBy());
+            sysBet.setVersion(betInfo.getVersion());
+            sysBet.setTableId(betInfo.getTableId());
+            sysBet.setBootNum(betInfo.getBootNum());
+            sysBet.setGameNum(betInfo.getGameNum());
+            sysBet.setGameId(betInfo.getGameId());
+
+            JSONObject jsonObject = JSON.parseObject(betUpdate.getOption());;
+
+            //注单明细
+            Map map = getBaccaratBetInfos(jsonObject, sysBet);
+            List<SysBetInfo> betInfos = (List) map.get("list");
+
+            betMapper.deleteBetInfo(betUpdate.getBetId());
+            betMapper.saveBetInfos(betInfos);
+
+            BigDecimal membersChip = (BigDecimal) map.get("membersChip");
+            if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
+                //生成 筹码帐变记录
+                BigDecimal chip = sysMembersMapper.selectMembersChip(sysBet.getCard());
+                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), chip, membersChip.abs(), chip.add(membersChip), sysBet.getBetId());
+                if (membersChip.compareTo(new BigDecimal(0)) > 0) {//赢
+                    sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
+                } else {
+                    sysChipRecord.setType(ChipChangeEnum.LOSE_CHIP.getCode());
+                }
+                sysChipRecord.setCreateBy(sysBet.getCreateBy());
+                sysChipRecordMapper.addChipRecord(sysChipRecord);
+                //修改会员现有筹码
+                sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip);
+            }
+            //计算打码量
+            BigDecimal newWater = (BigDecimal) map.get("water");
+            if (newWater.compareTo(BigDecimal.ZERO) != 0) {
+                BigDecimal waterAmount = (BigDecimal) map.get("waterAmount");
+                sysWaterMapper.saveMembersWater(sysBet.getCard(), newWater, waterAmount);
+            }
+
+            //修改 签单
+            tableChip[0] = tableChip[0].subtract(((BigDecimal) map.get("tableChip")));
+            tableCash[0] = tableCash[0].subtract(((BigDecimal) map.get("tableCash")));
+            tableInsurance[0] = tableInsurance[0].subtract(((BigDecimal) map.get("tableInsurance")));
+            water[0] = water[0].subtract(newWater);
+            if (tableChip[0].compareTo(BigDecimal.ZERO) != 0
+                    || tableCash[0].compareTo(BigDecimal.ZERO) != 0
+                    || tableInsurance[0].compareTo(BigDecimal.ZERO) != 0
+                    || water[0].compareTo(BigDecimal.ZERO) != 0) {
+                SysPorint sysPorint = porintMapper.getPorint(sysBet.getTableId(), sysBet.getBootNum(), sysBet.getVersion());
+                SysReceipt sysReceipt = receiptMapper.getReceipt(sysBet.getTableId(), sysBet.getVersion());
+                if (sysPorint != null) {
+                    porintMapper.updatePorint(sysPorint.getId(), tableChip[0], tableCash[0], tableInsurance[0], water[0]);
+                }
+                if (sysReceipt != null) {
+                    receiptMapper.updateReceipt(sysReceipt.getId(), tableChip[0], tableCash[0], tableInsurance[0], water[0]);
+                } else {
+                    //修改 桌台 累计
+                    sysTableManagementMapper.addTableMoney(new SysTableManagement(sysBet.getTableId(), tableChip[0], tableCash[0], tableInsurance[0]));
+                }
+            }
             betMapper.updateBet(sysBet);
         }
     }
@@ -498,12 +590,12 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<Map> selectTablePlumbingList(String startTime, String endTime) {
-        return betMapper.selectTablePlumbingList(startTime,endTime);
+        return betMapper.selectTablePlumbingList(startTime, endTime);
     }
 
     @Override
     public Map selectTablePlumbingTotal(String startTime, String endTime) {
-        return betMapper.selectTablePlumbingTotal(startTime,endTime);
+        return betMapper.selectTablePlumbingTotal(startTime, endTime);
     }
 
     /**
