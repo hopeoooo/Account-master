@@ -19,11 +19,11 @@ public class SysRemittanceDetailedSearch {
 
 
     @ApiModelProperty(value = "汇款类型(11:汇入,12:汇出)")
-    private Integer operationType;
+    private Integer type;
 
 
     @ApiModelProperty(value = "货币类型(0:筹码,1:现金)")
-    private Integer type;
+    private Integer operationType;
 
 
     @ApiModelProperty(value = "开始时间", required = false)
