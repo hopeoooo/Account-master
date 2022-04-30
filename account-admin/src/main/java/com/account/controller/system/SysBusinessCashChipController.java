@@ -98,7 +98,7 @@ public class SysBusinessCashChipController extends BaseController {
         //判断会员是否有欠钱
         SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, businessCashChipAddSearch.getCard());
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
-            return AjaxResult.success("当前用户不可汇出!");
+            return AjaxResult.success("当前用户不可换现!");
         }
         BigDecimal chip = sysMembers.getChip();
         if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0){
