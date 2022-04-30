@@ -55,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSignedRecordDetailed" >
         INSERT INTO sys_signed_record_detailed
         (
-        <if test="card != null and card != 0">card,</if>
-        <if test="type != null and type != 0">type,</if>
+        <if test="card != null and card != ''">card,</if>
+        <if test="type != null ">type,</if>
         <if test="amountType != null and amountType != ''">amount_type,</if>
         <if test="amountBefore != null and amountBefore != ''">amount_before,</if>
         <if test="amount != null and amount != ''">amount,</if>
@@ -65,8 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
         values(
-        <if test="card != null and card != 0">#{card},</if>
-        <if test="type != null and type != 0">#{type},</if>
+        <if test="card != null and card != ''">#{card},</if>
+        <if test="type != null ">#{type},</if>
         <if test="amountType != null and amountType != ''">#{amountType},</if>
         <if test="amountBefore != null and amountBefore != ''">#{amountBefore},</if>
         <if test="amount != null and amount != ''">#{amount},</if>

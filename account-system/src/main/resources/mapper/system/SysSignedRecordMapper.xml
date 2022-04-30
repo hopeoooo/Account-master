@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSigned">
         INSERT INTO sys_signed_record
         (
-        <if test="card != null and card != 0">card,</if>
+        <if test="card != null and card != ''">card,</if>
         <if test="amount != null and amount != ''">signed_amount,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time )

@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertAccessCodeDetailed" >
         INSERT INTO sys_access_code_detailed
         (
-        <if test="card != null and card != 0">card,</if>
+        <if test="card != null and card != ''">card,</if>
         <if test="type != null and type != ''">type,</if>
         <if test="chipAmountBefore != null and chipAmountBefore != ''">chip_amount_before,</if>
         <if test="chipAmount != null and chipAmount != ''">chip_amount,</if>
@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
         values(
-        <if test="card != null and card != 0">#{card},</if>
+        <if test="card != null and card != ''">#{card},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="chipAmountBefore != null and chipAmountBefore != ''">#{chipAmountBefore},</if>
         <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>

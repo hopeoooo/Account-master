@@ -1,5 +1,6 @@
 package com.account.controller.system;
 
+import com.account.common.constant.CommonConst;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
@@ -71,6 +72,9 @@ public class SysSignedRecordController extends BaseController {
         SysMembers sysMembers = membersService.selectmembersByCard(signedRecordSearch.getCard());
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
+        }
+        if (sysMembers.getStatus()== CommonConst.NUMBER_1){
+            return AjaxResult.success("该卡号已停用!");
         }
         signedRecordSearch.setMark(ChipChangeEnum.BORROW_CHIP.getCode());
         SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());

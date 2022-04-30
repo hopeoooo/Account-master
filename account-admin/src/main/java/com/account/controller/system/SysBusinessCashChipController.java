@@ -91,6 +91,9 @@ public class SysBusinessCashChipController extends BaseController {
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
         }
+        if (sysMembers.getStatus()== CommonConst.NUMBER_1){
+            return AjaxResult.success("该卡号已停用!");
+        }
         int isCash = sysMembers.getIsCash();
         if (isCash==CommonConst.NUMBER_0){
             return AjaxResult.success("当前用户不可换现!");
