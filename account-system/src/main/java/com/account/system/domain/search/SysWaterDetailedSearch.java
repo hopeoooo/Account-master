@@ -1,30 +1,24 @@
 package com.account.system.domain.search;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 /**
- * 汇款明细 查询条件
+ * 洗码费结算明细查询条件
  */
 @Data
-public class SysRemittanceDetailedSearch {
+public class SysWaterDetailedSearch {
 
-    @ApiModelProperty(value = "会员账卡号")
+
+    @ApiModelProperty(value ="会员卡号")
     private String card;
 
     @ApiModelProperty(value = "过滤内部卡号(0:未勾选,1:勾选)")
     private Integer isAdmin;
 
-
-    @ApiModelProperty(value = "汇款类型(11:汇入,12:汇出)")
-    private Integer type;
-
-
-    @ApiModelProperty(value = "货币类型(0:筹码,1:现金)")
-    private int operationType;
-
+    @ApiModelProperty(value = "包含子卡号(0:未勾选,1:勾选)")
+    private Integer cardType;
 
     @ApiModelProperty(value = "开始时间", required = false)
     private String startTime;

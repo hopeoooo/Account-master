@@ -2,6 +2,8 @@ package com.account.system.service;
 
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
+import com.account.system.domain.vo.SysMaterVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,4 +39,8 @@ public interface SysMembersService {
     int updateChipAmount( String card,  BigDecimal chipAmount, Integer type);
 
     Map getOddsConfig();
+
+    List<SysMaterVo> selectWaterList(String card, Integer isAdmin, Integer cardType);
+
+    Map selectWaterTotal(String card, Integer isAdmin,Integer cardType);
 }

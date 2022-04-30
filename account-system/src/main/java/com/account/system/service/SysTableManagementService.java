@@ -13,6 +13,8 @@ public interface SysTableManagementService
 {
     List<SysTableManagement> selectTableList(SysTableManagement sysTableManagement);
 
+    Map selectTableTotal(SysTableManagement sysTableManagement);
+
     SysTableManagement selectTableInfo(Long tableId,String ip,Long id);
 
     int insertTable(SysTableManagement sysTableManagement);
@@ -22,4 +24,6 @@ public interface SysTableManagementService
     int deleteUserByIds(Long id);
 
     boolean pingIp(String ip) throws IOException;
+
+    List<Map> selectTableIdInfo();
 }

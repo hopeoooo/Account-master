@@ -52,6 +52,7 @@ public class SysRemittanceController extends BaseController {
         return getDataTable(list);
     }
 
+/*
     @PreAuthorize("@ss.hasPermi('system:remittance:list')")
     @GetMapping("/total")
     @ApiOperation(value = "总计")
@@ -63,6 +64,7 @@ public class SysRemittanceController extends BaseController {
         Map map = membersService.selectBusinessCashChipTotal(card, isAdmin);
         return AjaxResult.success(map);
     }
+*/
 
 
     @PreAuthorize("@ss.hasPermi('system:remittance:list')")
@@ -75,7 +77,7 @@ public class SysRemittanceController extends BaseController {
         //判断该会员是否可以汇出
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.success("汇入失败!");
         }
         remittanceSearch.setType(ChipChangeEnum.IMPORT_CHIP.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());

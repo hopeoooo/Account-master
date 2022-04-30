@@ -24,7 +24,7 @@ public class SysChipRecordController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:chipRecord:list')")
     @GetMapping("/list")
-    @ApiOperation(value = "查询签单明细列表")
+    @ApiOperation(value = "查询客户筹码变动明细列表")
     public TableDataInfo list(SysChipRecordSearch chipRecordSearch){
         startPage();
         List<Map> maps = chipRecordService.selectChipRecordList(chipRecordSearch);

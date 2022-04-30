@@ -21,10 +21,10 @@ public class SysRemittanceDetailedVo {
     private String userName;
 
     @ApiModelProperty(value = "(7:汇入,8:汇出)")
-    private Integer operationType;
-
-    @ApiModelProperty(value = "(1:筹码,2:现金)")
     private Integer type;
+
+    @ApiModelProperty(value = "(0:筹码,1:现金)")
+    private Integer operationType;
 
     @ApiModelProperty(value = "变动金额")
     private BigDecimal amount;

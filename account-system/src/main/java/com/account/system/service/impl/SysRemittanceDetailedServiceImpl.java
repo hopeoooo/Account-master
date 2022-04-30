@@ -52,7 +52,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
             //汇款明细
             remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
             //汇入为筹码则累加用户筹码余额
-            if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){
+            if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
                 //添加筹码变动明细表
                 addChipRecord(remittanceSearch);
             }

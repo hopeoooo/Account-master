@@ -3,6 +3,7 @@ package com.account.system.service;
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.search.ReportSearch;
+import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.alibaba.fastjson.JSONArray;
@@ -55,4 +56,11 @@ public interface BetService {
     void repairBet(BetRepair betRepair);
 
     void updateBet(BetUpdate betUpdate);
+
+    /**
+     * 查询输赢报表
+     * @param reportSearch
+     * @return
+     */
+    List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 }

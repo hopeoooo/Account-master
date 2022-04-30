@@ -3,8 +3,10 @@ package com.account.system.mapper;
 import com.account.system.domain.*;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.search.ReportSearch;
+import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -73,4 +75,21 @@ public interface BetMapper {
             "where table_id=#{tableId} and version=#{version} and boot_num = #{bootNum} and game_num = #{gameNum}" +
             " order by create_time desc limit 0,1")
     List<SysBetInfo> getBetsByResult(SysGameResult gameResult);
+    @Update("update sys_porint set sys_chip = sys_chip + #{chip},chip_gap = chip_gap + #{chip}," +
+            " sys_insurance = sys_insurance + #{insurance},insurance_gap = insurance_gap + #{insurance}," +
+            " chip_win = chip_win - #{cash},insurance_win = insurance_win - #{insurance}," +
+            " water = water + #{water},update_time = sysdate()" +
+            " where id = #{id}")
+    void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip,
+                      @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+
+    @Update("update sys_receipt set chip = chip + #{chip},cash = cash + #{cash}," +
+            " insurance = insurance + #{insurance},win = win - #{cash}," +
+            " insurance_win = insurance_win - #{insurance},water = water + #{water},update_time = sysdate()" +
+            " where id = #{id}")
+    void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip,
+                       @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+
+
+    List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 }

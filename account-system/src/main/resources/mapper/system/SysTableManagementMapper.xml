@@ -45,6 +45,28 @@
         </where>
         ORDER BY create_time desc
     </select>
+    <select id="selectTableTotal"  resultType="java.util.Map">
+        SELECT
+        IFNULL(SUM(chip_point_base),0) as chipPointBase,
+        IFNULL(SUM(cash_point_base),0)as cashPointBase,
+        IFNULL(SUM(insurance_point_base),0)as insurancePointBase
+        FROM
+        sys_table_management
+        <where>
+            <if test="gameId != null and gameId != ''">
+                AND game_id =#{gameId}
+            </if>
+            and is_delete=0
+        </where>
+    </select>
+
+
+    <select id="selectTableIdInfo"  resultType="java.util.Map">
+        SELECT
+            t.table_id as tableId
+        FROM
+            sys_table_management t
+    </select>
 
 
     <insert id="insertTable">
