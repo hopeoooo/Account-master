@@ -159,15 +159,7 @@
         </where>
     </select>
 
-    <insert id="savePorint">
-        insert into sys_porint ( table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add, sys_insurance, person_insurance,
-                                 insurance_gap,insurance_add,water,chip_win,insurance_win,create_by,create_time)
-        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
-                #{insuranceGap}, #{insuranceAdd}, #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
-    </insert>
-
     <update id="updateBetInfos">
-        <foreach item="item" index="index" collection="list" separator=";">
             update sys_bet_info
             <set>
                 <if test="item.gameResult!=''">game_result = #{item.gameResult},</if>
@@ -216,7 +208,6 @@
                 update_by = #{item.updateBy}
             </set>
             where bet_id = #{item.betId} and `bet_option` = #{item.betOption}
-        </foreach>
     </update>
 
     <insert id="saveReceipt">

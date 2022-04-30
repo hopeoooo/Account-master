@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 参数配置 数据层
- *
+ * 会员
  * @author hope
  */
 public interface SysMembersMapper {
@@ -47,4 +46,6 @@ public interface SysMembersMapper {
     @Update(" update sys_members set chip = chip + #{chip} where card = #{card}")
     int updateMembersChip(@Param("card") String card, @Param("chip") BigDecimal chip);
 
+    @Select("select chip from sys_members where card = #{card}")
+    BigDecimal selectMembersChip(@Param("card") String card);
 }

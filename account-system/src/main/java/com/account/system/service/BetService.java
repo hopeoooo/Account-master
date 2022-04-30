@@ -20,10 +20,6 @@ public interface BetService {
 
     SysTableManagement getTableByIp(String ip);
 
-    void saveGameResult(SysGameResult sysGameResult);
-
-    void updateGameNum(Long id);
-
     BigDecimal selectMembersChip(String card);
 
     void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);

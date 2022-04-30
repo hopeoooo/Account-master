@@ -4,6 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.account.system.mapper.SysChipRecordMapper">
 
+    <insert id="addChipRecord">
+        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time
+        <if test="betId!=null">,bet_id</if>)
+            values (#{card},#{type},#{before},#{change},#{after},#{createBy},sysdate()
+        <if test="betId!=null">,#{betId}</if>)
+    </insert>
 
     <select id="selectChipRecordList"  resultType="java.util.Map">
         SELECT
@@ -39,5 +45,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY c.create_time DESC
     </select>
 
+    <select id="selectChipRecord"  resultType="java.util.Map">
+        SELECT card,
+               type,
+               `before`,
+               `change`,
+               `after`,
+        FROM sys_chip_record
+        where card = #{card}
+          and bet_id = #{betId}
+        limit 0,1
+    </select>
+
+    <update id="updateChipRecord">
+        update sys_chip_record
+        set `change` = #{change},
+            `after` = #{after}
+            type = #{type}
+        where card = #{card}
+          and bet_id = #{betId}
+    </update>
 
 </mapper>

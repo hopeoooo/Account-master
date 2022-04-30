@@ -15,14 +15,20 @@ public class Reckon {
     @ApiModelProperty("筹码数")
     private BigDecimal chip;
 
-    @ApiModelProperty("现金数")
-    private BigDecimal cash;
-
     @ApiModelProperty("筹码增")
     private BigDecimal chipAdd;
 
     @ApiModelProperty("筹码减")
     private BigDecimal chipSub;
+
+    @ApiModelProperty("现金数")
+    private BigDecimal cash;
+
+    @ApiModelProperty("现金增")
+    private BigDecimal cashAdd;
+
+    @ApiModelProperty("现金减")
+    private BigDecimal cashSub;
 
     @ApiModelProperty("保险筹码数")
     private BigDecimal insurance;

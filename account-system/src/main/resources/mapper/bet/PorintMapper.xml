@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.PorintMapper">
+
+    <insert id="savePorint">
+        insert into sys_porint ( table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add, sys_insurance, person_insurance,
+                                 insurance_gap,insurance_add,water,chip_win,insurance_win,create_by,create_time)
+        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
+                #{insuranceGap}, #{insuranceAdd}, #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
+    </insert>
+
+    <update id="updatePorint">
+        update sys_porint
+        set sys_chip      = sys_chip + #{chip},
+            chip_gap      = chip_gap + #{chip},
+            sys_insurance = sys_insurance + #{insurance},
+            insurance_gap = insurance_gap + #{insurance},
+            chip_win      = chip_win - #{cash},
+            insurance_win = insurance_win - #{insurance},
+            water         = water + #{water},
+            update_time   = sysdate()
+        where id = #{id}
+    </update>
+</mapper>

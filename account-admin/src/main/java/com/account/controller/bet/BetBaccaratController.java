@@ -20,7 +20,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,7 +89,11 @@ public class BetBaccaratController {
             return AjaxResult.error("ip地址错误");
         }
         sysGameResult.setUpdateBy(SecurityUtils.getUsername());
-        betService.updateGameResult(sysGameResult);
+        AsyncManager.me().execute(new TimerTask() {
+            public void run() {
+                betService.updateGameResult(sysGameResult);
+            }
+        });
         return AjaxResult.success();
     }
 
@@ -129,7 +132,7 @@ public class BetBaccaratController {
     }
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
-    @GetMapping("/input")
+    @PostMapping("/input")
     @ApiOperation(value = "录入")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
@@ -150,22 +153,17 @@ public class BetBaccaratController {
         //注单录入
         JSONArray bets = jsonObject.getJSONArray("bet");
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
-        SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
-        sysGameResult.setGameResult(gameResult);
-        sysGameResult.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             @Override
             public void run() {
                 betService.saveBet(sysTableManagement, gameResult, bets);
-                betService.saveGameResult(sysGameResult);
-                betService.updateGameNum(sysTableManagement.getId());
             }
         });
         return AjaxResult.success();
     }
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
-    @GetMapping("/reckon")
+    @PostMapping("/reckon")
     @ApiOperation(value = "点码||收码 计算差距")
     public AjaxResult reckon(Reckon reckon) {
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
@@ -183,7 +181,7 @@ public class BetBaccaratController {
     }
 
     @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
-    @GetMapping("/edit")
+    @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());

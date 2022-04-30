@@ -20,13 +20,16 @@ public class SysChipRecord extends BaseEntity {
     @ApiModelProperty("变动类型")
     private int type;
 
-    @ApiModelProperty("卡号")
+    @ApiModelProperty("注单id")
+    private Long betId;
+
+    @ApiModelProperty("帐变前")
     private BigDecimal before;
 
-    @ApiModelProperty("卡号")
+    @ApiModelProperty("帐变金额")
     private BigDecimal change;
 
-    @ApiModelProperty("卡号")
+    @ApiModelProperty("帐变后")
     private BigDecimal after;
 
     public SysChipRecord() {

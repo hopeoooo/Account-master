@@ -1,9 +1,7 @@
 package com.account.system.mapper;
 
 
-import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysSignedRecord;
-import com.account.system.domain.SysTableManagement;
 import com.account.system.domain.search.SysSignedRecordSearch;
 import com.account.system.domain.vo.SysSignedRecordVo;
 import org.apache.ibatis.annotations.Param;

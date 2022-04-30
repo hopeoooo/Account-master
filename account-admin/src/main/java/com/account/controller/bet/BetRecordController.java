@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/bet/record")
 @Api(tags = "注单记录")
-public class BetRecordController  extends BaseController {
+public class BetRecordController extends BaseController {
     @Autowired
     BetService betService;
     /**
