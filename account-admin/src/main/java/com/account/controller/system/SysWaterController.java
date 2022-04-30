@@ -99,6 +99,9 @@ public class SysWaterController extends BaseController {
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
         }
+        if (sysMembers.getStatus()== CommonConst.NUMBER_1){
+            return AjaxResult.success("该卡号已停用!");
+        }
         if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
             return AjaxResult.success("该会员不可结算洗码!");
         }
@@ -135,6 +138,9 @@ public class SysWaterController extends BaseController {
             SysMembers sysMembers = membersService.selectmembersByCard(info.getCard());
             if (sysMembers==null){
                 return AjaxResult.success("结算失败!");
+            }
+            if (sysMembers.getStatus()== CommonConst.NUMBER_1){
+                return AjaxResult.success("该卡号已停用!");
             }
             if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
                 return AjaxResult.success("结算失败!");

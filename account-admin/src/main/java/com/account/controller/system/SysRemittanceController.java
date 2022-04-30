@@ -74,7 +74,7 @@ public class SysRemittanceController extends BaseController {
         if (StringUtils.isNull(remittanceSearch.getCard())){
             return AjaxResult.error("参数错误,卡号为空!");
         }
-        //判断该会员是否可以汇出
+        //判断该会员是否可以汇入
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
             return AjaxResult.success("汇入失败!");
@@ -97,6 +97,9 @@ public class SysRemittanceController extends BaseController {
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
             return AjaxResult.success("当前卡号不存在!");
+        }
+        if (sysMembers.getStatus()== CommonConst.NUMBER_1){
+            return AjaxResult.success("该卡号已停用!");
         }
         int isOut = sysMembers.getIsOut();
         if (isOut==CommonConst.NUMBER_0){

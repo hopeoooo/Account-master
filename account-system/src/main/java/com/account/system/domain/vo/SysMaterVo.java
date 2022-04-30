@@ -17,6 +17,9 @@ public class SysMaterVo {
     @ApiModelProperty("姓名")
     private String name;
 
+    @ApiModelProperty("状态 0正常 1停用")
+    private Integer status;
+
     @ApiModelProperty("是否可结算洗码 0否 1是")
     private Integer isSettlement;
 

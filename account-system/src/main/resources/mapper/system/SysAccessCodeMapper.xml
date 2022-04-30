@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertAccessCode" >
         INSERT INTO sys_access_code
             (
-        <if test="card != null and card != 0">card,</if>
+        <if test="card != null and card != ''">card,</if>
         <if test="chipAmount != null and chipAmount != ''">chip_balance,</if>
         <if test="cashAmount != null and cashAmount != ''">cash_balance,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
