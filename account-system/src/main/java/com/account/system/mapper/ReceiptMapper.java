@@ -9,6 +9,6 @@ import java.math.BigDecimal;
  */
 public interface ReceiptMapper {
 
-    void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip,
-                       @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+    void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash
+            , @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
 }

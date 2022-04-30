@@ -12,6 +12,6 @@ public interface PorintMapper {
 
     void savePorint(SysPorint sysPorint);
 
-    void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip,
-                      @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+    void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash
+            , @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
 }

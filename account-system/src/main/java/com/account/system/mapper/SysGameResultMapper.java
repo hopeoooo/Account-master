@@ -23,12 +23,11 @@ public interface SysGameResultMapper {
 
     @Select("select id,table_id tableId,version,boot_num bootNum,game_num gameNum, game_result gameResult,version,game_id gameId from sys_game_result " +
             "where id=#{id} order by create_time desc limit 0,1")
-    SysGameResult selectGameResult(SysGameResult sysGameResult);
+    SysGameResult getGameResultInfo(SysGameResult sysGameResult);
 
     @Select("select id, table_id tableId,version,boot_num bootNum,game_num gameNum, game_result gameResult,version from sys_game_result " +
             "where game_id = #{gameId} and table_id = #{tableId} and boot_num = #{bootNum} and version = #{version}")
     List<Map> getGameResults(SysTableManagement sysTableManagement);
-
 
     @Update("update sys_game_result set game_result = #{gameResult},update_time = sysdate(),update_By = #{updateBy} where id = #{id}")
     void updateGameResult(SysGameResult sysGameResult);

@@ -71,25 +71,7 @@ public interface BetMapper {
     @Select("select id from sys_receipt where table_id = #{tableId} and version = #{version} limit 0,1")
     SysReceipt getReceipt(@Param("tableId") Long tableId, @Param("version") Long version);
 
-    @Select("select bet_id betId,table_id tableId,version,boot_num bootNum,game_num gameNum, game_result gameResult,version,game_id gameId from sys_bet_info " +
-            "where table_id=#{tableId} and version=#{version} and boot_num = #{bootNum} and game_num = #{gameNum}" +
-            " order by create_time desc limit 0,1")
     List<SysBetInfo> getBetsByResult(SysGameResult gameResult);
-    @Update("update sys_porint set sys_chip = sys_chip + #{chip},chip_gap = chip_gap + #{chip}," +
-            " sys_insurance = sys_insurance + #{insurance},insurance_gap = insurance_gap + #{insurance}," +
-            " chip_win = chip_win - #{cash},insurance_win = insurance_win - #{insurance}," +
-            " water = water + #{water},update_time = sysdate()" +
-            " where id = #{id}")
-    void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip,
-                      @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
-
-    @Update("update sys_receipt set chip = chip + #{chip},cash = cash + #{cash}," +
-            " insurance = insurance + #{insurance},win = win - #{cash}," +
-            " insurance_win = insurance_win - #{insurance},water = water + #{water},update_time = sysdate()" +
-            " where id = #{id}")
-    void updateReceipt(@Param("id") int id, @Param("chip") BigDecimal tableChip,
-                       @Param("cash") BigDecimal tableCash, @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
-
 
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 

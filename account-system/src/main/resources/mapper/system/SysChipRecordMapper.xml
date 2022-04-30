@@ -45,12 +45,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY c.create_time DESC
     </select>
 
-    <select id="selectChipRecord"  resultType="java.util.Map">
+    <select id="selectChipRecord"  resultType="SysChipRecord">
         SELECT card,
                type,
                `before`,
                `change`,
                `after`,
+               bet_id betId
         FROM sys_chip_record
         where card = #{card}
           and bet_id = #{betId}
@@ -60,10 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateChipRecord">
         update sys_chip_record
         set `change` = #{change},
-            `after` = #{after}
-            type = #{type}
-        where card = #{card}
-          and bet_id = #{betId}
+            `after` = #{after},
+            `type` = #{type}
+        where card = #{card} and bet_id = #{betId}
     </update>
 
 </mapper>

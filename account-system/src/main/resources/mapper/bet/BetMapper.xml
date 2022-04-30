@@ -162,52 +162,52 @@
     <update id="updateBetInfos">
             update sys_bet_info
             <set>
-                <if test="item.gameResult!=''">game_result = #{item.gameResult},</if>
-                <if test="item.type!=''">type = #{item.type},</if>
+                <if test="gameResult!=''">game_result = #{gameResult},</if>
+                <if test="type!=''">type = #{type},</if>
                 <choose>
-                    <when test="item.winLose != null">
-                        win_lose = #{item.winLose},
+                    <when test="winLose != null">
+                        win_lose = #{winLose},
                     </when>
                     <otherwise>
                         win_lose = 0,
                     </otherwise>
                 </choose>
                 <choose>
-                    <when test="item.water != null">
-                        water = #{item.water},
+                    <when test="water != null">
+                        water = #{water},
                     </when>
                     <otherwise>
                         water = 0,
                     </otherwise>
                 </choose>
                 <choose>
-                    <when test="item.waterAmount != null">
-                        water_amount = #{item.waterAmount},
+                    <when test="waterAmount != null">
+                        water_amount = #{waterAmount},
                     </when>
                     <otherwise>
                         water_amount = 0,
                     </otherwise>
                 </choose>
                 <choose>
-                    <when test="item.tie != null">
-                        tie = #{item.tie},
+                    <when test="tie != null">
+                        tie = #{tie},
                     </when>
                     <otherwise>
                         tie = 0,
                     </otherwise>
                 </choose>
                 <choose>
-                    <when test="item.pump != null">
-                        pump = #{item.pump},
+                    <when test="pump != null">
+                        pump = #{pump},
                     </when>
                     <otherwise>
                         pump = 0,
                     </otherwise>
                 </choose>
-                update_time = #{item.updateTime},
-                update_by = #{item.updateBy}
+                update_time = sysdate(),
+                update_by = #{updateBy}
             </set>
-            where bet_id = #{item.betId} and `bet_option` = #{item.betOption}
+            where bet_id = #{betId} and `bet_option` = #{betOption}
     </update>
 
     <insert id="saveReceipt">
@@ -315,6 +315,31 @@
         ORDER BY SUM( b.bet_money ) desc
     </select>
 
+    <select id="getBetsByResult" resultType="SysBetInfo">
+        select bet_id       betId,
+               card,
+               table_id     tableId,
+               version,
+               boot_num     bootNum,
+               game_num     gameNum,
+               game_result  gameResult,
+               version,
+               game_id      gameId,
+               type,
+               bet_option   betOption,
+               bet_money    betMoney,
+               win_lose     winLose,
+               water        water,
+               water_amount waterAmount,
+               tie,
+               pump
+        from sys_bet_info
+        where table_id = #{tableId}
+          and version = #{version}
+          and boot_num = #{bootNum}
+          and game_num = #{gameNum}
+        order by create_time desc
+    </select>
 
 
     <select id="selectTablePlumbingList"  resultType="java.util.Map">

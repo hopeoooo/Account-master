@@ -35,11 +35,11 @@ public class SysChipRecord extends BaseEntity {
     public SysChipRecord() {
     }
 
-    public SysChipRecord(String card, int type, BigDecimal before, BigDecimal change, BigDecimal after) {
+    public SysChipRecord(String card, BigDecimal before, BigDecimal change, BigDecimal after, Long betId) {
         this.card = card;
-        this.type = type;
         this.before = before;
         this.change = change;
         this.after = after;
+        this.betId = betId;
     }
 }

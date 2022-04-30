@@ -154,7 +154,6 @@ public class BetBaccaratController {
         JSONArray bets = jsonObject.getJSONArray("bet");
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
-            @Override
             public void run() {
                 betService.saveBet(sysTableManagement, gameResult, bets);
             }
