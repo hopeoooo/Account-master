@@ -62,6 +62,8 @@ public class SysWaterController extends BaseController {
             if (OddsConfigureList.getRollingCommissionRounding() == CommonConst.NUMBER_1){
                 BigDecimal actualWaterAmount = info.getWaterAmount().setScale(0, BigDecimal.ROUND_DOWN);
                 info.setActualWaterAmount(actualWaterAmount);
+            }else {
+                info.setActualWaterAmount(info.getWaterAmount());
             }
         });
 
