@@ -10,7 +10,7 @@ import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.mapper.*;
 import com.account.system.service.BetService;
-import com.account.system.service.SysBetUpdateRecordServicce;
+import com.account.system.service.SysBetUpdateRecordService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -38,7 +38,7 @@ public class BetServiceImpl implements BetService {
     BetUtilService betUtilService;
 
     @Autowired
-    SysBetUpdateRecordServicce sysBetUpdateRecordServicce;
+    SysBetUpdateRecordService sysBetUpdateRecordService;
 
     @Autowired
     SysMembersMapper sysMembersMapper;
@@ -83,16 +83,13 @@ public class BetServiceImpl implements BetService {
     @Transactional
     public void updateGameResult(SysGameResult sysGameResult,Long betId) {
         SysGameResult gameResult = sysGameResultMapper.getGameResultInfo(sysGameResult);
+        if(sysGameResult.getGameResult().equals(gameResult.getGameResult())) return;
         List<SysBet> sysBets = betMapper.getBetsByResult(gameResult);
         Map chipRecord = new HashMap();
         sysBets.forEach(sysBet -> {
             List<SysBetInfo> sysBetInfos = betMapper.getBetInfos(sysBet.getBetId());
-            sysBet.setUpdateBy(sysGameResult.getUpdateBy());
             sysBet.setGameResult(sysGameResult.getGameResult());
-            //修改注单
-            betMapper.updateBet(sysBet);
-            //生成修改记录
-            sysBetUpdateRecordServicce.saveUpdateResultRecord(sysBet,gameResult.getGameResult(),betId);
+            final BigDecimal[] newWin = {BigDecimal.ZERO};
             sysBetInfos.forEach(sysBetInfo -> {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put(sysBetInfo.getBetOption(), sysBetInfo.getBetMoney());
@@ -101,7 +98,7 @@ public class BetServiceImpl implements BetService {
                 Map map = betUtilService.getBetInfos(jsonObject, sysBet, gameResult.getGameId());
                 List<SysBetInfo> betInfos = (List) map.get("list");
                 betMapper.updateBetInfos(betInfos.get(0));
-
+                newWin[0] = newWin[0].add(betInfos.get(0).getWinLose());
                 //修改 洗码
                 BigDecimal water = (BigDecimal) map.get("water");
                 BigDecimal oldWater = sysBetInfo.getWater();
@@ -159,6 +156,11 @@ public class BetServiceImpl implements BetService {
                     }
                 }
             });
+            //生成注单修改记录
+            sysBetUpdateRecordService.saveResultRecord(sysBet,gameResult.getGameResult(),betId,sysBetInfos,newWin[0]);
+            //修改注单
+            sysBet.setUpdateBy(sysGameResult.getUpdateBy());
+            betMapper.updateBet(sysBet);
         });
 
         sysGameResultMapper.updateGameResult(sysGameResult);
@@ -585,7 +587,7 @@ public class BetServiceImpl implements BetService {
             }
         }
         betMapper.updateBet(sysBet);
-        sysBetUpdateRecordServicce.saveUpdateResultRecord(null,null,null);
+        sysBetUpdateRecordService.saveBetRecord();
     }
 
     @Override

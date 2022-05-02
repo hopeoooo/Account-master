@@ -119,15 +119,18 @@ public class BetBaccaratController {
         }
         //注单计算
         JSONArray bets = jsonObject.getJSONArray("bet");
-        bets.forEach(b -> {
-            JSONObject bet = (JSONObject) b;
+        for (int i = 0; i < bets.size(); i++) {
+            JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
             BigDecimal chip = betService.selectMembersChip(card);
+            if(chip==null){
+                return AjaxResult.error("卡号："+card+" 不存在");
+            }
             BigDecimal payout = betService.getPayOut(bet,gameResult,sysTableManagement.getGameId());//派彩
             if (0 == bet.getInteger("type")) chip = chip.add(payout);
             bet.put("chip", chip);
             bet.put("payout", payout);
-        });
+        }
         return AjaxResult.success(jsonObject);
     }
 

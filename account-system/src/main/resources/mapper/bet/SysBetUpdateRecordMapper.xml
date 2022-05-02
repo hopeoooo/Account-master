@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysBetUpdateRecordMapper">
+
+    <insert id="saveUpdateRecord">
+        insert into sys_bet_update_record (game_id, card, table_id, boot, game, `option`, `type`, amount,
+                                           `result`, `win`, create_by, bet_time, update_time)
+        values (#{gameId}, #{card}, #{tableId}, #{boot}, #{game}, #{option}, #{type}, #{amount},
+                #{result}, #{win}, #{createBy}, #{betTime}, sysdate())
+    </insert>
+
+</mapper>

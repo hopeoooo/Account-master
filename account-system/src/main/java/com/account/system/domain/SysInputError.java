@@ -1,9 +1,12 @@
 package com.account.system.domain;
 
+import lombok.Data;
+
 /**
  * @author hope
  * @since 2022/4/30
  */
+@Data
 public class SysInputError {
 
     private String userName;
