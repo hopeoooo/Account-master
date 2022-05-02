@@ -32,25 +32,25 @@ import java.util.TimerTask;
 
 /**
  * @author hope
- * @since 2022/4/21
+ * @since 2022/5/2
  */
 @RestController
-@RequestMapping("/bet/baccarat")
-@Api(tags = "百家乐注单录入")
-public class BetBaccaratController {
+@RequestMapping("/bet/pusher")
+@Api(tags = "推筒子注单录入")
+public class BetPusherController {
 
     @Autowired
     BetService betService;
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/info")
     @ApiOperation(value = "桌台信息")
     public AjaxResult info() {
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
-            return AjaxResult.error("ip地址错误 ip:"+ip);
+            return AjaxResult.error("ip地址错误 ip:" + ip);
         }
         Map map = new HashMap();
         map.put("tableId", sysTableManagement.getTableId());
@@ -64,13 +64,13 @@ public class BetBaccaratController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/game")
     @ApiOperation(value = "赛果列表")
     public AjaxResult game() {
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
@@ -78,13 +78,13 @@ public class BetBaccaratController {
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/update")
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
@@ -98,22 +98,18 @@ public class BetBaccaratController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/open")
     @ApiOperation(value = "开牌")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
+            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"bet\":[{\"card\":\"123456\",\"type\":0,\"输\":300}]}",
                     dataType = "string", required = true, paramType = "path")
     })
     public AjaxResult open(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
-        String gameResult = jsonObject.getString("gameResult");
-        if (StringUtils.isEmpty(ResultEnum.getResultEnum(gameResult))) {
-            return AjaxResult.error("赛果格式错误");
-        }
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
@@ -123,7 +119,7 @@ public class BetBaccaratController {
             JSONObject bet = (JSONObject) b;
             String card = bet.getString("card");
             BigDecimal chip = betService.selectMembersChip(card);
-            BigDecimal payout = betService.getPayOut(bet,gameResult,sysTableManagement.getGameId());//派彩
+            BigDecimal payout = betService.getPayOut(bet, null,sysTableManagement.getGameId());//派彩
             if (0 == bet.getInteger("type")) chip = chip.add(payout);
             bet.put("chip", chip);
             bet.put("payout", payout);
@@ -131,67 +127,63 @@ public class BetBaccaratController {
         return AjaxResult.success(jsonObject);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/input")
     @ApiOperation(value = "录入")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
+            @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"bet\":[{\"card\":\"123456\",\"type\":0,\"输\":300}]}",
                     dataType = "string", required = true, paramType = "path")
     })
     public AjaxResult input(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
-        }
-        String gameResult = jsonObject.getString("gameResult");
-        if (StringUtils.isEmpty(ResultEnum.getResultEnum(gameResult))) {
-            return AjaxResult.error("赛果格式错误");
         }
         //注单录入
         JSONArray bets = jsonObject.getJSONArray("bet");
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
-                betService.saveBet(sysTableManagement, gameResult, bets);
+                betService.saveBet(sysTableManagement, null, bets);
             }
         });
         return AjaxResult.success();
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/reckon")
     @ApiOperation(value = "点码||收码 计算差距")
     public AjaxResult reckon(Reckon reckon) {
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
         Map map;
-        if(reckon.getType()==0){
-            map = betService.pointChip(reckon,sysTableManagement);
-        }else {
-            map = betService.receiptChip(reckon,sysTableManagement);
+        if (reckon.getType() == 0) {
+            map = betService.pointChip(reckon, sysTableManagement);
+        } else {
+            map = betService.receiptChip(reckon, sysTableManagement);
         }
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
-        if(reckon.getType()==0){
-            betService.editChip(reckon,sysTableManagement);
-        }else {
-            betService.receiptEditChip(reckon,sysTableManagement);
+        if (reckon.getType() == 0) {
+            betService.editChip(reckon, sysTableManagement);
+        } else {
+            betService.receiptEditChip(reckon, sysTableManagement);
         }
         return AjaxResult.success();
     }

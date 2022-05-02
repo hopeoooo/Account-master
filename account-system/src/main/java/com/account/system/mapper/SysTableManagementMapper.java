@@ -19,7 +19,7 @@ public interface SysTableManagementMapper {
 
     Map selectTableTotal(SysTableManagement sysTableManagement);
 
-    SysTableManagement selectTableInfo(@Param("tableId")Long tableId,@Param("ip")String ip,@Param("id")Long id);
+    SysTableManagement selectTableInfo(@Param("tableId") Long tableId, @Param("ip") String ip, @Param("id") Long id);
 
     int insertTable(SysTableManagement sysTableManagement);
 
@@ -37,8 +37,8 @@ public interface SysTableManagementMapper {
     @Select("select id, table_id tableId,game_id gameId,chip_point_base chipPointBase,cash_point_base cashPointBase " +
             ",insurance_point_base insurancePointBase,boot_num bootNum" +
             ",game_num gameNum,chip,cash,insurance,chip_add chipAdd,insurance_add insuranceAdd ,version " +
-            "from sys_table_management where ip = #{ip} and is_delete = 0 limit 0,1")
-    SysTableManagement getTableByIp(@Param("ip") String ip);
+            "from sys_table_management where ip = #{ip} and game_id = #{gameId} and is_delete = 0 limit 0,1")
+    SysTableManagement getTableByIp(@Param("ip") String ip, @Param("gameId") Long gameId);
 
     List<Map> selectTableIdInfo();
 }

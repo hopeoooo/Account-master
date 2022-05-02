@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public interface BetService {
 
-    SysTableManagement getTableByIp(String ip);
+    SysTableManagement getTableByIp(String ip, Long gameId);
 
     BigDecimal selectMembersChip(String card);
 
@@ -28,7 +28,7 @@ public interface BetService {
 
     List<Map> getGameResults(SysTableManagement sysTableManagement);
 
-    BigDecimal getPayOut(JSONObject bet, String gameResult);
+    BigDecimal getPayOut(JSONObject bet, String gameResult, Long gameId);
 
     Map pointChip(Reckon reckon, SysTableManagement sysTableManagement);
 
