@@ -15,4 +15,41 @@
             update_time   = sysdate()
         where id = #{id}
     </update>
+
+    <select id="selectReceiptList" resultType="com.account.system.domain.SysReceipt">
+        SELECT
+        r.table_id as tableId,
+        r.chip as chip,
+        r.cash as cash,
+        r.insurance as insurance,
+        r.chip_add as chipAdd,
+        r.cash_add as cashAdd,
+        r.insurance_add as insuranceAdd,
+        r.water as water,
+        r.win as win,
+        r.insurance_win as insuranceWin,
+        r.create_time as createTime,
+        r.remark as remark
+        FROM
+        sys_receipt r
+        LEFT JOIN
+        (select t.game_id,t.table_id from sys_table_management t where t.is_delete=0) b on b.table_id=r.table_id
+
+    <where>
+        <if test="tableId != null and tableId != ''">
+            AND r.table_id = #{tableId}
+        </if>
+
+        <if test="gameId != null and gameId != ''">
+            AND b.game_id = #{gameId}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND r.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND r.create_time <![CDATA[<=]]> #{endTime}
+        </if>
+    </where>
+        GROUP BY r.table_id
+    </select>
 </mapper>
