@@ -6,7 +6,7 @@
 
     <select id="selectUserList" parameterType="sysUserSearch" resultType="SysUser">
         select user_id userId,nick_name nickName,user_name userName,
-        phonenumber,sex,address,post,join_time joinTime,brithday
+        phonenumber,sex,address,post,join_time joinTime,brithday,role_id roleId
         from
         sys_user
         <where>

@@ -1,7 +1,6 @@
 package com.account.controller.bet;
 
 import com.account.common.core.domain.AjaxResult;
-import com.account.common.enums.ResultEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
 import com.account.common.utils.StringUtils;
@@ -91,7 +90,7 @@ public class BetPusherController {
         sysGameResult.setUpdateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
-                betService.updateGameResult(sysGameResult);
+                betService.updateGameResult(sysGameResult,null);
             }
         });
         return AjaxResult.success();

@@ -44,15 +44,16 @@ public interface BetService {
 
     void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement);
 
-    void updateGameResult(SysGameResult sysGameResult);
+    void updateGameResult(SysGameResult sysGameResult, Long betId);
 
     /**
      * 查询客户日报表列表
+     *
      * @return
      */
-    List<Map> selectDailyReportList(ReportSearch reportSearch );
+    List<Map> selectDailyReportList(ReportSearch reportSearch);
 
-    Map selectDailyReportTotal(ReportSearch reportSearch );
+    Map selectDailyReportTotal(ReportSearch reportSearch);
 
     void repairBet(BetRepair betRepair);
 
@@ -60,6 +61,7 @@ public interface BetService {
 
     /**
      * 查询输赢报表
+     *
      * @param reportSearch
      * @return
      */
@@ -67,11 +69,12 @@ public interface BetService {
 
     /**
      * 台面上下水报表
+     *
      * @param startTime
      * @param endTime
      * @return
      */
-    List<Map> selectTablePlumbingList(String startTime,String endTime);
+    List<Map> selectTablePlumbingList(String startTime, String endTime);
 
-    Map selectTablePlumbingTotal(String startTime,String endTime);
+    Map selectTablePlumbingTotal(String startTime, String endTime);
 }

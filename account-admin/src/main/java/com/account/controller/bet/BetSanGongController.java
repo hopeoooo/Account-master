@@ -90,7 +90,7 @@ public class BetSanGongController {
         sysGameResult.setUpdateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
-                betService.updateGameResult(sysGameResult);
+                betService.updateGameResult(sysGameResult,null);
             }
         });
         return AjaxResult.success();

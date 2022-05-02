@@ -332,32 +332,28 @@
         ORDER BY SUM( b.bet_money ) desc
     </select>
 
-    <select id="getBetsByResult" resultType="SysBetInfo">
-        select bet_id       betId,
+    <select id="getBetsByResult" resultType="SysBet">
+        select bet_id      betId,
                card,
-               table_id     tableId,
+               table_id    tableId,
                version,
-               boot_num     bootNum,
-               game_num     gameNum,
-               game_result  gameResult,
-               version,
-               game_id      gameId,
+               boot_num    bootNum,
+               game_num    gameNum,
                type,
-               bet_option   betOption,
-               bet_money    betMoney,
-               win_lose     winLose,
-               water        water,
-               water_amount waterAmount,
-               tie,
-               pump
-        from sys_bet_info
+               game_id     gameId,
+               game_result gameResult,
+               update_time updateTime,
+               update_by   updateBy,
+               create_time createTime,
+               create_by   createBy
+        from sys_bet
         where table_id = #{tableId}
           and version = #{version}
           and boot_num = #{bootNum}
           and game_num = #{gameNum}
     </select>
 
-    <select id="getBets" resultType="SysBetInfo">
+    <select id="getBetInfos" resultType="SysBetInfo">
         select bet_id       betId,
                card,
                table_id     tableId,
@@ -378,6 +374,24 @@
                create_time createTime,
                create_by createBy
         from sys_bet_info
+        where bet_id = #{betId}
+    </select>
+
+    <select id="getBet">
+        select bet_id      betId,
+               card,
+               table_id    tableId,
+               version,
+               boot_num    bootNum,
+               game_num    gameNum,
+               type,
+               game_id     gameId,
+               game_result gameResult,
+               update_time updateTime,
+               update_by   updateBy,
+               create_time createTime,
+               create_by   createBy
+        from sys_bet
         where bet_id = #{betId}
     </select>
 

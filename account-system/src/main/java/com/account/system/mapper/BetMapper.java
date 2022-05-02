@@ -47,7 +47,9 @@ public interface BetMapper {
     @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version}")
     BigDecimal getReceiptInsuranceWin(SysTableManagement sysTableManagement);
 
-    List<SysBetInfo> getBets(@Param("betId") Long betId);
+    List<SysBetInfo> getBetInfos(@Param("betId") Long betId);
+
+    SysBet getBet(@Param("betId") Long betId);
 
     @Update("update sys_bet set game_result = #{gameResult},type = #{type},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
     void updateBet(SysBet sysBet);
@@ -60,7 +62,7 @@ public interface BetMapper {
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 
-    List<SysBetInfo> getBetsByResult(SysGameResult gameResult);
+    List<SysBet> getBetsByResult(SysGameResult gameResult);
 
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 
@@ -70,4 +72,5 @@ public interface BetMapper {
 
     @Delete("delete from sys_bet_info where bet_id = #{betId}")
     void deleteBetInfo(@Param("betId") Long betId);
+
 }
