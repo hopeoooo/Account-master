@@ -82,7 +82,7 @@
         update sys_user
         <set>
             <if test="userName != null and userName != '' ">user_name=#{userName},</if>
-            <if test="nickName != null and nickName != '' ">nick_name=#{userName},</if>
+            <if test="nickName != null and nickName != '' ">nick_name=#{nickName},</if>
             <if test="phonenumber != null and phonenumber != '' ">phonenumber=#{phonenumber},</if>
             <if test="sex != null ">sex=#{sex},</if>
             <if test="password != null ">password=#{password},</if>
