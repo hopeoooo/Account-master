@@ -151,7 +151,7 @@
             </if>
             <if test="bootNum!=null">
                 boot_num = boot_num + #{bootNum},
-                game_num=0
+                game_num=0,
             </if>
             <if test="chipAdd!=null">
                 chip_add = chip_add + #{chipAdd},
