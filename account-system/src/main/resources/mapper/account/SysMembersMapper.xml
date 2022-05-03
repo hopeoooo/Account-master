@@ -307,13 +307,16 @@
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
             </if>
-            <if test="card != null and card != ''">
-                AND m.card = #{card}
-            </if>
-            <if test="cardType != null and cardType != ''">
-                or m.parent_card = #{card}
+
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
             </if>
 
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
         </where>
         ORDER BY w.water desc
     </select>
