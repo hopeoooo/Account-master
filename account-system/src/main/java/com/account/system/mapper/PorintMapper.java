@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 点码
@@ -23,4 +24,8 @@ public interface PorintMapper {
     SysPorint getPorint(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum, @Param("version") Long version);
 
     List<SysReceipt> selectPorintList(ReceiptReportSearch receiptReportSearch);
+
+    Map selectPorintCount(ReceiptReportSearch receiptReportSearch);
+
+    SysPorint selectPorint(@Param("id") Long id);
 }

@@ -5,19 +5,25 @@
 <mapper namespace="com.account.system.mapper.PorintMapper">
 
     <insert id="savePorint">
-        insert into sys_porint ( table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add, sys_insurance, person_insurance,
-                                 insurance_gap,insurance_add,water,chip_win,insurance_win,create_by,create_time)
-        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd}, #{sysInsurance},#{personInsurance},
-                #{insuranceGap}, #{insuranceAdd}, #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
+        insert into sys_porint (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
+                                 sys_cash, person_cash,cash_gap,cash_add,
+                                sys_insurance, person_insurance,insurance_gap,insurance_add,
+                                water,chip_win,insurance_win,create_by,create_time)
+        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
+                #{sysCash},#{personCash},#{cashGap}, #{cashAdd},
+                #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
+                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
     </insert>
 
     <update id="updatePorint">
         update sys_porint
         set sys_chip      = sys_chip + #{chip},
             chip_gap      = chip_gap + #{chip},
+            sys_cash      = sys_chip + #{cash},
+            cash_gap      = chip_gap + #{cash},
             sys_insurance = sys_insurance + #{insurance},
             insurance_gap = insurance_gap + #{insurance},
-            chip_win      = chip_win - #{cash},
+            chip_win      = chip_win - #{cash} - #{chip},
             insurance_win = insurance_win - #{insurance},
             water         = water + #{water},
             update_time   = sysdate()
@@ -57,5 +63,53 @@
             </if>
         </where>
         ORDER BY create_time desc
+    </select>
+
+    <select id="selectPorintCount" resultType="map">
+        SELECT
+        if(sum(chip_add) is null ,0 ,sum(chip_add) ) chipAddCount,
+        if(sum(water) is null ,0 ,sum(water)) waterCount,
+        if(sum(chip_win) is null ,0 , sum(chip_win))chipWinCount,
+        if(sum(insurance_win) is null ,0 ,sum(insurance_win)) insuranceWinCount,
+        if(sum(insurance_add) is null ,0 , sum(insurance_add) )insuranceAddCount
+        FROM
+        sys_porint
+        <where>
+            <if test="tableId != null and tableId != ''">
+                AND table_id = #{tableId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectPorint" resultType="sysPorint">
+        SELECT
+            id,
+            table_id  tableId,
+            boot_num bootNum,
+            sys_chip sysChip,
+            person_chip personChip,
+            chip_gap chipGap,
+            chip_add chipAdd,
+            sys_insurance sysInsurance,
+            person_insurance personInsurance,
+            insurance_gap insuranceGap,
+            insurance_add insuranceAdd,
+            water water,
+            chip_win chipWin,
+            insurance_win insuranceWin,
+            create_time createTime,
+            create_by createBy,
+            remark
+        FROM
+            sys_porint
+        where
+            id = #{id}
     </select>
 </mapper>

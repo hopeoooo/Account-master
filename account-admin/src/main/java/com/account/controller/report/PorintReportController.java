@@ -1,8 +1,8 @@
 package com.account.controller.report;
 
 import com.account.common.core.controller.BaseController;
-import com.account.common.core.page.TableDataInfo;
-import com.account.system.domain.SysReceipt;
+import com.account.common.core.domain.AjaxResult;
+import com.account.system.domain.PorintUpdate;
 import com.account.system.domain.search.ReceiptReportSearch;
 import com.account.system.service.SysPorintService;
 import io.swagger.annotations.Api;
@@ -26,9 +26,26 @@ public class PorintReportController extends BaseController {
     @PreAuthorize("@ss.hasPermi('sys:porint:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询点码列表")
-    public TableDataInfo list(ReceiptReportSearch receiptReportSearch){
+    public AjaxResult list(ReceiptReportSearch receiptReportSearch){
         startPage();
-        return getDataTable(sysPorintService.selectPorintList(receiptReportSearch));
+        AjaxResult ajaxResult = AjaxResult.success();
+        List list = sysPorintService.selectPorintList(receiptReportSearch);
+        ajaxResult.put("list",list);
+        ajaxResult.put("count",sysPorintService.selectPorintCount(receiptReportSearch));
+        return ajaxResult;
     }
 
+    @PreAuthorize("@ss.hasPermi('sys:porint:list')")
+    @GetMapping("/reckon")
+    @ApiOperation(value = "点码修改 计算差距")
+    public AjaxResult reckon(PorintUpdate porintUpdate){
+        return AjaxResult.success(sysPorintService.porintReckon(porintUpdate));
+    }
+
+    @PreAuthorize("@ss.hasPermi('sys:porint:list')")
+    @GetMapping("/edit")
+    @ApiOperation(value = "点码修改 确认修改")
+    public AjaxResult edit(PorintUpdate porintUpdate){
+        return AjaxResult.success();
+    }
 }

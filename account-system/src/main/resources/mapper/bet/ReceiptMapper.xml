@@ -9,7 +9,7 @@
         set chip          = chip + #{chip},
             cash          = cash + #{cash},
             insurance     = insurance + #{insurance},
-            win           = win - #{cash},
+            win           = win - #{cash} - #{chip},
             insurance_win = insurance_win - #{insurance},
             water         = water + #{water},
             update_time   = sysdate()

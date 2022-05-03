@@ -340,16 +340,21 @@ public class BetServiceImpl implements BetService {
                 .subtract(checkDecimal(reckon.getChipSub())));
         sysPorint.setPersonChip(reckon.getChip());
         sysPorint.setChipGap(sysPorint.getPersonChip().subtract(sysPorint.getSysChip()));
-        sysPorint.setChipAdd((sysTableManagement.getChipAdd()).add(checkDecimal(reckon.getChipAdd()))
-                .subtract(checkDecimal(reckon.getChipSub())));
+        sysPorint.setChipAdd(checkDecimal(reckon.getChipAdd()).subtract(checkDecimal(reckon.getChipSub())));
+
+        sysPorint.setSysCash(sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())
+                .add(sysTableManagement.getCashAdd()).add(checkDecimal(reckon.getCashAdd()))
+                .subtract(checkDecimal(reckon.getCashSub())));
+        sysPorint.setPersonCash(reckon.getCash());
+        sysPorint.setCashGap(sysPorint.getPersonCash().subtract(sysPorint.getSysCash()));
+        sysPorint.setCashAdd(checkDecimal(reckon.getCashAdd()).subtract(checkDecimal(reckon.getCashSub())));
 
         sysPorint.setSysInsurance(sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance())
                 .add(sysTableManagement.getInsuranceAdd()).add(checkDecimal(reckon.getInsuranceAdd()))
                 .subtract(checkDecimal(reckon.getInsuranceSub())));
         sysPorint.setPersonInsurance(reckon.getInsurance());
         sysPorint.setInsuranceGap(sysPorint.getPersonInsurance().subtract(sysPorint.getSysInsurance()));
-        sysPorint.setInsuranceAdd((sysTableManagement.getInsuranceAdd())
-                .add(checkDecimal(reckon.getInsuranceAdd())).subtract(checkDecimal(reckon.getInsuranceSub())));
+        sysPorint.setInsuranceAdd(checkDecimal(reckon.getInsuranceAdd()).subtract(checkDecimal(reckon.getInsuranceSub())));
 
         sysPorint.setWater(betMapper.getWater(sysTableManagement));
         sysPorint.setChipWin(betMapper.getWinLose(sysTableManagement));

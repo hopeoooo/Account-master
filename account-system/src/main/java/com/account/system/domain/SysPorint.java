@@ -37,6 +37,18 @@ public class SysPorint extends BaseEntity {
     @ApiModelProperty("筹码增减")
     private BigDecimal chipAdd;
 
+    @ApiModelProperty("系统现金点码数")
+    private BigDecimal sysCash;
+
+    @ApiModelProperty("手动现金点码数")
+    private BigDecimal personCash;
+
+    @ApiModelProperty("现金差距")
+    private BigDecimal cashGap;
+
+    @ApiModelProperty("现金增减")
+    private BigDecimal cashAdd;
+
     @ApiModelProperty("保险系统点码数")
     private BigDecimal sysInsurance;
 

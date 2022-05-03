@@ -34,10 +34,6 @@ public interface SysTableManagementMapper {
     @Update("update sys_table_management set game_num=game_num+1 where id = #{id}")
     void updateGameNum(@Param("id") Long id);
 
-    @Select("select id, table_id tableId,game_id gameId,chip_point_base chipPointBase,cash_point_base cashPointBase " +
-            ",insurance_point_base insurancePointBase,boot_num bootNum" +
-            ",game_num gameNum,chip,cash,insurance,chip_add chipAdd,insurance_add insuranceAdd ,version " +
-            "from sys_table_management where ip = #{ip} and game_id = #{gameId} and is_delete = 0 limit 0,1")
     SysTableManagement getTableByIp(@Param("ip") String ip, @Param("gameId") Long gameId);
 
     List<Map> selectTableIdInfo();
