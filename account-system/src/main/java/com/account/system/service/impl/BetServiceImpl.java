@@ -359,6 +359,7 @@ public class BetServiceImpl implements BetService {
         sysPorint.setWater(betMapper.getWater(sysTableManagement));
         sysPorint.setChipWin(betMapper.getWinLose(sysTableManagement));
         sysPorint.setInsuranceWin(betMapper.getInsuranceWin(sysTableManagement));
+        sysPorint.setRemark(reckon.getRemark());
         porintMapper.savePorint(sysPorint);
         sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getId(), 1l, chipAdd, cashAdd, insuranceAdd));
     }
@@ -392,7 +393,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setWater(betMapper.getReceiptWater(sysTableManagement));
         sysReceipt.setWin(betMapper.getReceiptWinLose(sysTableManagement));
         sysReceipt.setInsuranceWin(betMapper.getReceiptInsuranceWin(sysTableManagement));
-
+        sysReceipt.setRemark(reckon.getRemark());
         betMapper.saveReceipt(sysReceipt);
         sysTableManagementMapper.resetTableMoney(sysTableManagement.getId());
     }

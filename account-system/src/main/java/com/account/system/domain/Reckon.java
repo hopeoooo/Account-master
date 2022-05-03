@@ -42,4 +42,6 @@ public class Reckon {
     @ApiModelProperty("类型 0 点码 1 收码")
     private int type;
 
+    @ApiModelProperty("备注")
+    private String remark;
 }

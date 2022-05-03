@@ -229,9 +229,9 @@
 
     <insert id="saveReceipt">
         insert into sys_receipt ( table_id, version, chip, cash, insurance, chip_add, cash_add, insurance_add, water,
-                                  win,insurance_win,create_by,create_time)
+                                  win,insurance_win,create_by,create_time,remark)
         values (#{tableId}, #{version}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, 0, #{insuranceAdd},#{water},
-                #{win}, #{insuranceWin},#{createBy},sysdate())
+                #{win}, #{insuranceWin},#{createBy},sysdate(),#{remark})
     </insert>
 
     <select id="selectDailyReportList" resultType="java.util.Map">

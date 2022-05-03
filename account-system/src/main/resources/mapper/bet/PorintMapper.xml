@@ -8,11 +8,11 @@
         insert into sys_porint (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
                                  sys_cash, person_cash,cash_gap,cash_add,
                                 sys_insurance, person_insurance,insurance_gap,insurance_add,
-                                water,chip_win,insurance_win,create_by,create_time)
+                                water,chip_win,insurance_win,create_by,create_time,remark)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
                 #{sysCash},#{personCash},#{cashGap}, #{cashAdd},
                 #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
-                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate())
+                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark})
     </insert>
 
     <update id="updatePorint">
