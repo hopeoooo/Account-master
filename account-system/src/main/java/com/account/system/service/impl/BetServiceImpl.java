@@ -116,17 +116,19 @@ public class BetServiceImpl implements BetService {
 
                 //修改 筹码帐变记录
                 SysChipRecord sysChipRecord = sysChipRecordMapper.selectChipRecord(sysBet.getCard(), sysBet.getBetId());
-                BigDecimal change = checkDecimal((BigDecimal) chipRecord.get(sysBetInfo.getBetId()));
-                change = change.add((BigDecimal) map.get("membersChip"));
-                chipRecord.put(sysBetInfo.getBetId(), change);
-                if (change.compareTo(new BigDecimal(0)) > 0) {//赢
-                    sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
-                } else {
-                    sysChipRecord.setType(ChipChangeEnum.LOSE_CHIP.getCode());
+                if(sysChipRecord!=null){
+                    BigDecimal change = checkDecimal((BigDecimal) chipRecord.get(sysBetInfo.getBetId()));
+                    change = change.add((BigDecimal) map.get("membersChip"));
+                    chipRecord.put(sysBetInfo.getBetId(), change);
+                    if (change.compareTo(new BigDecimal(0)) > 0) {//赢
+                        sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
+                    } else {
+                        sysChipRecord.setType(ChipChangeEnum.LOSE_CHIP.getCode());
+                    }
+                    sysChipRecord.setChange(change.abs());
+                    sysChipRecord.setAfter(sysChipRecord.getBefore().add(change));
+                    sysChipRecordMapper.updateChipRecord(sysChipRecord);
                 }
-                sysChipRecord.setChange(change.abs());
-                sysChipRecord.setAfter(sysChipRecord.getBefore().add(change));
-                sysChipRecordMapper.updateChipRecord(sysChipRecord);
 
                 //修改 签单
                 BigDecimal tableChip = (BigDecimal) map.get("tableChip");
@@ -494,7 +496,9 @@ public class BetServiceImpl implements BetService {
     public void updateBet(BetUpdate betUpdate) {
         //判断赛果是否修改
         SysGameResult sysGameResult = sysGameResultMapper.selectGameResultByBetId(betUpdate.getBetId());
+        String oldGameResult = sysGameResult != null?sysGameResult.getGameResult():"";
         if (sysGameResult != null && !betUpdate.getGameResult().equals(sysGameResult.getGameResult())) {
+            oldGameResult = sysGameResult.getGameResult();
             sysGameResult.setGameResult(betUpdate.getGameResult());
             updateGameResult(sysGameResult,betUpdate.getBetId());
         }
@@ -586,8 +590,8 @@ public class BetServiceImpl implements BetService {
                 sysTableManagementMapper.addTableMoney(new SysTableManagement(sysBet.getTableId(), tableChip[0], tableCash[0], tableInsurance[0]));
             }
         }
+        sysBetUpdateRecordService.saveBetRecord(betUpdate,list,betInfos,oldGameResult);
         betMapper.updateBet(sysBet);
-        sysBetUpdateRecordService.saveBetRecord();
     }
 
     @Override

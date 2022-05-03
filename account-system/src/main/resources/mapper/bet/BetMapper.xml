@@ -377,7 +377,7 @@
         where bet_id = #{betId}
     </select>
 
-    <select id="getBet">
+    <select id="getBet" resultType="SysBet">
         select bet_id      betId,
                card,
                table_id    tableId,
