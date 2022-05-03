@@ -1,6 +1,6 @@
-package com.account.system.mapper;
+package com.account.system.service;
 
-import com.account.system.domain.SysInputError;
+
 import com.account.system.domain.search.InputErrorSearch;
 import com.account.system.domain.vo.SysInputErrorVo;
 
@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author hope
- * @since 2022/4/30
+ * 员工录入错帐报表 服务层
  */
-public interface SysInputErrorMapper {
-
-    void saveInputError(SysInputError sysInputError);
-
+public interface SysInputErrorService
+{
     List<SysInputErrorVo> selectInputErrorList(InputErrorSearch errorSearch);
+
 }
