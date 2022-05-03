@@ -25,6 +25,7 @@ public class BetSearch {
 
     @ApiModelProperty("靴号")
     private Long bootNum;
+
     @ApiModelProperty("局号")
     private Long gameNum;
 

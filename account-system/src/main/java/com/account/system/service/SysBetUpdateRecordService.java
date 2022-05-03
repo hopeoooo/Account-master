@@ -3,6 +3,7 @@ package com.account.system.service;
 import com.account.system.domain.BetUpdate;
 import com.account.system.domain.SysBet;
 import com.account.system.domain.SysBetInfo;
+import com.account.system.domain.search.BetSearch;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,4 +18,6 @@ public interface SysBetUpdateRecordService {
 
 
     void saveBetRecord(BetUpdate betUpdate, List<SysBetInfo> oldBetInfos, List<SysBetInfo> newBetInfos,String gameResult);
+
+    List selectBetUpdateList(BetSearch betSearch);
 }

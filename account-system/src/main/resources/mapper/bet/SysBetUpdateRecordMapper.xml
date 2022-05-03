@@ -11,4 +11,54 @@
                 #{result}, #{win}, #{createBy}, #{betTime}, sysdate())
     </insert>
 
+    <select id="selectBetUpdateList" resultType="map">
+        SELECT id,
+        game_id gameId,
+        card,
+        table_id tableId,
+        boot bootNum,
+        game gameNum,
+        `option`,
+        `type`,
+        amount,
+        result,
+        win,
+        create_by createBy,
+        bet_time betTime,
+        update_time updateTime
+        FROM
+        sys_bet_update_record
+        <where>
+            <if test="card != null and card != ''">
+                AND card like concat('%', #{card}, '%')
+            </if>
+
+            <if test="tableId != null and tableId != ''">
+                AND table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND game_id = #{gameId}
+            </if>
+            <if test="type != null">
+                AND `type` like concat('%', #{type}, '%')
+            </if>
+            <if test="bootNum != null and bootNum != ''">
+                AND boot = #{bootNum}
+            </if>
+            <if test="gameNum != null and gameNum != ''">
+                AND game = #{gameNum}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                AND create_by = #{createBy}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND update_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND update_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        ORDER BY update_time desc
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.account.system.service.impl;
 
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.*;
+import com.account.system.domain.search.BetSearch;
 import com.account.system.mapper.BetMapper;
 import com.account.system.mapper.SysBetUpdateRecordMapper;
 import com.account.system.mapper.SysInputErrorMapper;
@@ -103,6 +104,11 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
 
         SysInputError sysInputError = new SysInputError(oldCreateBy,0l,1l);
         sysInputErrorMapper.saveInputError(sysInputError);
+    }
+
+    @Override
+    public List selectBetUpdateList(BetSearch betSearch) {
+        return sysBetUpdateRecordMapper.selectBetUpdateList(betSearch);
     }
 
     private String changeRelust(String s){
