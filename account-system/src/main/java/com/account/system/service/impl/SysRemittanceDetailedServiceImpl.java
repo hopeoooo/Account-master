@@ -46,18 +46,24 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     @Override
     @Transactional
     public int insertRemittanceDetailed(SysRemittanceSearch remittanceSearch) {
-        int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-        int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
-        if (i>0){
+        //筹码
+        if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
+            int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
+            int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
+            if (i>0){
+                //汇款明细
+                remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
+                //汇入为筹码则累加用户筹码余额
+                if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
+                    //添加筹码变动明细表
+                    addChipRecord(remittanceSearch);
+                }
+            }
+        }else {
             //汇款明细
             remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
-            //汇入为筹码则累加用户筹码余额
-            if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
-                //添加筹码变动明细表
-                addChipRecord(remittanceSearch);
-            }
         }
-        return i;
+        return 0;
     }
 
     /**
