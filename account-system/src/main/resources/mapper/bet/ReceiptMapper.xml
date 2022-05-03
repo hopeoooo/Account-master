@@ -32,14 +32,9 @@
         r.remark as remark
         FROM
         sys_receipt r
-        LEFT JOIN	 sys_table_management t  ON t.table_id = r.table_id  and t.is_delete = 0
     <where>
         <if test="tableId != null and tableId != ''">
             AND r.table_id = #{tableId}
-        </if>
-
-        <if test="gameId != null and gameId != ''">
-            AND t.game_id = #{gameId}
         </if>
         <if test="startTime != null and startTime != ''">
             AND r.create_time <![CDATA[>=]]> #{startTime}
@@ -49,6 +44,6 @@
         </if>
     </where>
         GROUP BY r.table_id
-        ORDER BY r.create_time deac
+        ORDER BY r.create_time DESC
     </select>
 </mapper>

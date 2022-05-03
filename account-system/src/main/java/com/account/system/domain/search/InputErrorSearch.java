@@ -5,14 +5,14 @@ import lombok.Data;
 
 
 /**
- * 收码报表查询条件
+ * 员工录入错账报表报表查询条件
  */
 @Data
-public class ReceiptReportSearch {
+public class InputErrorSearch {
 
 
-    @ApiModelProperty(value ="台号")
-    private Long tableId;
+    @ApiModelProperty(value ="员工工号")
+    private String userName;
 
     @ApiModelProperty(value = "开始时间", required = false)
     private String startTime;

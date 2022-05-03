@@ -12,4 +12,29 @@
         `error` = `error` + #{error}
     </insert>
 
+    <select id="selectInputErrorList" resultType="com.account.system.domain.vo.SysInputErrorVo">
+        SELECT
+        u.user_name as userName,u.nick_name as nickName,
+        IFNULL(COUNT(ts.card),0) as input ,
+        IFNULL(b.num,0)  as error,
+        IFNULL(TRUNCATE((IFNULL(b.num,0)/IFNULL(COUNT(ts.card),0))*100 ,2),0)  as errorRate
+        FROM
+        sys_user u
+        LEFT JOIN 	sys_bet ts on ts.create_by=u.user_name
+        LEFT JOIN 	(select COUNT(1) as num,create_by,create_time from sys_bet t where t.update_by is not null 	GROUP BY create_by) b on b.create_by=ts.create_by and b.create_time=ts.create_time
+
+        <where>
+            <if test="userName != null and userName != ''">
+                AND u.user_name = #{userName}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND ts.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND ts.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY u.user_name
+        ORDER BY 	b.num/COUNT(1)  desc
+    </select>
 </mapper>
