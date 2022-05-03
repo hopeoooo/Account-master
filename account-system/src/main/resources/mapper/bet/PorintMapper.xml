@@ -23,4 +23,39 @@
             update_time   = sysdate()
         where id = #{id}
     </update>
+
+    <select id="selectPorintList" resultType="sysPorint">
+        SELECT
+        id,
+        table_id  tableId,
+        boot_num bootNum,
+        sys_chip sysChip,
+        person_chip personChip,
+        chip_gap chipGap,
+        chip_add chipAdd,
+        sys_insurance sysInsurance,
+        person_insurance personInsurance,
+        insurance_gap insuranceGap,
+        insurance_add insuranceAdd,
+        water water,
+        chip_win chipWin,
+        insurance_win insuranceWin,
+        create_time createTime,
+        create_by createBy,
+        remark
+        FROM
+        sys_porint
+        <where>
+            <if test="tableId != null and tableId != ''">
+                AND table_id = #{tableId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        ORDER BY create_time desc
+    </select>
 </mapper>
