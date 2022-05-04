@@ -64,40 +64,6 @@ public class BetSanGongController {
     }
 
     @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
-    @PostMapping("/game")
-    @ApiOperation(value = "赛果列表")
-    public AjaxResult game() {
-        //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,4l);
-        if (StringUtils.isNull(sysTableManagement)) {
-            return AjaxResult.error("ip地址错误");
-        }
-        List<Map> list = betService.getGameResults(sysTableManagement);
-        return AjaxResult.success(list);
-    }
-
-    @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
-    @PostMapping("/update")
-    @ApiOperation(value = "路珠修改")
-    public AjaxResult update(SysGameResult sysGameResult) {
-        //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,4l);
-        if (StringUtils.isNull(sysTableManagement)) {
-            return AjaxResult.error("ip地址错误");
-        }
-        sysGameResult.setUpdateBy(SecurityUtils.getUsername());
-        AsyncManager.me().execute(new TimerTask() {
-            public void run() {
-                betService.updateGameResult(sysGameResult,null);
-            }
-        });
-        return AjaxResult.success();
-    }
-
-
-    @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
     @PostMapping("/open")
     @ApiOperation(value = "开牌")
     @ApiImplicitParams({
