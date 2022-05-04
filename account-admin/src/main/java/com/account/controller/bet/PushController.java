@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class PushController {
 
     @PostMapping("/save")
     @ApiOperation(value = "注单保存")
-    public AjaxResult save(JSONObject jsonObject) {
+    public AjaxResult save(@RequestBody JSONObject jsonObject) {
         //根据ip获取台桌信息
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
@@ -47,6 +48,6 @@ public class PushController {
     @PostMapping("/get")
     @ApiOperation(value = "注单查询")
     public AjaxResult get(Long tableId) {
-        return AjaxResult.success(redisCache.getCacheObject("bet:push:"+tableId));
+        return AjaxResult.success("OJBK",redisCache.getCacheObject("bet:push:"+tableId));
     }
 }
