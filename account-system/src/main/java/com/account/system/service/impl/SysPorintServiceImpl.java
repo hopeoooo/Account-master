@@ -4,6 +4,7 @@ package com.account.system.service.impl;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.*;
+import com.account.system.domain.search.PorintUpdateSearch;
 import com.account.system.domain.search.ReceiptReportSearch;
 import com.account.system.mapper.PorintMapper;
 import com.account.system.mapper.ReceiptMapper;
@@ -29,7 +30,7 @@ public class SysPorintServiceImpl implements SysPorintService {
     @Autowired
     SysTableManagementMapper sysTableManagementMapper;
 
-    public List<SysReceipt> selectPorintList(ReceiptReportSearch receiptReportSearch) {
+    public List<SysPorint> selectPorintList(ReceiptReportSearch receiptReportSearch) {
         return porintMapper.selectPorintList(receiptReportSearch);
     }
 
@@ -110,6 +111,11 @@ public class SysPorintServiceImpl implements SysPorintService {
             sysTableManagementMapper.addTableMoney(sysTableManagement);
         }
 
+    }
+
+    @Override
+    public List<Map> selectPorintUpdateList(PorintUpdateSearch porintUpdateSearch) {
+        return porintMapper.selectPorintUpdateList(porintUpdateSearch);
     }
 
     private BigDecimal checkDecimal(BigDecimal bigDecimal) {

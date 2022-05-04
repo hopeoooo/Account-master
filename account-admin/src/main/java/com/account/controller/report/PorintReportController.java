@@ -2,7 +2,9 @@ package com.account.controller.report;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
+import com.account.common.core.page.TableDataInfo;
 import com.account.system.domain.PorintUpdate;
+import com.account.system.domain.search.PorintUpdateSearch;
 import com.account.system.domain.search.ReceiptReportSearch;
 import com.account.system.service.SysPorintService;
 import io.swagger.annotations.Api;
@@ -48,5 +50,13 @@ public class PorintReportController extends BaseController {
     public AjaxResult edit(PorintUpdate porintUpdate){
         sysPorintService.editPorint(porintUpdate);
         return AjaxResult.success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('porint:update:list')")
+    @GetMapping("/update/list")
+    @ApiOperation(value = "点码修改列表")
+    public TableDataInfo updateList(PorintUpdateSearch porintUpdateSearch){
+        startPage();
+        return getDataTable(sysPorintService.selectPorintUpdateList(porintUpdateSearch));
     }
 }

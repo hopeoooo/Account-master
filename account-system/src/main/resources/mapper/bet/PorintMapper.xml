@@ -35,10 +35,12 @@
         id,
         table_id  tableId,
         boot_num bootNum,
-        sys_chip sysChip,
-        person_chip personChip,
+        sys_chip+sys_cash sysChip,
+        person_chip+person_cash personChip,
         chip_gap chipGap,
         chip_add chipAdd,
+        cash_gap cashGap,
+        cash_add cashAdd,
         sys_insurance sysInsurance,
         person_insurance personInsurance,
         insurance_gap insuranceGap,
@@ -189,4 +191,42 @@
                 #{id}
         </foreach>
     </update>
+
+    <select id="selectPorintUpdateList" resultType="map">
+        SELECT
+        id,
+        table_id  tableId,
+        boot_num bootNum,
+        sys_chip sysChip,
+        person_chip personChip,
+        chip_gap chipGap,
+        chip_add chipAdd,
+        sys_insurance sysInsurance,
+        person_insurance personInsurance,
+        insurance_gap insuranceGap,
+        insurance_add insuranceAdd,
+        water water,
+        chip_win chipWin,
+        insurance_win insuranceWin,
+        create_time createTime,
+        create_by createBy,
+        remark
+        FROM
+        sys_porint_update
+        <where>
+            <if test="tableId != null">
+                AND table_id = #{tableId}
+            </if>
+            <if test="bootNum != null">
+                AND boot_num = #{bootNum}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        ORDER BY create_time desc
+    </select>
 </mapper>
