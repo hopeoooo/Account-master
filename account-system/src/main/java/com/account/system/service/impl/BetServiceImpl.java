@@ -64,9 +64,6 @@ public class BetServiceImpl implements BetService {
     @Autowired
     SysGameResultMapper sysGameResultMapper;
 
-    @Autowired
-    SysInputErrorMapper sysInputErrorMapper;
-
     @Override
     public SysTableManagement getTableByIp(String ip, Long gameId) {
         return sysTableManagementMapper.getTableByIp(ip, gameId);
@@ -193,7 +190,6 @@ public class BetServiceImpl implements BetService {
                     sysBet.setGameResult("输");
                 }
             }
-            sysInputErrorMapper.saveInputError(new SysInputError(sysBet.getCreateBy(),1l,0l));
             betMapper.saveBet(sysBet);
 
             Map map = betUtilService.getBetInfos(bet, sysBet, sysTableManagement.getGameId());
@@ -236,7 +232,7 @@ public class BetServiceImpl implements BetService {
         //修改桌台累计
         if (tableChip[0].compareTo(BigDecimal.ZERO) != 0 || tableCash[0].compareTo(BigDecimal.ZERO) != 0
                 || tableInsurance[0].compareTo(BigDecimal.ZERO) != 0) {
-            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getId(), tableChip[0], tableCash[0], tableInsurance[0]));
+            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), tableChip[0], tableCash[0], tableInsurance[0]));
         }
         //记录赛果
         if (gameResult != null) {
@@ -356,12 +352,12 @@ public class BetServiceImpl implements BetService {
         sysPorint.setInsuranceGap(sysPorint.getPersonInsurance().subtract(sysPorint.getSysInsurance()));
         sysPorint.setInsuranceAdd(checkDecimal(reckon.getInsuranceAdd()).subtract(checkDecimal(reckon.getInsuranceSub())));
 
-        sysPorint.setWater(betMapper.getWater(sysTableManagement));
-        sysPorint.setChipWin(betMapper.getWinLose(sysTableManagement));
-        sysPorint.setInsuranceWin(betMapper.getInsuranceWin(sysTableManagement));
+        sysPorint.setWater(checkDecimal(betMapper.getWater(sysTableManagement)));
+        sysPorint.setChipWin(checkDecimal(betMapper.getWinLose(sysTableManagement)));
+        sysPorint.setInsuranceWin(checkDecimal(betMapper.getInsuranceWin(sysTableManagement)));
         sysPorint.setRemark(reckon.getRemark());
         porintMapper.savePorint(sysPorint);
-        sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getId(), 1l, chipAdd, cashAdd, insuranceAdd));
+        sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), 1l, chipAdd, cashAdd, insuranceAdd));
     }
 
     /**
@@ -390,9 +386,9 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setInsuranceAdd((sysTableManagement.getInsuranceAdd()).add(checkDecimal(reckon.getInsuranceAdd()))
                 .subtract(checkDecimal(reckon.getInsuranceSub())));
 
-        sysReceipt.setWater(betMapper.getReceiptWater(sysTableManagement));
-        sysReceipt.setWin(betMapper.getReceiptWinLose(sysTableManagement));
-        sysReceipt.setInsuranceWin(betMapper.getReceiptInsuranceWin(sysTableManagement));
+        sysReceipt.setWater(checkDecimal(betMapper.getReceiptWater(sysTableManagement)));
+        sysReceipt.setWin(checkDecimal(betMapper.getReceiptWinLose(sysTableManagement)));
+        sysReceipt.setInsuranceWin(checkDecimal(betMapper.getReceiptInsuranceWin(sysTableManagement)));
         sysReceipt.setRemark(reckon.getRemark());
         betMapper.saveReceipt(sysReceipt);
         sysTableManagementMapper.resetTableMoney(sysTableManagement.getId());

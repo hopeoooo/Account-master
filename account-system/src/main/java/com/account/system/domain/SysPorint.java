@@ -69,4 +69,18 @@ public class SysPorint extends BaseEntity {
 
     @ApiModelProperty("保险输赢")
     private BigDecimal insuranceWin;
+
+    public SysPorint() {
+
+    }
+
+    public SysPorint clone(){
+        SysPorint sysPorint = null;
+        try {
+            sysPorint= (SysPorint) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return sysPorint;
+    }
 }

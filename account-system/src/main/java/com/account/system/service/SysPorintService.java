@@ -16,4 +16,6 @@ public interface SysPorintService {
     Map selectPorintCount(ReceiptReportSearch receiptReportSearch);
 
     Map porintReckon(PorintUpdate porintUpdate);
+
+    void editPorint(PorintUpdate porintUpdate);
 }

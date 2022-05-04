@@ -93,10 +93,15 @@
             id,
             table_id  tableId,
             boot_num bootNum,
+            version,
             sys_chip sysChip,
             person_chip personChip,
             chip_gap chipGap,
             chip_add chipAdd,
+            sys_cash sysCash,
+            person_cash personCash,
+            cash_gap cashGap,
+            cash_add cashAdd,
             sys_insurance sysInsurance,
             person_insurance personInsurance,
             insurance_gap insuranceGap,
@@ -112,4 +117,76 @@
         where
             id = #{id}
     </select>
+
+    <update id="editPorint">
+        update sys_porint
+        set person_chip = #{personChip},
+            chip_add    = #{chipAdd},
+            chip_gap    = #{chipGap},
+            person_cash = #{personCash},
+            cash_add    = #{cashAdd},
+            cash_gap    = #{cashGap},
+            person_insurance = #{personInsurance},
+            insurance_add    = #{insuranceAdd},
+            insurance_gap    = #{insuranceGap},
+            <if test="remark != null and remark != ''"> remark = #{remark} </if>
+            update_by   = #{updateBy},
+            update_time = sysdate()
+        where id = #{id}
+    </update>
+
+    <select id="getPorints" resultType="sysPorint">
+        SELECT
+            id,
+            table_id  tableId,
+            version,
+            boot_num bootNum,
+            sys_chip sysChip,
+            person_chip personChip,
+            chip_gap chipGap,
+            chip_add chipAdd,
+            sys_cash sysCash,
+            person_cash personCash,
+            cash_gap cashGap,
+            cash_add cashAdd,
+            sys_insurance sysInsurance,
+            person_insurance personInsurance,
+            insurance_gap insuranceGap,
+            insurance_add insuranceAdd,
+            water,
+            chip_win chipWin,
+            insurance_win insuranceWin,
+            create_time createTime,
+            create_by createBy,
+            remark
+        FROM
+            sys_porint
+        where
+            table_id = #{tableId} and version = #{version} and boot_num > #{bootNum}
+    </select>
+
+    <insert id="savePorintUpdate">
+        insert into sys_porint_update (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
+                                ,cash_gap,cash_add,
+                                sys_insurance, person_insurance,insurance_gap,insurance_add,
+                                water,chip_win,insurance_win,create_by,create_time,remark)
+        values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
+                ,#{cashGap}, #{cashAdd},
+                #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
+                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark})
+    </insert>
+
+    <update id="editPorints">
+        update sys_porint
+        set chip_add      = chip_add + #{chipAdd},
+            chip_gap      = chip_gap + #{chipAdd},
+            cash_add      = cash_add + #{cashAdd},
+            cash_gap      = cash_gap + #{cashAdd},
+            insurance_add = insurance_add + #{insuranceAdd},
+            insurance_gap = insurance_gap + #{insuranceAdd}
+        where id in
+        <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+                #{id}
+        </foreach>
+    </update>
 </mapper>

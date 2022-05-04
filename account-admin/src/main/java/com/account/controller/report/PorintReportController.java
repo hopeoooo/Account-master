@@ -46,6 +46,7 @@ public class PorintReportController extends BaseController {
     @GetMapping("/edit")
     @ApiOperation(value = "点码修改 确认修改")
     public AjaxResult edit(PorintUpdate porintUpdate){
+        sysPorintService.editPorint(porintUpdate);
         return AjaxResult.success();
     }
 }

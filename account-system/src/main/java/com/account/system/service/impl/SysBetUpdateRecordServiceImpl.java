@@ -1,11 +1,12 @@
 package com.account.system.service.impl;
 
-import com.account.common.utils.StringUtils;
-import com.account.system.domain.*;
+import com.account.system.domain.BetUpdate;
+import com.account.system.domain.SysBet;
+import com.account.system.domain.SysBetInfo;
+import com.account.system.domain.SysBetUpdateRecord;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.mapper.BetMapper;
 import com.account.system.mapper.SysBetUpdateRecordMapper;
-import com.account.system.mapper.SysInputErrorMapper;
 import com.account.system.service.SysBetUpdateRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,6 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
 
     @Autowired
     SysBetUpdateRecordMapper sysBetUpdateRecordMapper;
-
-    @Autowired
-    SysInputErrorMapper sysInputErrorMapper;
 
     @Autowired
     BetMapper betMapper;
@@ -51,10 +49,6 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
             sysBetUpdateRecord.setAmount(amount[0].toString());
             sysBetUpdateRecord.setResult(changeRelust(gameResult)+"->"+changeRelust(sysBet.getGameResult()));
             sysBetUpdateRecordMapper.saveUpdateRecord(sysBetUpdateRecord);
-
-            SysInputError sysInputError = new SysInputError(sysBet.getCreateBy(),0l,1l);
-            if(StringUtils.isNotEmpty(sysBet.getUpdateBy()))sysInputError.setUserName(sysBet.getUpdateBy());
-            sysInputErrorMapper.saveInputError(sysInputError);
         }
     }
 
@@ -101,9 +95,6 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         //结果
         sysBetUpdateRecord.setResult(compare(changeRelust(gameResult),changeRelust(betUpdate.getGameResult())));
         sysBetUpdateRecordMapper.saveUpdateRecord(sysBetUpdateRecord);
-
-        SysInputError sysInputError = new SysInputError(oldCreateBy,0l,1l);
-        sysInputErrorMapper.saveInputError(sysInputError);
     }
 
     @Override

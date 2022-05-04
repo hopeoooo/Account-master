@@ -42,4 +42,7 @@ public class PorintUpdate {
     @ApiModelProperty("保险减")
     private BigDecimal insuranceSub;
 
+    @ApiModelProperty("备注")
+    private String remark;
+
 }

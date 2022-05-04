@@ -1,6 +1,7 @@
 package com.account.system.mapper;
 
 import com.account.system.domain.SysPorint;
+import com.account.system.domain.SysPorintUpdate;
 import com.account.system.domain.SysReceipt;
 import com.account.system.domain.search.ReceiptReportSearch;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,13 @@ public interface PorintMapper {
     Map selectPorintCount(ReceiptReportSearch receiptReportSearch);
 
     SysPorint selectPorint(@Param("id") Long id);
+
+    void editPorint(SysPorint porint);
+
+    List<SysPorint> getPorints(SysPorint sysPorint);
+
+    void savePorintUpdate(SysPorintUpdate sysPorintUpdate);
+
+    void editPorints(List<SysPorint> list, @Param("chipAdd") BigDecimal chipAdd, @Param("cashAdd") BigDecimal cashAdd
+            , @Param("insuranceAdd") BigDecimal insuranceAdd);
 }

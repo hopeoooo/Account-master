@@ -4,14 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.account.system.mapper.SysInputErrorMapper">
 
-    <insert id="saveInputError">
-        insert into sys_input_error (user_name, `input`, `error`)
-        values (#{userName}, #{input}, #{error})
-        ON DUPLICATE KEY UPDATE
-        `input` = `input` + #{input},
-        `error` = `error` + #{error}
-    </insert>
-
     <select id="selectInputErrorList" resultType="com.account.system.domain.vo.SysInputErrorVo">
         SELECT
         u.user_name as userName,u.nick_name as nickName,

@@ -67,8 +67,8 @@ public class SysTableManagement extends BaseEntity {
     public SysTableManagement() {
     }
 
-    public SysTableManagement(Long id, BigDecimal chip, BigDecimal cash, BigDecimal insurance) {
-        this.id = id;
+    public SysTableManagement(Long tableId, BigDecimal chip, BigDecimal cash, BigDecimal insurance) {
+        this.tableId = tableId;
         this.chip = chip;
         this.cash = cash;
         this.insurance = insurance;

@@ -163,7 +163,7 @@
                 insurance_add = insurance_add + #{insuranceAdd},
             </if>
         </set>
-        where id = #{id}
+        where table_id = #{tableId} and is_delete!=1
     </update>
 
     <update id="resetTableMoney">
