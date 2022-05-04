@@ -64,6 +64,8 @@ public enum ResultEnum {
 
     RESULT_BJL_458("458", "庄 庄对闲对"),
 
+    RESULT_BJL_485("485", "庄 闲对庄对"),
+
     RESULT_BJL_45("45", "庄 闲对"),
 
     RESULT_BJL_48("48", "庄 庄对"),
