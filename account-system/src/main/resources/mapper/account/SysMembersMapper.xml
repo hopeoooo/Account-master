@@ -309,7 +309,7 @@
         </where>
         ORDER BY
         m.chip,
-        m.create_time DESC
+        m.card DESC
     </select>
     <!--买码换现总计-->
     <select id="selectBusinessCashChipTotal" resultType="java.util.Map">
@@ -358,7 +358,7 @@
             </if>
         </where>
         ORDER BY  IFNULL( w.water, 0 ),
-        m.create_time DESC
+        m.card DESC
     </select>
 
 
