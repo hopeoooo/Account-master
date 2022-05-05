@@ -103,7 +103,7 @@ public class SysWaterController extends BaseController {
             return AjaxResult.success("当前卡号不存在!");
         }
         if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-            return AjaxResult.success("该卡号已停用!");
+            return AjaxResult.success("该会员不可结算洗码!");
         }
         if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
             return AjaxResult.success("该会员不可结算洗码!");
@@ -115,13 +115,12 @@ public class SysWaterController extends BaseController {
         }
 
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
-        BigDecimal water = new BigDecimal(map.get("water").toString());
         BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
-        if (water.compareTo(BigDecimal.ZERO)==0 || waterAmount.compareTo(BigDecimal.ZERO)==0){
+        if (waterAmount.compareTo(BigDecimal.ZERO)==0 || waterSearch.getWaterAmount().compareTo(BigDecimal.ZERO)==0){
             return AjaxResult.success("当前会员没有可结算洗码费!");
         }
 
-        if (waterSearch.getWater().compareTo(water)>0  || waterSearch.getWaterAmount().compareTo(waterAmount)>0){
+        if (waterSearch.getWaterAmount().compareTo(waterAmount)>0){
             return AjaxResult.success("结算洗码失败!");
         }
         waterSearch.setUpdateBy(SecurityUtils.getUsername());
@@ -135,8 +134,7 @@ public class SysWaterController extends BaseController {
     @PostMapping("/batchSettlementWater")
     @ApiOperation(value = "批量结算洗码")
     public AjaxResult batchSettlementWater(@Validated @RequestBody List<SysWaterSearch> waterSearch) {
-        waterSearch=waterSearch.stream().filter(item  -> item.getWaterAmount().compareTo(BigDecimal.ZERO)>0)
-                .collect(Collectors.toList());
+        //waterSearch=waterSearch.stream().filter(item  -> item.getWaterAmount().compareTo(BigDecimal.ZERO)>0).collect(Collectors.toList());
         for (int i=0;i< waterSearch.size();i++){
             SysWaterSearch info = waterSearch.get(i);
             //判断该卡号是否存在
@@ -145,7 +143,7 @@ public class SysWaterController extends BaseController {
                 return AjaxResult.success("结算失败!");
             }
             if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-                return AjaxResult.success("该卡号已停用!");
+                return AjaxResult.success("结算失败!");
             }
             if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
                 return AjaxResult.success("结算失败!");
@@ -157,12 +155,11 @@ public class SysWaterController extends BaseController {
             }
 
             Map map = membersWaterService.selectMembersWaterInfo(info.getCard());
-            BigDecimal water = new BigDecimal(map.get("water").toString());
             BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
-            if (water.compareTo(BigDecimal.ZERO)==0 || waterAmount.compareTo(BigDecimal.ZERO)==0){
+            if (waterAmount.compareTo(BigDecimal.ZERO)==0 || info.getWaterAmount().compareTo(BigDecimal.ZERO)==0){
                 return AjaxResult.success("结算失败!");
             }
-            if (info.getWater().compareTo(water)>0  || info.getWaterAmount().compareTo(waterAmount)>0){
+            if (info.getWaterAmount().compareTo(waterAmount)>0){
                 return AjaxResult.success("结算失败!");
             }
             info.setCreateBy(SecurityUtils.getUsername());
