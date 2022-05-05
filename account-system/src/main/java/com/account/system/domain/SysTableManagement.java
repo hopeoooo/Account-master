@@ -64,6 +64,9 @@ public class SysTableManagement extends BaseEntity {
     @ApiModelProperty(hidden = true)
     private BigDecimal insuranceAdd;
 
+    @ApiModelProperty(hidden = true)
+    private BigDecimal isDelete;
+
     public SysTableManagement() {
     }
 
@@ -74,8 +77,8 @@ public class SysTableManagement extends BaseEntity {
         this.insurance = insurance;
     }
 
-    public SysTableManagement(Long id, Long bootNum, BigDecimal chipAdd, BigDecimal cashAdd, BigDecimal insuranceAdd) {
-        this.id = id;
+    public SysTableManagement(Long tableId, Long bootNum, BigDecimal chipAdd, BigDecimal cashAdd, BigDecimal insuranceAdd) {
+        this.tableId = tableId;
         this.bootNum = bootNum;
         this.chipAdd = chipAdd;
         this.cashAdd = cashAdd;

@@ -197,7 +197,7 @@
                version
         from sys_table_management
         where ip = #{ip}
-          and game_id = #{gameId}
+          <if test="gameId!=null"> and game_id = #{gameId} </if>
           and is_delete = 0 limit 0,1
     </select>
 </mapper>
