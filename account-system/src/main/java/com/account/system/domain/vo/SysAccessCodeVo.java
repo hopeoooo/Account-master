@@ -20,6 +20,8 @@ public class SysAccessCodeVo  {
 
     @ApiModelProperty("姓名")
     private String userName;
+    @ApiModelProperty("状态 0正常 1停用")
+    private Integer status;
 
     @ApiModelProperty( value ="已存筹码余额")
     private BigDecimal chipBalance;
@@ -29,6 +31,8 @@ public class SysAccessCodeVo  {
 
     @ApiModelProperty(value = "总余额")
     private BigDecimal totalBalance;
+    @ApiModelProperty( value ="签单额")
+    private BigDecimal signedAmount;
 
     @ApiModelProperty(value = "备注")
     private String remark;

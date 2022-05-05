@@ -17,6 +17,9 @@ public class SysSignedRecordVo {
     @ApiModelProperty("卡号")
     private String card;
 
+    @ApiModelProperty("状态 0正常 1停用")
+    private Integer status;
+
     @ApiModelProperty("姓名")
     private String userName;
 

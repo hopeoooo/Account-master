@@ -291,6 +291,7 @@
         m.NAME AS userName,
         m.card AS card,
         m.chip AS chipAmount,
+        m.`status` as status,
         m.is_cash AS isCash,
         m.is_out as isOut,
         m.remark,

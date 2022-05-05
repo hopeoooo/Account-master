@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             m.id as id,
             m.`name` as userName,
+        m.`status` as status,
             m.card as card,
             IFNULL(s.signed_amount,0) as signedAmount,
             m.remark as remark
