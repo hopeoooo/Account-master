@@ -109,10 +109,10 @@ public class SysWaterController extends BaseController {
             return AjaxResult.success("该会员不可结算洗码!");
         }
         //判断会员是否有欠钱
-        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, waterSearch.getCard());
+/*        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, waterSearch.getCard());
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("该会员不可结算洗码!");
-        }
+        }*/
 
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
         BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
@@ -149,10 +149,10 @@ public class SysWaterController extends BaseController {
                 return AjaxResult.success("结算失败!");
             }
             //判断会员是否有欠钱
-            SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, info.getCard());
+      /*      SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, info.getCard());
             if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
                 return AjaxResult.success("结算失败!");
-            }
+            }*/
 
             Map map = membersWaterService.selectMembersWaterInfo(info.getCard());
             BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
