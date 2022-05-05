@@ -106,10 +106,10 @@ public class SysRemittanceController extends BaseController {
             return AjaxResult.success("当前用户不可汇出!");
         }
         //判断会员是否有欠钱
-        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getCard());
+/*        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getCard());
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("当前用户不可汇出!");
-        }
+        }*/
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
         //汇出为筹码则校验,减用户筹码余额
         if (remittanceSearch.getOperationType()==CommonConst.NUMBER_1){

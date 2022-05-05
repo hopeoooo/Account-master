@@ -99,10 +99,10 @@ public class SysBusinessCashChipController extends BaseController {
             return AjaxResult.success("当前用户不可换现!");
         }
         //判断会员是否有欠钱
-        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, businessCashChipAddSearch.getCard());
+ /*       SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, businessCashChipAddSearch.getCard());
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("当前用户不可换现!");
-        }
+        }*/
         BigDecimal chip = sysMembers.getChip();
         if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0){
             return AjaxResult.success("余额不足!");
