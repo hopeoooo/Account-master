@@ -36,11 +36,12 @@ public class SysAccessCodeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:accessCode:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询存取码列表")
-    public TableDataInfo list(SysAccessCodeSearch accessCodeSearch){
+    public AjaxResult list(SysAccessCodeSearch accessCodeSearch){
         startPage();
         startOrderBy();
         List<SysAccessCodeVo> sysAccessCodeVos = accessCodeService.selectAccessCodeList(accessCodeSearch);
-        return getDataTable(sysAccessCodeVos);
+        //return getDataTable(sysAccessCodeVos);
+        return AjaxResult.success().put("rows",getDataTable(sysAccessCodeVos));
     }
 
 
