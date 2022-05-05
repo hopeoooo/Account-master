@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/system/water")
@@ -134,6 +135,8 @@ public class SysWaterController extends BaseController {
     @PostMapping("/batchSettlementWater")
     @ApiOperation(value = "批量结算洗码")
     public AjaxResult batchSettlementWater(@Validated @RequestBody List<SysWaterSearch> waterSearch) {
+        waterSearch=waterSearch.stream().filter(item  -> item.getWaterAmount().compareTo(BigDecimal.ZERO)>0)
+                .collect(Collectors.toList());
         for (int i=0;i< waterSearch.size();i++){
             SysWaterSearch info = waterSearch.get(i);
             //判断该卡号是否存在
