@@ -354,7 +354,7 @@
                 AND (m.card = #{card} or m.parent_card = #{card})
             </if>
         </where>
-        ORDER BY w.water desc
+        ORDER BY  IFNULL( w.water, 0 ) desc
     </select>
 
 
