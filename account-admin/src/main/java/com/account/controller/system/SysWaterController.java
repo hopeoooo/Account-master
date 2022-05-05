@@ -9,6 +9,7 @@ import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysOddsConfigure;
 import com.account.system.domain.SysSignedRecord;
+import com.account.system.domain.search.SysWaterListSearch;
 import com.account.system.domain.search.SysWaterSearch;
 import com.account.system.domain.vo.SysMaterVo;
 import com.account.system.service.SysMembersService;
@@ -133,10 +134,11 @@ public class SysWaterController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:water:list')")
     @PostMapping("/batchSettlementWater")
     @ApiOperation(value = "批量结算洗码")
-    public AjaxResult batchSettlementWater(@Validated @RequestBody List<SysWaterSearch> waterSearch) {
+    public AjaxResult batchSettlementWater(@Validated @RequestBody SysWaterListSearch waterSearch) {
         //waterSearch=waterSearch.stream().filter(item  -> item.getWaterAmount().compareTo(BigDecimal.ZERO)>0).collect(Collectors.toList());
-        for (int i=0;i< waterSearch.size();i++){
-            SysWaterSearch info = waterSearch.get(i);
+        for (int i=0;i< waterSearch.getList().size();i++){
+            SysWaterSearch info = waterSearch.getList().get(i);
+            info.setOperationType(waterSearch.getOperationType());
             //判断该卡号是否存在
             SysMembers sysMembers = membersService.selectmembersByCard(info.getCard());
             if (sysMembers==null){
@@ -165,7 +167,7 @@ public class SysWaterController extends BaseController {
             info.setCreateBy(SecurityUtils.getUsername());
             info.setUpdateBy(SecurityUtils.getUsername());
         }
-        membersWaterService.updateMembersWaterList(waterSearch);
+        membersWaterService.updateMembersWaterList(waterSearch.getList());
         return AjaxResult.success("结算洗码成功!");
     }
 }
