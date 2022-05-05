@@ -307,7 +307,9 @@
                 AND m.card = #{card}
             </if>
         </where>
-        ORDER BY m.chip desc
+        ORDER BY
+        m.chip,
+        m.create_time DESC
     </select>
     <!--买码换现总计-->
     <select id="selectBusinessCashChipTotal" resultType="java.util.Map">
