@@ -293,6 +293,10 @@ public class BetServiceImpl implements BetService {
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
         map.put("insuranceGap", insuranceGap);
+        if(sysTableManagement.getGameId()==2){//龙虎 计算和钱
+            BigDecimal tie = checkDecimal(betMapper.selectTie(sysTableManagement));
+            map.put("tie", tie);
+        }
         return map;
     }
 
@@ -300,6 +304,7 @@ public class BetServiceImpl implements BetService {
      * 收码
      */
     public Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        sysTableManagement.setBootNum(null);
         Map map = pointChip(reckon, sysTableManagement);
         BigDecimal chipReceipt = checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase())
                 .subtract(checkDecimal(reckon.getChipAdd()))
