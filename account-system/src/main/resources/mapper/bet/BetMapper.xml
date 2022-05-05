@@ -116,6 +116,8 @@
             </if>
         </where>
         GROUP BY bt.bet_id
+        ORDER BY
+        bt.create_time DESC
     </select>
 
     <select id="selectBetOptionList" resultType="com.account.system.domain.vo.BetInfoOptionVo">
@@ -329,7 +331,7 @@
         </where>
         GROUP BY
             m.card
-        ORDER BY SUM( b.bet_money ) desc
+        ORDER BY   IFNULL( SUM( b.bet_money ), 0 ) desc
     </select>
 
     <select id="getBetsByResult" resultType="SysBet">
