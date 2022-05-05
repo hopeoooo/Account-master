@@ -20,7 +20,7 @@
         set sys_chip      = sys_chip + #{chip},
             chip_gap      = chip_gap + #{chip},
             sys_cash      = sys_chip + #{cash},
-            cash_gap      = chip_gap + #{cash},
+            cash_gap      = cash_gap + #{cash},
             sys_insurance = sys_insurance + #{insurance},
             insurance_gap = insurance_gap + #{insurance},
             chip_win      = chip_win - #{cash} - #{chip},
@@ -131,7 +131,7 @@
             person_insurance = #{personInsurance},
             insurance_add    = #{insuranceAdd},
             insurance_gap    = #{insuranceGap},
-            <if test="remark != null and remark != ''"> remark = #{remark} </if>
+            <if test="remark != null and remark != ''"> remark = #{remark}, </if>
             update_by   = #{updateBy},
             update_time = sysdate()
         where id = #{id}
@@ -169,11 +169,11 @@
 
     <insert id="savePorintUpdate">
         insert into sys_porint_update (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
-                                ,cash_gap,cash_add,
+                                cash_gap,cash_add,
                                 sys_insurance, person_insurance,insurance_gap,insurance_add,
                                 water,chip_win,insurance_win,create_by,create_time,remark)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
-                ,#{cashGap}, #{cashAdd},
+                #{cashGap}, #{cashAdd},
                 #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
                 #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark})
     </insert>

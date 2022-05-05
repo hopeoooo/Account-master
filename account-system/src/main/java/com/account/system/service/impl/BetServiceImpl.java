@@ -145,10 +145,10 @@ public class BetServiceImpl implements BetService {
                     SysPorint sysPorint = porintMapper.getPorint(gameResult.getTableId(), gameResult.getBootNum(), gameResult.getVersion());
                     SysReceipt sysReceipt = receiptMapper.getReceipt(gameResult.getTableId(), gameResult.getVersion());
                     if (sysPorint != null) {
-                        porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
+                        porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
                     }
                     if (sysReceipt != null) {
-                        receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, water);
+                        receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
                     } else {
                         //修改 桌台 累计
                         sysTableManagementMapper.addTableMoney(new SysTableManagement(gameResult.getTableId(), tableChip, tableCash, tableInsurance));

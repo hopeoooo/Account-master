@@ -12,6 +12,7 @@ import com.account.system.mapper.SysTableManagementMapper;
 import com.account.system.service.SysPorintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -66,6 +67,7 @@ public class SysPorintServiceImpl implements SysPorintService {
     /**
      * 修改点码 确认修改
      */
+    @Transactional
     public void editPorint(PorintUpdate porintUpdate) {
         SysPorint sysPorint = porintMapper.selectPorint(porintUpdate.getId());
         SysPorint porint = sysPorint.clone();

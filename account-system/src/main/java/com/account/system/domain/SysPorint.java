@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @since 2022/4/22
  */
 @Data
-public class SysPorint extends BaseEntity {
+public class SysPorint extends BaseEntity implements Cloneable {
 
     @ApiModelProperty("id")
     private int id;
