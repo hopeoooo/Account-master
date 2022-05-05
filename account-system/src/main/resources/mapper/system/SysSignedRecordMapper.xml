@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND m.card = #{card}
             </if>
         </where>
-        ORDER BY s.signed_amount desc
+        ORDER BY s.signed_amount,m.card desc
     </select>
 
 
