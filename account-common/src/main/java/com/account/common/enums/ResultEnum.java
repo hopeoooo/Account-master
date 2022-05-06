@@ -18,6 +18,9 @@ public enum ResultEnum {
     RESULT_BJL_1586("1586", "闲 庄对闲对 小"),
     RESULT_BJL_1589("1589", "闲 庄对闲对 大"),
 
+    RESULT_BJL_1856("1856", "闲 闲对庄对 小"),
+    RESULT_BJL_1859("1859", "闲 闲对庄对 大"),
+
     RESULT_BJL_156("156", "闲 闲对 小"),
     RESULT_BJL_159("159", "闲 闲对 大"),
 
@@ -30,6 +33,9 @@ public enum ResultEnum {
 
     RESULT_BJL_4586("4586", "庄 庄对闲对 小"),
     RESULT_BJL_4589("4589", "庄 庄对闲对 大"),
+
+    RESULT_BJL_4856("4856", "庄 闲对庄对 小"),
+    RESULT_BJL_4859("4859", "庄 闲对庄对 大"),
 
     RESULT_BJL_456("456", "庄 闲对 小"),
     RESULT_BJL_459("459", "庄 闲对 大"),
@@ -44,6 +50,9 @@ public enum ResultEnum {
     RESULT_BJL_7586("7586", "和 庄对闲对 小"),
     RESULT_BJL_7589("7589", "和 庄对闲对 大"),
 
+    RESULT_BJL_7856("7856", "和 闲对庄对 小"),
+    RESULT_BJL_7859("7859", "和 闲对庄对 大"),
+
     RESULT_BJL_756("756", "和 闲对 小"),
     RESULT_BJL_759("759", "和 闲对 大"),
 
@@ -54,6 +63,8 @@ public enum ResultEnum {
     RESULT_BJL_1("1", "闲"),
 
     RESULT_BJL_158("158", "闲 庄对闲对"),
+
+    RESULT_BJL_185("185", "闲 闲对庄对"),
 
     RESULT_BJL_15("15", "闲 闲对"),
 
@@ -74,6 +85,8 @@ public enum ResultEnum {
     RESULT_BJL_7("7", "和"),
 
     RESULT_BJL_758("758", "和 庄对闲对"),
+
+    RESULT_BJL_785("785", "和 闲对庄对"),
 
     RESULT_BJL_75("75", "和 闲对"),
 
