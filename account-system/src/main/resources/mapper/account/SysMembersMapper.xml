@@ -308,7 +308,7 @@
             </if>
         </where>
         ORDER BY
-        m.chip,
+        m.chip DESC,
         m.card DESC
     </select>
     <!--买码换现总计-->
@@ -357,7 +357,7 @@
                 AND (m.card = #{card} or m.parent_card = #{card})
             </if>
         </where>
-        ORDER BY  IFNULL( w.water, 0 ),
+        ORDER BY  IFNULL( w.water, 0 ) DESC,
         m.card DESC
     </select>
 

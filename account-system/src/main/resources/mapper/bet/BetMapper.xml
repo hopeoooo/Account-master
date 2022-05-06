@@ -117,7 +117,7 @@
         </where>
         GROUP BY bt.bet_id
         ORDER BY
-        bt.create_time DESC
+        bt.create_time,bt.card  DESC
     </select>
 
     <select id="selectBetOptionList" resultType="com.account.system.domain.vo.BetInfoOptionVo">
