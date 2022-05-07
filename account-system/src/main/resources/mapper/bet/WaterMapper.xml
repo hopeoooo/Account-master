@@ -20,6 +20,8 @@
         <set>
         water = water - #{water},
         water_amount = water_amount - #{waterAmount},
+        water_th = water_th - #{waterTh},
+        water_amount_th = water_amount_th - #{waterAmountTh},
         update_time = sysdate(),
         update_by = #{updateBy}
         </set>
@@ -33,6 +35,8 @@
                 <if test="item != null">
                     `water` = `water` - #{item.water},
                     `water_amount` = `water_amount` - #{item.waterAmount},
+                    `water_th` = `water_th` - #{item.waterTh},
+                    `water_amount_th` = `water_amount_th` - #{item.waterAmountTh},
                     `update_time` = sysdate(),
                     `update_by` = #{item.updateBy}
                 </if>
@@ -46,7 +50,9 @@
         SELECT
             m.card as card,
             m.water as water,
-            m.water_amount  as waterAmount
+            m.water_amount  as waterAmount,
+            m.water_th as waterTh,
+            m.water_amount_th  as waterAmountTh
         FROM
             sys_members_water m
         where m.card=#{card}

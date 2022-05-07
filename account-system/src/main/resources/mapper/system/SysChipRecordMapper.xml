@@ -37,8 +37,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="addChipRecordList">
         <foreach item="item" index="index" collection="list" separator=";">
-        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time)
-        values (#{item.card},#{item.type},#{item.before},#{item.change},#{item.after},#{item.createBy},sysdate())
+
+            INSERT INTO sys_chip_record
+            (
+            <if test="item.card != null and item.card != ''">card,</if>
+            <if test="item.type != null and item.type != ''">type,</if>
+            <if test="item.before != null">`before`,</if>
+            <if test="item.change != null"> `change`,</if>
+            <if test="item.after != null ">`after`,</if>
+            <if test="item.beforeTh != null">before_th,</if>
+            <if test="item.changeTh != null">change_th,</if>
+            <if test="item.afterTh != null ">after_th,</if>
+            <if test="item.createBy != null and item.createBy != ''">create_by,</if>
+            create_time )
+            values(
+            <if test="item.card != null and item.card != ''">#{item.card},</if>
+            <if test="item.type != null and item.type != ''">#{item.type},</if>
+            <if test="item.before != null ">#{item.before},</if>
+            <if test="item.change != null">#{item.change},</if>
+            <if test="item.after != null ">#{item.after},</if>
+            <if test="item.beforeTh != null ">#{item.beforeTh},</if>
+            <if test="item.changeTh != null ">#{item.changeTh},</if>
+            <if test="item.afterTh != null ">#{item.afterTh},</if>
+            <if test="item.createBy != null and item.createBy != ''">#{item.createBy},</if>
+            sysdate()
+            )
         </foreach>
     </insert>
 

@@ -12,6 +12,11 @@
         w.water AS water,
         w.water_amount AS waterAmount,
         w.actual_water_amount AS actualWaterAmount,
+
+        w.water_th AS waterTh,
+        w.water_amount_th AS waterAmountTh,
+        w.actual_water_amount_th AS actualWaterAmountTh,
+
         w.deadline AS deadline,
         w.create_time AS createTime,
         w.remark as remark,
@@ -47,7 +52,9 @@
     <select id="selectWaterDetailedTotal" resultType="java.util.Map">
         SELECT
         IFNULL(SUM(w.water),0) as sumWater,
-        IFNULL(SUM(w.water_amount),0) as sumWaterAmount
+        IFNULL(SUM(w.water_amount),0) as sumWaterAmount,
+        IFNULL(SUM(w.water_th),0) as sumWaterTh,
+        IFNULL(SUM(w.water_amount_th),0) as sumWaterAmountTh
         FROM
         sys_water_detailed w
         LEFT JOIN sys_members m ON m.card = w.card
@@ -83,6 +90,11 @@
         <if test="water != null and water != ''">water,</if>
         <if test="waterAmount != null and waterAmount != ''">water_amount,</if>
         <if test="actualWaterAmount != null and actualWaterAmount != ''">actual_water_amount,</if>
+
+        <if test="waterTh != null and waterTh != ''">water_th,</if>
+        <if test="waterAmountTh != null and waterAmountTh != ''">water_amount_th,</if>
+        <if test="actualWaterAmountTh != null and actualWaterAmountTh != ''">actual_water_amount_th,</if>
+
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,deadline )
@@ -92,6 +104,12 @@
         <if test="water != null and water != ''">#{water},</if>
         <if test="waterAmount != null and waterAmount != ''">#{waterAmount},</if>
         <if test="actualWaterAmount != null and actualWaterAmount != ''">#{actualWaterAmount},</if>
+
+        <if test="waterTh != null and waterTh != ''">#{waterTh},</if>
+        <if test="waterAmountTh != null and waterAmountTh != ''">#{waterAmountTh},</if>
+        <if test="actualWaterAmountTh != null and actualWaterAmountTh != ''">#{actualWaterAmountTh},</if>
+
+
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(), sysdate()
@@ -108,6 +126,11 @@
         <if test="item.water != null and item.water != ''">water,</if>
         <if test="item.waterAmount != null and item.waterAmount != ''">water_amount,</if>
         <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">actual_water_amount,</if>
+
+            <if test="item.waterTh != null and item.waterTh != ''">water_th,</if>
+            <if test="item.waterAmountTh != null and item.waterAmountTh != ''">water_amount_th,</if>
+            <if test="item.actualWaterAmountTh != null and item.actualWaterAmountTh != ''">actual_water_amount_th,</if>
+
         <if test="item.remark != null and item.remark != ''">remark,</if>
         <if test="item.createBy != null and item.createBy != ''">create_by,</if>
         create_time,deadline )
@@ -118,6 +141,11 @@
             <if test="item.water != null and item.water != ''">#{item.water},</if>
             <if test="item.waterAmount != null and item.waterAmount != ''">#{item.waterAmount},</if>
             <if test="item.actualWaterAmount != null and item.actualWaterAmount != ''">#{item.actualWaterAmount},</if>
+
+            <if test="item.waterTh != null and item.waterTh != ''">#{item.waterTh},</if>
+            <if test="item.waterAmountTh != null and item.waterAmountTh != ''">#{item.waterAmountTh},</if>
+            <if test="item.actualWaterAmountTh != null and item.actualWaterAmountTh != ''">#{item.actualWaterAmountTh},</if>
+
             <if test="item.remark != null and item.remark != ''">#{item.remark},</if>
             <if test="item.createBy != null and item.createBy != ''">#{item.createBy},</if>
             sysdate(), sysdate()

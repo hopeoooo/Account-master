@@ -32,6 +32,18 @@ public class SysWaterDetailed extends BaseEntity {
     @ApiModelProperty(value = "实际结算洗码费")
     private BigDecimal actualWaterAmount;
 
+
+    @ApiModelProperty(value = "结算洗码量-泰铢")
+    private BigDecimal waterTh;
+
+
+    @ApiModelProperty(value = "应结算洗码费-泰铢")
+    private BigDecimal waterAmountTh;
+
+
+    @ApiModelProperty(value = "实际结算洗码费-泰铢")
+    private BigDecimal actualWaterAmountTh;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

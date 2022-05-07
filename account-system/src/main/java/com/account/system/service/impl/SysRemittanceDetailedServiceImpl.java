@@ -40,7 +40,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
         List<SysRemittanceDetailedVo> sysRemittanceDetailedVos = remittanceDetailedMapper.selectRemittanceDetailedList(remittanceDetailedSearch);
 
         //渲染展示汇款类型,货币类型
-        sysRemittanceDetailedVos.stream().forEach(vo -> {
+/*        sysRemittanceDetailedVos.stream().forEach(vo -> {
             //汇款类型
             String remittanceTypeDisplay = RemittanceTypeEnum.getByValue(vo.getType()).getDisplay();
             vo.setTypeDisplay(remittanceTypeDisplay);
@@ -48,7 +48,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
             //货币类型
             String currencyTypeEnumDisplay = CurrencyTypeEnum.getByValue(vo.getOperationType()).getDisplay();
             vo.setOperationTypeDisplay(currencyTypeEnumDisplay);
-        });
+        });*/
         return sysRemittanceDetailedVos;
     }
 

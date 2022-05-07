@@ -368,8 +368,10 @@
         m.is_settlement AS isSettlement,
         IFNULL( w.water, 0 ) AS water,
         IFNULL( w.water_amount, 0 ) AS waterAmount,
+        IFNULL( w.water_th, 0 ) AS waterTh,
+        IFNULL( w.water_amount_th, 0 ) AS waterAmountTh,
         m.remark as remark,
-        IFNULL( r.signed_amount , 0 )as signedAmount,
+        IFNULL( s.signed_amount, 0 ) + 	IFNULL( s.signed_amount_th, 0 ) AS signedAmount
         m.`status` as status
         FROM
         sys_members m
@@ -399,7 +401,9 @@
     <select id="selectWaterTotal" resultType="java.util.Map">
         SELECT
         IFNULL(SUM(w.water),0) AS water,
-        IFNULL(SUM(w.water_amount),0) AS waterAmount
+        IFNULL(SUM(w.water_amount),0) AS waterAmount,
+        IFNULL(SUM(w.water_th),0) AS waterTh,
+        IFNULL(SUM(w.water_amount_th),0) AS waterAmountTh
         FROM
         sys_members m
         LEFT JOIN sys_members_water w ON w.card = m.card

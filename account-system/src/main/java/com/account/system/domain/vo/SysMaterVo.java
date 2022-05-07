@@ -29,8 +29,19 @@ public class SysMaterVo {
     @ApiModelProperty("未结算洗码费")
     private BigDecimal waterAmount;
 
+
     @ApiModelProperty("实际结算洗码费")
     private BigDecimal actualWaterAmount;
+
+    @ApiModelProperty("未结算洗码量-泰铢")
+    private BigDecimal waterTh;
+
+    @ApiModelProperty("未结算洗码费-泰铢")
+    private BigDecimal waterAmountTh;
+
+
+    @ApiModelProperty("实际结算洗码费-泰铢")
+    private BigDecimal actualWaterAmountTh;
 
     @ApiModelProperty("签单金额")
     private BigDecimal signedAmount;
