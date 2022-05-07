@@ -70,6 +70,51 @@ public class SysPorint extends BaseEntity implements Cloneable {
     @ApiModelProperty("保险输赢")
     private BigDecimal insuranceWin;
 
+    @ApiModelProperty("系统点码数")
+    private BigDecimal sysChipTh;
+
+    @ApiModelProperty("手动点码数")
+    private BigDecimal personChipTh;
+
+    @ApiModelProperty("筹码差距")
+    private BigDecimal chipGapTh;
+
+    @ApiModelProperty("筹码增减")
+    private BigDecimal chipAddTh;
+
+    @ApiModelProperty("系统现金点码数")
+    private BigDecimal sysCashTh;
+
+    @ApiModelProperty("手动现金点码数")
+    private BigDecimal personCashTh;
+
+    @ApiModelProperty("现金差距")
+    private BigDecimal cashGapTh;
+
+    @ApiModelProperty("现金增减")
+    private BigDecimal cashAddTh;
+
+    @ApiModelProperty("保险系统点码数")
+    private BigDecimal sysInsuranceTh;
+
+    @ApiModelProperty("保险手动点码数")
+    private BigDecimal personInsuranceTh;
+
+    @ApiModelProperty("保险差距")
+    private BigDecimal insuranceGapTh;
+
+    @ApiModelProperty("保险增减")
+    private BigDecimal insuranceAddTh;
+
+    @ApiModelProperty("洗码量")
+    private BigDecimal waterTh;
+
+    @ApiModelProperty("筹码输赢")
+    private BigDecimal chipWinTh;
+
+    @ApiModelProperty("保险输赢")
+    private BigDecimal insuranceWinTh;
+
     public SysPorint() {
 
     }

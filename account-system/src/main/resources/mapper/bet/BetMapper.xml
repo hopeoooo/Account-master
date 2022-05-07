@@ -231,9 +231,13 @@
 
     <insert id="saveReceipt">
         insert into sys_receipt ( table_id, version, chip, cash, insurance, chip_add, cash_add, insurance_add, water,
-                                  win,insurance_win,create_by,create_time,remark)
-        values (#{tableId}, #{version}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, 0, #{insuranceAdd},#{water},
-                #{win}, #{insuranceWin},#{createBy},sysdate(),#{remark})
+                                  win,insurance_win,create_by,create_time,remark,
+                                 chip_th, cash_th, insurance_th, chip_add_th, cash_add_th, insurance_add_th, water_th,
+                                  win_th,insurance_win_th)
+        values (#{tableId}, #{version}, #{chip}, #{cash}, #{insurance}, #{chipAdd}, #{cashAdd}, #{insuranceAdd},#{water},
+                #{win}, #{insuranceWin},#{createBy},sysdate(),#{remark},
+                #{chipTh}, #{cashTh}, #{insuranceTh}, #{chipAddTh}, #{cashAddTh}, #{insuranceAddTh},#{waterTh},
+                #{winTh}, #{insuranceWinTh})
     </insert>
 
     <select id="selectDailyReportList" resultType="java.util.Map">

@@ -119,11 +119,15 @@ public class SysTableManagement extends BaseEntity {
         this.insuranceTh = insuranceTh;
     }
 
-    public SysTableManagement(Long tableId, Long bootNum, BigDecimal chipAdd, BigDecimal cashAdd, BigDecimal insuranceAdd) {
+    public SysTableManagement(Long tableId, Long bootNum, BigDecimal chipAdd, BigDecimal cashAdd, BigDecimal insuranceAdd
+            , BigDecimal chipAddTh, BigDecimal cashAddTh, BigDecimal insuranceAddTh) {
         this.tableId = tableId;
         this.bootNum = bootNum;
         this.chipAdd = chipAdd;
         this.cashAdd = cashAdd;
         this.insuranceAdd = insuranceAdd;
+        this.chipAddTh = chipAddTh;
+        this.cashAddTh = cashAddTh;
+        this.insuranceAddTh = insuranceAddTh;
     }
 }

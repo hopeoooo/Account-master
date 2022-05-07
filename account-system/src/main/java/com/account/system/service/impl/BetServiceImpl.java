@@ -400,11 +400,16 @@ public class BetServiceImpl implements BetService {
         BigDecimal cashAdd = checkDecimal(reckon.getCashAdd()).subtract(checkDecimal(reckon.getCashSub()));
         BigDecimal insuranceAdd = checkDecimal(reckon.getInsuranceAdd()).subtract(checkDecimal(reckon.getInsuranceSub()));
 
+        BigDecimal chipAddTh = checkDecimal(reckon.getChipAddTh()).subtract(checkDecimal(reckon.getChipSubTh()));
+        BigDecimal cashAddTh = checkDecimal(reckon.getCashAddTh()).subtract(checkDecimal(reckon.getCashSubTh()));
+        BigDecimal insuranceAddTh = checkDecimal(reckon.getInsuranceAddTh()).subtract(checkDecimal(reckon.getInsuranceSubTh()));
+
         SysPorint sysPorint = new SysPorint();
         sysPorint.setCreateBy(SecurityUtils.getUsername());
         sysPorint.setTableId(sysTableManagement.getTableId());
         sysPorint.setVersion(sysTableManagement.getVersion());
         sysPorint.setBootNum(sysTableManagement.getBootNum());
+        sysPorint.setRemark(reckon.getRemark());
 
         sysPorint.setSysChip(sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
                 .add(sysTableManagement.getChipAdd()).add(checkDecimal(reckon.getChipAdd()))
@@ -430,9 +435,34 @@ public class BetServiceImpl implements BetService {
         sysPorint.setWater(checkDecimal(betMapper.getWater(sysTableManagement)));
         sysPorint.setChipWin(checkDecimal(betMapper.getWinLose(sysTableManagement)));
         sysPorint.setInsuranceWin(checkDecimal(betMapper.getInsuranceWin(sysTableManagement)));
-        sysPorint.setRemark(reckon.getRemark());
+
+        sysPorint.setSysChipTh(sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh())
+                .add(sysTableManagement.getChipAddTh()).add(checkDecimal(reckon.getChipAddTh()))
+                .subtract(checkDecimal(reckon.getChipSubTh())));
+        sysPorint.setPersonChipTh(checkDecimal(reckon.getChipTh()));
+        sysPorint.setChipGapTh(sysPorint.getPersonChipTh().subtract(sysPorint.getSysChipTh()));
+        sysPorint.setChipAddTh(checkDecimal(reckon.getChipAddTh()).subtract(checkDecimal(reckon.getChipSubTh())));
+
+        sysPorint.setSysCashTh(sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh())
+                .add(sysTableManagement.getCashAddTh()).add(checkDecimal(reckon.getCashAddTh()))
+                .subtract(checkDecimal(reckon.getCashSubTh())));
+        sysPorint.setPersonCashTh(checkDecimal(reckon.getCashTh()));
+        sysPorint.setCashGapTh(sysPorint.getPersonCashTh().subtract(sysPorint.getSysCashTh()));
+        sysPorint.setCashAddTh(checkDecimal(reckon.getCashAddTh()).subtract(checkDecimal(reckon.getCashSubTh())));
+
+        sysPorint.setSysInsuranceTh(sysTableManagement.getInsurancePointBaseTh().add(sysTableManagement.getInsuranceTh())
+                .add(sysTableManagement.getInsuranceAddTh()).add(checkDecimal(reckon.getInsuranceAddTh()))
+                .subtract(checkDecimal(reckon.getInsuranceSubTh())));
+        sysPorint.setPersonInsuranceTh(checkDecimal(reckon.getInsuranceTh()));
+        sysPorint.setInsuranceGapTh(sysPorint.getPersonInsuranceTh().subtract(sysPorint.getSysInsuranceTh()));
+        sysPorint.setInsuranceAddTh(checkDecimal(reckon.getInsuranceAddTh()).subtract(checkDecimal(reckon.getInsuranceSubTh())));
+
+        sysPorint.setWaterTh(checkDecimal(betMapper.getWaterTh(sysTableManagement)));
+        sysPorint.setChipWinTh(checkDecimal(betMapper.getWinLoseTh(sysTableManagement)));
+        sysPorint.setInsuranceWinTh(checkDecimal(betMapper.getInsuranceWinTh(sysTableManagement)));
+
         porintMapper.savePorint(sysPorint);
-        sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), 1l, chipAdd, cashAdd, insuranceAdd));
+        sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), 1l, chipAdd, cashAdd, insuranceAdd, chipAddTh, cashAddTh, insuranceAddTh));
     }
 
     /**
@@ -444,6 +474,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setCreateBy(SecurityUtils.getUsername());
         sysReceipt.setTableId(sysTableManagement.getTableId());
         sysReceipt.setVersion(sysTableManagement.getVersion());
+        sysReceipt.setRemark(reckon.getRemark());
 
         sysReceipt.setChip(checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase())
                 .subtract(checkDecimal(reckon.getChipAdd()))
@@ -453,6 +484,8 @@ public class BetServiceImpl implements BetService {
                 .subtract(checkDecimal(reckon.getChipSub())));
 
         sysReceipt.setCash(checkDecimal(reckon.getCash()).subtract(sysTableManagement.getCashPointBase()));
+        sysReceipt.setCashAdd((sysTableManagement.getCashAdd()).add(checkDecimal(reckon.getCashAdd()))
+                .subtract(checkDecimal(reckon.getCashSub())));
 
         sysReceipt.setInsurance(checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase())
                 .subtract(checkDecimal(reckon.getInsuranceAdd()))
@@ -464,7 +497,29 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setWater(checkDecimal(betMapper.getReceiptWater(sysTableManagement)));
         sysReceipt.setWin(checkDecimal(betMapper.getReceiptWinLose(sysTableManagement)));
         sysReceipt.setInsuranceWin(checkDecimal(betMapper.getReceiptInsuranceWin(sysTableManagement)));
-        sysReceipt.setRemark(reckon.getRemark());
+
+        sysReceipt.setChipTh(checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh())
+                .subtract(checkDecimal(reckon.getChipAddTh()))
+                .add(checkDecimal(reckon.getChipSubTh()))
+                .subtract(sysTableManagement.getChipAddTh()));
+        sysReceipt.setChipAddTh((sysTableManagement.getChipAddTh()).add(checkDecimal(reckon.getChipAddTh()))
+                .subtract(checkDecimal(reckon.getChipSubTh())));
+
+        sysReceipt.setCashTh(checkDecimal(reckon.getCashTh()).subtract(sysTableManagement.getCashPointBaseTh()));
+        sysReceipt.setCashAddTh((sysTableManagement.getCashAddTh()).add(checkDecimal(reckon.getCashAddTh()))
+                .subtract(checkDecimal(reckon.getCashSubTh())));
+
+        sysReceipt.setInsuranceTh(checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh())
+                .subtract(checkDecimal(reckon.getInsuranceAddTh()))
+                .add(checkDecimal(reckon.getInsuranceSubTh()))
+                .subtract(sysTableManagement.getInsuranceAddTh()));
+        sysReceipt.setInsuranceAddTh((sysTableManagement.getInsuranceAddTh()).add(checkDecimal(reckon.getInsuranceAddTh()))
+                .subtract(checkDecimal(reckon.getInsuranceSubTh())));
+
+        sysReceipt.setWaterTh(checkDecimal(betMapper.getReceiptWaterTh(sysTableManagement)));
+        sysReceipt.setWinTh(checkDecimal(betMapper.getReceiptWinLoseTh(sysTableManagement)));
+        sysReceipt.setInsuranceWinTh(checkDecimal(betMapper.getReceiptInsuranceWinTh(sysTableManagement)));
+
         betMapper.saveReceipt(sysReceipt);
         sysTableManagementMapper.resetTableMoney(sysTableManagement.getId());
     }

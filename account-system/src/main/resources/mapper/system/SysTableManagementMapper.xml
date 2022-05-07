@@ -189,6 +189,15 @@
             <if test="insuranceAdd!=null">
                 insurance_add = insurance_add + #{insuranceAdd},
             </if>
+            <if test="chipAddTh!=null">
+                chip_add_th = chip_add_th + #{chipAddTh},
+            </if>
+            <if test="cashAddTh!=null">
+                cash_add_th = cash_add_th + #{cashAddTh},
+            </if>
+            <if test="insuranceAddTh!=null">
+                insurance_add_th = insurance_add_th + #{insuranceAddTh},
+            </if>
         </set>
         where table_id = #{tableId} and is_delete = 0
     </update>

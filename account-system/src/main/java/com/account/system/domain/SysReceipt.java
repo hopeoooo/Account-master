@@ -48,4 +48,31 @@ public class SysReceipt extends BaseEntity {
 
     @ApiModelProperty("保险输赢")
     private BigDecimal insuranceWin;
+
+    @ApiModelProperty("筹码-收 泰铢")
+    private BigDecimal chipTh;
+
+    @ApiModelProperty("现金-收 泰铢")
+    private BigDecimal cashTh;
+
+    @ApiModelProperty("保险筹码-收 泰铢")
+    private BigDecimal insuranceTh;
+
+    @ApiModelProperty("筹码增减 泰铢")
+    private BigDecimal chipAddTh;
+
+    @ApiModelProperty("现金增减 泰铢")
+    private BigDecimal cashAddTh;
+
+    @ApiModelProperty("保险增减 泰铢")
+    private BigDecimal insuranceAddTh;
+
+    @ApiModelProperty("洗码量 泰铢")
+    private BigDecimal waterTh;
+
+    @ApiModelProperty("输赢 泰铢")
+    private BigDecimal winTh;
+
+    @ApiModelProperty("保险输赢 泰铢")
+    private BigDecimal insuranceWinTh;
 }

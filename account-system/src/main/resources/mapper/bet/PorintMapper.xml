@@ -8,11 +8,19 @@
         insert into sys_porint (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
                                  sys_cash, person_cash,cash_gap,cash_add,
                                 sys_insurance, person_insurance,insurance_gap,insurance_add,
-                                water,chip_win,insurance_win,create_by,create_time,remark)
+                                water,chip_win,insurance_win,create_by,create_time,remark,
+                                sys_chip_th, person_chip_th, chip_gap_th, chip_add_th,
+                                sys_cash_th, person_cash_th,cash_gap_th,cash_add_th,
+                                sys_insurance_th, person_insurance_th,insurance_gap_th,insurance_add_th,
+                                water_th,chip_win_th,insurance_win_th)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
                 #{sysCash},#{personCash},#{cashGap}, #{cashAdd},
                 #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
-                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark})
+                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark},
+                #{sysChipTh}, #{personChipTh}, #{chipGapTh}, #{chipAddTh},
+                #{sysCashTh},#{personCashTh},#{cashGapTh}, #{cashAddTh},
+                #{sysInsuranceTh},#{personInsuranceTh},#{insuranceGapTh}, #{insuranceAddTh},
+                #{waterTh}, #{chipWinTh}, #{insuranceWinTh})
     </insert>
 
     <update id="updatePorint">

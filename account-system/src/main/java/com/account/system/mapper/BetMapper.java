@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * 注单
+ *
  * @author hope
  * @since 2022/4/22
  */
@@ -29,23 +30,41 @@ public interface BetMapper {
 
     Map selectBetTotal(BetSearch betSearch);
 
-    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} ")
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(0,1,4)")
     BigDecimal getWater(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version}")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version} and type in(0,1,4)")
     BigDecimal getWinLose(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version}")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version} and type in(0,1,4)")
     BigDecimal getInsuranceWin(SysTableManagement sysTableManagement);
 
-    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and version = #{version} ")
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(2,3,5)")
+    BigDecimal getWaterTh(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version} and type in(2,3,5)")
+    BigDecimal getWinLoseTh(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version} and type in(2,3,5)")
+    BigDecimal getInsuranceWinTh(SysTableManagement sysTableManagement);
+
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and version = #{version} and type in(0,1,4) ")
     BigDecimal getReceiptWater(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type != 2 and version = #{version}")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type != 2 and version = #{version} and type in(0,1,4)")
     BigDecimal getReceiptWinLose(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version}")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version} and type in(0,1,4)")
     BigDecimal getReceiptInsuranceWin(SysTableManagement sysTableManagement);
+
+    @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and version = #{version} and type in(2,3,5) ")
+    BigDecimal getReceiptWaterTh(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type != 2 and version = #{version} and type in(2,3,5)")
+    BigDecimal getReceiptWinLoseTh(SysTableManagement sysTableManagement);
+
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and type = 2 and version = #{version} and type in(2,3,5)")
+    BigDecimal getReceiptInsuranceWinTh(SysTableManagement sysTableManagement);
 
     List<SysBetInfo> getBetInfos(@Param("betId") Long betId);
 
@@ -66,9 +85,9 @@ public interface BetMapper {
 
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 
-    List<Map> selectTablePlumbingList(@Param("startTime") String startTime,@Param("endTime") String endTime);
+    List<Map> selectTablePlumbingList(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    Map selectTablePlumbingTotal(@Param("startTime") String startTime,@Param("endTime") String endTime);
+    Map selectTablePlumbingTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     @Delete("delete from sys_bet_info where bet_id = #{betId}")
     void deleteBetInfo(@Param("betId") Long betId);
