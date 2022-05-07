@@ -16,6 +16,18 @@
         where id = #{id}
     </update>
 
+    <update id="updateReceiptTh">
+        update sys_receipt
+        set chip_th          = chip_th + #{chip},
+            cash_th          = cash_th + #{cash},
+            insurance_th     = insurance_th + #{insurance},
+            win_th           = win_th - #{cash} - #{chip},
+            insurance_win_th = insurance_win_th - #{insurance},
+            water_th         = water_th + #{water},
+            update_time   = sysdate()
+        where id = #{id}
+    </update>
+
     <select id="selectReceiptList" resultType="com.account.system.domain.SysReceipt">
         SELECT
         r.table_id as tableId,

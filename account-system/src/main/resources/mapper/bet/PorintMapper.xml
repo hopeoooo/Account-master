@@ -38,6 +38,21 @@
         where id = #{id}
     </update>
 
+    <update id="updatePorintTh">
+        update sys_porint
+        set sys_chip_th      = sys_chip_th + #{chip},
+            chip_gap_th      = chip_gap_th + #{chip},
+            sys_cash_th      = sys_chip_th + #{cash},
+            cash_gap_th      = cash_gap_th + #{cash},
+            sys_insurance_th = sys_insurance_th + #{insurance},
+            insurance_gap_th = insurance_gap_th + #{insurance},
+            chip_win_th      = chip_win_th - #{cash} - #{chip},
+            insurance_win_th = insurance_win_th - #{insurance},
+            water_th         = water_th + #{water},
+            update_time   = sysdate()
+        where id = #{id}
+    </update>
+
     <select id="selectPorintList" resultType="sysPorint">
         SELECT
         id,

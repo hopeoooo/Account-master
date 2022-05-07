@@ -28,7 +28,7 @@ public class BetRepair {
     @ApiModelProperty("卡号")
     private String card;
 
-    @ApiModelProperty("币种(0 筹码 1现金)")
+    @ApiModelProperty("币种(0筹码 1现金 2泰铢筹码 3泰铢现金)")
     private int type;
 
     @ApiModelProperty("下注金额 eq:{\"1\":200,\"5\":500}")

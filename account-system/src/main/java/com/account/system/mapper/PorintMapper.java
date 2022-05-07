@@ -21,6 +21,9 @@ public interface PorintMapper {
     void updatePorint(@Param("id") int id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash
             , @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
 
+    void updatePorintTh(@Param("id") int id, @Param("chip") BigDecimal tableChip, @Param("cash") BigDecimal tableCash
+            , @Param("insurance") BigDecimal tableInsurance, @Param("water") BigDecimal water);
+
     @Select("select id from sys_porint where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} limit 0,1")
     SysPorint getPorint(@Param("tableId") Long tableId, @Param("bootNum") Long bootNum, @Param("version") Long version);
 
