@@ -23,6 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dragonTigerRatioCash"    column="dragon_tiger_ratio_cash"    />
         <result property="rollingCommissionRounding"    column="rolling_commission_rounding"    />
         <result property="bankerWinPumpRounding"    column="banker_win_pump_rounding"    />
+
+
+        <result property="baccaratRollingRatioChipTh"    column="baccarat_rolling_ratio_chip_th"    />
+        <result property="baccaratRollingRatioCashTh"    column="baccarat_rolling_ratio_cash_th"    />
+        <result property="dragonTigerRatioChipTh"    column="dragon_tiger_ratio_chip_th"    />
+        <result property="dragonTigerRatioCashTh"    column="dragon_tiger_ratio_cash_th"    />
     </resultMap>
     
     <sql id="selectOddsConfigureVo">
@@ -44,7 +50,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             dragon_tiger_ratio_chip,
             dragon_tiger_ratio_cash,
             rolling_commission_rounding,
-            banker_win_pump_rounding
+            banker_win_pump_rounding,
+            baccarat_rolling_ratio_chip_th,
+            baccarat_rolling_ratio_cash_th,
+            dragon_tiger_ratio_chip_th,
+            dragon_tiger_ratio_cash_th
         FROM
             sys_odds_configure
     </sql>
@@ -74,6 +84,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dragonTigerRatioCash != null">dragon_tiger_ratio_cash = #{dragonTigerRatioCash},</if>
             <if test="rollingCommissionRounding != null">rolling_commission_rounding = #{rollingCommissionRounding},</if>
             <if test="bankerWinPumpRounding != null">banker_win_pump_rounding = #{bankerWinPumpRounding},</if>
+
+
+            <if test="baccaratRollingRatioChipTh != null">baccarat_rolling_ratio_chip_th = #{baccaratRollingRatioChipTh},</if>
+            <if test="baccaratRollingRatioCashTh != null">baccarat_rolling_ratio_cash_th = #{baccaratRollingRatioCashTh},</if>
+            <if test="dragonTigerRatioChipTh != null">dragon_tiger_ratio_chip_th = #{dragonTigerRatioChipTh},</if>
+            <if test="dragonTigerRatioCashTh != null">dragon_tiger_ratio_cash_th = #{dragonTigerRatioCashTh},</if>
         </set>
         where id = #{id}
     </update>

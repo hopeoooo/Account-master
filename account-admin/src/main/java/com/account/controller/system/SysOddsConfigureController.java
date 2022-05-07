@@ -23,7 +23,7 @@ public class SysOddsConfigureController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:oddsConfig:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询赔率设置")
-    public AjaxResult list(SysOddsConfigure oddsConfigure) {
+    public AjaxResult list() {
         SysOddsConfigure list = oddsConfigureService.selectConfigInfo();
         return AjaxResult.success(list);
     }
