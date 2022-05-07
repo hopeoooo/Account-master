@@ -23,14 +23,19 @@ public class SysAccessCodeVo  {
     @ApiModelProperty("状态 0正常 1停用")
     private Integer status;
 
-    @ApiModelProperty( value ="已存筹码余额")
+    @ApiModelProperty( value ="已存筹码余额-美金")
     private BigDecimal chipBalance;
 
-    @ApiModelProperty(value ="已存现金余额")
+    @ApiModelProperty(value ="已存现金余额-美金")
     private BigDecimal cashBalance;
 
-    @ApiModelProperty(value = "总余额")
-    private BigDecimal totalBalance;
+    @ApiModelProperty( value ="已存筹码余额-泰铢")
+    private BigDecimal chipBalanceTh;
+
+    @ApiModelProperty(value ="已存现金余额-泰铢")
+    private BigDecimal cashBalanceTh;
+
+
     @ApiModelProperty( value ="签单额")
     private BigDecimal signedAmount;
 

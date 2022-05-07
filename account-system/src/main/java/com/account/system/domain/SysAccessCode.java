@@ -18,12 +18,16 @@ public class SysAccessCode extends BaseEntity {
     @ApiModelProperty(value ="会员卡号")
     private String card;
 
-    @ApiModelProperty( value ="已存筹码余额")
+    @ApiModelProperty( value ="已存筹码余额-美金")
     private BigDecimal chipBalance;
 
-    @ApiModelProperty(value ="已存现金余额")
+    @ApiModelProperty(value ="已存现金余额-美金")
     private BigDecimal cashBalance;
 
-    @ApiModelProperty(value = "总余额")
-    private BigDecimal totalBalance;
+
+    @ApiModelProperty( value ="已存筹码余额-泰铢")
+    private BigDecimal chipBalanceTh;
+
+    @ApiModelProperty(value ="已存现金余额-泰铢")
+    private BigDecimal cashBalanceTh;
 }

@@ -5,9 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.account.system.mapper.SysChipRecordMapper">
 
     <insert id="addChipRecord">
-        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time
+        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time,`before_th`,`change_th`,`after_th`
         <if test="betId!=null">,bet_id</if>)
-            values (#{card},#{type},#{before},#{change},#{after},#{createBy},sysdate()
+            values (#{card},#{type},#{before},#{change},#{after},#{createBy},sysdate(),#{beforeTh},#{changeTh},#{afterTh}
         <if test="betId!=null">,#{betId}</if>)
     </insert>
 

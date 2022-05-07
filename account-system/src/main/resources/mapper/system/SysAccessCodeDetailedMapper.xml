@@ -71,6 +71,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="cashAmountBefore != null and cashAmountBefore != ''">cash_amount_before,</if>
         <if test="cashAmount != null and cashAmount != ''">cash_amount,</if>
         <if test="cashAmountAfter != null and cashAmountAfter != ''">cash_amount_after,</if>
+
+
+        <if test="chipAmountBeforeTh != null and chipAmountBeforeTh != ''">chip_amount_before_th,</if>
+        <if test="chipAmountTh != null and chipAmountTh != ''">chip_amount_th,</if>
+        <if test="chipAmountAfterTh != null and chipAmountAfterTh != ''">chip_amount_after_th,</if>
+        <if test="cashAmountBeforeTh != null and cashAmountBeforeTh != ''">cash_amount_before_th,</if>
+        <if test="cashAmountTh != null and cashAmountTh != ''">cash_amount_th,</if>
+        <if test="cashAmountAfterTh != null and cashAmountAfterTh != ''">cash_amount_after_th,</if>
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
@@ -83,6 +91,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="cashAmountBefore != null and cashAmountBefore != ''">#{cashAmountBefore},</if>
         <if test="cashAmount != null and cashAmount != ''">#{cashAmount},</if>
         <if test="cashAmountAfter != null and cashAmountAfter != ''">#{cashAmountAfter},</if>
+
+
+        <if test="chipAmountBeforeTh != null and chipAmountBeforeTh != ''">#{chipAmountBeforeTh},</if>
+        <if test="chipAmountTh != null and chipAmountTh != ''">#{chipAmountTh},</if>
+        <if test="chipAmountAfterTh != null and chipAmountAfterTh != ''">#{chipAmountAfterTh},</if>
+        <if test="cashAmountBeforeTh != null and cashAmountBeforeTh != ''">#{cashAmountBeforeTh},</if>
+        <if test="cashAmountTh != null and cashAmountTh != ''">#{cashAmountTh},</if>
+        <if test="cashAmountAfterTh != null and cashAmountAfterTh != ''">#{cashAmountAfterTh},</if>
+
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(), sysdate()
