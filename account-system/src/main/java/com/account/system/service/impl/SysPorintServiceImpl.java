@@ -58,9 +58,24 @@ public class SysPorintServiceImpl implements SysPorintService {
                 .subtract(checkDecimal(porintUpdate.getInsuranceAdd()))
                 .add(checkDecimal(porintUpdate.getInsuranceSub()));
 
+        BigDecimal chipGapTh = checkDecimal(porintUpdate.getChipTh()).subtract(sysPorint.getSysChipTh())
+                .subtract(checkDecimal(porintUpdate.getChipAddTh()))
+                .add(checkDecimal(porintUpdate.getChipSubTh()));
+
+        BigDecimal cashGapTh = checkDecimal(porintUpdate.getCashTh()).subtract(sysPorint.getSysCashTh())
+                .subtract(checkDecimal(porintUpdate.getCashAddTh()))
+                .add(checkDecimal(porintUpdate.getCashSubTh()));
+
+        BigDecimal insuranceGapTh = checkDecimal(porintUpdate.getInsuranceTh()).subtract(sysPorint.getSysInsuranceTh())
+                .subtract(checkDecimal(porintUpdate.getInsuranceAddTh()))
+                .add(checkDecimal(porintUpdate.getInsuranceSubTh()));
+
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
         map.put("insuranceGap", insuranceGap);
+        map.put("chipGapTh", chipGapTh);
+        map.put("cashGapTh", cashGapTh);
+        map.put("insuranceGapTh", insuranceGapTh);
         return map;
     }
 
@@ -83,6 +98,19 @@ public class SysPorintServiceImpl implements SysPorintService {
         porint.setChipGap(porint.getPersonChip().subtract(sysPorint.getSysChip()).subtract(porint.getChipAdd()));
         porint.setCashGap(porint.getPersonCash().subtract(sysPorint.getSysCash()).subtract(porint.getCashAdd()));
         porint.setInsuranceGap(porint.getPersonInsurance().subtract(sysPorint.getSysInsurance()).subtract(porint.getInsuranceAdd()));
+
+        porint.setPersonChipTh(checkDecimal(porintUpdate.getChipTh()));
+        porint.setPersonCashTh(checkDecimal(porintUpdate.getCashTh()));
+        porint.setPersonInsuranceTh(checkDecimal(porintUpdate.getInsuranceTh()));
+
+        porint.setChipAddTh(checkDecimal(porintUpdate.getChipAddTh()).subtract(checkDecimal(porintUpdate.getChipSubTh())));
+        porint.setCashAddTh(checkDecimal(porintUpdate.getCashAddTh()).subtract(checkDecimal(porintUpdate.getCashSubTh())));
+        porint.setInsuranceAddTh(checkDecimal(porintUpdate.getInsuranceAddTh()).subtract(checkDecimal(porintUpdate.getInsuranceSubTh())));
+
+        porint.setChipGapTh(porint.getPersonChipTh().subtract(sysPorint.getSysChipTh()).subtract(porint.getChipAddTh()));
+        porint.setCashGapTh(porint.getPersonCashTh().subtract(sysPorint.getSysCashTh()).subtract(porint.getCashAddTh()));
+        porint.setInsuranceGapTh(porint.getPersonInsuranceTh().subtract(sysPorint.getSysInsuranceTh()).subtract(porint.getInsuranceAddTh()));
+
         porint.setUpdateBy(SecurityUtils.getUsername());
         porint.setRemark(porintUpdate.getRemark());
         porintMapper.editPorint(porint);
@@ -91,26 +119,27 @@ public class SysPorintServiceImpl implements SysPorintService {
 
         if (sysPorint.getChipAdd().compareTo(porint.getChipAdd()) != 0
                 || sysPorint.getCashAdd().compareTo(porint.getCashAdd()) != 0
-                || sysPorint.getInsuranceAdd().compareTo(porint.getInsuranceAdd()) != 0) {
+                || sysPorint.getInsuranceAdd().compareTo(porint.getInsuranceAdd()) != 0
+                || sysPorint.getChipAddTh().compareTo(porint.getChipAddTh()) != 0
+                || sysPorint.getCashAddTh().compareTo(porint.getCashAddTh()) != 0
+                || sysPorint.getInsuranceAddTh().compareTo(porint.getInsuranceAddTh()) != 0) {
 
             List<SysPorint> list = porintMapper.getPorints(sysPorint);
             if(StringUtils.isNotEmpty(list)){
                 //修改后续点码 增减 差距
-                porintMapper.editPorints(list,porint.getChipAdd(),porint.getCashAdd(),porint.getInsuranceAdd());
+                porintMapper.editPorints(list,porint.getChipAdd(),porint.getCashAdd(),porint.getInsuranceAdd()
+                        ,porint.getChipAddTh(),porint.getCashAddTh(),porint.getInsuranceAddTh());
             }
         }
         // 修改 收码
         SysReceipt sysReceipt = receiptMapper.getReceipt(sysPorint.getTableId(), sysPorint.getVersion());
         if (sysReceipt != null) {
             receiptMapper.updateReceipt(sysReceipt.getId(), porint.getChipAdd(), porint.getCashAdd(), porint.getInsuranceAdd(), BigDecimal.ZERO);
+            receiptMapper.updateReceiptTh(sysReceipt.getId(), porint.getChipAddTh(), porint.getCashAddTh(), porint.getInsuranceAddTh(), BigDecimal.ZERO);
         } else {
             //修改 桌台 累计
-            SysTableManagement sysTableManagement = new SysTableManagement();
-            sysTableManagement.setTableId(sysPorint.getTableId());
-            sysTableManagement.setChipAdd(porint.getChipAdd());
-            sysTableManagement.setCashAdd(porint.getCashAdd());
-            sysTableManagement.setInsuranceAdd(porint.getInsuranceAdd());
-            sysTableManagementMapper.addTableMoney(sysTableManagement);
+            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysPorint.getTableId(), porint.getChipAdd(), porint.getCashAdd(), porint.getInsuranceAdd()
+                    , porint.getChipAddTh(), porint.getCashAddTh(), porint.getInsuranceAddTh()));
         }
 
     }
@@ -129,7 +158,6 @@ public class SysPorintServiceImpl implements SysPorintService {
 
         sysPorintUpdate.setPersonChip(compare(oldPorint.getPersonChip().add(oldPorint.getPersonCash()),
                 newPorint.getPersonChip().add(newPorint.getPersonCash())));
-
         sysPorintUpdate.setChipGap(compare(oldPorint.getChipGap(),newPorint.getChipGap()));
         sysPorintUpdate.setChipAdd(compare(oldPorint.getChipAdd(),newPorint.getChipAdd()));
 
@@ -139,6 +167,19 @@ public class SysPorintServiceImpl implements SysPorintService {
         sysPorintUpdate.setPersonInsurance(compare(oldPorint.getPersonInsurance(),newPorint.getPersonInsurance()));
         sysPorintUpdate.setInsuranceGap(compare(oldPorint.getInsuranceGap(),newPorint.getInsuranceGap()));
         sysPorintUpdate.setInsuranceAdd(compare(oldPorint.getInsuranceAdd(),newPorint.getInsuranceAdd()));
+
+        sysPorintUpdate.setPersonChipTh(compare(oldPorint.getPersonChipTh().add(oldPorint.getPersonCashTh()),
+                newPorint.getPersonChipTh().add(newPorint.getPersonCashTh())));
+        sysPorintUpdate.setChipGapTh(compare(oldPorint.getChipGapTh(),newPorint.getChipGapTh()));
+        sysPorintUpdate.setChipAddTh(compare(oldPorint.getChipAddTh(),newPorint.getChipAddTh()));
+
+        sysPorintUpdate.setCashGapTh(compare(oldPorint.getCashGapTh(),newPorint.getCashGapTh()));
+        sysPorintUpdate.setCashAddTh(compare(oldPorint.getCashAddTh(),newPorint.getCashAddTh()));
+
+        sysPorintUpdate.setPersonInsuranceTh(compare(oldPorint.getPersonInsuranceTh(),newPorint.getPersonInsuranceTh()));
+        sysPorintUpdate.setInsuranceGapTh(compare(oldPorint.getInsuranceGapTh(),newPorint.getInsuranceGapTh()));
+        sysPorintUpdate.setInsuranceAddTh(compare(oldPorint.getInsuranceAddTh(),newPorint.getInsuranceAddTh()));
+
         sysPorintUpdate.setCreateBy(newPorint.getUpdateBy());
         sysPorintUpdate.setRemark(newPorint.getRemark());
         porintMapper.savePorintUpdate(sysPorintUpdate);

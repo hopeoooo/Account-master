@@ -134,6 +134,21 @@
             water water,
             chip_win chipWin,
             insurance_win insuranceWin,
+            sys_chip_th sysChipTh,
+            person_chip_th personChipTh,
+            chip_gap_th chipGapTh,
+            chip_add_th chipAddTh,
+            sys_cash_th sysCashTh,
+            person_cash_th personCashTh,
+            cash_gap_th cashGapTh,
+            cash_add_th cashAddTh,
+            sys_insurance_th sysInsuranceTh,
+            person_insurance_th personInsuranceTh,
+            insurance_gap_th insuranceGapTh,
+            insurance_add_th insuranceAddTh,
+            water_th waterTh,
+            chip_win_th chipWinTh,
+            insurance_win_th insuranceWinTh,
             create_time createTime,
             create_by createBy,
             remark
@@ -154,6 +169,15 @@
             person_insurance = #{personInsurance},
             insurance_add    = #{insuranceAdd},
             insurance_gap    = #{insuranceGap},
+            person_chip_th = #{personChipTh},
+            chip_add   _th = #{chipAddTh},
+            chip_gap   _th = #{chipGapTh},
+            person_cash_th = #{personCashTh},
+            cash_add   _th = #{cashAddTh},
+            cash_gap   _th = #{cashGapTh},
+            person_insurance_th = #{personInsuranceTh},
+            insurance_add   _th = #{insuranceAddTh},
+            insurance_gap   _th = #{insuranceGapTh},
             <if test="remark != null and remark != ''"> remark = #{remark}, </if>
             update_by   = #{updateBy},
             update_time = sysdate()
@@ -192,26 +216,40 @@
 
     <insert id="savePorintUpdate">
         insert into sys_porint_update (table_id, version, boot_num, sys_chip, person_chip, chip_gap, chip_add,
-                                cash_gap,cash_add,
-                                sys_insurance, person_insurance,insurance_gap,insurance_add,
-                                water,chip_win,insurance_win,create_by,create_time,remark)
+                                       cash_gap, cash_add,
+                                       sys_insurance, person_insurance, insurance_gap, insurance_add,
+                                       water, chip_win, insurance_win, create_by, create_time, remark,
+                                       sys_chip_th, person_chip_th, chip_gap_th, chip_add_th,
+                                       cash_gap_th, cash_add_th,
+                                       sys_insurance_th, person_insurance_th, insurance_gap_th, insurance_add_th,
+                                       water_th, chip_win_th, insurance_win_th)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
                 #{cashGap}, #{cashAdd},
-                #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
-                #{water}, #{chipWin}, #{insuranceWin},#{createBy},sysdate(),#{remark})
+                #{sysInsurance}, #{personInsurance}, #{insuranceGap}, #{insuranceAdd},
+                #{water}, #{chipWin}, #{insuranceWin}, #{createBy}, sysdate(), #{remark},
+                #{sysChipTh}, #{personChipTh}, #{chipGapTh}, #{chipAddTh},
+                #{cashGapTh}, #{cashAddTh},
+                #{sysInsuranceTh}, #{personInsuranceTh}, #{insuranceGapTh}, #{insuranceAddTh},
+                #{waterTh}, #{chipWinTh}, #{insuranceWinTh})
     </insert>
 
     <update id="editPorints">
         update sys_porint
-        set chip_add      = chip_add + #{chipAdd},
-            chip_gap      = chip_gap + #{chipAdd},
-            cash_add      = cash_add + #{cashAdd},
-            cash_gap      = cash_gap + #{cashAdd},
-            insurance_add = insurance_add + #{insuranceAdd},
-            insurance_gap = insurance_gap + #{insuranceAdd}
+        set chip_add = chip_add + #{chipAdd},
+        chip_gap = chip_gap + #{chipAdd},
+        cash_add = cash_add + #{cashAdd},
+        cash_gap = cash_gap + #{cashAdd},
+        insurance_add = insurance_add + #{insuranceAdd},
+        insurance_gap = insurance_gap + #{insuranceAdd},
+        chip_add_th = chip_add_th + #{chipAddTh},
+        chip_gap_th = chip_gap_th + #{chipAddTh},
+        cash_add_th = cash_add_th + #{cashAddTh},
+        cash_gap_th = cash_gap_th + #{cashAddTh},
+        insurance_add_th = insurance_add_th + #{insuranceAddTh},
+        insurance_gap_th = insurance_gap_th + #{insuranceAddTh}
         where id in
         <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
-                #{id}
+            #{id}
         </foreach>
     </update>
 

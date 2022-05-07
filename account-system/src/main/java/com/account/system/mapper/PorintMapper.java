@@ -39,8 +39,8 @@ public interface PorintMapper {
 
     void savePorintUpdate(SysPorintUpdate sysPorintUpdate);
 
-    void editPorints(List<SysPorint> list, @Param("chipAdd") BigDecimal chipAdd, @Param("cashAdd") BigDecimal cashAdd
-            , @Param("insuranceAdd") BigDecimal insuranceAdd);
+    void editPorints(List<SysPorint> list, @Param("chipAdd") BigDecimal chipAdd, @Param("cashAdd") BigDecimal cashAdd, @Param("insuranceAdd") BigDecimal insuranceAdd
+            , @Param("chipAddTh") BigDecimal chipAddTh, @Param("cashAddTh") BigDecimal cashAddTh, @Param("insuranceAddTh") BigDecimal insuranceAddTh);
 
     List<Map> selectPorintUpdateList(PorintUpdateSearch porintUpdateSearch);
 }

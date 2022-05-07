@@ -70,49 +70,49 @@ public class SysPorint extends BaseEntity implements Cloneable {
     @ApiModelProperty("保险输赢")
     private BigDecimal insuranceWin;
 
-    @ApiModelProperty("系统点码数")
+    @ApiModelProperty("系统点码数 泰铢")
     private BigDecimal sysChipTh;
 
-    @ApiModelProperty("手动点码数")
+    @ApiModelProperty("手动点码数 泰铢")
     private BigDecimal personChipTh;
 
-    @ApiModelProperty("筹码差距")
+    @ApiModelProperty("筹码差距 泰铢")
     private BigDecimal chipGapTh;
 
-    @ApiModelProperty("筹码增减")
+    @ApiModelProperty("筹码增减 泰铢")
     private BigDecimal chipAddTh;
 
-    @ApiModelProperty("系统现金点码数")
+    @ApiModelProperty("系统现金点码数 泰铢")
     private BigDecimal sysCashTh;
 
-    @ApiModelProperty("手动现金点码数")
+    @ApiModelProperty("手动现金点码数 泰铢")
     private BigDecimal personCashTh;
 
-    @ApiModelProperty("现金差距")
+    @ApiModelProperty("现金差距 泰铢")
     private BigDecimal cashGapTh;
 
-    @ApiModelProperty("现金增减")
+    @ApiModelProperty("现金增减 泰铢")
     private BigDecimal cashAddTh;
 
-    @ApiModelProperty("保险系统点码数")
+    @ApiModelProperty("保险系统点码数 泰铢")
     private BigDecimal sysInsuranceTh;
 
-    @ApiModelProperty("保险手动点码数")
+    @ApiModelProperty("保险手动点码数 泰铢")
     private BigDecimal personInsuranceTh;
 
-    @ApiModelProperty("保险差距")
+    @ApiModelProperty("保险差距 泰铢")
     private BigDecimal insuranceGapTh;
 
-    @ApiModelProperty("保险增减")
+    @ApiModelProperty("保险增减 泰铢")
     private BigDecimal insuranceAddTh;
 
-    @ApiModelProperty("洗码量")
+    @ApiModelProperty("洗码量 泰铢")
     private BigDecimal waterTh;
 
-    @ApiModelProperty("筹码输赢")
+    @ApiModelProperty("筹码输赢 泰铢")
     private BigDecimal chipWinTh;
 
-    @ApiModelProperty("保险输赢")
+    @ApiModelProperty("保险输赢 泰铢")
     private BigDecimal insuranceWinTh;
 
     public SysPorint() {

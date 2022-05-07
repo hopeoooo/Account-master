@@ -148,7 +148,13 @@ public class BetServiceImpl implements BetService {
                         receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
                     } else {
                         //修改 桌台 累计
-                        sysTableManagementMapper.addTableMoney(new SysTableManagement(gameResult.getTableId(), tableChip, tableCash, tableInsurance));
+                        if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                            sysTableManagementMapper.addTableMoney(new SysTableManagement(gameResult.getTableId(), tableChip, tableCash, tableInsurance
+                                    , null, null, null));
+                        } else {
+                            sysTableManagementMapper.addTableMoney(new SysTableManagement(gameResult.getTableId(), null, null, null
+                                    , tableChip, tableCash, tableInsurance));
+                        }
                     }
                 }
             });
@@ -628,14 +634,14 @@ public class BetServiceImpl implements BetService {
         if (sysPorint != null) {
             if (sysBet.getType() == 0 || sysBet.getType() == 1) {
                 porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
-            }else{
+            } else {
                 porintMapper.updatePorintTh(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
             }
         }
         if (sysReceipt != null) {
             if (sysBet.getType() == 0 || sysBet.getType() == 1) {
                 receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, water);
-            }else{
+            } else {
                 receiptMapper.updateReceiptTh(sysReceipt.getId(), tableChip, tableCash, tableInsurance, water);
             }
         } else {
@@ -767,7 +773,7 @@ public class BetServiceImpl implements BetService {
             tableCash[0] = tableCash[0].subtract(((BigDecimal) map.get("tableCash")));
             tableInsurance[0] = tableInsurance[0].subtract(((BigDecimal) map.get("tableInsurance")));
             water[0] = water[0].subtract(newWater);
-        }else{
+        } else {
             tableChipTh[0] = tableChipTh[0].subtract(((BigDecimal) map.get("tableChip")));
             tableCashTh[0] = tableCashTh[0].subtract(((BigDecimal) map.get("tableCash")));
             tableInsuranceTh[0] = tableInsuranceTh[0].subtract(((BigDecimal) map.get("tableInsurance")));

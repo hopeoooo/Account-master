@@ -64,6 +64,45 @@ public class SysPorintUpdate extends BaseEntity {
     @ApiModelProperty("保险输赢")
     private String insuranceWin;
 
+    @ApiModelProperty("系统点码数 现金加筹码 泰铢")
+    private String sysChipTh;
+
+    @ApiModelProperty("手动点码数  现金加筹码 泰铢")
+    private String personChipTh;
+
+    @ApiModelProperty("筹码差距 泰铢")
+    private String chipGapTh;
+
+    @ApiModelProperty("筹码增减 泰铢")
+    private String chipAddTh;
+
+    @ApiModelProperty("现金差距 泰铢")
+    private String cashGapTh;
+
+    @ApiModelProperty("现金增减 泰铢")
+    private String cashAddTh;
+
+    @ApiModelProperty("保险系统点码数 泰铢")
+    private String sysInsuranceTh;
+
+    @ApiModelProperty("保险手动点码数 泰铢")
+    private String personInsuranceTh;
+
+    @ApiModelProperty("保险差距 泰铢")
+    private String insuranceGapTh;
+
+    @ApiModelProperty("保险增减 泰铢")
+    private String insuranceAddTh;
+
+    @ApiModelProperty("洗码量 泰铢")
+    private String waterTh;
+
+    @ApiModelProperty("筹码输赢 泰铢")
+    private String chipWinTh;
+
+    @ApiModelProperty("保险输赢 泰铢")
+    private String insuranceWinTh;
+
     public SysPorintUpdate() {
 
     }
@@ -72,11 +111,18 @@ public class SysPorintUpdate extends BaseEntity {
         this.tableId = oldPorint.getTableId();
         this.version = oldPorint.getVersion();
         this.bootNum = oldPorint.getBootNum();
+
         this.sysChip = oldPorint.getSysChip().add(oldPorint.getSysCash()).toString();
         this.sysInsurance = oldPorint.getSysInsurance().toString();
         this.water = oldPorint.getWater().toString();
         this.chipWin = oldPorint.getChipWin().toString();
         this.insuranceWin = oldPorint.getInsuranceWin().toString();
+
+        this.sysChipTh = oldPorint.getSysChipTh().add(oldPorint.getSysCashTh()).toString();
+        this.sysInsuranceTh = oldPorint.getSysInsuranceTh().toString();
+        this.waterTh = oldPorint.getWaterTh().toString();
+        this.chipWinTh = oldPorint.getChipWinTh().toString();
+        this.insuranceWinTh = oldPorint.getInsuranceWinTh().toString();
     }
 
 
