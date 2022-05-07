@@ -9,8 +9,8 @@
         <result property="card" column="card"/>
         <result property="operationType" column="operation_type"/>
         <result property="type" column="type"/>
-        <result property="amountUsd" column="amount_usd"/>
-        <result property="amountThb" column="amount_thb"/>
+        <result property="amount" column="amount"/>
+        <result property="amountTh" column="amount_th"/>
         <result property="remark" column="remark"/>
         <result property="operationTime" column="operation_time"/>
         <result property="createBy" column="create_by"/>
@@ -24,8 +24,8 @@
         m.card,
         d.type,
         d.operation_type as operationType,
-        d.amount_usd as amountUsd,
-        d.amount_thb as amountThb,
+        d.amount as amount,
+        d.amount_th as amountThb,
         d.remark,
         d.operation_time as operationTime,
         d.create_by as createBy
@@ -58,7 +58,8 @@
 
     <select id="selectRemittanceDetailedTotal" resultType="java.util.Map">
         SELECT
-        IFNULL( SUM( d.amount ), 0 ) as amount
+        IFNULL( SUM( d.amount ), 0 ) as amount,
+        IFNULL( SUM( d.amountTh ), 0 ) as amountTh
         FROM
         sys_remittance_detailed d
         LEFT JOIN sys_members m ON m.card = d.card
@@ -93,6 +94,7 @@
         <if test="operationType != null ">operation_type,</if>
         <if test="type != null and type != ''">type,</if>
         <if test="amount != null and amount != ''">amount,</if>
+        <if test="amountTh != null and amountTh != ''">amount_th,</if>
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
@@ -101,6 +103,7 @@
         <if test="operationType != null ">#{operationType},</if>
         <if test="type != null and type != ''">#{type},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
+        <if test="amountTh != null and amountTh != ''">#{amountTh},</if>
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(), sysdate()

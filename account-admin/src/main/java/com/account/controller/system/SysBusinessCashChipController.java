@@ -104,7 +104,7 @@ public class SysBusinessCashChipController extends BaseController {
             return AjaxResult.success("当前用户不可换现!");
         }*/
         BigDecimal chip = sysMembers.getChip();
-        if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0){
+        if (businessCashChipAddSearch.getChipAmount().compareTo(chip)>0 || businessCashChipAddSearch.getChipAmountTh().compareTo(chip)>0){
             return AjaxResult.success("余额不足!");
         }
         businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());

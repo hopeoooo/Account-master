@@ -5,10 +5,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.account.system.mapper.SysChipRecordMapper">
 
     <insert id="addChipRecord">
-        insert into sys_chip_record (card,type,`before`,`change`,`after`,create_by,create_time,`before_th`,`change_th`,`after_th`
-        <if test="betId!=null">,bet_id</if>)
-            values (#{card},#{type},#{before},#{change},#{after},#{createBy},sysdate(),#{beforeTh},#{changeTh},#{afterTh}
-        <if test="betId!=null">,#{betId}</if>)
+
+        INSERT INTO sys_chip_record
+        (
+        <if test="card != null and card != ''">card,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="before != null">`before`,</if>
+        <if test="change != null"> `change`,</if>
+        <if test="after != null ">`after`,</if>
+        <if test="beforeTh != null">before_th,</if>
+        <if test="changeTh != null">change_th,</if>
+        <if test="afterTh != null ">after_th,</if>
+        <if test="betId != null and betId != ''">bet_id,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time )
+        values(
+        <if test="card != null and card != ''">#{card},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="before != null ">#{before},</if>
+        <if test="change != null">#{change},</if>
+        <if test="after != null ">#{after},</if>
+        <if test="beforeTh != null ">#{beforeTh},</if>
+        <if test="changeTh != null ">#{changeTh},</if>
+        <if test="afterTh != null ">#{afterTh},</if>
+        <if test="betId != null and betId != ''">#{betId},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
     </insert>
 
 

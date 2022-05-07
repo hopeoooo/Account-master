@@ -32,7 +32,7 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
     @Transactional
     public int addBuyCode(SysBusinessCashChipAddSearch businessCashChipAddSearch) {
         int mark = businessCashChipAddSearch.getMark() == ChipChangeEnum.BUY_CODE.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-        int i = membersService.updateChipAmount(businessCashChipAddSearch.getCard(), businessCashChipAddSearch.getChipAmount(),null, mark);
+        int i = membersService.updateChipAmount(businessCashChipAddSearch.getCard(), businessCashChipAddSearch.getChipAmount(),businessCashChipAddSearch.getChipAmountTh(), mark);
         if (i>0){
             addChipRecord(businessCashChipAddSearch);
         }
@@ -48,13 +48,29 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
         chipRecord.setCard(businessCashChipAddSearch.getCard());
         chipRecord.setType(businessCashChipAddSearch.getMark());
         BigDecimal chip = sysMembers!=null && sysMembers.getChip() != null ? sysMembers.getChip() :  BigDecimal.ZERO;
+        BigDecimal chipTh = sysMembers!=null && sysMembers.getChipTh() != null ? sysMembers.getChipTh() :  BigDecimal.ZERO;
+
+        BigDecimal before=BigDecimal.ZERO;
+        BigDecimal beforeTh=BigDecimal.ZERO;
+
         if (businessCashChipAddSearch.getMark() == ChipChangeEnum.BUY_CODE.getCode()){
-            chipRecord.setBefore(chip.subtract(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount()));
+            before=chip.subtract(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount());
+            beforeTh=chipTh.subtract(businessCashChipAddSearch.getChipAmountTh()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmountTh());
         }else {
-            chipRecord.setBefore(chip.add(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount()));
+            before=chip.add(businessCashChipAddSearch.getChipAmount()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmount());
+            beforeTh=chipTh.add(businessCashChipAddSearch.getChipAmountTh()==null ?BigDecimal.ZERO:businessCashChipAddSearch.getChipAmountTh());
         }
-        chipRecord.setChange(businessCashChipAddSearch.getChipAmount());
-        chipRecord.setAfter(chip);
+        if(businessCashChipAddSearch.getChipAmount()!=null && businessCashChipAddSearch.getChipAmount().compareTo(BigDecimal.ZERO)>0) {
+            chipRecord.setBefore(before);
+            chipRecord.setChange(businessCashChipAddSearch.getChipAmount());
+            chipRecord.setAfter(chip);
+        }
+        if(businessCashChipAddSearch.getChipAmountTh()!=null && businessCashChipAddSearch.getChipAmountTh().compareTo(BigDecimal.ZERO)>0){
+            chipRecord.setBeforeTh(beforeTh);
+            chipRecord.setChangeTh(businessCashChipAddSearch.getChipAmountTh());
+            chipRecord.setAfterTh(chipTh);
+
+        }
         chipRecord.setCreateBy(businessCashChipAddSearch.getCreateBy());
         chipRecordMapper.addChipRecord(chipRecord);
     }
