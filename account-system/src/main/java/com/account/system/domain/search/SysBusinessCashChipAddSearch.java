@@ -19,7 +19,10 @@ public class SysBusinessCashChipAddSearch {
     private String card;
 
     @ApiModelProperty(value = "已存筹码余额")
-    private BigDecimal chipAmount;
+    private BigDecimal chipAmount=BigDecimal.ZERO;
+
+    @ApiModelProperty(value = "已存筹码余额-泰铢")
+    private BigDecimal chipAmountTh=BigDecimal.ZERO;
 
     @ApiModelProperty(value = "备注")
     private String remark;

@@ -33,10 +33,10 @@ public class SysRemittanceDetailedVo {
     private String operationTypeDisplay;
 
     @ApiModelProperty(value = "变动金额(美金)")
-    private BigDecimal amountUsd;
+    private BigDecimal amount;
 
     @ApiModelProperty(value = "变动金额(泰铢)")
-    private BigDecimal amountThb;
+    private BigDecimal amountTh;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "操作时间")

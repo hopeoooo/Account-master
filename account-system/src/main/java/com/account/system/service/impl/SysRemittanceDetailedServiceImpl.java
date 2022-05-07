@@ -63,7 +63,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
         //筹码
         if (remittanceSearch.getOperationType() == CommonConst.NUMBER_0) {
             int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-            int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), null,type);
+            int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), remittanceSearch.getAmountTh(),type);
             if (i > 0) {
                 //汇款明细
                 remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
@@ -85,16 +85,33 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     public void addChipRecord(SysRemittanceSearch remittanceSearch) {
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         BigDecimal chip = sysMembers != null && sysMembers.getChip() != null ? sysMembers.getChip() : BigDecimal.ZERO;
+        BigDecimal chipTh = sysMembers != null && sysMembers.getChipTh() != null ? sysMembers.getChipTh() : BigDecimal.ZERO;
         SysChipRecord chipRecord = new SysChipRecord();
         chipRecord.setCard(remittanceSearch.getCard());
         chipRecord.setType(remittanceSearch.getType());
+
+
+        BigDecimal before=BigDecimal.ZERO;
+        BigDecimal beforeTh=BigDecimal.ZERO;
+
         if (remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode()) {
-            chipRecord.setBefore(chip.subtract(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount()));
+            before=chip.subtract(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount());
+            beforeTh=chipTh.subtract(remittanceSearch.getAmountTh() == null ? BigDecimal.ZERO : remittanceSearch.getAmountTh());
         } else {
-            chipRecord.setBefore(chip.add(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount()));
+            before=chip.add(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount());
+            beforeTh=chipTh.add(remittanceSearch.getAmountTh() == null ? BigDecimal.ZERO : remittanceSearch.getAmountTh());
         }
-        chipRecord.setChange(remittanceSearch.getAmount());
-        chipRecord.setAfter(chip);
+        if(remittanceSearch.getAmount()!=null && remittanceSearch.getAmount().compareTo(BigDecimal.ZERO)>0) {
+            chipRecord.setBefore(before);
+            chipRecord.setChange(remittanceSearch.getAmount());
+            chipRecord.setAfter(chip);
+        }
+
+        if(remittanceSearch.getAmountTh()!=null && remittanceSearch.getAmountTh().compareTo(BigDecimal.ZERO)>0) {
+            chipRecord.setBeforeTh(beforeTh);
+            chipRecord.setChangeTh(remittanceSearch.getAmountTh());
+            chipRecord.setAfterTh(chipTh);
+        }
         chipRecord.setCreateBy(remittanceSearch.getCreateBy());
         chipRecordMapper.addChipRecord(chipRecord);
     }

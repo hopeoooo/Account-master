@@ -21,6 +21,9 @@ public class SysRemittanceSearch {
     @ApiModelProperty(value = "余额")
     private BigDecimal amount;
 
+    @ApiModelProperty(value = "余额-泰铢")
+    private BigDecimal amountTh;
+
     @ApiModelProperty(value = "(0:筹码,1:现金)")
     private Integer operationType;
 

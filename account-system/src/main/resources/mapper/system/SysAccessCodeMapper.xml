@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         IFNULL( a.cash_balance_th, 0 ) as cashBalanceTh,
         IFNULL( a.chip_balance_th, 0 ) as chipBalanceTh,
         m.remark  as remark,
-        IFNULL( s.signed_amount, 0 ) AS signedAmount
+        IFNULL( s.signed_amount, 0 ) + 	IFNULL( s.signed_amount_th, 0 ) AS signedAmount
         FROM
         sys_members m
         LEFT JOIN sys_access_code a ON a.card = m.card

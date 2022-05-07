@@ -322,11 +322,12 @@
         m.NAME AS userName,
         m.card AS card,
         m.chip AS chipAmount,
+        m.chip_th AS chipAmountTh,
         m.`status` as status,
         m.is_cash AS isCash,
         m.is_out as isOut,
         m.remark,
-        IFNULL(s.signed_amount,0) as signedAmount
+        IFNULL( s.signed_amount, 0 ) + 	IFNULL( s.signed_amount_th, 0 ) AS signedAmount
         FROM
         sys_members m
         LEFT JOIN sys_signed_record s on s.card=m.card
@@ -345,7 +346,8 @@
     <!--买码换现总计-->
     <select id="selectBusinessCashChipTotal" resultType="java.util.Map">
         SELECT
-        IFNULL(SUM(m.chip),0) AS chipAmount
+        IFNULL(SUM(m.chip),0) AS chipAmount,
+        IFNULL(SUM(m.chip_th),0) AS chipAmountTh
         FROM
         sys_members m
         <where>

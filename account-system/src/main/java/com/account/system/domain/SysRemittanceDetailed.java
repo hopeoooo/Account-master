@@ -27,10 +27,10 @@ public class SysRemittanceDetailed extends BaseEntity {
     private Integer type;
 
     @ApiModelProperty(value = "变动金额(美金)")
-    private BigDecimal amountUsd;
+    private BigDecimal amount;
 
     @ApiModelProperty(value = "变动金额(泰铢)")
-    private BigDecimal amountThb;
+    private BigDecimal amountTh;
 
     @ApiModelProperty(value = "备注")
     private String remark;
