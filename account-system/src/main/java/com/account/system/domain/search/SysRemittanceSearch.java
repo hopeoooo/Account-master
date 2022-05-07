@@ -19,10 +19,10 @@ public class SysRemittanceSearch {
     private String card;
 
     @ApiModelProperty(value = "余额")
-    private BigDecimal amount;
+    private BigDecimal amount=BigDecimal.ZERO;
 
     @ApiModelProperty(value = "余额-泰铢")
-    private BigDecimal amountTh;
+    private BigDecimal amountTh=BigDecimal.ZERO;
 
     @ApiModelProperty(value = "(0:筹码,1:现金)")
     private Integer operationType;
