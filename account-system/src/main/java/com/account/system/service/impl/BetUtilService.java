@@ -50,7 +50,7 @@ public class BetUtilService {
         BigDecimal tableCash = BigDecimal.ZERO;//桌台现金输赢
         BigDecimal tableInsurance = BigDecimal.ZERO;//桌台保险输赢
 
-        boolean isChip = (0 == sysBet.getType() || 2 == sysBet.getType()); //是否为筹码下注
+        Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
         String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
@@ -78,11 +78,7 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        if (isChip) {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100)));
-                        } else {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
-                        }
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
                     }
                 } else if ("4".equals(option)) {//庄
                     if (gameResult.contains("4")) {
@@ -94,40 +90,30 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        if (isChip) {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100)));
-                        } else {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
-                        }
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
                     }
                 } else if ("0".equals(option)) { //闲保险
-                    sysBetInfo.setType(2);
+                    if (type == 0 || type == 1) {
+                        sysBetInfo.setType(4);
+                    } else if (type == 2 || type == 3) {
+                        sysBetInfo.setType(5);
+                    }
                     if (gameResult.contains("4")) {
                         sysBetInfo.setWinLose(amount);
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
-                        water = water.add(amount);
-                        sysBetInfo.setWater(amount);
-                        if (isChip) {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100)));
-                        } else {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
-                        }
                     }
                     tableInsurance = tableInsurance.subtract(sysBetInfo.getWinLose());
                 } else if ("3".equals(option)) { //庄保险
-                    sysBetInfo.setType(2);
+                    if (type == 0 || type == 1) {
+                        sysBetInfo.setType(4);
+                    } else if (type == 2 || type == 3) {
+                        sysBetInfo.setType(5);
+                    }
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount);
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
-                        water = water.add(amount);
-                        sysBetInfo.setWater(amount);
-                        if (isChip) {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100)));
-                        } else {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
-                        }
                     }
                     tableInsurance = tableInsurance.subtract(sysBetInfo.getWinLose());
                 } else {
@@ -137,27 +123,20 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        if (isChip) {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100)));
-                        } else {
-                            sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100)));
-                        }
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
                     }
                 }
                 list.add(sysBetInfo);
-                if (isChip) {
+                if (type == 0 || type == 2) {
                     membersChip = membersChip.add(sysBetInfo.getWinLose());
-                    tableChip = tableChip.subtract(sysBetInfo.getWinLose()).subtract(tableInsurance);
+                    tableChip = tableChip.subtract(sysBetInfo.getWinLose());
                 } else {
                     tableCash = tableCash.subtract(sysBetInfo.getWinLose());
                 }
             }
         }
-        if (isChip) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
-        } else {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100));
-        }
+
+        waterAmount = getBaccaratWaterAmount(water, sysOddsConfigure, type);
 
         map.put("list", list);
         map.put("membersChip", membersChip);
@@ -184,7 +163,7 @@ public class BetUtilService {
         BigDecimal tableCash = BigDecimal.ZERO;//桌台现金输赢
         BigDecimal tableInsurance = BigDecimal.ZERO;//桌台保险输赢
 
-        boolean isChip = 0 == sysBet.getType(); //是否为筹码下注
+        Integer type = sysBet.getType(); //是否为筹码下注
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
         String[] betOption = {"龙", "虎", "和"};
         String[] odds = {sysOddsConfigure.getDragonWin(), sysOddsConfigure.getTigerWin(), sysOddsConfigure.getTieWin(),};
@@ -202,15 +181,11 @@ public class BetUtilService {
                     sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     water = water.add(amount);
                     sysBetInfo.setWater(amount);
-                    if (isChip) {
-                        sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getDragonTigerRatioChip()).divide(new BigDecimal(100)));
-                    } else {
-                        sysBetInfo.setWaterAmount(amount.multiply(sysOddsConfigure.getDragonTigerRatioCash()).divide(new BigDecimal(100)));
-                    }
+                    sysBetInfo.setWaterAmount(getDragonTigerWaterAmount(amount, sysOddsConfigure, type));
                     if ("和".contains(gameResult)) sysBetInfo.setTie(amount);
                 }
                 list.add(sysBetInfo);
-                if (isChip) {
+                if (type == 0 || type == 2) {
                     membersChip = membersChip.add(sysBetInfo.getWinLose());
                     tableChip = tableChip.subtract(sysBetInfo.getWinLose());
                 } else {
@@ -218,11 +193,8 @@ public class BetUtilService {
                 }
             }
         }
-        if (isChip) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
-        } else {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100));
-        }
+
+        waterAmount = getDragonTigerWaterAmount(water, sysOddsConfigure, type);
 
         map.put("list", list);
         map.put("membersChip", membersChip);
@@ -273,5 +245,33 @@ public class BetUtilService {
         map.put("water", BigDecimal.ZERO);
         map.put("waterAmount", BigDecimal.ZERO);
         return map;
+    }
+
+    private BigDecimal getBaccaratWaterAmount(BigDecimal water, SysOddsConfigure sysOddsConfigure, Integer type) {
+        BigDecimal waterAmount = BigDecimal.ZERO;
+        if (type == 0) {
+            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+        } else if (type == 1) {
+            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100));
+        } else if (type == 2) {
+            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChipTh()).divide(new BigDecimal(100));
+        } else if (type == 3) {
+            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCashTh()).divide(new BigDecimal(100));
+        }
+        return waterAmount;
+    }
+
+    private BigDecimal getDragonTigerWaterAmount(BigDecimal water, SysOddsConfigure sysOddsConfigure, Integer type) {
+        BigDecimal waterAmount = BigDecimal.ZERO;
+        if (type == 0) {
+            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioChip()).divide(new BigDecimal(100));
+        } else if (type == 1) {
+            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioCash()).divide(new BigDecimal(100));
+        } else if (type == 2) {
+            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioChipTh()).divide(new BigDecimal(100));
+        } else if (type == 3) {
+            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioCashTh()).divide(new BigDecimal(100));
+        }
+        return waterAmount;
     }
 }

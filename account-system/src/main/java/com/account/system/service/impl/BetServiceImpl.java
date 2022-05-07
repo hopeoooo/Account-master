@@ -165,6 +165,10 @@ public class BetServiceImpl implements BetService {
         final BigDecimal[] tableChip = {BigDecimal.ZERO};
         final BigDecimal[] tableCash = {BigDecimal.ZERO};
         final BigDecimal[] tableInsurance = {BigDecimal.ZERO};
+
+        final BigDecimal[] tableChipTh = {BigDecimal.ZERO};
+        final BigDecimal[] tableCashTh = {BigDecimal.ZERO};
+        final BigDecimal[] tableInsuranceTh = {BigDecimal.ZERO};
         bets.forEach(b -> {
             //添加注单
             JSONObject bet = (JSONObject) b;
@@ -190,9 +194,15 @@ public class BetServiceImpl implements BetService {
             Map map = betUtilService.getBetInfos(bet, sysBet, sysTableManagement.getGameId());
 
             //桌台 累计
-            tableChip[0] = tableChip[0].add((BigDecimal) map.get("tableChip"));
-            tableCash[0] = tableCash[0].add((BigDecimal) map.get("tableCash"));
-            tableInsurance[0] = tableInsurance[0].add((BigDecimal) map.get("tableInsurance"));
+            if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                tableChip[0] = tableChip[0].add((BigDecimal) map.get("tableChip"));
+                tableCash[0] = tableCash[0].add((BigDecimal) map.get("tableCash"));
+                tableInsurance[0] = tableInsurance[0].add((BigDecimal) map.get("tableInsurance"));
+            } else {
+                tableChipTh[0] = tableChipTh[0].add((BigDecimal) map.get("tableChip"));
+                tableCashTh[0] = tableCashTh[0].add((BigDecimal) map.get("tableCash"));
+                tableInsuranceTh[0] = tableInsuranceTh[0].add((BigDecimal) map.get("tableInsurance"));
+            }
 
             //添加 注单明细
             List list = (List) map.get("list");
@@ -203,8 +213,19 @@ public class BetServiceImpl implements BetService {
             BigDecimal membersChip = (BigDecimal) map.get("membersChip");
             if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
                 //生成 筹码帐变记录
-                BigDecimal chip = BigDecimal.ZERO;// sysMembersMapper.selectMembersChip(sysBet.getCard());
-                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), chip, membersChip.abs(), chip.add(membersChip), sysBet.getBetId());
+                SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
+                SysChipRecord sysChipRecord;
+                if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                    sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip)
+                            , null, null, null, sysBet.getBetId());
+                    //修改会员现有筹码
+                    sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip, BigDecimal.ZERO);
+                } else {
+                    sysChipRecord = new SysChipRecord(sysBet.getCard(), null, null, null,
+                            sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
+                    //修改会员现有筹码
+                    sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, membersChip);
+                }
                 if (membersChip.compareTo(new BigDecimal(0)) > 0) {//赢
                     sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
                 } else {
@@ -212,8 +233,6 @@ public class BetServiceImpl implements BetService {
                 }
                 sysChipRecord.setCreateBy(sysTableManagement.getCreateBy());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
-                //修改会员现有筹码
-                sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip,BigDecimal.ZERO);
             }
             //计算打码量
             BigDecimal water = (BigDecimal) map.get("water");
@@ -221,13 +240,13 @@ public class BetServiceImpl implements BetService {
                 BigDecimal waterAmount = (BigDecimal) map.get("waterAmount");
                 sysWaterMapper.saveMembersWater(sysBet.getCard(), water, waterAmount);
             }
-
         });
 
         //修改桌台累计
         if (tableChip[0].compareTo(BigDecimal.ZERO) != 0 || tableCash[0].compareTo(BigDecimal.ZERO) != 0
                 || tableInsurance[0].compareTo(BigDecimal.ZERO) != 0) {
-            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), tableChip[0], tableCash[0], tableInsurance[0]));
+            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysTableManagement.getTableId(), tableChip[0], tableCash[0], tableInsurance[0]
+                    , tableChipTh[0], tableCashTh[0], tableInsuranceTh[0]));
         }
         //记录赛果
         if (gameResult != null) {
@@ -553,7 +572,7 @@ public class BetServiceImpl implements BetService {
         if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
             //生成 筹码帐变记录
             BigDecimal chip =BigDecimal.ZERO;// sysMembersMapper.selectMembersChip(sysBet.getCard());
-            SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), chip, membersChip.abs(), chip.add(membersChip), sysBet.getBetId());
+            SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), chip, membersChip.abs(), chip.add(membersChip), null,null,null,sysBet.getBetId());
             if (membersChip.compareTo(new BigDecimal(0)) > 0) {//赢
                 sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
             } else {
