@@ -371,7 +371,7 @@
         IFNULL( w.water_th, 0 ) AS waterTh,
         IFNULL( w.water_amount_th, 0 ) AS waterAmountTh,
         m.remark as remark,
-        IFNULL( s.signed_amount, 0 ) + 	IFNULL( s.signed_amount_th, 0 ) AS signedAmount
+        IFNULL( r.signed_amount, 0 ) + 	IFNULL( r.signed_amount_th, 0 ) AS signedAmount,
         m.`status` as status
         FROM
         sys_members m
