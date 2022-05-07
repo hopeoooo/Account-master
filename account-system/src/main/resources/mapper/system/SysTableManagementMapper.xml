@@ -13,6 +13,9 @@
         <result property="chipPointBase" column="chip_point_base"/>
         <result property="cashPointBase" column="cash_point_base"/>
         <result property="insurancePointBase" column="insurance_point_base"/>
+        <result property="chipPointBaseTh" column="chip_point_base_th"/>
+        <result property="cashPointBaseTh" column="cash_point_base_th"/>
+        <result property="insurancePointBaseTh" column="insurance_point_base_th"/>
         <result property="isDelete" column="is_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -28,6 +31,9 @@
                chip_point_base,
                cash_point_base,
                insurance_point_base,
+               chip_point_base_th,
+               cash_point_base_th,
+               insurance_point_base_th,
                create_by,
                create_time,
                update_by,
@@ -49,7 +55,10 @@
         SELECT
         IFNULL(SUM(chip_point_base),0) as chipPointBase,
         IFNULL(SUM(cash_point_base),0)as cashPointBase,
-        IFNULL(SUM(insurance_point_base),0)as insurancePointBase
+        IFNULL(SUM(insurance_point_base),0)as insurancePointBase,
+        IFNULL(SUM(chip_point_base_th),0) as chipPointBaseTh,
+        IFNULL(SUM(cash_point_base_th),0)as cashPointBaseTh,
+        IFNULL(SUM(insurance_point_base_th),0)as insurancePointBaseTh
         FROM
         sys_table_management
         <where>
@@ -80,6 +89,9 @@
         <if test="chipPointBase != null and chipPointBase != ''">chip_point_base,</if>
         <if test="cashPointBase != null and cashPointBase != ''">cash_point_base,</if>
         <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base,</if>
+        <if test="chipPointBaseTh != null and chipPointBaseTh != ''">chip_point_base_th,</if>
+        <if test="cashPointBaseTh != null and cashPointBaseTh != ''">cash_point_base_th,</if>
+        <if test="insurancePointBaseTh != null and insurancePointBaseTh != ''">insurance_point_base_th,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time)
         values(
@@ -90,6 +102,10 @@
         <if test="chipPointBase != null and chipPointBase != ''">#{chipPointBase},</if>
         <if test="cashPointBase != null and cashPointBase != ''">#{cashPointBase},</if>
         <if test="insurancePointBase != null and insurancePointBase != ''">#{insurancePointBase},</if>
+
+        <if test="chipPointBaseTh != null and chipPointBaseTh != ''">#{chipPointBaseTh},</if>
+        <if test="cashPointBaseTh != null and cashPointBaseTh != ''">#{cashPointBaseTh},</if>
+        <if test="insurancePointBaseTh != null and insurancePointBaseTh != ''">#{insurancePointBaseTh},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(),sysdate()
         )
@@ -105,9 +121,11 @@
             <if test="gameName != null and gameName != ''">game_name = #{gameName},</if>
             <if test="chipPointBase != null and chipPointBase != ''">chip_point_base = #{chipPointBase},</if>
             <if test="cashPointBase != null and cashPointBase != ''">cash_point_base = #{cashPointBase},</if>
-            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base =
-                #{insurancePointBase},
-            </if>
+            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base =#{insurancePointBase}, </if>
+
+            <if test="chipPointBaseTh != null and chipPointBaseTh != ''">chip_point_base_th = #{chipPointBaseTh},</if>
+            <if test="cashPointBaseTh != null and cashPointBaseTh != ''">cash_point_base_th = #{cashPointBaseTh},</if>
+            <if test="insurancePointBaseTh != null and insurancePointBaseTh != ''">insurance_point_base_th =#{insurancePointBaseTh}, </if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>

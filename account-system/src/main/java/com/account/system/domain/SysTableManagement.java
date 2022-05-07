@@ -28,13 +28,13 @@ public class SysTableManagement extends BaseEntity {
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
 
-    @ApiModelProperty(value = "筹码点码基数")
+    @ApiModelProperty(value = "筹码点码基数-美金")
     private BigDecimal chipPointBase;
 
-    @ApiModelProperty(value = "现金点码基数")
+    @ApiModelProperty(value = "现金点码基数-美金")
     private BigDecimal cashPointBase;
 
-    @ApiModelProperty(value = "保险筹码点码基数")
+    @ApiModelProperty(value = "保险筹码点码基数-美金")
     private BigDecimal insurancePointBase;
 
     @ApiModelProperty(hidden = true)
@@ -66,6 +66,37 @@ public class SysTableManagement extends BaseEntity {
 
     @ApiModelProperty(hidden = true)
     private BigDecimal isDelete;
+
+
+
+    @ApiModelProperty(value = "筹码点码基数-泰铢")
+    private BigDecimal chipPointBaseTh;
+
+    @ApiModelProperty(value = "现金点码基数-泰铢")
+    private BigDecimal cashPointBaseTh;
+
+    @ApiModelProperty(value = "保险筹码点码基数-泰铢")
+    private BigDecimal insurancePointBaseTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal chipTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal cashTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal insuranceTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal chipAddTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal cashAddTh;
+
+    @ApiModelProperty(hidden = true)
+    private BigDecimal insuranceAddTh;
+
+
 
     public SysTableManagement() {
     }
