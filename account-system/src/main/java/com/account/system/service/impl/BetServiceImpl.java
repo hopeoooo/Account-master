@@ -333,19 +333,39 @@ public class BetServiceImpl implements BetService {
                 .subtract(checkDecimal(reckon.getCashAdd()))
                 .add(checkDecimal(reckon.getCashSub()));
 
-
         BigDecimal insuranceGap = checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase())
                 .subtract(sysTableManagement.getInsuranceAdd())
                 .subtract(sysTableManagement.getInsurance())
                 .subtract(checkDecimal(reckon.getInsuranceAdd()))
                 .add(checkDecimal(reckon.getInsuranceSub()));
 
+        BigDecimal chipGapTh = checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh()).subtract(sysTableManagement.getChipTh())
+                .subtract(sysTableManagement.getChipAddTh())
+                .subtract(checkDecimal(reckon.getChipAddTh()))
+                .add(checkDecimal(reckon.getChipSubTh()));
+
+        BigDecimal cashGapTh = checkDecimal(reckon.getCashTh()).subtract(sysTableManagement.getCashPointBaseTh()).subtract(sysTableManagement.getCashTh())
+                .subtract(sysTableManagement.getCashAddTh())
+                .subtract(checkDecimal(reckon.getCashAddTh()))
+                .add(checkDecimal(reckon.getCashSubTh()));
+
+        BigDecimal insuranceGapTh = checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh())
+                .subtract(sysTableManagement.getInsuranceAddTh())
+                .subtract(sysTableManagement.getInsuranceTh())
+                .subtract(checkDecimal(reckon.getInsuranceAddTh()))
+                .add(checkDecimal(reckon.getInsuranceSubTh()));
+
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
         map.put("insuranceGap", insuranceGap);
+        map.put("chipGapTh", chipGapTh);
+        map.put("cashGapTh", cashGapTh);
+        map.put("insuranceGapTh", insuranceGapTh);
         if (sysTableManagement.getGameId() == 2) {//龙虎 计算和钱
             BigDecimal tie = checkDecimal(betMapper.selectTie(sysTableManagement));
+            BigDecimal tieTh = checkDecimal(betMapper.selectTieTh(sysTableManagement));
             map.put("tie", tie);
+            map.put("tieTh", tieTh);
         }
         return map;
     }
@@ -526,7 +546,7 @@ public class BetServiceImpl implements BetService {
         BigDecimal water = (BigDecimal) map.get("water");
         if (water.compareTo(BigDecimal.ZERO) != 0) {
             BigDecimal waterAmount = (BigDecimal) map.get("waterAmount");
-            sysWaterMapper.saveMembersWater(sysBet.getCard(), water, waterAmount,BigDecimal.ZERO,BigDecimal.ZERO);
+            sysWaterMapper.saveMembersWater(sysBet.getCard(), water, waterAmount, BigDecimal.ZERO, BigDecimal.ZERO);
         }
         //查询签单
         if (tableChip.compareTo(BigDecimal.ZERO) != 0
@@ -570,7 +590,7 @@ public class BetServiceImpl implements BetService {
             //修改 洗码
             if (oldBetInfo.getWater().compareTo(BigDecimal.ZERO) != 0) {
                 sysWaterMapper.saveMembersWater(oldBetInfo.getCard(), BigDecimal.ZERO.subtract(oldBetInfo.getWater())
-                        , BigDecimal.ZERO.subtract(oldBetInfo.getWaterAmount()),BigDecimal.ZERO,BigDecimal.ZERO);
+                        , BigDecimal.ZERO.subtract(oldBetInfo.getWaterAmount()), BigDecimal.ZERO, BigDecimal.ZERO);
                 water[0] = water[0].add(oldBetInfo.getWater());
             }
             //修改会员现有筹码
@@ -623,7 +643,7 @@ public class BetServiceImpl implements BetService {
         BigDecimal newWater = (BigDecimal) map.get("water");
         if (newWater.compareTo(BigDecimal.ZERO) != 0) {
             BigDecimal waterAmount = (BigDecimal) map.get("waterAmount");
-            sysWaterMapper.saveMembersWater(sysBet.getCard(), newWater, waterAmount,BigDecimal.ZERO,BigDecimal.ZERO);
+            sysWaterMapper.saveMembersWater(sysBet.getCard(), newWater, waterAmount, BigDecimal.ZERO, BigDecimal.ZERO);
         }
 
         //修改 签单

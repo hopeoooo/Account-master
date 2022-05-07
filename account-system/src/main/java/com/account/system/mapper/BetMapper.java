@@ -73,7 +73,11 @@ public interface BetMapper {
     @Delete("delete from sys_bet_info where bet_id = #{betId}")
     void deleteBetInfo(@Param("betId") Long betId);
 
-    @Select("<script>select sum(tie) from sys_bet_info where table_id = #{tableId} and version = #{version} " +
+    @Select("<script>select sum(tie) from sys_bet_info where table_id = #{tableId} and version = #{version} and type in(0,1,4) " +
             "<if test='bootNum!=null'> and boot_num = #{bootNum} </if> </script>")
     BigDecimal selectTie(SysTableManagement sysTableManagement);
+
+    @Select("<script>select sum(tie) from sys_bet_info where table_id = #{tableId} and version = #{version} and type in(2,3,5) " +
+            "<if test='bootNum!=null'> and boot_num = #{bootNum} </if> </script>")
+    BigDecimal selectTieTh(SysTableManagement sysTableManagement);
 }

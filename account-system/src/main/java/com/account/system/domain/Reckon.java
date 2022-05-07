@@ -39,6 +39,33 @@ public class Reckon {
     @ApiModelProperty("保险减")
     private BigDecimal insuranceSub;
 
+    @ApiModelProperty("筹码数 泰铢")
+    private BigDecimal chipTh;
+
+    @ApiModelProperty("筹码增 泰铢")
+    private BigDecimal chipAddTh;
+
+    @ApiModelProperty("筹码减 泰铢")
+    private BigDecimal chipSubTh;
+
+    @ApiModelProperty("现金数 泰铢")
+    private BigDecimal cashTh;
+
+    @ApiModelProperty("现金增 泰铢")
+    private BigDecimal cashAddTh;
+
+    @ApiModelProperty("现金减 泰铢")
+    private BigDecimal cashSubTh;
+
+    @ApiModelProperty("保险筹码数 泰铢")
+    private BigDecimal insuranceTh;
+
+    @ApiModelProperty("保险增 泰铢")
+    private BigDecimal insuranceAddTh;
+
+    @ApiModelProperty("保险减 泰铢")
+    private BigDecimal insuranceSubTh;
+
     @ApiModelProperty("类型 0 点码 1 收码")
     private int type;
 
