@@ -47,6 +47,12 @@ public class SysMembers extends BaseEntity {
     @ApiModelProperty("补卡费")
     private BigDecimal repair;
 
+    @ApiModelProperty("押金")
+    private BigDecimal depositTh;
+
+    @ApiModelProperty("补卡费")
+    private BigDecimal repairTh;
+
     @ApiModelProperty("占股比例")
     private Integer shareRatio;
 

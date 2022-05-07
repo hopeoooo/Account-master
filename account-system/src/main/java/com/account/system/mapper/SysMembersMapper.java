@@ -48,8 +48,8 @@ public interface SysMembersMapper {
             "FROM sys_odds_configure limit 0,1")
     Map getOddsConfig();
 
-    @Update(" update sys_members set chip = chip + #{chip} where card = #{card}")
-    int updateMembersChip(@Param("card") String card, @Param("chip") BigDecimal chip);
+    @Update(" update sys_members set chip = chip + #{chip},chip_th = chip_th + #{chipTh} where card = #{card}")
+    int updateMembersChip(@Param("card") String card, @Param("chip") BigDecimal chip, @Param("chipTh") BigDecimal chipTh);
 
     List<SysMaterVo> selectWaterList(@Param("card")String card, @Param("isAdmin")Integer isAdmin, @Param("cardType")Integer cardType);
 

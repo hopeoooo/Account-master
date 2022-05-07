@@ -170,6 +170,8 @@
         <if test="baccaratRollingRatioCashTh != null ">baccarat_rolling_ratio_cash_th,</if>
         <if test="dragonTigerRatioChipTh != null ">dragon_tiger_ratio_chip_th,</if>
         <if test="dragonTigerRatioCashTh != null ">dragon_tiger_ratio_cash_th,</if>
+        <if test="depositTh != null ">deposit_th,</if>
+        <if test="repairTh != null ">repair_th,</if>
         create_time
         )values(
         <if test="parentCard != null and parentCard != '' ">#{parentCard},</if>
@@ -200,6 +202,8 @@
         <if test="baccaratRollingRatioCashTh != null ">#{baccaratRollingRatioCashTh},</if>
         <if test="dragonTigerRatioChipTh != null ">#{dragonTigerRatioChipTh},</if>
         <if test="dragonTigerRatioCashTh != null ">#{dragonTigerRatioCashTh},</if>
+        <if test="depositTh != null ">#{depositTh},</if>
+        <if test="repairTh != null ">#{repairTh},</if>
         sysdate()
         )
     </insert>
@@ -222,7 +226,9 @@
                dragon_tiger_ratio_chip_th     dragonTigerRatioChipTh,
                dragon_tiger_ratio_cash_th     dragonTigerRatioCashTh,
                chip    as                     chip,
-               chip_th as                     chipTh
+               chip_th as                     chipTh,
+               deposit_th depositTh,
+               repair_th repairTh
         from sys_members
         where id = #{id}
     </select>
@@ -255,6 +261,8 @@
             <if test="baccaratRollingRatioCashTh != null ">baccarat_rolling_ratio_cash_th = #{baccaratRollingRatioCashTh},</if>
             <if test="dragonTigerRatioChipTh != null ">dragon_tiger_ratio_chip_th = #{dragonTigerRatioChipTh},</if>
             <if test="dragonTigerRatioCashTh != null ">dragon_tiger_ratio_cash_th = #{dragonTigerRatioCashTh},</if>
+            <if test="depositTh != null ">deposit_th = #{depositTh},</if>
+            <if test="repairTh != null ">repair_th = #{repairTh},</if>
             update_time = sysdate(),
             update_by = #{updateBy}
         </set>
