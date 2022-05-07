@@ -199,23 +199,32 @@
 
     <select id="getTableByIp" resultType="sysTableManagement">
         select id,
-               table_id             tableId,
-               game_id              gameId,
-               chip_point_base      chipPointBase,
-               cash_point_base      cashPointBase,
-               insurance_point_base insurancePointBase,
-               boot_num             bootNum,
-               game_num             gameNum,
-               chip,
-               cash,
-               insurance,
-               chip_add             chipAdd,
-               cash_add             cashAdd,
-               insurance_add        insuranceAdd,
-               version
+            table_id tableId,
+            game_id gameId,
+            chip_point_base chipPointBase,
+            cash_point_base cashPointBase,
+            insurance_point_base insurancePointBase,
+            boot_num bootNum,
+            game_num gameNum,
+            chip,
+            cash,
+            insurance,
+            chip_add chipAdd,
+            cash_add cashAdd,
+            insurance_add insuranceAdd,
+            version,
+            chip_point_base_th chipPointBaseTh,
+            cash_point_base_th cashPointBaseTh,
+            insurance_point_base_th insurancePointBaseTh,
+            chip_th chipTh,
+            cash_th cashTh,
+            insurance_th insuranceTh,
+            chip_add_th chipAddTh,
+            cash_add_th cashAddTh,
+            insurance_add_th insuranceAddTh
         from sys_table_management
         where ip = #{ip}
-          <if test="gameId!=null"> and game_id = #{gameId} </if>
-          and is_delete = 0 limit 0,1
+        <if test="gameId!=null">and game_id = #{gameId}</if>
+        and is_delete = 0 limit 0,1
     </select>
 </mapper>

@@ -2,13 +2,15 @@ package com.account.controller.account;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
-import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysMembersSearch;
 import com.account.system.service.SysMembersService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,16 +93,16 @@ public class MembersController extends BaseController {
     /**
      * 删除会员
      */
-    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
-    @GetMapping("/delete")
-    @ApiOperation(value = "删除会员")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", value = "用户id，多个用逗号拼接", dataType = "Long", required = true, paramType = "path")
-    })
-    public AjaxResult delete(String ids) {
-        sysMembersService.deleteMembers(ids);
-        return AjaxResult.success();
-    }
+//    @PreAuthorize("@ss.hasPermi('account:mambers:list')")
+//    @GetMapping("/delete")
+//    @ApiOperation(value = "删除会员")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "ids", value = "用户id，多个用逗号拼接", dataType = "Long", required = true, paramType = "path")
+//    })
+//    public AjaxResult delete(String ids) {
+//        sysMembersService.deleteMembers(ids);
+//        return AjaxResult.success();
+//    }
 
     /**
      * 获取默认洗码比例

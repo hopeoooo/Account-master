@@ -82,6 +82,22 @@ public class SysMembers extends BaseEntity {
 
     @ApiModelProperty("龙虎洗码比例(现金)")
     private BigDecimal dragonTigerRatioCash;
-    @ApiModelProperty("用户筹码余额")
+
+    @ApiModelProperty("百家乐洗码比例(筹码) 泰铢")
+    private BigDecimal baccaratRollingRatioChipTh;
+
+    @ApiModelProperty("百家乐洗码比例(现金) 泰铢")
+    private BigDecimal baccaratRollingRatioCashTh;
+
+    @ApiModelProperty("龙虎洗码比例(筹码) 泰铢")
+    private BigDecimal dragonTigerRatioChipTh;
+
+    @ApiModelProperty("龙虎洗码比例(现金) 泰铢")
+    private BigDecimal dragonTigerRatioCashTh;
+
+    @ApiModelProperty("用户筹码余额 美元")
     private BigDecimal chip;
+
+    @ApiModelProperty("用户筹码余额 泰铢")
+    private BigDecimal chipTh;
 }

@@ -40,15 +40,16 @@ public interface SysMembersMapper {
     @Select("SELECT baccarat_rolling_ratio_chip baccaratRollingRatioChip, " +
             "baccarat_rolling_ratio_cash baccaratRollingRatioCash, " +
             "dragon_tiger_ratio_chip dragonTigerRatioChip, " +
-            "dragon_tiger_ratio_cash dragonTigerRatioCash " +
+            "dragon_tiger_ratio_cash dragonTigerRatioCash," +
+            "baccarat_rolling_ratio_chip_th baccaratRollingRatioChipTh," +
+            "baccarat_rolling_ratio_cash_th baccaratRollingRatioCashTh," +
+            "dragon_tiger_ratio_chip_th dragonTigerRatioChipTh," +
+            "dragon_tiger_ratio_cash_th dragonTigerRatioCashTh " +
             "FROM sys_odds_configure limit 0,1")
     Map getOddsConfig();
 
     @Update(" update sys_members set chip = chip + #{chip} where card = #{card}")
     int updateMembersChip(@Param("card") String card, @Param("chip") BigDecimal chip);
-
-    @Select("select chip from sys_members where card = #{card}")
-    BigDecimal selectMembersChip(@Param("card") String card);
 
     List<SysMaterVo> selectWaterList(@Param("card")String card, @Param("isAdmin")Integer isAdmin, @Param("cardType")Integer cardType);
 
