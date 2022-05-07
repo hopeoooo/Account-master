@@ -72,6 +72,10 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
         waterDetailed.setWater(waterSearch.getWater());
         waterDetailed.setWaterAmount(waterSearch.getWaterAmount());
         waterDetailed.setActualWaterAmount(waterSearch.getActualWaterAmount());
+
+        waterDetailed.setWaterTh(waterSearch.getWaterTh());
+        waterDetailed.setWaterAmountTh(waterSearch.getWaterAmountTh());
+        waterDetailed.setActualWaterAmountTh(waterSearch.getActualWaterAmountTh());
         waterDetailed.setRemark(waterSearch.getRemark());
         waterDetailed.setCreateBy(waterSearch.getCreateBy());
         //添加洗码明细
@@ -89,6 +93,10 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
             waterDetailed.setWater(info.getWater());
             waterDetailed.setWaterAmount(info.getWaterAmount());
             waterDetailed.setActualWaterAmount(info.getActualWaterAmount());
+
+            waterDetailed.setWaterTh(info.getWaterTh());
+            waterDetailed.setWaterAmountTh(info.getWaterAmountTh());
+            waterDetailed.setActualWaterAmountTh(info.getActualWaterAmountTh());
             waterDetailed.setRemark("批量结算");
             waterDetailed.setCreateBy(info.getCreateBy());
             list.add(waterDetailed);
@@ -115,12 +123,21 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
     public SysChipRecord addChipRecord(SysWaterSearch waterSearch){
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
         BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
+        BigDecimal waterAmountTh = new BigDecimal(map.get("waterAmountTh").toString());
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(waterSearch.getCard());
         chipRecord.setType(ChipChangeEnum.SETTLEMENT_CHIP.getCode());
+
+
         chipRecord.setBefore(waterAmount.add(waterSearch.getWaterAmount()));
         chipRecord.setChange(waterSearch.getWaterAmount());
         chipRecord.setAfter(waterAmount);
+
+
+        chipRecord.setBeforeTh(waterAmountTh.add(waterSearch.getWaterAmountTh()));
+        chipRecord.setChangeTh(waterSearch.getWaterAmountTh());
+        chipRecord.setAfterTh(waterAmountTh);
+
         chipRecord.setCreateBy(waterSearch.getCreateBy());
         return  chipRecord;
     }

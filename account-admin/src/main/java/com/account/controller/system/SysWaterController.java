@@ -63,9 +63,12 @@ public class SysWaterController extends BaseController {
             //洗码佣金取整(0:未勾选 、1:已勾选)
             if (OddsConfigureList.getRollingCommissionRounding() == CommonConst.NUMBER_1){
                 BigDecimal actualWaterAmount = info.getWaterAmount().setScale(0, BigDecimal.ROUND_DOWN);
+                BigDecimal actualWaterAmountTh = info.getWaterAmountTh().setScale(0, BigDecimal.ROUND_DOWN);
                 info.setActualWaterAmount(actualWaterAmount);
+                info.setActualWaterAmountTh(actualWaterAmountTh);
             }else {
                 info.setActualWaterAmount(info.getWaterAmount());
+                info.setActualWaterAmountTh(info.getWaterAmountTh());
             }
         });
 
@@ -109,19 +112,12 @@ public class SysWaterController extends BaseController {
         if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
             return AjaxResult.success("该会员不可结算洗码!");
         }
-        //判断会员是否有欠钱
-/*        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, waterSearch.getCard());
-        if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
-            return AjaxResult.success("该会员不可结算洗码!");
-        }*/
-
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
         BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
-        if (waterAmount.compareTo(BigDecimal.ZERO)==0 || waterSearch.getWaterAmount().compareTo(BigDecimal.ZERO)==0){
-            return AjaxResult.success("当前会员没有可结算洗码费!");
-        }
+        BigDecimal waterAmountTh = new BigDecimal(map.get("waterAmountTh").toString());
 
-        if (waterSearch.getWaterAmount().compareTo(waterAmount)>0){
+
+        if (waterSearch.getWaterAmount().compareTo(waterAmount)>0 || waterSearch.getWaterAmountTh().compareTo(waterAmountTh)>0){
             return AjaxResult.success("结算洗码失败!");
         }
         waterSearch.setUpdateBy(SecurityUtils.getUsername());
@@ -150,18 +146,13 @@ public class SysWaterController extends BaseController {
             if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
                 return AjaxResult.success("结算失败!");
             }
-            //判断会员是否有欠钱
-      /*      SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, info.getCard());
-            if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
-                return AjaxResult.success("结算失败!");
-            }*/
 
             Map map = membersWaterService.selectMembersWaterInfo(info.getCard());
             BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
-            if (waterAmount.compareTo(BigDecimal.ZERO)==0 || info.getWaterAmount().compareTo(BigDecimal.ZERO)==0){
-                return AjaxResult.success("结算失败!");
-            }
-            if (info.getWaterAmount().compareTo(waterAmount)>0){
+            BigDecimal waterAmountTh = new BigDecimal(map.get("waterAmountTh").toString());
+
+
+            if (info.getWaterAmount().compareTo(waterAmount)>0 || info.getWaterAmountTh().compareTo(waterAmountTh)>0){
                 return AjaxResult.success("结算失败!");
             }
             info.setCreateBy(SecurityUtils.getUsername());
