@@ -9,7 +9,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="card"    column="card"    />
         <result property="chipBalance"     column="chip_balance"     />
         <result property="cashBalance"   column="cash_balance"   />
-        <result property="totalBalance"    column="total_balance"    />
+
+        <result property="chipBalanceTh"     column="chip_balance_th"     />
+        <result property="cashBalanceTh"   column="cash_balance_th"   />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
@@ -25,7 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.`status` as status,
         IFNULL( a.cash_balance, 0 ) as cashBalance,
         IFNULL( a.chip_balance, 0 ) as chipBalance,
-        IFNULL( a.total_balance, 0 ) as totalBalance,
+        IFNULL( a.cash_balance_th, 0 ) as cashBalanceTh,
+        IFNULL( a.chip_balance_th, 0 ) as chipBalanceTh,
         m.remark  as remark,
         IFNULL( s.signed_amount, 0 ) AS signedAmount
         FROM
@@ -40,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND m.card = #{card}
         </if>
     </where>
-        ORDER BY a.total_balance DESC,m.card DESC
+        ORDER BY a.create_time DESC,m.card DESC
     </select>
 
     <select id="selectAccessCodeTotal"  resultType="java.util.Map">
@@ -48,7 +51,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             SUM( IFNULL( a.cash_balance, 0 ) ) AS cashBalance,
             SUM(
                     IFNULL( a.chip_balance, 0 )) AS chipBalance,
-            SUM( IFNULL( a.total_balance, 0 ) ) AS totalBalance
+        SUM( IFNULL( a.cash_balance_th, 0 ) ) AS cashBalanceTh,
+        SUM(IFNULL( a.chip_balance_th, 0 )) AS chipBalanceTh
         FROM
             sys_members m
         LEFT JOIN sys_access_code a ON a.card = m.card
@@ -63,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectAccessCodeInfo" parameterType="SysAccessCode" resultMap="SysAccessCodeResult">
-        select a.card,a.chip_balance,a.cash_balance,a.total_balance from sys_access_code a
+        select a.card,a.chip_balance,a.cash_balance,a.chip_balance_th,a.cash_balance_th from sys_access_code a
         <where>
             <if test="card != null and card != '' ">
                and  a.card=#{card}
@@ -80,14 +84,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="card != null and card != ''">card,</if>
         <if test="chipAmount != null and chipAmount != ''">chip_balance,</if>
         <if test="cashAmount != null and cashAmount != ''">cash_balance,</if>
+        <if test="chipAmountTh != null and chipAmountTh != ''">chip_balance_th,</if>
+        <if test="cashAmountTh != null and cashAmountTh != ''">cash_balance_th,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
-        total_balance,create_time,update_time )
+        create_time,update_time )
         values(
         <if test="card != null and card != ''">#{card},</if>
         <if test="chipAmount != null and chipAmount != ''">#{chipAmount},</if>
         <if test="cashAmount != null and cashAmount != ''">#{cashAmount},</if>
+
+        <if test="chipAmountTh != null and chipAmountTh != ''">#{chipAmountTh},</if>
+        <if test="cashAmountTh != null and cashAmountTh != ''">#{cashAmountTh},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
-        #{totalBalance},sysdate(),sysdate()
+               sysdate(),sysdate()
         )
     </insert>
 
@@ -98,13 +107,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <if test="mark==1">
                     <if test="chipAmount != null and chipAmount != ''">chip_balance=chip_balance+#{chipAmount},</if>
                     <if test="cashAmount != null and cashAmount != ''">cash_balance=cash_balance+#{cashAmount},</if>
+                    <if test="chipAmountTh != null and chipAmountTh != ''">chip_balance_th=chip_balance_th+#{chipAmountTh},</if>
+                    <if test="cashAmountTh != null and cashAmountTh != ''">cash_balance_th=cash_balance_th+#{cashAmountTh},</if>
                 </if>
                 <if test="mark==2">
                     <if test="chipAmount != null and chipAmount != ''">chip_balance=chip_balance-#{chipAmount},</if>
                     <if test="cashAmount != null and cashAmount != ''">cash_balance=cash_balance-#{cashAmount},</if>
+                    <if test="chipAmountTh != null and chipAmountTh != ''">chip_balance_th=chip_balance_th-#{chipAmountTh},</if>
+                    <if test="cashAmountTh != null and cashAmountTh != ''">cash_balance_th=cash_balance_th-#{cashAmountTh},</if>
                 </if>
                 <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
-                total_balance=chip_balance+cash_balance, update_time = sysdate()
+             update_time = sysdate()
             </set>
         where card=#{card}
     </update>

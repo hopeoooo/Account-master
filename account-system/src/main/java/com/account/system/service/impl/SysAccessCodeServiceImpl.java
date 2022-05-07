@@ -50,9 +50,6 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     @Override
     @Transactional
     public int insertAccessCode(SysAccessCodeAddSearch accessCode) {
-        BigDecimal cashBalance = accessCode.getCashAmount() == null ? BigDecimal.ZERO : accessCode.getCashAmount();
-        BigDecimal chipBalance = accessCode.getChipAmount() == null ? BigDecimal.ZERO : accessCode.getChipAmount();
-        accessCode.setTotalBalance(cashBalance.add(chipBalance));
         int i = accessCodeMapper.insertAccessCode(accessCode);
         if(i>0){
             //保存存取码明细
@@ -86,7 +83,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         accessCodeDetailed.setType(accessCode.getMark());
         accessCodeDetailed.setCreateBy(accessCode.getCreateBy());
         accessCodeDetailed.setRemark(accessCode.getRemark());
-        //筹码
+        //美金-筹码
         if (accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0){
             BigDecimal chipBalance = sysAccessCode!=null && sysAccessCode.getChipBalance() != null ? sysAccessCode.getChipBalance() :  BigDecimal.ZERO;
             if (accessCode.getMark()== ChipChangeEnum.STORE_CHIP.getCode()){
@@ -96,10 +93,8 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             }
             accessCodeDetailed.setChipAmount(accessCode.getChipAmount());
             accessCodeDetailed.setChipAmountAfter(chipBalance);
-            //添加筹码变动明细表
-            addChipRecord(accessCodeDetailed);
         }
-        //现金
+        //美金-现金
         if (accessCode.getCashAmount()!=null && accessCode.getCashAmount().compareTo(BigDecimal.ZERO)>0) {
             BigDecimal cashBalance = sysAccessCode!=null &&  sysAccessCode.getCashBalance() != null ? sysAccessCode.getCashBalance() : BigDecimal.ZERO;
             if (accessCode.getMark()==ChipChangeEnum.STORE_CHIP.getCode()){
@@ -110,7 +105,40 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             accessCodeDetailed.setCashAmount(accessCode.getCashAmount());
             accessCodeDetailed.setCashAmountAfter(cashBalance);
         }
+
+        //泰铢-筹码
+        if (accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0){
+            BigDecimal chipBalanceTh = sysAccessCode!=null && sysAccessCode.getChipBalanceTh() != null ? sysAccessCode.getChipBalanceTh() :  BigDecimal.ZERO;
+            if (accessCode.getMark()== ChipChangeEnum.STORE_CHIP.getCode()){
+                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.subtract(accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh()));
+            }else {
+                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.add(accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh()));
+            }
+            accessCodeDetailed.setChipAmountTh(accessCode.getChipAmount());
+            accessCodeDetailed.setChipAmountAfterTh(chipBalanceTh);
+
+        }
+
+        //泰铢-现金
+        if (accessCode.getCashAmountTh()!=null && accessCode.getCashAmountTh().compareTo(BigDecimal.ZERO)>0) {
+            BigDecimal cashBalanceTh = sysAccessCode!=null &&  sysAccessCode.getCashBalanceTh() != null ? sysAccessCode.getCashBalanceTh() : BigDecimal.ZERO;
+            if (accessCode.getMark()==ChipChangeEnum.STORE_CHIP.getCode()){
+                accessCodeDetailed.setCashAmountBeforeTh(cashBalanceTh.subtract(accessCode.getCashAmountTh()==null ?BigDecimal.ZERO:accessCode.getCashAmountTh()));
+            }else {
+                accessCodeDetailed.setCashAmountBeforeTh(cashBalanceTh.add(accessCode.getCashAmountTh()==null ?BigDecimal.ZERO:accessCode.getCashAmountTh()));
+            }
+            accessCodeDetailed.setCashAmountTh(accessCode.getCashAmountTh());
+            accessCodeDetailed.setCashAmountAfterTh(cashBalanceTh);
+        }
+
         accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
+
+
+        if ((accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0)
+                || (accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0)){
+            //添加筹码变动明细表
+            addChipRecord(accessCodeDetailed);
+        }
     }
 
 
@@ -122,9 +150,12 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(accessCodeDetailed.getCard());
         chipRecord.setType(accessCodeDetailed.getType());
-        chipRecord.setBefore(accessCodeDetailed.getChipAmountBefore());
-        chipRecord.setChange(accessCodeDetailed.getChipAmount());
-        chipRecord.setAfter(accessCodeDetailed.getChipAmountAfter());
+        chipRecord.setBefore(accessCodeDetailed.getChipAmountBefore()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountBefore());
+        chipRecord.setChange(accessCodeDetailed.getChipAmount()==null ? BigDecimal.ZERO :accessCodeDetailed.getChipAmount() );
+        chipRecord.setAfter(accessCodeDetailed.getChipAmountAfter()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountAfter());
+        chipRecord.setBeforeTh(accessCodeDetailed.getChipAmountBeforeTh()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountBeforeTh());
+        chipRecord.setChangeTh(accessCodeDetailed.getChipAmountTh()==null ? BigDecimal.ZERO :accessCodeDetailed.getChipAmountTh() );
+        chipRecord.setAfterTh(accessCodeDetailed.getChipAmountAfterTh()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountAfterTh());
         chipRecord.setCreateBy(accessCodeDetailed.getCreateBy());
         chipRecordMapper.addChipRecord(chipRecord);
     }

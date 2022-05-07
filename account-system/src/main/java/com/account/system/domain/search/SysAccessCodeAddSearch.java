@@ -29,8 +29,13 @@ public class SysAccessCodeAddSearch{
     @ApiModelProperty(value ="现金")
     private BigDecimal cashAmount;
 
-    @ApiModelProperty(value = "总余额")
-    private BigDecimal totalBalance;
+
+    @ApiModelProperty( value ="筹码-泰铢")
+    private BigDecimal chipAmountTh;
+
+    @ApiModelProperty(value ="现金-泰铢")
+    private BigDecimal cashAmountTh;
+
 
     @ApiModelProperty(value = "备注")
     private String remark;
