@@ -32,7 +32,7 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
     @Transactional
     public int addBuyCode(SysBusinessCashChipAddSearch businessCashChipAddSearch) {
         int mark = businessCashChipAddSearch.getMark() == ChipChangeEnum.BUY_CODE.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-        int i = membersService.updateChipAmount(businessCashChipAddSearch.getCard(), businessCashChipAddSearch.getChipAmount(), mark);
+        int i = membersService.updateChipAmount(businessCashChipAddSearch.getCard(), businessCashChipAddSearch.getChipAmount(),null, mark);
         if (i>0){
             addChipRecord(businessCashChipAddSearch);
         }

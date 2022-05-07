@@ -33,7 +33,7 @@ public interface SysMembersMapper {
 
     void deleteMembers(@Param("ids") String ids);
 
-    int updateChipAmount(@Param("card") String card, @Param("chipAmount") BigDecimal chipAmount,@Param("type")Integer type);
+    int updateChipAmount(@Param("card") String card, @Param("chipAmount") BigDecimal chipAmount,@Param("chipAmountTh") BigDecimal chipAmountTh,@Param("type")Integer type);
 
     SysMembers selectmembersByCard(@Param("card") String card);
 

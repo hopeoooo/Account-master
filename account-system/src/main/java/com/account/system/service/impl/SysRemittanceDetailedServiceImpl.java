@@ -63,7 +63,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
         //筹码
         if (remittanceSearch.getOperationType() == CommonConst.NUMBER_0) {
             int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-            int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
+            int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), null,type);
             if (i > 0) {
                 //汇款明细
                 remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);

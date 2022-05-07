@@ -21,23 +21,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
    <select id="selectAccessDetailedCodeList" parameterType="SysAccessCodeDetailedSearch"  resultType="com.account.system.domain.vo.SysAccessCodeDetailedVo">
        SELECT
-           d.id,
-           m.`name` as userName,
-           m.card,
-           m.is_admin as isAdmin,
-           d.type,
-           d.chip_amount_before as chipAmountBefore,
-           d.chip_amount as chipAmount,
-           d.chip_amount_after as chipAmountAfter,
-           d.cash_amount_before as cashAmountBefore,
-           d.cash_amount as cashAmount,
-           d.cash_amount_after as cashAmountAfter,
-           d.remark,
-           d.operation_time as operationTime,
-           d.create_by as  createBy
+       d.id,
+       m.`name` AS userName,
+       m.card,
+       m.is_admin AS isAdmin,
+       d.type,
+       d.chip_amount_before AS chipAmountBefore,
+       d.chip_amount AS chipAmount,
+       d.chip_amount_after AS chipAmountAfter,
+       d.cash_amount_before AS cashAmountBefore,
+       d.cash_amount AS cashAmount,
+       d.cash_amount_after AS cashAmountAfter,
+       d.chip_amount_before_th AS chipAmountBeforeTh,
+       d.chip_amount_th AS chipAmountTh,
+       d.chip_amount_after_th AS chipAmountAfterTh,
+       d.cash_amount_before_th AS cashAmountBeforeTh,
+       d.cash_amount_th AS cashAmountTh,
+       d.cash_amount_after_th AS cashAmountAfterTh,
+       d.remark,
+       d.operation_time AS operationTime,
+       d.create_by AS createBy
        FROM
-           sys_access_code_detailed d
-           LEFT JOIN sys_members m ON m.card = d.card
+       sys_access_code_detailed d
+       LEFT JOIN sys_members m ON m.card = d.card
     <where>
         <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
             AND m.is_admin = 0

@@ -28,8 +28,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         c.`before`,
         c.`change`,
         c.`after`,
-        c.create_time as createTime,
-        c.create_by as createBy
+        c.`before_th` as beforeTh,
+        c.`change_th` as changeTh,
+        c.`after_th` as afterTh,
+        c.create_time AS createTime,
+        c.create_by AS createBy
         FROM
         sys_chip_record c
         LEFT JOIN sys_members m ON m.card = c.card

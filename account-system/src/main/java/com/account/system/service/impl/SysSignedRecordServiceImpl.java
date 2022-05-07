@@ -61,7 +61,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
 
             //更新用户筹码金额
             if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0){
-                updateUserChipAmount(signedRecordSearch.getAmount(), CommonConst.NUMBER_1,signedRecordSearch.getCard());
+                updateUserChipAmount(signedRecordSearch.getAmount(), signedRecordSearch.getAmountTh(), CommonConst.NUMBER_1,signedRecordSearch.getCard());
             }
         }
         return i;
@@ -77,7 +77,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
             //更新用户筹码金额
             if (signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO) > 0) {
                 int number1 = signedRecordSearch.getMark() == ChipChangeEnum.BORROW_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
-                updateUserChipAmount(signedRecordSearch.getAmount(), number1, signedRecordSearch.getCard());
+                updateUserChipAmount(signedRecordSearch.getAmount(),signedRecordSearch.getAmountTh(), number1, signedRecordSearch.getCard());
             }
         }
         return i;
@@ -89,8 +89,8 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
      * @param type 0:减、1:加
      * @return
      */
-    public int updateUserChipAmount(BigDecimal chipAmount,int type,String userId){
-        return  membersMapper.updateChipAmount(userId, chipAmount, type);
+    public int updateUserChipAmount(BigDecimal chipAmount,BigDecimal chipAmountTh,int type,String userId){
+        return  membersMapper.updateChipAmount(userId, chipAmount,chipAmountTh, type);
     }
 
     /**
@@ -105,14 +105,33 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         SysSignedRecordDetailed signedRecordDetailed=new SysSignedRecordDetailed();
         signedRecordDetailed.setCard(signedRecordSearch.getCard());
         signedRecordDetailed.setType(signedRecordSearch.getMark());
+        //美金
         BigDecimal signedAmount = sysSignedRecord!=null && sysSignedRecord.getSignedAmount() != null ? sysSignedRecord.getSignedAmount() :  BigDecimal.ZERO;
+        //泰铢
+        BigDecimal signedAmountTh = sysSignedRecord!=null && sysSignedRecord.getSignedAmountTh() != null ? sysSignedRecord.getSignedAmountTh() :  BigDecimal.ZERO;
+
+        BigDecimal amountBefore=BigDecimal.ZERO;
+        BigDecimal amountBeforeTh=BigDecimal.ZERO;
         if (signedRecordSearch.getMark() == ChipChangeEnum.BORROW_CHIP.getCode()){
-            signedRecordDetailed.setAmountBefore(signedAmount.subtract(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));
+            amountBefore=signedAmount.subtract(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount());
+            amountBeforeTh=signedAmountTh.subtract(signedRecordSearch.getAmountTh()==null ?BigDecimal.ZERO:signedRecordSearch.getAmountTh());
         }else {
-            signedRecordDetailed.setAmountBefore(signedAmount.add(signedRecordSearch.getAmount()==null ?BigDecimal.ZERO:signedRecordSearch.getAmount()));
+            amountBefore= signedAmount.add(signedRecordSearch.getAmount()==null ? BigDecimal.ZERO:signedRecordSearch.getAmount());
+            amountBeforeTh= signedAmountTh.add(signedRecordSearch.getAmountTh()==null ?BigDecimal.ZERO:signedRecordSearch.getAmountTh());
         }
-        signedRecordDetailed.setAmount(signedRecordSearch.getAmount());
-        signedRecordDetailed.setAmountAfter(signedAmount);
+
+        if(signedRecordSearch.getAmount()!=null && signedRecordSearch.getAmount().compareTo(BigDecimal.ZERO)>0) {
+            signedRecordDetailed.setAmountBefore(amountBefore);
+            signedRecordDetailed.setAmount(signedRecordSearch.getAmount());
+            signedRecordDetailed.setAmountAfter(signedAmount);
+        }
+
+        if(signedRecordSearch.getAmountTh()!=null && signedRecordSearch.getAmountTh().compareTo(BigDecimal.ZERO)>0){
+            signedRecordDetailed.setAmountBeforeTh(amountBeforeTh);
+            signedRecordDetailed.setAmountTh(signedRecordSearch.getAmountTh());
+            signedRecordDetailed.setAmountAfterTh(signedAmountTh);
+
+        }
 
         signedRecordDetailed.setCreateBy(signedRecordSearch.getCreateBy());
         signedRecordDetailed.setRemark(signedRecordSearch.getRemark());
@@ -131,9 +150,12 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         SysChipRecord chipRecord=new SysChipRecord();
         chipRecord.setCard(signedRecordDetailed.getCard());
         chipRecord.setType(signedRecordDetailed.getType());
-        chipRecord.setBefore(signedRecordDetailed.getAmountBefore());
-        chipRecord.setChange(signedRecordDetailed.getAmount());
-        chipRecord.setAfter(signedRecordDetailed.getAmountAfter());
+        chipRecord.setBefore(signedRecordDetailed.getAmountBefore()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountBefore());
+        chipRecord.setChange(signedRecordDetailed.getAmount()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmount());
+        chipRecord.setAfter(signedRecordDetailed.getAmountAfter()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountAfter());
+        chipRecord.setBeforeTh(signedRecordDetailed.getAmountBeforeTh()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountBeforeTh());
+        chipRecord.setChangeTh(signedRecordDetailed.getAmountTh()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountTh());
+        chipRecord.setAfterTh(signedRecordDetailed.getAmountAfterTh()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountAfterTh());
         chipRecord.setCreateBy(signedRecordDetailed.getCreateBy());
         chipRecordMapper.addChipRecord(chipRecord);
     }

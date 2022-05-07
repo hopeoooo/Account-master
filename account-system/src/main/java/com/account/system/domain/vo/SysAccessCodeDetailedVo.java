@@ -45,6 +45,26 @@ public class SysAccessCodeDetailedVo {
     private BigDecimal cashAmountAfter;
 
 
+    @ApiModelProperty(value ="筹码变动前金额-泰铢")
+    private BigDecimal chipAmountBeforeTh;
+
+    @ApiModelProperty(value = "筹码变动金额-泰铢")
+    private BigDecimal chipAmountTh;
+
+    @ApiModelProperty(value = "筹码变动后金额-泰铢")
+    private BigDecimal chipAmountAfterTh;
+
+
+    @ApiModelProperty(value ="现金变动前金额-泰铢")
+    private BigDecimal cashAmountBeforeTh;
+
+    @ApiModelProperty(value = "现金变动金额-泰铢")
+    private BigDecimal cashAmountTh;
+
+    @ApiModelProperty(value = "现金变动后金额-泰铢")
+    private BigDecimal cashAmountAfterTh;
+
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

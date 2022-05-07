@@ -35,6 +35,17 @@ public class SysSignedRecordDetailedVo{
     @ApiModelProperty(value = "变动后金额")
     private BigDecimal amountAfter;
 
+
+
+    @ApiModelProperty(value ="变动前金额-泰铢")
+    private BigDecimal amountBeforeTh;
+
+    @ApiModelProperty(value = "变动金额-泰铢")
+    private BigDecimal amountTh;
+
+    @ApiModelProperty(value = "变动后金额-泰铢")
+    private BigDecimal amountAfterTh;
+
     private String createBy;
 
     @ApiModelProperty(value = "备注")

@@ -12,6 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amountBefore"      column="amount_before"      />
         <result property="amount"      column="amount"      />
         <result property="amountAfter"    column="amount_after"    />
+
+        <result property="amountBeforeTh"      column="amount_before_th"      />
+        <result property="amountTh"      column="amount_th"      />
+        <result property="amountAfterTh"    column="amount_after_th"    />
         <result property="remark"      column="remark"      />
         <result property="operationTime"      column="operation_time"      />
         <result property="createBy"      column="create_by"      />
@@ -19,19 +23,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSignedRecordDetailedList" parameterType="SysSignedRecordDetailedSearch"  resultType="com.account.system.domain.vo.SysSignedRecordDetailedVo">
         SELECT
-            m.card as card,
-            m.`name` as userName,
+        m.card AS card,
+        m.`name` AS userName,
         d.type AS type,
-            d.amount_before as amountBefore,
-            d.amount as amount,
-            d.amount_after as amountAfter,
-            d.amount_type as amountType,
-            d.operation_time as operationTime,
-            d.create_by as createBy,
-            d.remark  as remark
+        d.amount_before AS amountBefore,
+        d.amount AS amount,
+        d.amount_after AS amountAfter,
+        d.amount_before_Th AS amountBeforeTh,
+        d.amount_Th AS amountTh,
+        d.amount_after_Th AS amountAfterTh,
+        d.amount_type AS amountType,
+        d.operation_time AS operationTime,
+        d.create_by AS createBy,
+        d.remark AS remark
         FROM
-            sys_signed_record_detailed d
-                LEFT JOIN sys_members m ON m.card = d.card
+        sys_signed_record_detailed d
+        LEFT JOIN sys_members m ON m.card = d.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -61,6 +68,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="amountBefore != null and amountBefore != ''">amount_before,</if>
         <if test="amount != null and amount != ''">amount,</if>
         <if test="amountAfter != null and amountAfter != ''">amount_after,</if>
+
+        <if test="amountBeforeTh != null and amountBeforeTh != ''">amount_before_th,</if>
+        <if test="amountTh != null and amountTh != ''">amount_th,</if>
+        <if test="amountAfterTh != null and amountAfterTh != ''">amount_after_th,</if>
+
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,operation_time )
@@ -71,6 +83,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="amountBefore != null and amountBefore != ''">#{amountBefore},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
         <if test="amountAfter != null and amountAfter != ''">#{amountAfter},</if>
+
+        <if test="amountBeforeTh != null and amountBeforeTh != ''">#{amountBeforeTh},</if>
+        <if test="amountTh != null and amountTh != ''">#{amountTh},</if>
+        <if test="amountAfterTh != null and amountAfterTh != ''">#{amountAfterTh},</if>
+
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(), sysdate()

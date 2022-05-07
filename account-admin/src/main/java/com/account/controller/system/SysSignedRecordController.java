@@ -108,7 +108,8 @@ public class SysSignedRecordController extends BaseController {
         if (sysSignedRecord == null) {
             return AjaxResult.error("还单失败!");
         }
-        if (signedRecordSearch.getAmount().compareTo(sysSignedRecord.getSignedAmount()) > 0) {
+        if (signedRecordSearch.getAmount().compareTo(sysSignedRecord.getSignedAmount()) > 0
+                || signedRecordSearch.getAmountTh().compareTo(sysSignedRecord.getSignedAmountTh()) > 0) {
             return AjaxResult.error("请输入正确的金额!");
         }
 

@@ -36,7 +36,7 @@ public interface SysMembersService {
 
     Map selectBusinessCashChipTotal(String card, Integer isAdmin);
 
-    int updateChipAmount( String card,  BigDecimal chipAmount, Integer type);
+    int updateChipAmount( String card,  BigDecimal chipAmount,BigDecimal chipAmountTh, Integer type);
 
     Map getOddsConfig();
 

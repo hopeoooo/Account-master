@@ -26,6 +26,9 @@ public class SysSignedRecordVo {
     @ApiModelProperty( value ="签单额")
     private BigDecimal signedAmount;
 
+    @ApiModelProperty( value ="签单额-泰铢")
+    private BigDecimal signedAmountTh;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

@@ -99,13 +99,17 @@ public class SysAccessCodeController extends BaseController {
         if (sysAccessCode==null){
             return AjaxResult.error("取码失败!");
         }
-        if (accessCode.getChipAmount() !=null && accessCode.getChipAmount().compareTo(sysAccessCode.getChipBalance())>0){
+        if ((accessCode.getChipAmount() !=null && accessCode.getChipAmount().compareTo(sysAccessCode.getChipBalance())>0)
+                ||  (accessCode.getChipAmountTh() !=null && accessCode.getChipAmountTh().compareTo(sysAccessCode.getChipBalanceTh())>0)){
             return AjaxResult.error("余额不足!");
         }
 
-        if (accessCode.getCashAmount() !=null && accessCode.getCashAmount().compareTo(sysAccessCode.getCashBalance())>0){
+        if ((accessCode.getCashAmount() !=null && accessCode.getCashAmount().compareTo(sysAccessCode.getCashBalance())>0)
+        || (accessCode.getCashAmountTh() !=null && accessCode.getCashAmountTh().compareTo(sysAccessCode.getCashBalanceTh())>0)){
             return AjaxResult.error("余额不足!");
         }
+
+
         //取码:金额减
         accessCode.setUpdateBy(SecurityUtils.getUsername());
         accessCode.setCreateBy(SecurityUtils.getUsername());
