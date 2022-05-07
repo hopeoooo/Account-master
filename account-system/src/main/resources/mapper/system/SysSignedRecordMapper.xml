@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	<id     property="id"      column="id"      />
         <result property="card"    column="card"    />
         <result property="signedAmount"     column="signed_amount"     />
+        <result property="signedAmountTh"     column="signed_amount_th"     />
         <result property="createBy"      column="create_by"      />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"      column="update_by"      />
@@ -20,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         m.`status` as status,
             m.card as card,
             IFNULL(s.signed_amount,0) as signedAmount,
+            IFNULL(s.signed_amount_th,0) as signedAmountTh,
             m.remark as remark
         FROM
             sys_members m
@@ -32,13 +34,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND m.card = #{card}
             </if>
         </where>
-        ORDER BY s.signed_amount DESC,m.card desc
+        ORDER BY s.update_time DESC,m.card desc
     </select>
 
 
     <select id="selectSignedRecordTotal"  resultType="java.util.Map">
         SELECT
-        IFNULL(SUM(s.signed_amount ),0) as signed_amount
+        IFNULL(SUM(s.signed_amount ),0) as signed_amount,
+        IFNULL(SUM(s.signed_amount_th ),0) as signed_amountTh
         FROM
         sys_members m
         LEFT JOIN sys_signed_record s ON s.card = m.card
@@ -57,7 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
         s.id,
         s.card,
-        s.signed_amount
+        s.signed_amount,
+        s.signed_amount_th
         FROM
         sys_signed_record s
         <where>
@@ -75,11 +79,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (
         <if test="card != null and card != ''">card,</if>
         <if test="amount != null and amount != ''">signed_amount,</if>
+        <if test="amountTh != null and amountTh != ''">signed_amount_th,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time,update_time )
         values(
         <if test="card != null and card != ''">#{card},</if>
         <if test="amount != null and amount != ''">#{amount},</if>
+        <if test="amountTh != null and amountTh != ''">#{amountTh},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate(),sysdate()
         )
@@ -91,9 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <set>
             <if test="mark==5">
                 <if test="amount != null and amount != ''">signed_amount=signed_amount+#{amount},</if>
+                <if test="amountTh != null and amountTh != ''">signed_amount_th=signed_amount_th+#{amountTh},</if>
             </if>
             <if test="mark==6">
                 <if test="amount != null and amount != ''">signed_amount=signed_amount-#{amount},</if>
+                <if test="amountTh != null and amountTh != ''">signed_amount_th=signed_amount_th-#{amountTh},</if>
             </if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()

@@ -282,10 +282,12 @@
         update sys_members
         <set>
             <if test="type==1">
-                <if test="chipAmount != null and chipAmount != '' ">chip =chip + #{chipAmount}</if>
+                <if test="chipAmount != null and chipAmount != '' ">chip =chip + #{chipAmount},</if>
+                <if test="chipAmountTh != null and chipAmountTh != '' ">chip_th =chip_th + #{chipAmountTh}</if>
             </if>
             <if test="type==0">
-                <if test="chipAmount != null and chipAmount != '' ">chip =chip - #{chipAmount}</if>
+                <if test="chipAmount != null and chipAmount != '' ">chip =chip - #{chipAmount},</if>
+                <if test="chipAmountTh != null and chipAmountTh != '' ">chip_th =chip_th - #{chipAmountTh}</if>
             </if>
         </set>
         where card = #{card}

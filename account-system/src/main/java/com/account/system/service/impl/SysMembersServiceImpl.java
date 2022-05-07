@@ -70,8 +70,8 @@ public class SysMembersServiceImpl implements SysMembersService {
      * @return
      */
     @Override
-    public int updateChipAmount(String card, BigDecimal chipAmount, Integer type) {
-        return sysMembersMapper.updateChipAmount(card, chipAmount, type);
+    public int updateChipAmount(String card, BigDecimal chipAmount,BigDecimal chipAmountTh, Integer type) {
+        return sysMembersMapper.updateChipAmount(card, chipAmount,chipAmountTh, type);
     }
 
     @Override

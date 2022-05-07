@@ -20,7 +20,9 @@ public class SysSignedRecordSearch {
     private Long id;
 
     @ApiModelProperty(value = "金额")
-    private BigDecimal amount;
+    private BigDecimal amount=BigDecimal.ZERO;
+    @ApiModelProperty(value = "金额-泰铢")
+    private BigDecimal amountTh=BigDecimal.ZERO;
 
     @ApiModelProperty(value ="会员卡号")
     private String card;
