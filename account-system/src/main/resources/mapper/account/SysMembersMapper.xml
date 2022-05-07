@@ -76,7 +76,9 @@
         select if(sum(IF(card_type=0,1,0)) is null,0,sum(IF(card_type=0,1,0))) parentCount,
                if(sum(IF(card_type=1,1,0)) is null,0,sum(IF(card_type=1,1,0))) childCount,
                if(sum(deposit) is null,0, sum(deposit)) depositCount,
-               if(sum(repair) is null,0, sum(repair)) repairCount
+               if(sum(repair) is null,0, sum(repair)) repairCount,
+               if(sum(deposit_th) is null,0, sum(deposit_th)) depositCountTh,
+               if(sum(repair_th) is null,0, sum(repair_th)) repairCountTh
         from sys_members
         where card in (
         select card from
