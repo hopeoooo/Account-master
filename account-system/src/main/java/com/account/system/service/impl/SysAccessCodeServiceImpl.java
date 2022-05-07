@@ -134,11 +134,11 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
 
 
-        if ((accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0)
+        /*if ((accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0)
                 || (accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0)){
             //添加筹码变动明细表
             addChipRecord(accessCodeDetailed);
-        }
+        }*/
     }
 
 
