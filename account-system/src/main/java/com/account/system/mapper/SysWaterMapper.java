@@ -14,7 +14,8 @@ import java.util.Map;
  */
 public interface SysWaterMapper {
 
-    void saveMembersWater(@Param("card") String card, @Param("water") BigDecimal water, @Param("waterAmount") BigDecimal waterAmount);
+    void saveMembersWater(@Param("card") String card, @Param("water") BigDecimal water, @Param("waterAmount") BigDecimal waterAmount
+            , @Param("waterTh") BigDecimal waterTh, @Param("waterAmountTh") BigDecimal waterAmountTh);
 
 
     int updateMembersWater(SysWaterSearch waterSearch);

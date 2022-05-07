@@ -5,12 +5,14 @@
 <mapper namespace="com.account.system.mapper.SysWaterMapper">
 
     <insert id="saveMembersWater">
-        insert into sys_members_water (card, water, water_amount, create_time)
-        values (#{card}, #{water}, #{waterAmount}, sysdate())
-        ON DUPLICATE KEY UPDATE
-        water = water + #{water},
-        water_amount = water_amount + #{waterAmount},
-        update_time = sysdate()
+        insert into sys_members_water (card, water, water_amount, create_time, water_th, water_amount_th)
+        values (#{card}, #{water}, #{waterAmount}, sysdate(), #{waterTh}, #{waterAmountTh}) ON DUPLICATE KEY
+        UPDATE
+            water = water + #{water},
+            water_amount = water_amount + #{waterAmount},
+            water_th = water_th + #{waterTh},
+            water_amount_th = water_amount_th + #{waterAmountTh},
+            update_time = sysdate()
     </insert>
 
     <update id="updateMembersWater">

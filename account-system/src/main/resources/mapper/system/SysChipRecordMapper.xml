@@ -71,6 +71,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_chip_record
         set `change` = #{change},
             `after` = #{after},
+            `change_th` = #{changeTh},
+            `after_th` = #{afterTH},
             `type` = #{type}
         where card = #{card} and bet_id = #{betId}
     </update>
