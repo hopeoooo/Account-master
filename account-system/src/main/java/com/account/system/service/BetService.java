@@ -22,8 +22,6 @@ public interface BetService {
 
     SysTableManagement getTableByIp(String ip, Long gameId);
 
-    BigDecimal selectMembersChip(String card);
-
     void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
 
     List<Map> getGameResults(SysTableManagement sysTableManagement);

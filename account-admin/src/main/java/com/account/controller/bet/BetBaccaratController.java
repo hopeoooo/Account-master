@@ -61,6 +61,10 @@ public class BetBaccaratController {
         map.put("cash", sysTableManagement.getCashPointBase().add(sysTableManagement.getCash()));
         map.put("total", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
                 .add(sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())));
+        map.put("chipTh", sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh()));
+        map.put("cashTh", sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh()));
+        map.put("totalTh", sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh())
+                .add(sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh())));
         return AjaxResult.success(map);
     }
 
@@ -122,7 +126,7 @@ public class BetBaccaratController {
         for (int i = 0; i < bets.size(); i++) {
             JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
-            BigDecimal chip = betService.selectMembersChip(card);
+            BigDecimal chip = BigDecimal.ZERO; // betService.selectMembersChip(card);
             if(chip==null){
                 return AjaxResult.error("卡号："+card+" 不存在");
             }

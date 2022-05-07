@@ -122,7 +122,7 @@ public class BetDragonTigerController {
         bets.forEach(b -> {
             JSONObject bet = (JSONObject) b;
             String card = bet.getString("card");
-            BigDecimal chip = betService.selectMembersChip(card);
+            BigDecimal chip =BigDecimal.ZERO;// betService.selectMembersChip(card);
             BigDecimal payout = betService.getPayOut(bet, gameResult,sysTableManagement.getGameId());//派彩
             if (0 == bet.getInteger("type")) chip = chip.add(payout);
             bet.put("chip", chip);
