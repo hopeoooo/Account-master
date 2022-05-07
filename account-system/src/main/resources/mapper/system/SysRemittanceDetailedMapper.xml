@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.account.system.mapper.SysRemittanceDetailedMapper">
 
-    <resultMap type="SysRemittanceDetailed" id="SysRemittanceDetailedResult">
-    	<id     property="id"      column="id"      />
-        <result property="card"    column="card"    />
-        <result property="operationType"      column="operation_type"      />
-        <result property="type"    column="type"    />
-        <result property="amount"      column="amount"      />
-        <result property="remark"      column="remark"      />
-        <result property="operationTime"      column="operation_time"      />
-        <result property="createBy"      column="create_by"      />
+    <resultMap type="com.account.system.domain.SysRemittanceDetailed" id="SysRemittanceDetailedResult">
+        <id property="id" column="id"/>
+        <result property="card" column="card"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="type" column="type"/>
+        <result property="amountUsd" column="amount_usd"/>
+        <result property="amountThb" column="amount_thb"/>
+        <result property="remark" column="remark"/>
+        <result property="operationTime" column="operation_time"/>
+        <result property="createBy" column="create_by"/>
     </resultMap>
 
-    <select id="selectRemittanceDetailedList" parameterType="SysRemittanceDetailedSearch"  resultType="com.account.system.domain.vo.SysRemittanceDetailedVo">
+    <!--resultType="com.account.system.domain.SysRemittanceDetailed"-->
+    <select id="selectRemittanceDetailedList" parameterType="com.account.system.domain.search.SysRemittanceDetailedSearch"
+            resultType="com.account.system.domain.vo.SysRemittanceDetailedVo">
         SELECT
-            m.`name` as userName,
-            m.card,
-            d.type,
-            d.operation_type as operationType,
-            d.amount,
-            d.remark,
-            d.operation_time as operationTime,
-            d.create_by as  createBy
+        m.`name` as userName,
+        m.card,
+        d.type,
+        d.operation_type as operationType,
+        d.amount_usd as amountUsd,
+        d.amount_thb as amountThb,
+        d.remark,
+        d.operation_time as operationTime,
+        d.create_by as createBy
         FROM
-            sys_remittance_detailed d
-                LEFT JOIN sys_members m ON m.card = d.card
+        sys_remittance_detailed d
+        LEFT JOIN sys_members m ON m.card = d.card
         <where>
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
@@ -52,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         d.operation_time desc
     </select>
 
-    <select id="selectRemittanceDetailedTotal"  resultType="java.util.Map">
+    <select id="selectRemittanceDetailedTotal" resultType="java.util.Map">
         SELECT
         IFNULL( SUM( d.amount ), 0 ) as amount
         FROM
@@ -82,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         d.operation_time desc
     </select>
 
-    <insert id="insertRemittanceDetailed" >
+    <insert id="insertRemittanceDetailed">
         INSERT INTO sys_remittance_detailed
         (
         <if test="card != null and card != ''">card,</if>

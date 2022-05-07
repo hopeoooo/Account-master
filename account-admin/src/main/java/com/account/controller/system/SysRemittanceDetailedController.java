@@ -22,12 +22,13 @@ public class SysRemittanceDetailedController extends BaseController {
     @Autowired
     private SysRemittanceDetailedService remittanceDetailedService;
 
-    @PreAuthorize("@ss.hasPermi('system:remittanceDetailed:list')")
+//    @PreAuthorize("@ss.hasPermi('system:remittanceDetailed:list')")
     @GetMapping("/list")
     @ApiOperation(value = "查询汇款明细列表")
     public TableDataInfo list(SysRemittanceDetailedSearch remittanceDetailedSearch) {
         startPage();
         List<SysRemittanceDetailedVo> list = remittanceDetailedService.selectRemittanceDetailedList(remittanceDetailedSearch);
+
         return getDataTable(list);
     }
 

@@ -2,6 +2,8 @@ package com.account.system.service.impl;
 
 import com.account.common.constant.CommonConst;
 import com.account.common.enums.ChipChangeEnum;
+import com.account.common.enums.CurrencyTypeEnum;
+import com.account.common.enums.RemittanceTypeEnum;
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysRemittanceDetailedSearch;
@@ -35,7 +37,19 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
 
     @Override
     public List<SysRemittanceDetailedVo> selectRemittanceDetailedList(SysRemittanceDetailedSearch remittanceDetailedSearch) {
-        return remittanceDetailedMapper.selectRemittanceDetailedList(remittanceDetailedSearch);
+        List<SysRemittanceDetailedVo> sysRemittanceDetailedVos = remittanceDetailedMapper.selectRemittanceDetailedList(remittanceDetailedSearch);
+
+        //渲染展示汇款类型,货币类型
+        sysRemittanceDetailedVos.stream().forEach(vo -> {
+            //汇款类型
+            String remittanceTypeDisplay = RemittanceTypeEnum.getByValue(vo.getType()).getDisplay();
+            vo.setTypeDisplay(remittanceTypeDisplay);
+
+            //货币类型
+            String currencyTypeEnumDisplay = CurrencyTypeEnum.getByValue(vo.getOperationType()).getDisplay();
+            vo.setOperationTypeDisplay(currencyTypeEnumDisplay);
+        });
+        return sysRemittanceDetailedVos;
     }
 
     @Override
@@ -47,16 +61,16 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
     @Transactional
     public int insertRemittanceDetailed(SysRemittanceSearch remittanceSearch) {
         //筹码
-        if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
+        if (remittanceSearch.getOperationType() == CommonConst.NUMBER_0) {
             int type = remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode() ? CommonConst.NUMBER_1 : CommonConst.NUMBER_0;
             int i = membersService.updateChipAmount(remittanceSearch.getCard(), remittanceSearch.getAmount(), type);
-            if (i>0){
+            if (i > 0) {
                 //汇款明细
                 remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
                 //添加筹码变动明细表
                 addChipRecord(remittanceSearch);
             }
-        }else {
+        } else {
             //汇款明细
             remittanceDetailedMapper.insertRemittanceDetailed(remittanceSearch);
         }
@@ -65,18 +79,19 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
 
     /**
      * 组装筹码明细变动数据
+     *
      * @param remittanceSearch
      */
-    public void addChipRecord( SysRemittanceSearch remittanceSearch){
+    public void addChipRecord(SysRemittanceSearch remittanceSearch) {
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
-        BigDecimal chip = sysMembers!=null && sysMembers.getChip() != null ? sysMembers.getChip() :  BigDecimal.ZERO;
-        SysChipRecord chipRecord=new SysChipRecord();
+        BigDecimal chip = sysMembers != null && sysMembers.getChip() != null ? sysMembers.getChip() : BigDecimal.ZERO;
+        SysChipRecord chipRecord = new SysChipRecord();
         chipRecord.setCard(remittanceSearch.getCard());
         chipRecord.setType(remittanceSearch.getType());
-        if (remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode()){
-            chipRecord.setBefore(chip.subtract(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));
-        }else {
-            chipRecord.setBefore(chip.add(remittanceSearch.getAmount()==null ?BigDecimal.ZERO:remittanceSearch.getAmount()));
+        if (remittanceSearch.getType() == ChipChangeEnum.IMPORT_CHIP.getCode()) {
+            chipRecord.setBefore(chip.subtract(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount()));
+        } else {
+            chipRecord.setBefore(chip.add(remittanceSearch.getAmount() == null ? BigDecimal.ZERO : remittanceSearch.getAmount()));
         }
         chipRecord.setChange(remittanceSearch.getAmount());
         chipRecord.setAfter(chip);
