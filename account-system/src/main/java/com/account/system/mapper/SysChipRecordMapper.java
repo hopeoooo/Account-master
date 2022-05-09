@@ -2,6 +2,7 @@ package com.account.system.mapper;
 
 import com.account.system.domain.SysChipRecord;
 import com.account.system.domain.search.SysChipRecordSearch;
+import com.account.system.domain.vo.SysChipRecordVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface SysChipRecordMapper {
 
     void addChipRecordList(List<SysChipRecord> sysChipRecord);
 
-    List<Map> selectChipRecordList(SysChipRecordSearch chipRecordSearch);
+    List<SysChipRecordVo> selectChipRecordList(SysChipRecordSearch chipRecordSearch);
 
     SysChipRecord selectChipRecord(@Param("card") String card, @Param("betId") Long betId);
 

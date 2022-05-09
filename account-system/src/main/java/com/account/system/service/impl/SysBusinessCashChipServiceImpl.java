@@ -72,6 +72,7 @@ public class SysBusinessCashChipServiceImpl implements SysBusinessCashChipServic
 
         }
         chipRecord.setCreateBy(businessCashChipAddSearch.getCreateBy());
+        chipRecord.setRemark(businessCashChipAddSearch.getRemark());
         chipRecordMapper.addChipRecord(chipRecord);
     }
 

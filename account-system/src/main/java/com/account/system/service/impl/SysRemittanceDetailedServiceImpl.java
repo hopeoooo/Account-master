@@ -113,6 +113,7 @@ public class SysRemittanceDetailedServiceImpl implements SysRemittanceDetailedSe
             chipRecord.setAfterTh(chipTh);
         }
         chipRecord.setCreateBy(remittanceSearch.getCreateBy());
+        chipRecord.setRemark(remittanceSearch.getRemark());
         chipRecordMapper.addChipRecord(chipRecord);
     }
 }

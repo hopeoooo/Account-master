@@ -41,6 +41,10 @@ public class SysChipRecord extends BaseEntity {
     @ApiModelProperty("帐变后-泰铢")
     private BigDecimal afterTh;
 
+    @ApiModelProperty(value = "备注")
+    private String remark;
+
+
     public SysChipRecord() {
     }
 

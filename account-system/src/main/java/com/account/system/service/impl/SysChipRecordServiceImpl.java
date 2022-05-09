@@ -1,6 +1,7 @@
 package com.account.system.service.impl;
 
 import com.account.system.domain.search.SysChipRecordSearch;
+import com.account.system.domain.vo.SysChipRecordVo;
 import com.account.system.mapper.SysChipRecordMapper;
 import com.account.system.service.SysChipRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class SysChipRecordServiceImpl implements SysChipRecordService {
 
 
     @Override
-    public List<Map> selectChipRecordList(SysChipRecordSearch chipRecordSearch) {
+    public List<SysChipRecordVo> selectChipRecordList(SysChipRecordSearch chipRecordSearch) {
         return chipRecordMapper.selectChipRecordList( chipRecordSearch);
     }
 }

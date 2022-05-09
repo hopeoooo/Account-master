@@ -4,6 +4,7 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.page.TableDataInfo;
 import com.account.system.domain.search.SysChipRecordSearch;
 import com.account.system.domain.search.SysSignedRecordDetailedSearch;
+import com.account.system.domain.vo.SysChipRecordVo;
 import com.account.system.domain.vo.SysSignedRecordDetailedVo;
 import com.account.system.service.SysChipRecordService;
 import io.swagger.annotations.Api;
@@ -27,7 +28,7 @@ public class SysChipRecordController extends BaseController {
     @ApiOperation(value = "查询客户筹码变动明细列表")
     public TableDataInfo list(SysChipRecordSearch chipRecordSearch){
         startPage();
-        List<Map> maps = chipRecordService.selectChipRecordList(chipRecordSearch);
+        List<SysChipRecordVo> maps = chipRecordService.selectChipRecordList(chipRecordSearch);
         return getDataTable(maps);
     }
 }

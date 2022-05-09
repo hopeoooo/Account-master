@@ -2,6 +2,7 @@ package com.account.system.service;
 
 
 import com.account.system.domain.search.SysChipRecordSearch;
+import com.account.system.domain.vo.SysChipRecordVo;
 
 import java.util.List;
 import java.util.Map;
@@ -12,5 +13,5 @@ import java.util.Map;
 public interface SysChipRecordService
 {
 
-    List<Map> selectChipRecordList(SysChipRecordSearch chipRecordSearch);
+    List<SysChipRecordVo> selectChipRecordList(SysChipRecordSearch chipRecordSearch);
 }

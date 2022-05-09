@@ -157,6 +157,7 @@ public class SysSignedRecordServiceImpl implements SysSignedRecordService {
         chipRecord.setChangeTh(signedRecordDetailed.getAmountTh()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountTh());
         chipRecord.setAfterTh(signedRecordDetailed.getAmountAfterTh()==null ? BigDecimal.ZERO:signedRecordDetailed.getAmountAfterTh());
         chipRecord.setCreateBy(signedRecordDetailed.getCreateBy());
+        chipRecord.setRemark(signedRecordDetailed.getRemark());
         chipRecordMapper.addChipRecord(chipRecord);
     }
 

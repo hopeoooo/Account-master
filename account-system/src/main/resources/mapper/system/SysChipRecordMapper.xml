@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="changeTh != null">change_th,</if>
         <if test="afterTh != null ">after_th,</if>
         <if test="betId != null and betId != ''">bet_id,</if>
+        <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time )
         values(
@@ -29,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="changeTh != null ">#{changeTh},</if>
         <if test="afterTh != null ">#{afterTh},</if>
         <if test="betId != null and betId != ''">#{betId},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
         )
@@ -48,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="item.beforeTh != null">before_th,</if>
             <if test="item.changeTh != null">change_th,</if>
             <if test="item.afterTh != null ">after_th,</if>
+            <if test="item.remark != null and item.remark != ''">remark,</if>
             <if test="item.createBy != null and item.createBy != ''">create_by,</if>
             create_time )
             values(
@@ -59,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="item.beforeTh != null ">#{item.beforeTh},</if>
             <if test="item.changeTh != null ">#{item.changeTh},</if>
             <if test="item.afterTh != null ">#{item.afterTh},</if>
+            <if test="item.remark != null and item.remark != ''">#{item.remark},</if>
             <if test="item.createBy != null and item.createBy != ''">#{item.createBy},</if>
             sysdate()
             )
@@ -66,19 +70,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <select id="selectChipRecordList"  resultType="java.util.Map">
+    <select id="selectChipRecordList"  resultType="com.account.system.domain.vo.SysChipRecordVo">
         SELECT
         c.card,
-        m.`name` AS NAME,
+        m.`name` AS name,
         c.type,
-        c.`before`,
-        c.`change`,
-        c.`after`,
+        c.`before` as `before`,
+        c.`change` as `change`,
+        c.`after` as `after`,
         c.`before_th` as beforeTh,
         c.`change_th` as changeTh,
         c.`after_th` as afterTh,
         c.create_time AS createTime,
-        c.create_by AS createBy
+        c.create_by AS createBy,
+        c.remark as remark
         FROM
         sys_chip_record c
         LEFT JOIN sys_members m ON m.card = c.card
