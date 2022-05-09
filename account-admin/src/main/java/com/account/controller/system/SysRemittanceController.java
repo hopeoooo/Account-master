@@ -114,7 +114,8 @@ public class SysRemittanceController extends BaseController {
         //汇出为筹码则校验,减用户筹码余额
         if (remittanceSearch.getOperationType()==CommonConst.NUMBER_0){
             BigDecimal chip = sysMembers.getChip();
-            if (remittanceSearch.getAmount().compareTo(chip)>0 || remittanceSearch.getAmountTh().compareTo( sysMembers.getChipTh())>0){
+            if ((remittanceSearch.getAmount() !=null && remittanceSearch.getAmount().compareTo(chip)>0)
+                    || (remittanceSearch.getAmountTh() !=null && remittanceSearch.getAmountTh().compareTo( sysMembers.getChipTh())>0)){
                 return AjaxResult.success("余额不足!");
             }
         }

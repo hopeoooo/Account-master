@@ -117,7 +117,8 @@ public class SysWaterController extends BaseController {
         BigDecimal waterAmountTh = new BigDecimal(map.get("waterAmountTh").toString());
 
 
-        if (waterSearch.getWaterAmount().compareTo(waterAmount)>0 || waterSearch.getWaterAmountTh().compareTo(waterAmountTh)>0){
+        if ( (waterSearch.getWaterAmount()!=null && waterSearch.getWaterAmount().compareTo(waterAmount)>0 )
+                || (waterSearch.getWaterAmountTh()!=null &&  waterSearch.getWaterAmountTh().compareTo(waterAmountTh)>0)){
             return AjaxResult.success("结算洗码失败!");
         }
         waterSearch.setUpdateBy(SecurityUtils.getUsername());
@@ -151,8 +152,8 @@ public class SysWaterController extends BaseController {
             BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
             BigDecimal waterAmountTh = new BigDecimal(map.get("waterAmountTh").toString());
 
-
-            if (info.getWaterAmount().compareTo(waterAmount)>0 || info.getWaterAmountTh().compareTo(waterAmountTh)>0){
+            if ( (info.getWaterAmount()!=null && info.getWaterAmount().compareTo(waterAmount)>0 )
+                    || (info.getWaterAmountTh()!=null &&  info.getWaterAmountTh().compareTo(waterAmountTh)>0)){
                 return AjaxResult.success("结算失败!");
             }
             info.setCreateBy(SecurityUtils.getUsername());
