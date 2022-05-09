@@ -56,7 +56,7 @@
     <select id="selectPorintList" resultType="sysPorint">
         SELECT
         id,
-        table_id  tableId,
+        table_id tableId,
         boot_num bootNum,
         sys_chip+sys_cash sysChip,
         person_chip+person_cash personChip,
@@ -73,7 +73,22 @@
         insurance_win insuranceWin,
         create_time createTime,
         create_by createBy,
-        remark
+        remark,
+        sys_chip_th+sys_cash_th sysChipTh,
+        person_chip_th+person_cash_th personChipTh,
+        chip_gap_th chipGapTh,
+        chip_add_th chipAddTh,
+        sys_cash_th sysCashTh,
+        person_cash_th personCashTh,
+        cash_gap_th cashGapTh,
+        cash_add_th cashAddTh,
+        sys_insurance_th sysInsuranceTh,
+        person_insurance_th personInsuranceTh,
+        insurance_gap_th insuranceGapTh,
+        insurance_add_th insuranceAddTh,
+        water_th waterTh,
+        chip_win_th chipWinTh,
+        insurance_win_th insuranceWinTh
         FROM
         sys_porint
         <where>
@@ -96,7 +111,13 @@
         if(sum(water) is null ,0 ,sum(water)) waterCount,
         if(sum(chip_win) is null ,0 , sum(chip_win))chipWinCount,
         if(sum(insurance_win) is null ,0 ,sum(insurance_win)) insuranceWinCount,
-        if(sum(insurance_add) is null ,0 , sum(insurance_add) )insuranceAddCount
+        if(sum(insurance_add) is null ,0 , sum(insurance_add) )insuranceAddCount,
+
+        if(sum(chip_add_th) is null ,0 ,sum(chip_add_th) ) chipAddCountTh,
+        if(sum(water_th) is null ,0 ,sum(water_th)) waterCountTh,
+        if(sum(chip_win_th) is null ,0 , sum(chip_win_th))chipWinCountTh,
+        if(sum(insurance_win_th) is null ,0 ,sum(insurance_win_th)) insuranceWinCountTh,
+        if(sum(insurance_add_th) is null ,0 , sum(insurance_add_th) )insuranceAddCountTh
         FROM
         sys_porint
         <where>
