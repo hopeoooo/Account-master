@@ -296,7 +296,14 @@
             IFNULL( SUM( b.water_amount ), 0 ) as waterAmount,
             IFNULL( SUM( b.tie ), 0 ) as tie,
             IFNULL( SUM( b.pump ), 0 ) as pump ,
-            IFNULL( SUM( b.win_lose ), 0 ) as winLose
+            IFNULL( SUM( b.win_lose ), 0 ) as winLose,
+
+            IFNULL( SUM( b.bet_money_th ), 0 ) as betMoneyTh,
+            IFNULL( SUM( b.water_th ), 0 ) as waterTh,
+            IFNULL( SUM( b.water_amount_th ), 0 ) as waterAmountTh,
+            IFNULL( SUM( b.tie_th ), 0 ) as tieTh,
+            IFNULL( SUM( b.pump_th ), 0 ) as pumpTh ,
+            IFNULL( SUM( b.win_lose_th ), 0 ) as winLoseTh
         FROM
             sys_members m
                 LEFT JOIN sys_bet_info b ON b.card = m.card  and b.type !=2
