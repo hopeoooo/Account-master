@@ -41,7 +41,16 @@
         r.win as win,
         r.insurance_win as insuranceWin,
         r.create_time as createTime,
-        r.remark as remark
+        r.remark as remark,
+        r.chip_th as chipTh,
+        r.cash_th as cashTh,
+        r.insurance_th as insuranceTh,
+        r.chip_add_th as chipAddTh,
+        r.cash_add_th as cashAddTh,
+        r.insurance_add_th as insuranceAddTh,
+        r.water_th as waterTh,
+        r.win_th as winTh,
+        r.insurance_win_th as insuranceWinTh
         FROM
         sys_receipt r
     <where>
