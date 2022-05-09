@@ -59,7 +59,7 @@
     <select id="selectRemittanceDetailedTotal" resultType="java.util.Map">
         SELECT
         IFNULL( SUM( d.amount ), 0 ) as amount,
-        IFNULL( SUM( d.amountTh ), 0 ) as amountTh
+        IFNULL( SUM( d.amount_th ), 0 ) as amountTh
         FROM
         sys_remittance_detailed d
         LEFT JOIN sys_members m ON m.card = d.card
