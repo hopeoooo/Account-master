@@ -114,7 +114,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
             }else {
                 accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.add(accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh()));
             }
-            accessCodeDetailed.setChipAmountTh(accessCode.getChipAmount());
+            accessCodeDetailed.setChipAmountTh(accessCode.getChipAmountTh());
             accessCodeDetailed.setChipAmountAfterTh(chipBalanceTh);
 
         }
