@@ -25,7 +25,7 @@
         d.type,
         d.operation_type as operationType,
         d.amount as amount,
-        d.amount_th as amountThb,
+        d.amount_th as amountTh,
         d.remark,
         d.operation_time as operationTime,
         d.create_by as createBy
