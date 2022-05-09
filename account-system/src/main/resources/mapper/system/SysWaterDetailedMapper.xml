@@ -51,10 +51,12 @@
 
     <select id="selectWaterDetailedTotal" resultType="java.util.Map">
         SELECT
-        IFNULL(SUM(w.water),0) as sumWater,
-        IFNULL(SUM(w.water_amount),0) as sumWaterAmount,
-        IFNULL(SUM(w.water_th),0) as sumWaterTh,
-        IFNULL(SUM(w.water_amount_th),0) as sumWaterAmountTh
+        IFNULL( SUM( w.water ), 0 ) AS sumWater,
+        IFNULL( SUM( w.water_amount ), 0 ) AS sumWaterAmount,
+        IFNULL( SUM( w.actual_water_amount ), 0 ) AS actualWaterAmount,
+        IFNULL( SUM( w.water_th ), 0 ) AS sumWaterTh,
+        IFNULL( SUM( w.water_amount_th ), 0 ) AS sumWaterAmountTh ,
+        IFNULL( SUM( w.actual_water_amount_th ), 0 ) AS actualWaterAmountTh
         FROM
         sys_water_detailed w
         LEFT JOIN sys_members m ON m.card = w.card
