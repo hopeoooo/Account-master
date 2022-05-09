@@ -248,7 +248,12 @@
         SUM( b.win_lose ) as winLose,
         (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLose,
         SUM( b.water ) as water,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWater
+        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWater,
+        SUM( b.win_lose_th ) as winLoseTh,
+        (select SUM(a.win_lose_th) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLoseTh,
+        SUM( b.water_th ) as waterTh,
+        (select SUM(a.water_th) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWaterTh
+
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
