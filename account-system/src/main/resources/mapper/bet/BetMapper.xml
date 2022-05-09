@@ -242,18 +242,32 @@
 
     <select id="selectDailyReportList" resultType="java.util.Map">
         SELECT
-        m.card as card,
-        m.`name` as name ,
-        date_format(b.create_time,'%Y-%m-%d') as date ,
-        SUM( b.win_lose ) as winLose,
-        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLose,
-        SUM( b.water ) as water,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWater,
-        SUM( b.win_lose_th ) as winLoseTh,
-        (select SUM(a.win_lose_th) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLoseTh,
-        SUM( b.water_th ) as waterTh,
-        (select SUM(a.water_th) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWaterTh
+        m.card                                                                                                    as card,
+        m.`name`                                                                                                  as name,
+        date_format(b.create_time, '%Y-%m-%d')                                                                    as date,
+        ifnull(SUM(case when type in (0,1,4) then b.win_lose else 0 end), 0) as winLose,
+        (select ifnull(SUM(case when type in (0,1,4) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLose,
+        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0)          as water,
+        (select ifnull(SUM(case when type in(0,1,4) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWater,
 
+
+        ifnull(SUM(case when type in (2,3,5) then b.win_lose else 0 end),
+        0)                                                                                                 as winLoseTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLoseTh,
+        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0)          as waterTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWaterTh
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
@@ -293,6 +307,66 @@
 
 
     <select id="selectWinLoseList"  resultType="java.util.Map">
+        select
+            m.card,
+            m.name,
+            ifnull(sum(case when type in (0, 1) then b.bet_money else 0 end), 0)               as betMoney,
+            ifnull(sum(case when type in (0, 1) then b.water else 0 end), 0)                   as water,
+            ifnull(sum(case when type in (0, 1) then b.water_amount else 0 end), 0)            as waterAmount,
+            ifnull(sum(case when type in (0, 1) then b.tie else 0 end), 0)                     as tie,
+            ifnull(sum(case when type in (0, 1) then b.pump when 1 then b.pump else 0 end), 0) as pump,
+            ifnull(sum(case when type in (0, 1) then b.win_lose else 0 end), 0)                as winLose,
+
+            ifnull(sum(case when type in (2, 3) then b.bet_money else 0 end), 0)               as betMoneyTh,
+            ifnull(sum(case when type in (2, 3) then b.water else 0 end), 0)                   as waterTh,
+            ifnull(sum(case when type in (2, 3) then b.water_amount else 0 end), 0)            as waterAmountTh,
+            ifnull(sum(case when type in (2, 3) then b.tie else 0 end), 0)                     as tieTh,
+            ifnull(sum(case when type in (2, 3) then b.pump else 0 end), 0)                    as pumpTh,
+            ifnull(sum(case when type in (2, 3) then b.win_lose else 0 end), 0)                as winLoseTh
+        from
+          sys_members m
+        left join sys_bet_info b on b.card = m.card and b.type in (0, 1, 2, 3)
+        <where>
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
+            </if>
+
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="tableId != null and tableId != ''">
+                AND b.table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND b.game_id = #{gameId}
+            </if>
+
+            <if test="operationType != null ">
+                AND b.type = #{operationType}
+            </if>
+
+            <if test="startTime != null and startTime != ''">
+                AND b.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND b.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        GROUP BY m.card
+        order by
+          ifnull(sum(case type when 0 then b.bet_money when 1 then b.bet_money else 0 end), 0) desc,
+          ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc;
+    </select>
+
+    <!--
+
+    <select id="selectWinLoseList"  resultType="java.util.Map">
         SELECT
             m.card,
             m.NAME,
@@ -301,19 +375,11 @@
             IFNULL( SUM( b.water_amount ), 0 ) as waterAmount,
             IFNULL( SUM( b.tie ), 0 ) as tie,
             IFNULL( SUM( b.pump ), 0 ) as pump ,
-            IFNULL( SUM( b.win_lose ), 0 ) as winLose,
-
-            IFNULL( SUM( b.bet_money_th ), 0 ) as betMoneyTh,
-            IFNULL( SUM( b.water_th ), 0 ) as waterTh,
-            IFNULL( SUM( b.water_amount_th ), 0 ) as waterAmountTh,
-            IFNULL( SUM( b.tie_th ), 0 ) as tieTh,
-            IFNULL( SUM( b.pump_th ), 0 ) as pumpTh ,
-            IFNULL( SUM( b.win_lose_th ), 0 ) as winLoseTh
+            IFNULL( SUM( b.win_lose ), 0 ) as winLose
         FROM
             sys_members m
                 LEFT JOIN sys_bet_info b ON b.card = m.card  and b.type !=2
         <where>
-
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
                     AND m.card = #{card}
@@ -349,6 +415,8 @@
             m.card
         ORDER BY   IFNULL( SUM( b.bet_money ), 0 ) desc
     </select>
+
+    -->
 
     <select id="getBetsByResult" resultType="SysBet">
         select bet_id      betId,
@@ -416,18 +484,19 @@
 
     <select id="selectTablePlumbingList"  resultType="java.util.Map">
         SELECT
-            t.table_id as tableId ,
-            CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as chipWinLose,
-            CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as cashWinLose,
-            IFNULL(-SUM(b.win_lose),0)as winLose,
-            IFNULL(SUM(b.water),0)as water,
-            CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose_th),0) else 0 end as chipWinLoseTh,
-            CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose_th),0) else 0 end as cashWinLoseTh,
-            IFNULL(-SUM(b.win_lose_th),0)as winLoseTh,
-            IFNULL(SUM(b.water_th),0)as waterTh
+        t.table_id                                                           as tableId,
+        IFNULL(-SUM(CASE WHEN b.type = 0 THEN b.win_lose else 0 end), 0)     as chipWinLose,
+        IFNULL(-SUM(CASE WHEN b.type = 1 THEN b.win_lose else 0 end), 0)     as cashWinLose,
+        IFNULL(-SUM(case when type in (0, 1) then b.win_lose else 0 end), 0) as winLose,
+        IFNULL(SUM(case when type in (0, 1) then b.water else 0 end), 0)     as water,
+
+        IFNULL(-SUM(CASE WHEN b.type = 2 THEN b.win_lose else 0 end), 0)     as chipWinLoseTh,
+        IFNULL(-SUM(CASE WHEN b.type = 3 THEN b.win_lose else 0 end), 0)     as cashWinLoseTh,
+        IFNULL(-SUM(case when type in (2, 3) then b.win_lose else 0 end), 0) as winLoseTh,
+        IFNULL(SUM(case when type in (2, 3) then b.water else 0 end), 0)     as waterTh
         FROM
             sys_table_management t
-        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id and  b.type !=2
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id /*and  b.type !=2*/
         <where>
             AND  t.is_delete=0
             <if test="startTime != null and startTime != ''">
@@ -445,18 +514,19 @@
 
     <select id="selectTablePlumbingTotal"  resultType="java.util.Map">
         SELECT
-        CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as sumChipWinLose,
-        CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose),0) else 0 end as sumCashWinLose,
-        IFNULL(-SUM(b.win_lose),0)as sumWinLose,
-        IFNULL(SUM(b.water),0)as sumWater,
+        t.table_id tid,
+        IFNULL(-SUM(CASE WHEN b.type = 0 THEN b.win_lose else 0 end), 0)     as chipWinLose,
+        IFNULL(-SUM(CASE WHEN b.type = 1 THEN b.win_lose else 0 end), 0)     as cashWinLose,
+        IFNULL(-SUM(case when type in (0, 1) then b.win_lose else 0 end), 0) as winLose,
+        IFNULL(SUM(case when type in (0, 1) then b.water else 0 end), 0)     as water,
 
-        CASE WHEN b.type=0 THEN IFNULL(-SUM(b.win_lose_th),0) else 0 end as sumChipWinLoseTh,
-        CASE WHEN b.type=1 THEN IFNULL(-SUM(b.win_lose_th),0) else 0 end as sumCashWinLoseTh,
-        IFNULL(-SUM(b.win_lose_th),0)as sumWinLoseTh,
-        IFNULL(SUM(b.water_th),0)as sumWaterTh
+        IFNULL(-SUM(CASE WHEN b.type = 2 THEN b.win_lose else 0 end), 0)     as chipWinLoseTh,
+        IFNULL(-SUM(CASE WHEN b.type = 3 THEN b.win_lose else 0 end), 0)     as cashWinLoseTh,
+        IFNULL(-SUM(case when type in (2, 3) then b.win_lose else 0 end), 0) as winLoseTh,
+        IFNULL(SUM(case when type in (2, 3) then b.water else 0 end), 0)     as waterTh
         FROM
         sys_table_management t
-        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id and  b.type !=2
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id /*and  b.type !=2*/
         <where>
             AND  t.is_delete=0
             <if test="startTime != null and startTime != ''">
