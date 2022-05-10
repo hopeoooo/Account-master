@@ -86,31 +86,27 @@
                 AND bt.card = #{card}
             </if>
 
-            <if test="tableId != null and tableId = 1 ">
-                AND bt.table_id = 0
-            </if>
-            <if test="tableId != null and tableId = 2 ">
-                AND bt.table_id = 1
-            </if>
-            <if test="tableId != null and tableId = 3 ">
-                AND bt.table_id = 2
-            </if>
-            <if test="tableId != null and tableId = 4 ">
-                AND bt.table_id = 3
-            </if>
-            <if test="tableId != null and tableId = 5 ">
-                AND bt.table_id in (0,1)
-            </if>
-            <if test="tableId != null and tableId = 6 ">
-                AND bt.table_id in (2,3)
+            <if test="tableId != null and tableId != ''">
+                AND bt.table_id = #{tableId}
             </if>
 
-            <if test="gameId != null and gameId != ''">
-                AND bt.game_id = #{gameId}
+            <if test="type != null and type = 1 ">
+                AND bt.type = 0
             </if>
-
-            <if test="type != null and type != ''">
-                AND bt.type = #{type}
+            <if test="type != null and type = 2 ">
+                AND bt.type = 1
+            </if>
+            <if test="type != null and type = 3 ">
+                AND bt.type = 2
+            </if>
+            <if test="type != null and type = 4 ">
+                AND bt.type = 3
+            </if>
+            <if test="type != null and type = 5 ">
+                AND bt.type in (0,1)
+            </if>
+            <if test="type != null and type = 6 ">
+                AND bt.type in (2,3)
             </if>
 
             <if test="bootNum != null and bootNum != ''">
