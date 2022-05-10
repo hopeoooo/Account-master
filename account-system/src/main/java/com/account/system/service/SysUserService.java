@@ -32,4 +32,6 @@ public interface SysUserService {
     void editUser(SysUser sysUser);
 
     void deleteUser(Long userId);
+
+    boolean updateUserAvatar(String userName, String avatar);
 }

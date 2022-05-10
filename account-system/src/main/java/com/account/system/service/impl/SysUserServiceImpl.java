@@ -62,4 +62,9 @@ public class SysUserServiceImpl implements SysUserService {
     public void deleteUser(Long userId) {
         userMapper.deleteUser(userId);
     }
+
+    @Override
+    public boolean updateUserAvatar(String userName, String avatar) {
+        return userMapper.updateUserAvatar(userName, avatar) > 0;
+    }
 }

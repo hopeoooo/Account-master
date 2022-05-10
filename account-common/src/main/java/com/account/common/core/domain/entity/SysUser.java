@@ -47,6 +47,9 @@ public class SysUser extends BaseEntity {
     @ApiModelProperty("出生年份")
     private String brithday;
 
+    @ApiModelProperty("用户头像")
+    private String avatar;
+
     public boolean isAdmin() {
         return isAdmin(this.userId);
     }

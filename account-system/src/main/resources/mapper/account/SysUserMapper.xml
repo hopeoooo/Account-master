@@ -36,7 +36,12 @@
                create_by,
                create_time,
                remark,
-               role_id   roleId
+               role_id   roleId,
+               address,
+               post,
+               join_time joinTime,
+               brithday,
+               avatar
         from sys_user
         where user_name = #{userName}
     </select>

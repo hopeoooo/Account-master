@@ -6,6 +6,7 @@ import com.account.system.domain.search.SysUserSearch;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import com.account.common.core.domain.entity.SysUser;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 用户表 数据层
@@ -44,4 +45,7 @@ public interface SysUserMapper {
 
     @Delete("delete from sys_user where user_id = #{userId}")
     void deleteUser(@Param("userId") Long userId);
+
+    @Update("update sys_user set avatar = #{avatar} where user_name = #{userName}")
+    Integer updateUserAvatar(@Param("userName") String userName, @Param("avatar") String avatar);
 }
