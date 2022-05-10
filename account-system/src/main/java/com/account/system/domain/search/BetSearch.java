@@ -20,7 +20,8 @@ public class BetSearch {
     @ApiModelProperty("游戏类型")
     private Long gameId;
 
-    @ApiModelProperty("币种(0 筹码 1现金)")
+    //$筹码、$现金、฿筹码、฿现金、$筹码+$现金、฿筹码+฿现金
+    @ApiModelProperty("币种(1美金筹码 2美元现金 3泰铢筹码 4泰铢现金 5美金筹码加现金 6泰铢筹码加现金)")
     private int type;
 
     @ApiModelProperty("靴号")
