@@ -131,6 +131,9 @@ public class BetBaccaratController {
         for (int i = 0; i < bets.size(); i++) {
             JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
+            if(StringUtils.isEmpty(card)){
+                break;
+            }
             SysMembers sysMembers = sysMembersService.selectmembersByCard(card);
             if(StringUtils.isNull(sysMembers)){
                 return AjaxResult.error("卡号："+card+" 不存在");

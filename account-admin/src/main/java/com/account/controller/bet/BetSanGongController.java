@@ -8,8 +8,10 @@ import com.account.common.utils.ip.IpUtils;
 import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysTableManagement;
 import com.account.system.service.BetService;
+import com.account.system.service.SysMembersService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -40,6 +42,9 @@ public class BetSanGongController {
 
     @Autowired
     BetService betService;
+
+    @Autowired
+    SysMembersService sysMembersService;
 
     @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
     @PostMapping("/info")
@@ -80,15 +85,25 @@ public class BetSanGongController {
         }
         //注单计算
         JSONArray bets = jsonObject.getJSONArray("bet");
-        bets.forEach(b -> {
-            JSONObject bet = (JSONObject) b;
+        for (int i = 0; i < bets.size(); i++) {
+            JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
-            BigDecimal chip = BigDecimal.ZERO;//betService.selectMembersChip(card);
-            BigDecimal payout = betService.getPayOut(bet, null,sysTableManagement.getGameId());//派彩
-            if (0 == bet.getInteger("type")) chip = chip.add(payout);
-            bet.put("chip", chip);
+            if(StringUtils.isEmpty(card)){
+                break;
+            }
+            SysMembers sysMembers = sysMembersService.selectmembersByCard(card);
+            if(StringUtils.isNull(sysMembers)){
+                return AjaxResult.error("卡号："+card+" 不存在");
+            }
+            BigDecimal payout = betService.getPayOut(bet,null,sysTableManagement.getGameId());//派彩
+            if (0 == bet.getInteger("type") || 1==bet.getInteger("type")) {
+                sysMembers.setChip(sysMembers.getChip().add(payout));
+            }else {
+                sysMembers.setChip(sysMembers.getChipTh().add(payout));
+            }
+            bet.put("chip", sysMembers.getChip());
             bet.put("payout", payout);
-        });
+        }
         return AjaxResult.success(jsonObject);
     }
 
