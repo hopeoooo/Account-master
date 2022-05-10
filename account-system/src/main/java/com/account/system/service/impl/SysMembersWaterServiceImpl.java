@@ -101,6 +101,7 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
             waterDetailed.setCreateBy(info.getCreateBy());
             list.add(waterDetailed);
             if (info.getOperationType()== CommonConst.NUMBER_0){
+                info.setRemark("批量结算");
                 SysChipRecord sysChipRecord = addChipRecord(info);
                 chipList.add(sysChipRecord);
             }
@@ -137,7 +138,7 @@ public class SysMembersWaterServiceImpl implements SysMembersWaterService {
         chipRecord.setBeforeTh(waterAmountTh.add(waterSearch.getWaterAmountTh()));
         chipRecord.setChangeTh(waterSearch.getWaterAmountTh());
         chipRecord.setAfterTh(waterAmountTh);
-
+        chipRecord.setRemark(waterSearch.getRemark());
         chipRecord.setCreateBy(waterSearch.getCreateBy());
         return  chipRecord;
     }
