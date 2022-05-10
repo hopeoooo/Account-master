@@ -90,22 +90,22 @@
                 AND bt.table_id = #{tableId}
             </if>
 
-            <if test="type != null and type = 1 ">
+            <if test="type == 1 ">
                 AND bt.type = 0
             </if>
-            <if test="type != null and type = 2 ">
+            <if test="type == 2 ">
                 AND bt.type = 1
             </if>
-            <if test="type != null and type = 3 ">
+            <if test="type == 3 ">
                 AND bt.type = 2
             </if>
-            <if test="type != null and type = 4 ">
+            <if test="type == 4 ">
                 AND bt.type = 3
             </if>
-            <if test="type != null and type = 5 ">
+            <if test="type == 5 ">
                 AND bt.type in (0,1)
             </if>
-            <if test="type != null and type = 6 ">
+            <if test="type == 6 ">
                 AND bt.type in (2,3)
             </if>
 

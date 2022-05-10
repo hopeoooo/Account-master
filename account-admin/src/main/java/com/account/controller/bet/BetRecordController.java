@@ -4,6 +4,7 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
+import com.account.common.utils.StringUtils;
 import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.BetRepair;
 import com.account.system.domain.BetUpdate;
@@ -45,17 +46,20 @@ public class BetRecordController extends BaseController {
     public TableDataInfo list(BetSearch betSearch){
         startPage();
         List<BetInfoVo> sysAccessCodeVos = betService.selectBetInfoList(betSearch);
-        List<Long> betId = sysAccessCodeVos.stream().map(BetInfoVo::getBetId).collect(Collectors.toList());
-        //玩法
-        Map<Long, List<BetInfoOptionVo>> betOptionList = betService.selectBetOptionList(betId);
+        if(StringUtils.isNotEmpty(sysAccessCodeVos)){
+            List<Long> betId = sysAccessCodeVos.stream().map(BetInfoVo::getBetId).collect(Collectors.toList());
+            //玩法
+            Map<Long, List<BetInfoOptionVo>> betOptionList = betService.selectBetOptionList(betId);
 
-        sysAccessCodeVos.forEach(info ->{
-            List<BetInfoOptionVo> betInfoOptionVos = betOptionList.get(info.getBetId());
-            if (betInfoOptionVos!=null){
-                info.setOption(betInfoOptionVos);
-            }
+            sysAccessCodeVos.forEach(info ->{
+                List<BetInfoOptionVo> betInfoOptionVos = betOptionList.get(info.getBetId());
+                if (betInfoOptionVos!=null){
+                    info.setOption(betInfoOptionVos);
+                }
 
-        });
+            });
+        }
+
         return getDataTable(sysAccessCodeVos);
     }
 
