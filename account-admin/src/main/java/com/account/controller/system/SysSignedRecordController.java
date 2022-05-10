@@ -74,7 +74,7 @@ public class SysSignedRecordController extends BaseController {
             return AjaxResult.success("当前卡号不存在!");
         }
         if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-            return AjaxResult.success("该卡号已停用!");
+            return AjaxResult.error("该卡号已停用!");
         }
         signedRecordSearch.setMark(ChipChangeEnum.BORROW_CHIP.getCode());
         SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());
@@ -102,7 +102,7 @@ public class SysSignedRecordController extends BaseController {
         //判断该卡号是否存在
         SysMembers sysMembers = membersService.selectmembersByCard(signedRecordSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.error("当前卡号不存在!");
         }
         SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, signedRecordSearch.getCard());
         if (sysSignedRecord == null) {

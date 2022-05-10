@@ -104,13 +104,13 @@ public class SysWaterController extends BaseController {
         //判断该卡号是否存在
         SysMembers sysMembers = membersService.selectmembersByCard(waterSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.error("当前卡号不存在!");
         }
         if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-            return AjaxResult.success("该会员不可结算洗码!");
+            return AjaxResult.error("该会员不可结算洗码!");
         }
         if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
-            return AjaxResult.success("该会员不可结算洗码!");
+            return AjaxResult.error("该会员不可结算洗码!");
         }
         Map map = membersWaterService.selectMembersWaterInfo(waterSearch.getCard());
         BigDecimal waterAmount = new BigDecimal(map.get("waterAmount").toString());
@@ -119,7 +119,7 @@ public class SysWaterController extends BaseController {
 
         if ( (waterSearch.getWaterAmount()!=null && waterSearch.getWaterAmount().compareTo(waterAmount)>0 )
                 || (waterSearch.getWaterAmountTh()!=null &&  waterSearch.getWaterAmountTh().compareTo(waterAmountTh)>0)){
-            return AjaxResult.success("结算洗码失败!");
+            return AjaxResult.error("结算洗码失败!");
         }
         waterSearch.setUpdateBy(SecurityUtils.getUsername());
         waterSearch.setCreateBy(SecurityUtils.getUsername());
@@ -139,13 +139,13 @@ public class SysWaterController extends BaseController {
             //判断该卡号是否存在
             SysMembers sysMembers = membersService.selectmembersByCard(info.getCard());
             if (sysMembers==null){
-                return AjaxResult.success("结算失败!");
+                return AjaxResult.error("结算失败!");
             }
             if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-                return AjaxResult.success("结算失败!");
+                return AjaxResult.error("结算失败!");
             }
             if (sysMembers.getIsSettlement()== CommonConst.NUMBER_0){
-                return AjaxResult.success("结算失败!");
+                return AjaxResult.error("结算失败!");
             }
 
             Map map = membersWaterService.selectMembersWaterInfo(info.getCard());
@@ -154,7 +154,7 @@ public class SysWaterController extends BaseController {
 
             if ( (info.getWaterAmount()!=null && info.getWaterAmount().compareTo(waterAmount)>0 )
                     || (info.getWaterAmountTh()!=null &&  info.getWaterAmountTh().compareTo(waterAmountTh)>0)){
-                return AjaxResult.success("结算失败!");
+                return AjaxResult.error("结算失败!");
             }
             info.setCreateBy(SecurityUtils.getUsername());
             info.setUpdateBy(SecurityUtils.getUsername());

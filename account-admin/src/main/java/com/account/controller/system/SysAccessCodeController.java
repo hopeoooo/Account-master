@@ -91,7 +91,7 @@ public class SysAccessCodeController extends BaseController {
         //判断该卡号是否存在
         SysMembers sysMembers = membersService.selectmembersByCard(accessCode.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.error("当前卡号不存在!");
         }
         //判断金额是否足够
         SysAccessCode sysAccessCode = accessCodeService.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
