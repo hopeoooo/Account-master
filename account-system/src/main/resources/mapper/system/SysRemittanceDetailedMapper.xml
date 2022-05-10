@@ -77,10 +77,10 @@
                 AND d.type = #{type}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND d.operation_time <![CDATA[>=]]> #{startTime}
+                AND date_format(d.operation_time ,'%Y-%m-%d') <![CDATA[>=]]> #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND d.operation_time <![CDATA[<=]]> #{endTime}
+                AND date_format(d.operation_time ,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
             </if>
         </where>
         ORDER BY
