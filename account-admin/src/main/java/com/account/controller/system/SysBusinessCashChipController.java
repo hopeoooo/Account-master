@@ -89,14 +89,14 @@ public class SysBusinessCashChipController extends BaseController {
         //判断该会员是否可以换现
         SysMembers sysMembers = membersService.selectmembersByCard(businessCashChipAddSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.error("当前卡号不存在!");
         }
         if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-            return AjaxResult.success("该卡号已停用!");
+            return AjaxResult.error("该卡号已停用!");
         }
         int isCash = sysMembers.getIsCash();
         if (isCash==CommonConst.NUMBER_0){
-            return AjaxResult.success("当前用户不可换现!");
+            return AjaxResult.error("当前用户不可换现!");
         }
         //判断会员是否有欠钱
  /*       SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, businessCashChipAddSearch.getCard());
@@ -106,7 +106,7 @@ public class SysBusinessCashChipController extends BaseController {
         BigDecimal chip = sysMembers.getChip();
         if ( (businessCashChipAddSearch.getChipAmount()!=null && businessCashChipAddSearch.getChipAmount().compareTo(chip)>0 )
                 || (businessCashChipAddSearch.getChipAmountTh()!=null && businessCashChipAddSearch.getChipAmountTh().compareTo(chip)>0)){
-            return AjaxResult.success("余额不足!");
+            return AjaxResult.error("余额不足!");
         }
         businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
         businessCashChipService.addBuyCode(businessCashChipAddSearch);
