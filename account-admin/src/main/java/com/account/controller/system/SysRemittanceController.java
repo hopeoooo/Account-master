@@ -47,6 +47,9 @@ public class SysRemittanceController extends BaseController {
             @ApiImplicitParam(name = "isAdmin", value = "过滤内部卡号(0:未勾选,1:勾选)", required = false)
     })
     public TableDataInfo list(String card, Integer isAdmin) {
+        if (StringUtils.isNull(card)){
+            return new TableDataInfo();
+        }
         startPage();
         List<Map>list = membersService.selectBusinessCashChipList(card, isAdmin);
         return getDataTable(list);
