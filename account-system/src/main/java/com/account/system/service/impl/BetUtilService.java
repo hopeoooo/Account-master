@@ -163,7 +163,7 @@ public class BetUtilService {
         BigDecimal tableCash = BigDecimal.ZERO;//桌台现金输赢
         BigDecimal tableInsurance = BigDecimal.ZERO;//桌台保险输赢
 
-        Integer type = sysBet.getType(); //是否为筹码下注
+        Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
         String[] betOption = {"龙", "虎", "和"};
         String[] odds = {sysOddsConfigure.getDragonWin(), sysOddsConfigure.getTigerWin(), sysOddsConfigure.getTieWin(),};
@@ -217,7 +217,7 @@ public class BetUtilService {
         BigDecimal tableChip = BigDecimal.ZERO;//桌台筹码输赢
         BigDecimal tableCash = BigDecimal.ZERO;//桌台现金输赢
 
-        boolean isChip = 0 == sysBet.getType(); //是否为筹码下注
+        boolean isChip = 0 == sysBet.getType() || 2 == sysBet.getType(); //是否为筹码下注
         SysBetInfo sysBetInfo = JSON.parseObject(JSONObject.toJSONString(sysBet), SysBetInfo.class);
         BigDecimal amount = bet.getBigDecimal("输");
         if (amount != null) {
