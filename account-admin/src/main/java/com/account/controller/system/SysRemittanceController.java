@@ -77,7 +77,7 @@ public class SysRemittanceController extends BaseController {
         //判断该会员是否可以汇入
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("汇入失败!");
+            return AjaxResult.error("汇入失败!");
         }
         remittanceSearch.setType(ChipChangeEnum.IMPORT_CHIP.getCode());
         remittanceSearch.setCreateBy(SecurityUtils.getUsername());
@@ -96,14 +96,14 @@ public class SysRemittanceController extends BaseController {
         //判断该会员是否可以汇出
         SysMembers sysMembers = membersService.selectmembersByCard(remittanceSearch.getCard());
         if (sysMembers==null){
-            return AjaxResult.success("当前卡号不存在!");
+            return AjaxResult.error("当前卡号不存在!");
         }
         if (sysMembers.getStatus()== CommonConst.NUMBER_1){
-            return AjaxResult.success("该卡号已停用!");
+            return AjaxResult.error("该卡号已停用!");
         }
         int isOut = sysMembers.getIsOut();
         if (isOut==CommonConst.NUMBER_0){
-            return AjaxResult.success("当前用户不可汇出!");
+            return AjaxResult.error("当前用户不可汇出!");
         }
         //判断会员是否有欠钱
 /*        SysSignedRecord sysSignedRecord = signedRecordService.selectSignedRecordInfo(null, remittanceSearch.getCard());
@@ -116,7 +116,7 @@ public class SysRemittanceController extends BaseController {
             BigDecimal chip = sysMembers.getChip();
             if ((remittanceSearch.getAmount() !=null && remittanceSearch.getAmount().compareTo(chip)>0)
                     || (remittanceSearch.getAmountTh() !=null && remittanceSearch.getAmountTh().compareTo( sysMembers.getChipTh())>0)){
-                return AjaxResult.success("余额不足!");
+                return AjaxResult.error("余额不足!");
             }
         }
         remittanceDetailedService.insertRemittanceDetailed(remittanceSearch);
