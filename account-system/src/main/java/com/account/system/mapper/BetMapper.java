@@ -70,7 +70,7 @@ public interface BetMapper {
 
     SysBet getBet(@Param("betId") Long betId);
 
-    @Update("update sys_bet set game_result = #{gameResult},type = #{type},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
+    @Update("update sys_bet set game_result = #{gameResult},type = #{type},card = #{card},update_time = sysdate(),update_by = #{updateBy} where bet_id = #{betId}")
     void updateBet(SysBet sysBet);
 
     void updateBetInfos(SysBetInfo betInfos);

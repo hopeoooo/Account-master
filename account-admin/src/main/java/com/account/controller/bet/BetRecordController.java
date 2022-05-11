@@ -8,10 +8,12 @@ import com.account.common.utils.StringUtils;
 import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.BetRepair;
 import com.account.system.domain.BetUpdate;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.BetSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.service.BetService;
+import com.account.system.service.SysMembersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ import java.util.stream.Collectors;
 public class BetRecordController extends BaseController {
     @Autowired
     BetService betService;
+
+    @Autowired
+    SysMembersService sysMembersService;
     /**
      * 注单记录
      * @return
@@ -75,6 +80,10 @@ public class BetRecordController extends BaseController {
     @PostMapping("/repair")
     @ApiOperation(value = "注单补录")
     public AjaxResult repair(BetRepair betRepair){
+        SysMembers sysMembers = sysMembersService.selectmembersByCard(betRepair.getCard());
+        if(StringUtils.isNull(sysMembers)){
+            return AjaxResult.error("卡号："+betRepair.getCard()+" 不存在");
+        }
         betService.repairBet(betRepair);
         return AjaxResult.success();
     }
@@ -83,6 +92,10 @@ public class BetRecordController extends BaseController {
     @PostMapping("/edit")
     @ApiOperation(value = "注单修改")
     public AjaxResult edit(BetUpdate betUpdate){
+        SysMembers sysMembers = sysMembersService.selectmembersByCard(betUpdate.getCard());
+        if(StringUtils.isNull(sysMembers)){
+            return AjaxResult.error("卡号："+betUpdate.getCard()+" 不存在");
+        }
         betUpdate.setUpdateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
