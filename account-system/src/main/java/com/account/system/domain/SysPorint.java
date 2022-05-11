@@ -16,6 +16,9 @@ public class SysPorint extends BaseEntity implements Cloneable {
     @ApiModelProperty("id")
     private int id;
 
+    @ApiModelProperty("游戏id")
+    private Long gameId;
+
     @ApiModelProperty("台号")
     private Long tableId;
 
