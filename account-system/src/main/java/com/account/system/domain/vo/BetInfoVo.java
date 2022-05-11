@@ -22,17 +22,23 @@ public class BetInfoVo {
 
     @ApiModelProperty("台号")
     private Long tableId;
+
     @ApiModelProperty("标记号")
     private Long version;
+
     @ApiModelProperty("靴号")
     private Long bootNum;
+
     @ApiModelProperty("局号")
     private Long gameNum;
+
+    @ApiModelProperty("游戏类型")
+    private Long gameId;
 
     @ApiModelProperty("下注玩法")
     private List<BetInfoOptionVo> option;
 
-    @ApiModelProperty("币种(0 筹码 1现金)")
+    @ApiModelProperty("币种(0美元筹码 1美元现金 2泰铢筹码 3泰铢现金)")
     private int type;
 
     @ApiModelProperty(value = "下注金额")
@@ -46,7 +52,6 @@ public class BetInfoVo {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "下注时间")
-
     private Date createTime;
 
     @ApiModelProperty(value = "操作员")

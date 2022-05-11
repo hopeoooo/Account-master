@@ -72,6 +72,7 @@
             bt.table_id AS tableId,
             bt.boot_num AS bootNum,
             bt.game_num AS gameNum,
+            bt.game_id AS gameId,
             bt.type,
             SUM(b.bet_money) as betMoney,
             bt.game_result AS gameResult,
