@@ -110,11 +110,14 @@
                 AND bt.type in (2,3)
             </if>
 
-            <if test="bootNum != null and bootNum != ''">
+            <if test="bootNum != null">
                 AND bt.boot_num = #{bootNum}
             </if>
-            <if test="gameNum != null and gameNum != ''">
+            <if test="gameNum != null">
                 AND bt.game_num = #{gameNum}
+            </if>
+            <if test="gameId != null">
+                AND bt.game_id = #{gameId}
             </if>
             <if test="createBy != null and createBy != ''">
                 AND bt.create_by = #{createBy}
@@ -128,7 +131,7 @@
         </where>
         GROUP BY bt.bet_id
         ORDER BY
-        bt.create_time,bt.card  DESC
+        bt.create_time DESC,bt.card DESC
     </select>
 
     <select id="selectBetOptionList" resultType="com.account.system.domain.vo.BetInfoOptionVo">
