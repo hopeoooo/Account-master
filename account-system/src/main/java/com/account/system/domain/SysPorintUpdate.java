@@ -112,17 +112,17 @@ public class SysPorintUpdate extends BaseEntity {
         this.version = oldPorint.getVersion();
         this.bootNum = oldPorint.getBootNum();
 
-        this.sysChip = oldPorint.getSysChip().add(oldPorint.getSysCash()).toString();
-        this.sysInsurance = oldPorint.getSysInsurance().toString();
-        this.water = oldPorint.getWater().toString();
-        this.chipWin = oldPorint.getChipWin().toString();
-        this.insuranceWin = oldPorint.getInsuranceWin().toString();
+        this.sysChip = oldPorint.getSysChip().add(oldPorint.getSysCash()).setScale(2).toString();
+        this.sysInsurance = oldPorint.getSysInsurance().setScale(2).toString();
+        this.water = oldPorint.getWater().setScale(2).toString();
+        this.chipWin = oldPorint.getChipWin().setScale(2).toString();
+        this.insuranceWin = oldPorint.getInsuranceWin().setScale(2).toString();
 
-        this.sysChipTh = oldPorint.getSysChipTh().add(oldPorint.getSysCashTh()).toString();
-        this.sysInsuranceTh = oldPorint.getSysInsuranceTh().toString();
-        this.waterTh = oldPorint.getWaterTh().toString();
-        this.chipWinTh = oldPorint.getChipWinTh().toString();
-        this.insuranceWinTh = oldPorint.getInsuranceWinTh().toString();
+        this.sysChipTh = oldPorint.getSysChipTh().add(oldPorint.getSysCashTh()).setScale(2).toString();
+        this.sysInsuranceTh = oldPorint.getSysInsuranceTh().setScale(2).toString();
+        this.waterTh = oldPorint.getWaterTh().setScale(2).toString();
+        this.chipWinTh = oldPorint.getChipWinTh().setScale(2).toString();
+        this.insuranceWinTh = oldPorint.getInsuranceWinTh().setScale(2).toString();
     }
 
 
