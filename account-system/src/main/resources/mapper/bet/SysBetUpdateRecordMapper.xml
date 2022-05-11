@@ -24,8 +24,8 @@
         result,
         win,
         create_by createBy,
-        bet_time betTime,
-        update_time updateTime
+        date_format(bet_time,'%Y-%m-%d %H:%i:%s') betTime,
+        date_format(update_time,'%Y-%m-%d %H:%i:%s') updateTime
         FROM
         sys_bet_update_record
         <where>

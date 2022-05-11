@@ -304,7 +304,7 @@
         water_th waterTh,
         chip_win_th chipWinTh,
         insurance_win_th insuranceWinTh,
-        create_time createTime,
+        date_format(create_time,'%Y-%m-%d %H:%i:%s') createTime,
         create_by createBy,
         remark
         FROM
