@@ -15,6 +15,9 @@ public class PorintUpdate {
     @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("游戏id")
+    private Long gameId;
+
     @ApiModelProperty("筹码数")
     private BigDecimal chip;
 

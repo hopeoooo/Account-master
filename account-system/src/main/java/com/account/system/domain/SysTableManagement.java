@@ -101,6 +101,12 @@ public class SysTableManagement extends BaseEntity {
     public SysTableManagement() {
     }
 
+    public SysTableManagement(Long tableId,Long version, Long bootNum) {
+        this.tableId = tableId;
+        this.version = version;
+        this.bootNum = bootNum;
+    }
+
     public SysTableManagement(Long tableId, BigDecimal chip, BigDecimal cash, BigDecimal insurance
             , BigDecimal chipTh, BigDecimal cashTh, BigDecimal insuranceTh) {
         this.tableId = tableId;

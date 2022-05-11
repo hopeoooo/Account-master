@@ -6,6 +6,7 @@ import com.account.common.utils.StringUtils;
 import com.account.system.domain.*;
 import com.account.system.domain.search.PorintUpdateSearch;
 import com.account.system.domain.search.ReceiptReportSearch;
+import com.account.system.mapper.BetMapper;
 import com.account.system.mapper.PorintMapper;
 import com.account.system.mapper.ReceiptMapper;
 import com.account.system.mapper.SysTableManagementMapper;
@@ -30,6 +31,9 @@ public class SysPorintServiceImpl implements SysPorintService {
 
     @Autowired
     SysTableManagementMapper sysTableManagementMapper;
+
+    @Autowired
+    BetMapper betMapper;
 
     public List<SysPorint> selectPorintList(ReceiptReportSearch receiptReportSearch) {
         return porintMapper.selectPorintList(receiptReportSearch);
@@ -76,6 +80,13 @@ public class SysPorintServiceImpl implements SysPorintService {
         map.put("chipGapTh", chipGapTh);
         map.put("cashGapTh", cashGapTh);
         map.put("insuranceGapTh", insuranceGapTh);
+        if (porintUpdate.getGameId() == 2) {//龙虎 计算和钱
+            SysTableManagement sysTableManagement = new SysTableManagement(sysPorint.getTableId(),sysPorint.getVersion(),sysPorint.getBootNum());
+            BigDecimal tie = checkDecimal(betMapper.selectTie(sysTableManagement));
+            BigDecimal tieTh = checkDecimal(betMapper.selectTieTh(sysTableManagement));
+            map.put("tie", tie);
+            map.put("tieTh", tieTh);
+        }
         return map;
     }
 

@@ -55,7 +55,7 @@
 
     <select id="selectPorintList" resultType="sysPorint">
         SELECT
-        t.game_id  gameId
+        t.game_id  gameId,
         s.id,
         s.table_id tableId,
         s.boot_num bootNum,
