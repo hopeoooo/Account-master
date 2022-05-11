@@ -30,23 +30,18 @@
         sys_bet_update_record
         <where>
             <if test="card != null and card != ''">
-                AND card like concat('%', #{card}, '%')
+                AND card = #{card}
             </if>
-
-            <if test="tableId != null and tableId != ''">
+            <if test="tableId != null">
                 AND table_id = #{tableId}
             </if>
-
-            <if test="gameId != null and gameId != ''">
+            <if test="gameId != null">
                 AND game_id = #{gameId}
             </if>
-            <if test="type != null">
-                AND `type` like concat('%', #{type}, '%')
-            </if>
-            <if test="bootNum != null and bootNum != ''">
+            <if test="bootNum != null">
                 AND boot = #{bootNum}
             </if>
-            <if test="gameNum != null and gameNum != ''">
+            <if test="gameNum != null">
                 AND game = #{gameNum}
             </if>
             <if test="createBy != null and createBy != ''">
