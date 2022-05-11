@@ -40,13 +40,13 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
                 if(option.length()>0) option.append("/");
                 amount[0] = amount[0].add(sysBetInfo.getBetMoney());
                 option.append(changeRelust(sysBetInfo.getBetOption()))
-                        .append(":").append(sysBetInfo.getBetMoney());
+                        .append(":").append(sysBetInfo.getBetMoney().setScale(2));
                 oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
             });
-            sysBetUpdateRecord.setWin(oldWin[0].toString());
-            if(oldWin[0].compareTo(win)!=0)sysBetUpdateRecord.setWin(sysBetUpdateRecord.getWin()+"->"+win.toString());
+            sysBetUpdateRecord.setWin(oldWin[0].setScale(2).toString());
+            if(oldWin[0].compareTo(win)!=0)sysBetUpdateRecord.setWin(sysBetUpdateRecord.getWin()+"->"+win.setScale(2).toString());
             sysBetUpdateRecord.setOption(option.toString());
-            sysBetUpdateRecord.setAmount(amount[0].toString());
+            sysBetUpdateRecord.setAmount(amount[0].setScale(2).toString());
             sysBetUpdateRecord.setResult(changeRelust(gameResult)+"->"+changeRelust(sysBet.getGameResult()));
             sysBetUpdateRecordMapper.saveUpdateRecord(sysBetUpdateRecord);
         }
@@ -61,7 +61,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         //卡号
         sysBetUpdateRecord.setCard(compare(sysBet.getCard(),betUpdate.getCard()));
         //下注类型
-        sysBetUpdateRecord.setType(compare(sysBet.getType(),betUpdate.getType()));
+        sysBetUpdateRecord.setType(compare(changeType(sysBet.getType()),changeType(betUpdate.getType())));
         //玩法
         StringBuffer oldOption = new StringBuffer("");
         final BigDecimal[] oldAmount = {BigDecimal.ZERO};
@@ -70,7 +70,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
             if(oldOption.length()>0) oldOption.append("/");
             oldAmount[0] = oldAmount[0].add(sysBetInfo.getBetMoney());
             oldOption.append(changeRelust(sysBetInfo.getBetOption()))
-                    .append(":").append(sysBetInfo.getBetMoney());
+                    .append(":").append(sysBetInfo.getBetMoney().setScale(2));
             oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
         });
         StringBuffer newOption = new StringBuffer("");
@@ -78,17 +78,17 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         final BigDecimal[] newWin = {BigDecimal.ZERO};
         newBetInfos.forEach(sysBetInfo -> {
             if(newOption.length()>0) newOption.append("/");
-            newAmount[0] = newAmount[0].add(sysBetInfo.getBetMoney().setScale(4));
+            newAmount[0] = newAmount[0].add(sysBetInfo.getBetMoney());
             newOption.append(changeRelust(sysBetInfo.getBetOption()))
-                    .append(":").append(sysBetInfo.getBetMoney().setScale(4));
-            newWin[0] = newWin[0].add(sysBetInfo.getWinLose().setScale(4));
+                    .append(":").append(sysBetInfo.getBetMoney().setScale(2));
+            newWin[0] = newWin[0].add(sysBetInfo.getWinLose());
         });
 
         sysBetUpdateRecord.setOption(compare(oldOption.toString(),newOption.toString()));
         //金额
-        sysBetUpdateRecord.setAmount(compare(oldAmount[0],newAmount[0]));
+        sysBetUpdateRecord.setAmount(compare(oldAmount[0].setScale(2),newAmount[0].setScale(2)));
         //输赢
-        sysBetUpdateRecord.setWin(compare(oldWin[0],newWin[0]));
+        sysBetUpdateRecord.setWin(compare(oldWin[0].setScale(2),newWin[0].setScale(2)));
         //操作员
         String oldCreateBy = sysBet.getUpdateBy()==null?sysBet.getCreateBy():sysBet.getUpdateBy();
         sysBetUpdateRecord.setCreateBy(compare(oldCreateBy,betUpdate.getUpdateBy()));
@@ -119,6 +119,21 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
             return a.toString();
         }else {
             return  a+"->"+b;
+        }
+    }
+
+    private String changeType(int type){
+        switch (type){
+            case 0:
+                return "$筹码";
+            case 1:
+                return "$现金";
+            case 2:
+                return "฿筹码";
+            case 3:
+                return "฿现金";
+            default:
+                return "未知";
         }
     }
 }

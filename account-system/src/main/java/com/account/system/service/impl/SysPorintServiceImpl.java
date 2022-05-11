@@ -198,10 +198,10 @@ public class SysPorintServiceImpl implements SysPorintService {
 
     private String compare(Object a,Object b){
         if(a instanceof BigDecimal){
-            a = ((BigDecimal)a).setScale(4);
+            a = ((BigDecimal)a).setScale(2);
         }
         if(b instanceof BigDecimal){
-            b = ((BigDecimal)b).setScale(4);
+            b = ((BigDecimal)b).setScale(2);
         }
         if(a.equals(b)){
             return a.toString();
