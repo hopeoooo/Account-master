@@ -78,6 +78,7 @@ public class SysProfileController extends BaseController {
             if (userService.updateUserAvatar(loginUser.getUsername(), avatar)) {
                 AjaxResult ajax = AjaxResult.success();
                 ajax.put("imgUrl", avatar);
+                loginUser.getUser().setAvatar(avatar);
                 // 更新缓存用户头像
                 tokenService.setLoginUser(loginUser);
                 return ajax;
