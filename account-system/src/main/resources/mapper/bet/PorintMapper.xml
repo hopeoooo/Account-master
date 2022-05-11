@@ -55,54 +55,57 @@
 
     <select id="selectPorintList" resultType="sysPorint">
         SELECT
-        id,
-        table_id tableId,
-        boot_num bootNum,
-        sys_chip+sys_cash sysChip,
-        person_chip+person_cash personChip,
-        chip_gap chipGap,
-        chip_add chipAdd,
-        cash_gap cashGap,
-        cash_add cashAdd,
-        sys_insurance sysInsurance,
-        person_insurance personInsurance,
-        insurance_gap insuranceGap,
-        insurance_add insuranceAdd,
-        water water,
-        chip_win chipWin,
-        insurance_win insuranceWin,
-        create_time createTime,
-        create_by createBy,
-        remark,
-        sys_chip_th+sys_cash_th sysChipTh,
-        person_chip_th+person_cash_th personChipTh,
-        chip_gap_th chipGapTh,
-        chip_add_th chipAddTh,
-        sys_cash_th sysCashTh,
-        person_cash_th personCashTh,
-        cash_gap_th cashGapTh,
-        cash_add_th cashAddTh,
-        sys_insurance_th sysInsuranceTh,
-        person_insurance_th personInsuranceTh,
-        insurance_gap_th insuranceGapTh,
-        insurance_add_th insuranceAddTh,
-        water_th waterTh,
-        chip_win_th chipWinTh,
-        insurance_win_th insuranceWinTh
+        t.game_id  gameId
+        s.id,
+        s.table_id tableId,
+        s.boot_num bootNum,
+        s.sys_chip+sys_cash sysChip,
+        s.person_chip+person_cash personChip,
+        s.chip_gap chipGap,
+        s.chip_add chipAdd,
+        s.cash_gap cashGap,
+        s.cash_add cashAdd,
+        s.sys_insurance sysInsurance,
+        s.person_insurance personInsurance,
+        s.insurance_gap insuranceGap,
+        s.insurance_add insuranceAdd,
+        s.water water,
+        s.chip_win chipWin,
+        s.insurance_win insuranceWin,
+        s.create_time createTime,
+        s.create_by createBy,
+        s.remark,
+        s.sys_chip_th+sys_cash_th sysChipTh,
+        s.person_chip_th+person_cash_th personChipTh,
+        s.chip_gap_th chipGapTh,
+        s.chip_add_th chipAddTh,
+        s.sys_cash_th sysCashTh,
+        s.person_cash_th personCashTh,
+        s.cash_gap_th cashGapTh,
+        s.cash_add_th cashAddTh,
+        s.sys_insurance_th sysInsuranceTh,
+        s.person_insurance_th personInsuranceTh,
+        s.insurance_gap_th insuranceGapTh,
+        s.insurance_add_th insuranceAddTh,
+        s.water_th waterTh,
+        s.chip_win_th chipWinTh,
+        s.insurance_win_th insuranceWinTh
         FROM
-        sys_porint
+        sys_porint s
+        left join sys_table_management t
+        on s.table_id = t.table_id
         <where>
             <if test="tableId != null ">
-                AND table_id = #{tableId}
+                AND s.table_id = #{tableId}
             </if>
             <if test="startTime != null and startTime != ''">
-                AND create_time <![CDATA[>=]]> #{startTime}
+                AND s.create_time <![CDATA[>=]]> #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                AND create_time <![CDATA[<=]]> #{endTime}
+                AND s.create_time <![CDATA[<=]]> #{endTime}
             </if>
         </where>
-        ORDER BY create_time desc
+        ORDER BY s.create_time desc
     </select>
 
     <select id="selectPorintCount" resultType="map">

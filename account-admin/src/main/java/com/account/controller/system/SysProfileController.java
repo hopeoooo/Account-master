@@ -6,6 +6,7 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.domain.model.LoginUser;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.file.FileUploadUtils;
+import com.account.common.utils.file.MimeTypeUtils;
 import com.account.framework.web.service.TokenService;
 import com.account.system.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -71,10 +72,10 @@ public class SysProfileController extends BaseController {
      */
     @PostMapping("/avatar")
     @ApiOperation(value = "头像上传")
-    public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws IOException {
+    public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws Exception {
         if (!file.isEmpty()) {
             LoginUser loginUser = getLoginUser();
-            String avatar = FileUploadUtils.upload(AccountConfig.getAvatarPath(), file);
+            String avatar = FileUploadUtils.upload(AccountConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
             if (userService.updateUserAvatar(loginUser.getUsername(), avatar)) {
                 AjaxResult ajax = AjaxResult.success();
                 ajax.put("imgUrl", avatar);
