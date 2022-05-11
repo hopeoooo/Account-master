@@ -76,6 +76,7 @@
         FROM
             sys_table_management t
         where  t.is_delete=0
+        ORDER BY  t.table_id asc
     </select>
 
 
