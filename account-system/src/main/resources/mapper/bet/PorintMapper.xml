@@ -92,7 +92,7 @@
         FROM
         sys_porint
         <where>
-            <if test="tableId != null and tableId != ''">
+            <if test="tableId != null ">
                 AND table_id = #{tableId}
             </if>
             <if test="startTime != null and startTime != ''">

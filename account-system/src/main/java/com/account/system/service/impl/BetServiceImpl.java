@@ -163,8 +163,9 @@ public class BetServiceImpl implements BetService {
             SysChipRecord sysChipRecord = sysChipRecordMapper.selectChipRecord(sysBet.getCard(), sysBet.getBetId());
             BigDecimal change = (BigDecimal) chipRecord.get(sysBet.getBetId());
             if (change.compareTo(new BigDecimal(0)) == 0) {
-                sysChipRecordMapper.deleteChipRecord(sysChipRecord.getCard(), sysChipRecord.getBetId());
+                sysChipRecordMapper.deleteChipRecord(sysBet.getCard(), sysBet.getBetId());
             } else {
+                if (StringUtils.isNull(sysChipRecord)) sysChipRecord = new SysChipRecord(sysBet.getCard(), sysBet.getBetId());
                 if (change.compareTo(new BigDecimal(0)) > 0) {//赢
                     sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
                 } else if (change.compareTo(new BigDecimal(0)) < 0) {
@@ -658,6 +659,7 @@ public class BetServiceImpl implements BetService {
     /**
      * 注单修改
      */
+    @Transactional
     public void updateBet(BetUpdate betUpdate) {
         //判断赛果是否修改
         SysGameResult sysGameResult = sysGameResultMapper.selectGameResultByBetId(betUpdate.getBetId());

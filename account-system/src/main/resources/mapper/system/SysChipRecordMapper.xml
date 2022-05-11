@@ -126,7 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         set `change` = #{change},
             `after` = #{after},
             `change_th` = #{changeTh},
-            `after_th` = #{afterTH},
+            `after_th` = #{afterTh},
             `type` = #{type}
         where card = #{card} and bet_id = #{betId}
     </update>

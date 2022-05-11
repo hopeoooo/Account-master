@@ -32,7 +32,7 @@ public class PorintReportController extends BaseController {
         startPage();
         AjaxResult ajaxResult = AjaxResult.success();
         List list = sysPorintService.selectPorintList(receiptReportSearch);
-        ajaxResult.put("list",list);
+        ajaxResult.put("list",getDataTable(list));
         ajaxResult.put("count",sysPorintService.selectPorintCount(receiptReportSearch));
         return ajaxResult;
     }
