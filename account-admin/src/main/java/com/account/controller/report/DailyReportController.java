@@ -3,6 +3,7 @@ package com.account.controller.report;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
+import com.account.common.utils.StringUtils;
 import com.account.system.domain.search.ReportSearch;
 import com.account.system.service.BetService;
 import io.swagger.annotations.Api;
@@ -32,6 +33,9 @@ public class DailyReportController extends BaseController {
     @GetMapping("/list")
     @ApiOperation(value = "查询客户日报表列表")
     public TableDataInfo list(ReportSearch reportSearch ){
+        if (StringUtils.isNull(reportSearch.getCard())){
+            return new TableDataInfo();
+        }
         startPage();
         List<Map> list = betService.selectDailyReportList(reportSearch);
         return getDataTable(list);
