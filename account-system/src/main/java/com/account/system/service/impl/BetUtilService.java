@@ -74,7 +74,7 @@ public class BetUtilService {
                 if ("1".equals(option)) {//闲
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -87,7 +87,7 @@ public class BetUtilService {
                     if (gameResult.contains("4")) {
                         sysBetInfo.setPump(amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100)));
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])).subtract(sysBetInfo.getPump()));
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -104,7 +104,7 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("4")) {
                         sysBetInfo.setWinLose(amount);
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -119,7 +119,7 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount);
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -134,7 +134,7 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(amount);
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     }
@@ -142,7 +142,7 @@ public class BetUtilService {
                 } else {
                     if (gameResult.contains(option)) {
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
-                        payout.add(sysBetInfo.getWinLose());
+                        payout = payout.add(sysBetInfo.getWinLose());
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
@@ -205,7 +205,7 @@ public class BetUtilService {
                 sysBetInfo.setBetMoney(amount);
                 if (gameResult.contains(option)) {
                     sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
-                    payout.add(sysBetInfo.getWinLose());
+                    payout = payout.add(sysBetInfo.getWinLose());
                 } else {
                     sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     water = water.add(amount);
@@ -260,7 +260,7 @@ public class BetUtilService {
             sysBetInfo.setBetOption("-");
             sysBetInfo.setBetMoney(amount);
             sysBetInfo.setWinLose(amount);
-            payout.add(amount);
+            payout = payout.add(amount);
         }
         list.add(sysBetInfo);
         if (isChip) {
