@@ -103,11 +103,11 @@ public class SysBusinessCashChipController extends BaseController {
         if (sysSignedRecord!=null && sysSignedRecord.getSignedAmount().compareTo(BigDecimal.ZERO)>0){
             return AjaxResult.success("当前用户不可换现!");
         }*/
-        BigDecimal chip = sysMembers.getChip();
+/*        BigDecimal chip = sysMembers.getChip();
         if ( (businessCashChipAddSearch.getChipAmount()!=null && businessCashChipAddSearch.getChipAmount().compareTo(chip)>0 )
                 || (businessCashChipAddSearch.getChipAmountTh()!=null && businessCashChipAddSearch.getChipAmountTh().compareTo(chip)>0)){
             return AjaxResult.error("余额不足!");
-        }
+        }*/
         businessCashChipAddSearch.setCreateBy(SecurityUtils.getUsername());
         businessCashChipService.addBuyCode(businessCashChipAddSearch);
         return AjaxResult.success("换现成功!");
