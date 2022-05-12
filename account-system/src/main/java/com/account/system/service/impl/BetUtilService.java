@@ -100,6 +100,8 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("4")) {
                         sysBetInfo.setWinLose(amount);
+                    } else if (gameResult.contains("7")) {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     }
@@ -112,6 +114,8 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount);
+                    } else if (gameResult.contains("7")) {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     }
@@ -127,10 +131,12 @@ public class BetUtilService {
                     }
                 }
                 list.add(sysBetInfo);
-                if (sysBetInfo.getType() == 0 || sysBetInfo.getType() == 2) {
+                if (type == 0 || type == 2) {
                     membersChip = membersChip.add(sysBetInfo.getWinLose());
+                }
+                if (sysBetInfo.getType() == 0 || sysBetInfo.getType() == 2) {
                     tableChip = tableChip.subtract(sysBetInfo.getWinLose());
-                } else  if (sysBetInfo.getType() == 1 || sysBetInfo.getType() == 3){
+                } else if (sysBetInfo.getType() == 1 || sysBetInfo.getType() == 3) {
                     tableCash = tableCash.subtract(sysBetInfo.getWinLose());
                 }
             }
