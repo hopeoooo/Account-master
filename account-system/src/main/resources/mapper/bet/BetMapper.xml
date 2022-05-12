@@ -324,22 +324,22 @@
         select
             m.card,
             m.name,
-            ifnull(sum(case when type in (0, 1) then b.bet_money else 0 end), 0)               as betMoney,
-            ifnull(sum(case when type in (0, 1) then b.water else 0 end), 0)                   as water,
-            ifnull(sum(case when type in (0, 1) then b.water_amount else 0 end), 0)            as waterAmount,
-            ifnull(sum(case when type in (0, 1) then b.tie else 0 end), 0)                     as tie,
-            ifnull(sum(case when type in (0, 1) then b.pump when 1 then b.pump else 0 end), 0) as pump,
-            ifnull(sum(case when type in (0, 1) then b.win_lose else 0 end), 0)                as winLose,
+            ifnull(sum(case when type in (0, 1,4) then b.bet_money else 0 end), 0)               as betMoney,
+            ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)                   as water,
+            ifnull(sum(case when type in (0, 1,4) then b.water_amount else 0 end), 0)            as waterAmount,
+            ifnull(sum(case when type in (0, 1,4) then b.tie else 0 end), 0)                     as tie,
+            ifnull(sum(case when type in (0, 1,4) then b.pump when 1 then b.pump else 0 end), 0) as pump,
+            ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)                as winLose,
 
-            ifnull(sum(case when type in (2, 3) then b.bet_money else 0 end), 0)               as betMoneyTh,
-            ifnull(sum(case when type in (2, 3) then b.water else 0 end), 0)                   as waterTh,
-            ifnull(sum(case when type in (2, 3) then b.water_amount else 0 end), 0)            as waterAmountTh,
-            ifnull(sum(case when type in (2, 3) then b.tie else 0 end), 0)                     as tieTh,
-            ifnull(sum(case when type in (2, 3) then b.pump else 0 end), 0)                    as pumpTh,
-            ifnull(sum(case when type in (2, 3) then b.win_lose else 0 end), 0)                as winLoseTh
+            ifnull(sum(case when type in (2, 3,5) then b.bet_money else 0 end), 0)               as betMoneyTh,
+            ifnull(sum(case when type in (2, 3,5) then b.water else 0 end), 0)                   as waterTh,
+            ifnull(sum(case when type in (2, 3,5) then b.water_amount else 0 end), 0)            as waterAmountTh,
+            ifnull(sum(case when type in (2, 3,5) then b.tie else 0 end), 0)                     as tieTh,
+            ifnull(sum(case when type in (2, 3,5) then b.pump else 0 end), 0)                    as pumpTh,
+            ifnull(sum(case when type in (2, 3,5) then b.win_lose else 0 end), 0)                as winLoseTh
         from
           sys_members m
-        left join sys_bet_info b on b.card = m.card and b.type in (0, 1, 2, 3)
+        left join sys_bet_info b on b.card = m.card
         <where>
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
@@ -380,22 +380,22 @@
 
     <select id="selectWinLoseTotal"  resultType="java.util.Map">
         select
-            ifnull(sum(case when type in (0, 1) then b.bet_money else 0 end), 0)               as betMoney,
-            ifnull(sum(case when type in (0, 1) then b.water else 0 end), 0)                   as water,
-            ifnull(sum(case when type in (0, 1) then b.water_amount else 0 end), 0)            as waterAmount,
-            ifnull(sum(case when type in (0, 1) then b.tie else 0 end), 0)                     as tie,
-            ifnull(sum(case when type in (0, 1) then b.pump when 1 then b.pump else 0 end), 0) as pump,
-            ifnull(sum(case when type in (0, 1) then b.win_lose else 0 end), 0)                as winLose,
+            ifnull(sum(case when type in (0, 1,4) then b.bet_money else 0 end), 0)               as betMoney,
+            ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)                   as water,
+            ifnull(sum(case when type in (0, 1,4) then b.water_amount else 0 end), 0)            as waterAmount,
+            ifnull(sum(case when type in (0, 1,4) then b.tie else 0 end), 0)                     as tie,
+            ifnull(sum(case when type in (0, 1,4) then b.pump when 1 then b.pump else 0 end), 0) as pump,
+            ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)                as winLose,
 
-            ifnull(sum(case when type in (2, 3) then b.bet_money else 0 end), 0)               as betMoneyTh,
-            ifnull(sum(case when type in (2, 3) then b.water else 0 end), 0)                   as waterTh,
-            ifnull(sum(case when type in (2, 3) then b.water_amount else 0 end), 0)            as waterAmountTh,
-            ifnull(sum(case when type in (2, 3) then b.tie else 0 end), 0)                     as tieTh,
-            ifnull(sum(case when type in (2, 3) then b.pump else 0 end), 0)                    as pumpTh,
-            ifnull(sum(case when type in (2, 3) then b.win_lose else 0 end), 0)                as winLoseTh
+            ifnull(sum(case when type in (2, 3,5) then b.bet_money else 0 end), 0)               as betMoneyTh,
+            ifnull(sum(case when type in (2, 3,5) then b.water else 0 end), 0)                   as waterTh,
+            ifnull(sum(case when type in (2, 3,5) then b.water_amount else 0 end), 0)            as waterAmountTh,
+            ifnull(sum(case when type in (2, 3,5) then b.tie else 0 end), 0)                     as tieTh,
+            ifnull(sum(case when type in (2, 3,5) then b.pump else 0 end), 0)                    as pumpTh,
+            ifnull(sum(case when type in (2, 3,5) then b.win_lose else 0 end), 0)                as winLoseTh
         from
             sys_members m
-                left join sys_bet_info b on b.card = m.card and b.type in (0, 1, 2, 3)
+                left join sys_bet_info b on b.card = m.card
         <where>
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
