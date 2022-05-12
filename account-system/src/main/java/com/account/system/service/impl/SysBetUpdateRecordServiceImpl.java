@@ -33,6 +33,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
     public void saveResultRecord(SysBet sysBet, String gameResult, Long betId, List<SysBetInfo> sysBetInfos,BigDecimal win) {
         if(!sysBet.getBetId().equals(betId)){
             SysBetUpdateRecord sysBetUpdateRecord = new SysBetUpdateRecord(sysBet);
+            sysBetUpdateRecord.setType(changeType(sysBet.getType()));
             StringBuffer option = new StringBuffer("");
             final BigDecimal[] amount = {BigDecimal.ZERO};
             final BigDecimal[] oldWin = {BigDecimal.ZERO};

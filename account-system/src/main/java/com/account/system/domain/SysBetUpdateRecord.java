@@ -66,7 +66,6 @@ public class SysBetUpdateRecord {
         this.tableId = String.valueOf(sysBet.getTableId());
         this.boot = String.valueOf(sysBet.getBootNum());
         this.game = String.valueOf(sysBet.getGameNum());
-        this.type = String.valueOf(sysBet.getType());
         this.betTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sysBet.getCreateTime());
         this.createBy = sysBet.getCreateBy();
     }
