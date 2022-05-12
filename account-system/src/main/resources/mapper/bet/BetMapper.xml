@@ -302,10 +302,32 @@
 
     <select id="selectDailyReportTotal"  resultType="java.util.Map">
         SELECT
-            SUM( b.win_lose ) AS winLose,
-            SUM( b.water ) AS water
+        ifnull(SUM(case when type in (0,1,4) then b.win_lose else 0 end), 0) as winLose,
+        (select ifnull(SUM(case when type in (0,1,4) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLose,
+        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0)          as water,
+        (select ifnull(SUM(case when type in(0,1,4) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWater,
+
+
+        ifnull(SUM(case when type in (2,3,5) then b.win_lose else 0 end),
+        0)                                                                                                 as winLoseTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLoseTh,
+        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0)          as waterTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWaterTh
         FROM
-            sys_bet_info b
+        sys_bet_info b
+        LEFT JOIN sys_members m ON m.card = b.card
         <where>
             <if test="card != null and card != ''">
                 AND b.card = #{card}
