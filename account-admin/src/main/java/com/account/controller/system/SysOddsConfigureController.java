@@ -37,6 +37,20 @@ public class SysOddsConfigureController extends BaseController {
     @ApiOperation(value = "修改赔率设置")
     public AjaxResult update(@Validated @RequestBody SysOddsConfigure oddsConfigure)
     {
+        if (oddsConfigure.getBaccaratBankerWin().length()>10 ||
+                oddsConfigure.getBaccaratPlayerWin().length()>10||
+                oddsConfigure.getBaccaratTieWin().length()>10||
+                oddsConfigure.getBaccaratBankerPair().length()>10||
+                oddsConfigure.getBaccaratPlayerPair().length()>10||
+                oddsConfigure.getBaccaratLarge().length()>10||
+                oddsConfigure.getBaccaratSmall().length()>10||
+                oddsConfigure.getDragonWin().length()>10||
+                oddsConfigure.getTigerWin().length()>10||
+                oddsConfigure.getTieWin().length()>10
+        ){
+            return AjaxResult.error("请输入正确得配置数据");
+        }
+
         return toAjax(oddsConfigureService.updateOddsConfig(oddsConfigure));
     }
 
