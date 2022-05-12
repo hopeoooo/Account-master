@@ -304,7 +304,7 @@
         select
         SUM(tb.winLose) as winLose,
         SUM(tb.sumWinLose) as sumWinLose,
-        SUM(tb.winLose) as winLose,
+        SUM(tb.water) as water,
         SUM(tb.sumWater) as sumWater,
         SUM(tb.winLoseTh) as winLoseTh,
         SUM(tb.sumWinLoseTh) as sumWinLoseTh,
@@ -404,9 +404,6 @@
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
             </if>
-
-
-
         </where>
         GROUP BY m.card
         order by
