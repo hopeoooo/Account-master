@@ -810,6 +810,11 @@ public class BetServiceImpl implements BetService {
         return betMapper.selectWinLoseList(reportSearch);
     }
 
+
+    @Override
+    public Map selectWinLoseTotal(WinLoseReportSearch reportSearch) {
+        return betMapper.selectWinLoseTotal(reportSearch);
+    }
     @Override
     public List<Map> selectTablePlumbingList(String startTime, String endTime) {
         return betMapper.selectTablePlumbingList(startTime, endTime);

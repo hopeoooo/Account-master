@@ -90,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="baccaratRollingRatioCashTh != null">baccarat_rolling_ratio_cash_th = #{baccaratRollingRatioCashTh},</if>
             <if test="dragonTigerRatioChipTh != null">dragon_tiger_ratio_chip_th = #{dragonTigerRatioChipTh},</if>
             <if test="dragonTigerRatioCashTh != null">dragon_tiger_ratio_cash_th = #{dragonTigerRatioCashTh},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
         </set>
         where id = #{id}
     </update>

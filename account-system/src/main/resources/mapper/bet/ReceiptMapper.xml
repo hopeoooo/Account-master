@@ -31,38 +31,37 @@
     <select id="selectReceiptList" resultType="com.account.system.domain.SysReceipt">
         SELECT
         r.table_id AS tableId,
-        r.chip AS chip,
-        r.cash AS cash,
-        r.insurance AS insurance,
-        r.chip_add AS chipAdd,
-        r.cash_add AS cashAdd,
-        r.insurance_add AS insuranceAdd,
-        r.water AS water,
-        r.win AS win,
-        r.insurance_win AS insuranceWin,
+        SUM(r.chip) AS chip,
+        SUM(r.cash) AS cash,
+        SUM(r.insurance) AS insurance,
+        SUM(r.chip_add) AS chipAdd,
+        SUM(r.cash_add) AS cashAdd,
+        SUM(r.insurance_add )AS insuranceAdd,
+        SUM(r.water )AS water,
+        SUM(r.win )AS win,
+        SUM(r.insurance_win) AS insuranceWin,
         r.create_time AS createTime,
-        r.remark AS remark ,
-
-        r.chip_th AS chipTh,
-        r.cash_th AS cashTh,
-        r.insurance_th AS insuranceTh,
-        r.chip_add_th AS chipAddTh,
-        r.cash_add_th AS cashAddTh,
-        r.insurance_add_th AS insuranceAddTh,
-        r.water_th AS waterTh,
-        r.win_th AS winTh,
-        r.insurance_win_th AS insuranceWinTh
+       r.remark AS remark,
+        SUM(r.chip_th )AS chipTh,
+        SUM(r.cash_th )AS cashTh,
+        SUM(r.insurance_th )AS insuranceTh,
+        SUM(r.chip_add_th )AS chipAddTh,
+        SUM(r.cash_add_th )AS cashAddTh,
+        SUM(r.insurance_add_th )AS insuranceAddTh,
+        SUM(r.water_th )AS waterTh,
+        SUM(r.win_th )AS winTh,
+        SUM(r.insurance_win_th )AS insuranceWinTh
         FROM
         sys_receipt r
     <where>
-        <if test="tableId != null and tableId != ''">
+        <if test="tableId != null">
             AND r.table_id = #{tableId}
         </if>
         <if test="startTime != null and startTime != ''">
-            AND r.create_time <![CDATA[>=]]> #{startTime}
+            AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND r.create_time <![CDATA[<=]]> #{endTime}
+            AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[<=]]> #{startTime}
         </if>
     </where>
         GROUP BY r.table_id
