@@ -12,7 +12,7 @@
                                 sys_chip_th, person_chip_th, chip_gap_th, chip_add_th,
                                 sys_cash_th, person_cash_th,cash_gap_th,cash_add_th,
                                 sys_insurance_th, person_insurance_th,insurance_gap_th,insurance_add_th,
-                                water_th,chip_win_th,insurance_win_th)
+                                water_th,chip_win_th,insurance_win_th,game_id)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
                 #{sysCash},#{personCash},#{cashGap}, #{cashAdd},
                 #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
@@ -20,7 +20,7 @@
                 #{sysChipTh}, #{personChipTh}, #{chipGapTh}, #{chipAddTh},
                 #{sysCashTh},#{personCashTh},#{cashGapTh}, #{cashAddTh},
                 #{sysInsuranceTh},#{personInsuranceTh},#{insuranceGapTh}, #{insuranceAddTh},
-                #{waterTh}, #{chipWinTh}, #{insuranceWinTh})
+                #{waterTh}, #{chipWinTh}, #{insuranceWinTh},#{gameId})
     </insert>
 
     <update id="updatePorint">
@@ -55,7 +55,7 @@
 
     <select id="selectPorintList" resultType="sysPorint">
         SELECT
-        t.game_id  gameId,
+        s.game_id  gameId,
         s.id,
         s.table_id tableId,
         s.boot_num bootNum,
@@ -92,8 +92,6 @@
         s.insurance_win_th insuranceWinTh
         FROM
         sys_porint s
-        left join sys_table_management t
-        on s.table_id = t.table_id
         <where>
             <if test="tableId != null ">
                 AND s.table_id = #{tableId}

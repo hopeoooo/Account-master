@@ -421,6 +421,7 @@ public class BetServiceImpl implements BetService {
         sysPorint.setVersion(sysTableManagement.getVersion());
         sysPorint.setBootNum(sysTableManagement.getBootNum());
         sysPorint.setRemark(reckon.getRemark());
+        sysPorint.setGameId(sysTableManagement.getGameId());
 
         sysPorint.setSysChip(sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
                 .add(sysTableManagement.getChipAdd()).add(checkDecimal(reckon.getChipAdd()))

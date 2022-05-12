@@ -127,10 +127,10 @@ public class BetUtilService {
                     }
                 }
                 list.add(sysBetInfo);
-                if (type == 0 || type == 2) {
+                if (sysBetInfo.getType() == 0 || sysBetInfo.getType() == 2) {
                     membersChip = membersChip.add(sysBetInfo.getWinLose());
                     tableChip = tableChip.subtract(sysBetInfo.getWinLose());
-                } else {
+                } else  if (sysBetInfo.getType() == 1 || sysBetInfo.getType() == 3){
                     tableCash = tableCash.subtract(sysBetInfo.getWinLose());
                 }
             }
