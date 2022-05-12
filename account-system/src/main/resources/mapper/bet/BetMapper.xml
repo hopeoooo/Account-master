@@ -301,30 +301,40 @@
     </select>
 
     <select id="selectDailyReportTotal"  resultType="java.util.Map">
+        select
+        SUM(tb.winLose) as winLose,
+        SUM(tb.sumWinLose) as sumWinLose,
+        SUM(tb.water) as water,
+        SUM(tb.sumWater) as sumWater,
+        SUM(tb.winLoseTh) as winLoseTh,
+        SUM(tb.sumWinLoseTh) as sumWinLoseTh,
+        SUM(tb.waterTh) as waterTh,
+        SUM(tb.sumWaterTh) as sumWaterTh
+        from (
         SELECT
         ifnull(SUM(case when type in (0,1,4) then b.win_lose else 0 end), 0) as winLose,
         (select ifnull(SUM(case when type in (0,1,4) then a.win_lose else 0 end), 0)
         from sys_bet_info a
         WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
-        and a.card = b.card)                                                                                   as sumWinLose,
-        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0)          as water,
+        and a.card = b.card) as sumWinLose,
+        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0) as water,
         (select ifnull(SUM(case when type in(0,1,4) then a.water else 0 end), 0)
         from sys_bet_info a
         WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
-        and a.card = b.card)                                                                                   as sumWater,
+        and a.card = b.card) as sumWater,
 
 
         ifnull(SUM(case when type in (2,3,5) then b.win_lose else 0 end),
-        0)                                                                                                 as winLoseTh,
+        0) as winLoseTh,
         (select ifnull(SUM(case when type in (2,3,5) then a.win_lose else 0 end), 0)
         from sys_bet_info a
         WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
-        and a.card = b.card)                                                                                   as sumWinLoseTh,
-        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0)          as waterTh,
+        and a.card = b.card) as sumWinLoseTh,
+        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0) as waterTh,
         (select ifnull(SUM(case when type in (2,3,5) then a.water else 0 end), 0)
         from sys_bet_info a
         WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
-        and a.card = b.card)                                                                                   as sumWaterTh
+        and a.card = b.card) as sumWaterTh
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
@@ -339,6 +349,7 @@
                 AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
             </if>
         </where>
+        ) tb
     </select>
 
 
@@ -362,6 +373,24 @@
         from
           sys_members m
         left join sys_bet_info b on b.card = m.card
+        <if test="startTime != null and startTime != ''">
+            AND b.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND b.create_time <![CDATA[<=]]> #{endTime}
+        </if>
+        <if test="tableId != null and tableId != ''">
+            AND b.table_id = #{tableId}
+        </if>
+
+        <if test="gameId != null and gameId != ''">
+            AND b.game_id = #{gameId}
+        </if>
+
+        <if test="operationType != null ">
+            AND b.type = #{operationType}
+        </if>
+
         <where>
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
@@ -375,29 +404,11 @@
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
             </if>
-            <if test="tableId != null and tableId != ''">
-                AND b.table_id = #{tableId}
-            </if>
-
-            <if test="gameId != null and gameId != ''">
-                AND b.game_id = #{gameId}
-            </if>
-
-            <if test="operationType != null ">
-                AND b.type = #{operationType}
-            </if>
-
-            <if test="startTime != null and startTime != ''">
-                AND b.create_time <![CDATA[>=]]> #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND b.create_time <![CDATA[<=]]> #{endTime}
-            </if>
         </where>
         GROUP BY m.card
         order by
           ifnull(sum(case type when 0 then b.bet_money when 1 then b.bet_money else 0 end), 0) desc,
-          ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc;
+          ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc
     </select>
 
     <select id="selectWinLoseTotal"  resultType="java.util.Map">
@@ -418,6 +429,24 @@
         from
             sys_members m
                 left join sys_bet_info b on b.card = m.card
+        <if test="tableId != null and tableId != ''">
+            AND b.table_id = #{tableId}
+        </if>
+
+        <if test="gameId != null and gameId != ''">
+            AND b.game_id = #{gameId}
+        </if>
+
+        <if test="operationType != null ">
+            AND b.type = #{operationType}
+        </if>
+
+        <if test="startTime != null and startTime != ''">
+            AND b.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND b.create_time <![CDATA[<=]]> #{endTime}
+        </if>
         <where>
             <if test="cardType == null or cardType == '' or cardType == 0 ">
                 <if test="card != null and card != ''">
@@ -431,24 +460,7 @@
             <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
                 AND m.is_admin = 0
             </if>
-            <if test="tableId != null and tableId != ''">
-                AND b.table_id = #{tableId}
-            </if>
 
-            <if test="gameId != null and gameId != ''">
-                AND b.game_id = #{gameId}
-            </if>
-
-            <if test="operationType != null ">
-                AND b.type = #{operationType}
-            </if>
-
-            <if test="startTime != null and startTime != ''">
-                AND b.create_time <![CDATA[>=]]> #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND b.create_time <![CDATA[<=]]> #{endTime}
-            </if>
         </where>
     </select>
 
@@ -587,15 +599,15 @@
         IFNULL(-SUM(case when type in (5) then b.win_lose else 0 end), 0) as insuranceWinLoseTh
         FROM
             sys_table_management t
-        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id /*and  b.type !=2*/
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id
+        <if test="startTime != null and startTime != ''">
+            AND b.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND b.create_time <![CDATA[<=]]> #{endTime}
+        </if>
         <where>
             AND  t.is_delete=0
-            <if test="startTime != null and startTime != ''">
-                AND b.create_time <![CDATA[>=]]> #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND b.create_time <![CDATA[<=]]> #{endTime}
-            </if>
         </where>
         GROUP BY
             t.table_id
