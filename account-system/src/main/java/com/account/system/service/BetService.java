@@ -65,6 +65,8 @@ public interface BetService {
      */
     List<Map> selectWinLoseList(WinLoseReportSearch reportSearch);
 
+    Map selectWinLoseTotal(WinLoseReportSearch reportSearch) ;
+
     /**
      * 台面上下水报表
      *

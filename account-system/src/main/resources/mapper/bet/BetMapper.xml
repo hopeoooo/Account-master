@@ -378,6 +378,59 @@
           ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc;
     </select>
 
+    <select id="selectWinLoseTotal"  resultType="java.util.Map">
+        select
+            ifnull(sum(case when type in (0, 1) then b.bet_money else 0 end), 0)               as betMoney,
+            ifnull(sum(case when type in (0, 1) then b.water else 0 end), 0)                   as water,
+            ifnull(sum(case when type in (0, 1) then b.water_amount else 0 end), 0)            as waterAmount,
+            ifnull(sum(case when type in (0, 1) then b.tie else 0 end), 0)                     as tie,
+            ifnull(sum(case when type in (0, 1) then b.pump when 1 then b.pump else 0 end), 0) as pump,
+            ifnull(sum(case when type in (0, 1) then b.win_lose else 0 end), 0)                as winLose,
+
+            ifnull(sum(case when type in (2, 3) then b.bet_money else 0 end), 0)               as betMoneyTh,
+            ifnull(sum(case when type in (2, 3) then b.water else 0 end), 0)                   as waterTh,
+            ifnull(sum(case when type in (2, 3) then b.water_amount else 0 end), 0)            as waterAmountTh,
+            ifnull(sum(case when type in (2, 3) then b.tie else 0 end), 0)                     as tieTh,
+            ifnull(sum(case when type in (2, 3) then b.pump else 0 end), 0)                    as pumpTh,
+            ifnull(sum(case when type in (2, 3) then b.win_lose else 0 end), 0)                as winLoseTh
+        from
+            sys_members m
+                left join sys_bet_info b on b.card = m.card and b.type in (0, 1, 2, 3)
+        <where>
+            <if test="cardType == null or cardType == '' or cardType == 0 ">
+                <if test="card != null and card != ''">
+                    AND m.card = #{card}
+                </if>
+            </if>
+
+            <if test="cardType != null and cardType != '' and cardType > 0 ">
+                AND (m.card = #{card} or m.parent_card = #{card})
+            </if>
+            <if test="isAdmin != null and isAdmin != '' and isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+            <if test="tableId != null and tableId != ''">
+                AND b.table_id = #{tableId}
+            </if>
+
+            <if test="gameId != null and gameId != ''">
+                AND b.game_id = #{gameId}
+            </if>
+
+            <if test="operationType != null ">
+                AND b.type = #{operationType}
+            </if>
+
+            <if test="startTime != null and startTime != ''">
+                AND b.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND b.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+    </select>
+
+
     <!--
 
     <select id="selectWinLoseList"  resultType="java.util.Map">

@@ -2,6 +2,7 @@ package com.account.controller.system;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
+import com.account.common.utils.SecurityUtils;
 import com.account.system.domain.SysOddsConfigure;
 import com.account.system.service.SysOddsConfigureService;
 import io.swagger.annotations.Api;
@@ -50,7 +51,7 @@ public class SysOddsConfigureController extends BaseController {
         ){
             return AjaxResult.error("请输入正确得配置数据");
         }
-
+        oddsConfigure.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(oddsConfigureService.updateOddsConfig(oddsConfigure));
     }
 
