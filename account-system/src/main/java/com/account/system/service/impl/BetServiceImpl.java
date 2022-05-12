@@ -320,12 +320,7 @@ public class BetServiceImpl implements BetService {
         sysBet.setType(bet.getInteger("type"));
         sysBet.setCreateBy(SecurityUtils.getUsername());
         Map map = betUtilService.getBetInfos(bet, sysBet, gameId);
-        BigDecimal payout = (BigDecimal) map.get("tableChip");
-        if (payout.compareTo(BigDecimal.ZERO) != 0) {
-            return payout.add((BigDecimal) map.get("tableInsurance"));
-        } else {
-            payout = (BigDecimal) map.get("tableCash");
-        }
+        BigDecimal payout = (BigDecimal) map.get("payout");
         return payout;
     }
 

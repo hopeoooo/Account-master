@@ -112,7 +112,8 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
                 .replaceAll("9","大")
                 .replaceAll("6","小")
                 .replaceAll("0","闲保险")
-                .replaceAll("3","庄保险");
+                .replaceAll("3","庄保险")
+                .replaceAll("2","和保险");
     }
 
     private String compare(Object a,Object b){

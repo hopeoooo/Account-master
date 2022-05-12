@@ -36,11 +36,13 @@ public class BetUtilService {
 
     /**
      * 计算百家乐 注单明细
-     * 1：闲 4：庄 7：和 || 5：闲对 8：庄对 || 9：大 6：小 || 0: 闲保险 3:庄保险
+     * 1：闲 4：庄 7：和 || 5：闲对 8：庄对 || 9：大 6：小 || 0: 闲保险 3:庄保险 2:和保险
      */
     private Map getBaccaratBetInfos(JSONObject bet, SysBet sysBet) {
         Map map = new HashMap();
         List<SysBetInfo> list = new ArrayList<>();//注单明细
+        BigDecimal payout = BigDecimal.ZERO;//赔码数
+
         BigDecimal membersChip = BigDecimal.ZERO;//会员总筹码输赢
 
         BigDecimal water = BigDecimal.ZERO;//会员洗码量
@@ -52,7 +54,7 @@ public class BetUtilService {
 
         Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3"};
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3", "2"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
                 sysOddsConfigure.getBaccaratTieWin(),
@@ -72,6 +74,7 @@ public class BetUtilService {
                 if ("1".equals(option)) {//闲
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                        payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -84,6 +87,7 @@ public class BetUtilService {
                     if (gameResult.contains("4")) {
                         sysBetInfo.setPump(amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100)));
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])).subtract(sysBetInfo.getPump()));
+                        payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -100,6 +104,7 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("4")) {
                         sysBetInfo.setWinLose(amount);
+                        payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
                     } else {
@@ -114,8 +119,22 @@ public class BetUtilService {
                     }
                     if (gameResult.contains("1")) {
                         sysBetInfo.setWinLose(amount);
+                        payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
                         sysBetInfo.setWinLose(BigDecimal.ZERO);
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
+                    tableInsurance = tableInsurance.subtract(sysBetInfo.getWinLose());
+                } else if ("2".equals(option)) { //和保险
+                    if (type == 0 || type == 1) {
+                        sysBetInfo.setType(4);
+                    } else if (type == 2 || type == 3) {
+                        sysBetInfo.setType(5);
+                    }
+                    if (gameResult.contains("7")) {
+                        sysBetInfo.setWinLose(amount);
+                        payout.add(sysBetInfo.getWinLose());
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     }
@@ -123,6 +142,7 @@ public class BetUtilService {
                 } else {
                     if (gameResult.contains(option)) {
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                        payout.add(sysBetInfo.getWinLose());
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
@@ -151,6 +171,7 @@ public class BetUtilService {
         map.put("tableInsurance", tableInsurance);
         map.put("water", water);
         map.put("waterAmount", waterAmount);
+        map.put("payout", payout);
         return map;
     }
 
@@ -160,6 +181,7 @@ public class BetUtilService {
     private Map getDragonTigerBetInfos(JSONObject bet, SysBet sysBet) {
         Map map = new HashMap();
         List<SysBetInfo> list = new ArrayList<>();//注单明细
+        BigDecimal payout = BigDecimal.ZERO;//赔码数
         BigDecimal membersChip = BigDecimal.ZERO;//会员总筹码输赢
 
         BigDecimal water = BigDecimal.ZERO;//会员洗码量
@@ -183,6 +205,7 @@ public class BetUtilService {
                 sysBetInfo.setBetMoney(amount);
                 if (gameResult.contains(option)) {
                     sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
+                    payout.add(sysBetInfo.getWinLose());
                 } else {
                     sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     water = water.add(amount);
@@ -209,6 +232,7 @@ public class BetUtilService {
         map.put("tableInsurance", tableInsurance);
         map.put("water", water);
         map.put("waterAmount", waterAmount);
+        map.put("payout", payout);
         return map;
     }
 
@@ -218,6 +242,7 @@ public class BetUtilService {
     private Map getOtherBetInfos(JSONObject bet, SysBet sysBet) {
         Map map = new HashMap();
         List<SysBetInfo> list = new ArrayList<>();//注单明细
+        BigDecimal payout = BigDecimal.ZERO;//赔码数
         BigDecimal membersChip = BigDecimal.ZERO;//会员总筹码输赢
 
         BigDecimal tableChip = BigDecimal.ZERO;//桌台筹码输赢
@@ -235,6 +260,7 @@ public class BetUtilService {
             sysBetInfo.setBetOption("-");
             sysBetInfo.setBetMoney(amount);
             sysBetInfo.setWinLose(amount);
+            payout.add(amount);
         }
         list.add(sysBetInfo);
         if (isChip) {
@@ -250,6 +276,7 @@ public class BetUtilService {
         map.put("tableInsurance", BigDecimal.ZERO);
         map.put("water", BigDecimal.ZERO);
         map.put("waterAmount", BigDecimal.ZERO);
+        map.put("payout", payout);
         return map;
     }
 

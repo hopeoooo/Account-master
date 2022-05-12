@@ -139,12 +139,6 @@ public class BetBaccaratController {
                 return AjaxResult.error("卡号："+card+" 不存在");
             }
             BigDecimal payout = betService.getPayOut(bet,gameResult,sysTableManagement.getGameId());//派彩
-            if (0 == bet.getInteger("type") || 1==bet.getInteger("type")) {
-                sysMembers.setChip(sysMembers.getChip().add(payout));
-            }else {
-                sysMembers.setChip(sysMembers.getChipTh().add(payout));
-            }
-            bet.put("chip", sysMembers.getChip());
             bet.put("payout", payout);
         }
         return AjaxResult.success(jsonObject);
