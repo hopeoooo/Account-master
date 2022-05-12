@@ -599,15 +599,15 @@
         IFNULL(-SUM(case when type in (5) then b.win_lose else 0 end), 0) as insuranceWinLoseTh
         FROM
             sys_table_management t
-        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id /*and  b.type !=2*/
+        LEFT JOIN sys_bet_info b ON b.table_id = t.table_id
+        <if test="startTime != null and startTime != ''">
+            AND b.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND b.create_time <![CDATA[<=]]> #{endTime}
+        </if>
         <where>
             AND  t.is_delete=0
-            <if test="startTime != null and startTime != ''">
-                AND b.create_time <![CDATA[>=]]> #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND b.create_time <![CDATA[<=]]> #{endTime}
-            </if>
         </where>
         GROUP BY
             t.table_id
