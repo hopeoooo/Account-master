@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,11 @@ public class BetUtilService {
                     }
                 } else if ("4".equals(option)) {//庄
                     if (gameResult.contains("4")) {
-                        sysBetInfo.setPump(amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100)));
+                        BigDecimal pump = amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100));
+                        if(sysOddsConfigure.getBankerWinPumpRounding()==1){//取整
+                            pump = pump.setScale( 0, RoundingMode.HALF_UP);
+                        }
+                        sysBetInfo.setPump(pump);
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])).subtract(sysBetInfo.getPump()));
                         payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("7")) {
