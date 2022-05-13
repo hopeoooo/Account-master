@@ -603,13 +603,13 @@
         t.table_id                                                           as tableId,
         IFNULL(-SUM(CASE WHEN b.type = 0 THEN b.win_lose else 0 end), 0)     as chipWinLose,
         IFNULL(-SUM(CASE WHEN b.type = 1 THEN b.win_lose else 0 end), 0)     as cashWinLose,
-        IFNULL(-SUM(case when type in (0, 1) then b.win_lose else 0 end), 0) as winLose,
+        IFNULL(-SUM(case when type in (0, 1,4) then b.win_lose else 0 end), 0) as winLose,
         IFNULL(SUM(case when type in (0, 1) then b.water else 0 end), 0)     as water,
         IFNULL(-SUM(case when type in (4) then b.win_lose else 0 end), 0) as insuranceWinLose,
 
         IFNULL(-SUM(CASE WHEN b.type = 2 THEN b.win_lose else 0 end), 0)     as chipWinLoseTh,
         IFNULL(-SUM(CASE WHEN b.type = 3 THEN b.win_lose else 0 end), 0)     as cashWinLoseTh,
-        IFNULL(-SUM(case when type in (2, 3) then b.win_lose else 0 end), 0) as winLoseTh,
+        IFNULL(-SUM(case when type in (2, 3,5) then b.win_lose else 0 end), 0) as winLoseTh,
         IFNULL(SUM(case when type in (2, 3) then b.water else 0 end), 0)     as waterTh,
         IFNULL(-SUM(case when type in (5) then b.win_lose else 0 end), 0) as insuranceWinLoseTh
         FROM
@@ -634,14 +634,14 @@
         SELECT
         IFNULL(-SUM(CASE WHEN b.type = 0 THEN b.win_lose else 0 end), 0)     as chipWinLose,
         IFNULL(-SUM(CASE WHEN b.type = 1 THEN b.win_lose else 0 end), 0)     as cashWinLose,
-        IFNULL(-SUM(case when type in (0, 1) then b.win_lose else 0 end), 0) as winLose,
+        IFNULL(-SUM(case when type in (0, 1,4) then b.win_lose else 0 end), 0) as winLose,
         IFNULL(SUM(case when type in (0, 1) then b.water else 0 end), 0)     as water,
 
         IFNULL(-SUM(case when type in (4) then b.win_lose else 0 end), 0) as insuranceWinLose,
 
         IFNULL(-SUM(CASE WHEN b.type = 2 THEN b.win_lose else 0 end), 0)     as chipWinLoseTh,
         IFNULL(-SUM(CASE WHEN b.type = 3 THEN b.win_lose else 0 end), 0)     as cashWinLoseTh,
-        IFNULL(-SUM(case when type in (2, 3) then b.win_lose else 0 end), 0) as winLoseTh,
+        IFNULL(-SUM(case when type in (2, 3,5) then b.win_lose else 0 end), 0) as winLoseTh,
         IFNULL(SUM(case when type in (2, 3) then b.water else 0 end), 0)     as waterTh,
 
         IFNULL(-SUM(case when type in (5) then b.win_lose else 0 end), 0) as insuranceWinLoseTh
