@@ -64,7 +64,7 @@
             AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
         </if>
     </where>
-        GROUP BY r.table_id
+        GROUP BY  date_format( r.create_time ,'%Y-%m-%d'),r.table_id
         ORDER BY r.create_time DESC
     </select>
 </mapper>
