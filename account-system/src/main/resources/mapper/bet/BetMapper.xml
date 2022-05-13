@@ -361,7 +361,7 @@
             ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)                   as water,
             ifnull(sum(case when type in (0, 1,4) then b.water_amount else 0 end), 0)            as waterAmount,
             ifnull(sum(case when type in (0, 1,4) then b.tie else 0 end), 0)                     as tie,
-            ifnull(sum(case when type in (0, 1,4) then b.pump when 1 then b.pump else 0 end), 0) as pump,
+            ifnull(sum(case when type in (0, 1,4)then b.pump else 0 end), 0)  as pump,
             ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)                as winLose,
 
             ifnull(sum(case when type in (2, 3,5) then b.bet_money else 0 end), 0)               as betMoneyTh,
