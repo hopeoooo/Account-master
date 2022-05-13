@@ -61,7 +61,7 @@
             AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[<=]]> #{startTime}
+            AND date_format( r.create_time ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
         </if>
     </where>
         GROUP BY r.table_id
