@@ -41,8 +41,13 @@ public class IpUtils {
         if (request == null) {
             return "unknown";
         }
-        String ip = request.getHeader("x-forwarded-for");
-        return intToIp(ip.substring(0,ip.lastIndexOf(",")));
+        String ip = request.getHeader("Client-Local-IP");
+        if (ip == null || ip.length() == 0) {
+            return "unknown";
+        } else {
+            ip = ip.substring(0, ip.lastIndexOf(","));
+        }
+        return intToIp(ip);
     }
 
     public static boolean internalIp(String ip) {
