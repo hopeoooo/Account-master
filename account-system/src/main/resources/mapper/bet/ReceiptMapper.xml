@@ -51,6 +51,8 @@
         r.water_th AS waterTh,
         r.win_th AS winTh,
         r.insurance_win_th AS insuranceWinTh
+        FROM
+        sys_receipt r
     <where>
         <if test="tableId != null">
             AND r.table_id = #{tableId}
