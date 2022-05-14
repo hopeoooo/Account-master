@@ -6,6 +6,7 @@ import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
+import com.account.system.domain.vo.DailyReportVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -49,7 +50,7 @@ public interface BetService {
      *
      * @return
      */
-    List<Map> selectDailyReportList(ReportSearch reportSearch);
+    List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch);
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 

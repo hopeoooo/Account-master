@@ -1,5 +1,6 @@
 package com.account.system.service.impl;
 
+import com.account.common.constant.CommonConst;
 import com.account.common.enums.ChipChangeEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
@@ -9,6 +10,7 @@ import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
+import com.account.system.domain.vo.DailyReportVo;
 import com.account.system.mapper.*;
 import com.account.system.service.BetService;
 import com.account.system.service.SysBetUpdateRecordService;
@@ -24,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author hope
@@ -532,8 +535,54 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Map> selectDailyReportList(ReportSearch reportSearch) {
-        return betMapper.selectDailyReportList(reportSearch);
+    public List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch) {
+
+        List<DailyReportVo> maps = betMapper.selectDailyReportList(reportSearch);
+        List<DailyReportVo> mapsTh = betMapper.selectDailyReportThList(reportSearch);
+
+        List<DailyReportVo> list = new ArrayList<>();
+        list.addAll(maps);
+        list.addAll(mapsTh);
+        Map<String,List<DailyReportVo>> collect = list.stream().collect(Collectors.groupingBy(item -> item.getCard()+"@"+item.getDate()));
+
+
+        List<DailyReportVo> dailyReportList = new ArrayList<>();
+        for (String s : collect.keySet()) {
+            DailyReportVo dailyReport = new DailyReportVo();
+            List<DailyReportVo> visitss = collect.get(s);
+
+            BigDecimal winLose = visitss.stream().map(DailyReportVo::getWinLose).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal winLoseTh = visitss.stream().map(DailyReportVo::getWinLoseTh).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal sumWinLose = visitss.stream().map(DailyReportVo::getSumWinLose).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal sumWinLoseTh = visitss.stream().map(DailyReportVo::getSumWinLoseTh).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal water = visitss.stream().map(DailyReportVo::getWater).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal waterTh = visitss.stream().map(DailyReportVo::getWaterTh).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal sumWater = visitss.stream().map(DailyReportVo::getSumWater).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal sumWaterTh = visitss.stream().map(DailyReportVo::getSumWaterTh).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            DailyReportVo dailyReportInfo = visitss.get(CommonConst.NUMBER_0);
+
+            dailyReport.setWinLose(winLose);
+            dailyReport.setWinLoseTh(winLoseTh);
+            dailyReport.setSumWinLose(sumWinLose);
+            dailyReport.setSumWinLoseTh(sumWinLoseTh);
+
+
+            dailyReport.setWater(water);
+            dailyReport.setWaterTh(waterTh);
+            dailyReport.setSumWater(sumWater);
+            dailyReport.setSumWaterTh(sumWaterTh);
+
+            dailyReport.setCard(dailyReportInfo.getCard());
+            dailyReport.setDate(dailyReportInfo.getDate());
+            dailyReport.setName(dailyReportInfo.getName());
+
+            dailyReportList.add(dailyReport);
+        }
+        return dailyReportList;
     }
 
     @Override

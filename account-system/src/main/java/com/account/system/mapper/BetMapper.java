@@ -6,6 +6,7 @@ import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.search.WinLoseReportSearch;
 import com.account.system.domain.vo.BetInfoOptionVo;
 import com.account.system.domain.vo.BetInfoVo;
+import com.account.system.domain.vo.DailyReportVo;
 import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;
@@ -77,7 +78,8 @@ public interface BetMapper {
 
     void saveReceipt(SysReceipt sysReceipt);
 
-    List<Map> selectDailyReportList(ReportSearch reportSearch);
+    List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch);
+    List<DailyReportVo> selectDailyReportThList(ReportSearch reportSearch);
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 

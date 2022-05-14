@@ -5,6 +5,7 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.search.ReportSearch;
+import com.account.system.domain.vo.DailyReportVo;
 import com.account.system.service.BetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +38,7 @@ public class DailyReportController extends BaseController {
             return new TableDataInfo();
         }
         startPage();
-        List<Map> list = betService.selectDailyReportList(reportSearch);
+        List<DailyReportVo> list = betService.selectDailyReportList(reportSearch);
         return getDataTable(list);
     }
 
