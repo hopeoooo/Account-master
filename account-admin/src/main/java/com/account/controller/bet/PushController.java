@@ -35,7 +35,7 @@ public class PushController {
     @ApiOperation(value = "注单保存")
     public AjaxResult save(@RequestBody JSONObject jsonObject) {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,null);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");

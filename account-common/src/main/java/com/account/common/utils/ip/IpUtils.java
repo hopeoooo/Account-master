@@ -42,7 +42,7 @@ public class IpUtils {
             return "unknown";
         }
         String ip = request.getHeader("x-forwarded-for");
-        return intToIp(ip);
+        return intToIp(ip.substring(0,ip.lastIndexOf(",")));
     }
 
     public static boolean internalIp(String ip) {

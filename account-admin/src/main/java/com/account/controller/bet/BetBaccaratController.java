@@ -78,7 +78,7 @@ public class BetBaccaratController {
     @ApiOperation(value = "赛果列表")
     public AjaxResult game() {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -92,7 +92,7 @@ public class BetBaccaratController {
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -121,7 +121,7 @@ public class BetBaccaratController {
             return AjaxResult.error("赛果格式错误");
         }
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -154,7 +154,7 @@ public class BetBaccaratController {
     public AjaxResult input(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -178,7 +178,7 @@ public class BetBaccaratController {
     @PostMapping("/reckon")
     @ApiOperation(value = "点码||收码 计算差距")
     public AjaxResult reckon(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -196,7 +196,7 @@ public class BetBaccaratController {
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");

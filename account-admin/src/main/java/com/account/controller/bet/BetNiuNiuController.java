@@ -51,7 +51,7 @@ public class BetNiuNiuController {
     @ApiOperation(value = "桌台信息")
     public AjaxResult info() {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,3l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误 ip:" + ip);
@@ -82,7 +82,7 @@ public class BetNiuNiuController {
     public AjaxResult open(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,3l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -115,7 +115,7 @@ public class BetNiuNiuController {
     public AjaxResult input(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,3l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -135,7 +135,7 @@ public class BetNiuNiuController {
     @PostMapping("/reckon")
     @ApiOperation(value = "点码||收码 计算差距")
     public AjaxResult reckon(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,3l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -153,7 +153,7 @@ public class BetNiuNiuController {
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,3l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");

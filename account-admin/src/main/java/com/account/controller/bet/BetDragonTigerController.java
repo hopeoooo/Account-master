@@ -52,7 +52,7 @@ public class BetDragonTigerController {
     @ApiOperation(value = "桌台信息")
     public AjaxResult info() {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误 ip:" + ip);
@@ -78,7 +78,7 @@ public class BetDragonTigerController {
     @ApiOperation(value = "赛果列表")
     public AjaxResult game() {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -92,7 +92,7 @@ public class BetDragonTigerController {
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -121,7 +121,7 @@ public class BetDragonTigerController {
             return AjaxResult.error("赛果格式错误");
         }
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -154,7 +154,7 @@ public class BetDragonTigerController {
     public AjaxResult input(String json) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -178,7 +178,7 @@ public class BetDragonTigerController {
     @PostMapping("/reckon")
     @ApiOperation(value = "点码||收码 计算差距")
     public AjaxResult reckon(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
@@ -196,7 +196,7 @@ public class BetDragonTigerController {
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
