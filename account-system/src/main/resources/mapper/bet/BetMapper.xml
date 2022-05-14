@@ -276,9 +276,9 @@
         m.`name` as name ,
         date_format(b.create_time,'%Y-%m-%d') as date ,
         SUM( b.win_lose ) as winLose,
-        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLose,
+        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in   (0,1,4)) as sumWinLose,
         SUM( b.water ) as water,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWater
+        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in  (0,1,4)) as sumWater
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
@@ -304,9 +304,9 @@
         m.`name` as name ,
         date_format(b.create_time,'%Y-%m-%d') as date ,
         SUM( b.win_lose ) as winLoseTh,
-        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWinLoseTh,
+        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in  (2,3,5)) as sumWinLoseTh,
         SUM( b.water ) as waterTh,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card) as sumWaterTh
+        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card and a.type in  (2,3,5)) as sumWaterTh
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
