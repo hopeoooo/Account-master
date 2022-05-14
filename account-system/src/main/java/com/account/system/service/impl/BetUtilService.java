@@ -2,7 +2,9 @@ package com.account.system.service.impl;
 
 import com.account.system.domain.SysBet;
 import com.account.system.domain.SysBetInfo;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysOddsConfigure;
+import com.account.system.mapper.SysMembersMapper;
 import com.account.system.mapper.SysOddsConfigureMapper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,6 +27,9 @@ public class BetUtilService {
 
     @Autowired
     SysOddsConfigureMapper oddsConfigureMapper;
+
+    @Autowired
+    SysMembersMapper sysMembersMapper;
 
     public Map getBetInfos(JSONObject bet, SysBet sysBet, Long gameId) {
         if (gameId == 1) {
@@ -55,6 +60,7 @@ public class BetUtilService {
 
         Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
+        SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
         String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3", "2"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
@@ -82,7 +88,7 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysMembers, type));
                     }
                 } else if ("4".equals(option)) {//庄
                     if (gameResult.contains("4")) {
@@ -99,7 +105,7 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysMembers, type));
                     }
                 } else if ("0".equals(option)) { //闲保险
                     if (type == 0 || type == 1) {
@@ -152,7 +158,7 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                         water = water.add(amount);
                         sysBetInfo.setWater(amount);
-                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysOddsConfigure, type));
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysMembers, type));
                     }
                 }
                 list.add(sysBetInfo);
@@ -167,7 +173,7 @@ public class BetUtilService {
             }
         }
 
-        waterAmount = getBaccaratWaterAmount(water, sysOddsConfigure, type);
+        waterAmount = getBaccaratWaterAmount(water, sysMembers, type);
 
         map.put("list", list);
         map.put("membersChip", membersChip);
@@ -198,6 +204,7 @@ public class BetUtilService {
 
         Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
+        SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
         String[] betOption = {"龙", "虎", "和"};
         String[] odds = {sysOddsConfigure.getDragonWin(), sysOddsConfigure.getTigerWin(), sysOddsConfigure.getTieWin(),};
         String gameResult = sysBet.getGameResult();
@@ -215,7 +222,7 @@ public class BetUtilService {
                     sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     water = water.add(amount);
                     sysBetInfo.setWater(amount);
-                    sysBetInfo.setWaterAmount(getDragonTigerWaterAmount(amount, sysOddsConfigure, type));
+                    sysBetInfo.setWaterAmount(getDragonTigerWaterAmount(amount, sysMembers, type));
                     if ("和".contains(gameResult)) sysBetInfo.setTie(amount);
                 }
                 list.add(sysBetInfo);
@@ -228,7 +235,7 @@ public class BetUtilService {
             }
         }
 
-        waterAmount = getDragonTigerWaterAmount(water, sysOddsConfigure, type);
+        waterAmount = getDragonTigerWaterAmount(water, sysMembers, type);
 
         map.put("list", list);
         map.put("membersChip", membersChip);
@@ -285,30 +292,30 @@ public class BetUtilService {
         return map;
     }
 
-    private BigDecimal getBaccaratWaterAmount(BigDecimal water, SysOddsConfigure sysOddsConfigure, Integer type) {
+    private BigDecimal getBaccaratWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
         if (type == 0) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCash()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioCash()).divide(new BigDecimal(100));
         } else if (type == 2) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioChipTh()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioChipTh()).divide(new BigDecimal(100));
         } else if (type == 3) {
-            waterAmount = water.multiply(sysOddsConfigure.getBaccaratRollingRatioCashTh()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioCashTh()).divide(new BigDecimal(100));
         }
         return waterAmount;
     }
 
-    private BigDecimal getDragonTigerWaterAmount(BigDecimal water, SysOddsConfigure sysOddsConfigure, Integer type) {
+    private BigDecimal getDragonTigerWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
         if (type == 0) {
-            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioChip()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getDragonTigerRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {
-            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioCash()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getDragonTigerRatioCash()).divide(new BigDecimal(100));
         } else if (type == 2) {
-            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioChipTh()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getDragonTigerRatioChipTh()).divide(new BigDecimal(100));
         } else if (type == 3) {
-            waterAmount = water.multiply(sysOddsConfigure.getDragonTigerRatioCashTh()).divide(new BigDecimal(100));
+            waterAmount = water.multiply(sysMembers.getDragonTigerRatioCashTh()).divide(new BigDecimal(100));
         }
         return waterAmount;
     }

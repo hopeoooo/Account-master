@@ -206,10 +206,17 @@
     <update id="resetTableMoney">
         update sys_table_management
         set chip_add= 0,
+            cash_add = 0,
             insurance_add= 0,
             chip=0,
             cash=0,
             insurance=0,
+            chip_add_th= 0,
+            cash_add_th = 0,
+            insurance_add_th= 0,
+            chip_th=0,
+            cash_th=0,
+            insurance_th=0,
             game_num=0,
             boot_num = 1,
             version = version + 1
