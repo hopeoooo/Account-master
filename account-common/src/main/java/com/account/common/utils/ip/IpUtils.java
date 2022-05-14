@@ -34,7 +34,7 @@ public class IpUtils {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : EscapeUtil.clean(ip);
+        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : intToIp(EscapeUtil.clean(ip));
     }
 
     public static boolean internalIp(String ip) {
@@ -164,7 +164,8 @@ public class IpUtils {
         return "未知";
     }
 
-    public static String intToIp(int ip) {
+    public static String intToIp(String ip) {
+        Long ipInt = Long.valueOf(ip);
         StringBuilder sb = new StringBuilder();
         int num = 0;
         boolean needPoint = false; // 是否需要加入'.'
@@ -174,7 +175,7 @@ public class IpUtils {
             }
             needPoint = true;
             int offset = 8 * (3 - i);
-            num = (ip >> offset) & 0xff;
+            num = (ipInt.intValue() >> offset) & 0xff;
             sb.append(num);
         }
         return sb.toString();
