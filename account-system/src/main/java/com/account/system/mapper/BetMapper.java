@@ -34,19 +34,19 @@ public interface BetMapper {
     @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(0,1,4)")
     BigDecimal getWater(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version} and type in(0,1,4)")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(0,1,4)")
     BigDecimal getWinLose(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version} and type in(0,1,4)")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(0,1,4)")
     BigDecimal getInsuranceWin(SysTableManagement sysTableManagement);
 
     @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(2,3,5)")
     BigDecimal getWaterTh(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type != 2 and version = #{version} and type in(2,3,5)")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(2,3,5)")
     BigDecimal getWinLoseTh(SysTableManagement sysTableManagement);
 
-    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and type = 2 and version = #{version} and type in(2,3,5)")
+    @Select("select 0-SUM(win_lose) from sys_bet_info where table_id = #{tableId} and boot_num = #{bootNum} and version = #{version} and type in(2,3,5)")
     BigDecimal getInsuranceWinTh(SysTableManagement sysTableManagement);
 
     @Select("select SUM(water) from sys_bet_info where table_id = #{tableId} and version = #{version} and type in(0,1,4) ")
