@@ -295,7 +295,7 @@
             </if>
         </where>
         GROUP BY m.card,date_format(b.create_time,'%Y-%m-%d')
-        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc;
+        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc
     </select>
 
     <select id="selectDailyReportThList"  resultType="com.account.system.domain.vo.DailyReportVo">
@@ -323,7 +323,7 @@
             </if>
         </where>
         GROUP BY m.card,date_format(b.create_time,'%Y-%m-%d')
-        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc;
+        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc
     </select>
 
     <select id="selectDailyReportTotal"  resultType="java.util.Map">
