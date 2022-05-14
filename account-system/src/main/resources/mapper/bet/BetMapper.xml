@@ -269,49 +269,38 @@
                 #{winTh}, #{insuranceWinTh})
     </insert>
 
-
-    <select id="selectDailyReportList"  resultType="com.account.system.domain.vo.DailyReportVo">
+    <select id="selectDailyReportList" resultType="java.util.Map">
         SELECT
-        m.card as card,
-        m.`name` as name ,
-        date_format(b.create_time,'%Y-%m-%d') as date ,
-        SUM( b.win_lose ) as winLose,
-        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in   (0,1,4)) as sumWinLose,
-        SUM( b.water ) as water,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in  (0,1,4)) as sumWater
+        m.card                                                                                                    as card,
+        m.`name`                                                                                                  as name,
+        date_format(b.create_time, '%Y-%m-%d')                                                                    as date,
+        ifnull(SUM(case when type in (0,1,4) then b.win_lose else 0 end), 0) as winLose,
+        (select ifnull(SUM(case when type in (0,1,4) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLose,
+        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0)          as water,
+        (select ifnull(SUM(case when type in(0,1,4) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWater,
+
+
+        ifnull(SUM(case when type in (2,3,5) then b.win_lose else 0 end),
+        0)                                                                                                 as winLoseTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLoseTh,
+        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0)          as waterTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWaterTh
         FROM
         sys_bet_info b
         LEFT JOIN sys_members m ON m.card = b.card
         <where>
-            and b.type in  (0,1,4)
-            <if test="card != null and card != ''">
-                AND b.card = #{card}
-            </if>
-            <if test="startTime != null and startTime != ''">
-                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[>=]]> #{startTime}
-            </if>
-            <if test="endTime != null and endTime != ''">
-                AND date_format(b.create_time,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
-            </if>
-        </where>
-        GROUP BY m.card,date_format(b.create_time,'%Y-%m-%d')
-        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc
-    </select>
-
-    <select id="selectDailyReportThList"  resultType="com.account.system.domain.vo.DailyReportVo">
-        SELECT
-        m.card as card,
-        m.`name` as name ,
-        date_format(b.create_time,'%Y-%m-%d') as date ,
-        SUM( b.win_lose ) as winLoseTh,
-        (select SUM(a.win_lose) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card  and a.type in  (2,3,5)) as sumWinLoseTh,
-        SUM( b.water ) as waterTh,
-        (select SUM(a.water) from sys_bet_info a WHERE date_format(a.create_time,'%Y-%m-%d') <![CDATA[<=]]>	date_format(b.create_time,'%Y-%m-%d') and a.card=b.card and a.type in  (2,3,5)) as sumWaterTh
-        FROM
-        sys_bet_info b
-        LEFT JOIN sys_members m ON m.card = b.card
-        <where>
-            and b.type in  (2,3,5)
             <if test="card != null and card != ''">
                 AND b.card = #{card}
             </if>

@@ -38,7 +38,7 @@ public class DailyReportController extends BaseController {
             return new TableDataInfo();
         }
         startPage();
-        List<DailyReportVo> list = betService.selectDailyReportList(reportSearch);
+        List<Map> list = betService.selectDailyReportList(reportSearch);
         return getDataTable(list);
     }
 

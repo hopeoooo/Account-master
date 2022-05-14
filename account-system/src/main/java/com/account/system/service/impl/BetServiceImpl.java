@@ -17,6 +17,7 @@ import com.account.system.service.SysBetUpdateRecordService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.bcel.internal.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -535,8 +536,9 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch) {
-
+    public List<Map> selectDailyReportList(ReportSearch reportSearch) {
+        return  betMapper.selectDailyReportList(reportSearch);
+/*
         List<DailyReportVo> maps = betMapper.selectDailyReportList(reportSearch);
         List<DailyReportVo> mapsTh = betMapper.selectDailyReportThList(reportSearch);
 
@@ -582,7 +584,7 @@ public class BetServiceImpl implements BetService {
 
             dailyReportList.add(dailyReport);
         }
-        return dailyReportList;
+        return dailyReportList;*/
     }
 
     @Override

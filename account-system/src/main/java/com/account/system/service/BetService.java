@@ -50,7 +50,7 @@ public interface BetService {
      *
      * @return
      */
-    List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch);
+    List<Map> selectDailyReportList(ReportSearch reportSearch);
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 

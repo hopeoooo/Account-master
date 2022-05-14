@@ -78,8 +78,7 @@ public interface BetMapper {
 
     void saveReceipt(SysReceipt sysReceipt);
 
-    List<DailyReportVo> selectDailyReportList(ReportSearch reportSearch);
-    List<DailyReportVo> selectDailyReportThList(ReportSearch reportSearch);
+    List<Map> selectDailyReportList(ReportSearch reportSearch);
 
     Map selectDailyReportTotal(ReportSearch reportSearch);
 
