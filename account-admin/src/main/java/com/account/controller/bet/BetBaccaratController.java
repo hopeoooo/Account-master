@@ -52,7 +52,7 @@ public class BetBaccaratController {
     @ApiOperation(value = "桌台信息")
     public AjaxResult info() {
         //根据ip获取台桌信息
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误 ip:"+ip);
