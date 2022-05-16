@@ -33,6 +33,16 @@ public class PageDomain
         return StringUtils.toUnderScoreCase(orderByColumn) + " " + isAsc;
     }
 
+
+    public String getOrderByNew()
+    {
+        if (StringUtils.isEmpty(orderByColumn))
+        {
+            return "";
+        }
+        return orderByColumn + " " + isAsc;
+    }
+
     public Integer getPageNum()
     {
         return pageNum;

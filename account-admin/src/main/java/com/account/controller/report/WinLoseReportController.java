@@ -31,7 +31,7 @@ public class WinLoseReportController extends BaseController {
     @ApiOperation(value = "查询输赢报表列表")
     public TableDataInfo list(WinLoseReportSearch reportSearch ){
         startPage();
-        startOrderBy();
+        startOrderByNew();
         List<Map> list = betService.selectWinLoseList(reportSearch);
         return getDataTable(list);
     }
