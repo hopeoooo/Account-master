@@ -589,7 +589,7 @@
             AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
         </if>
         <if test="endTime != null and endTime != ''">
-            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{endTime}
+            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
         </if>
         <where>
             AND  t.is_delete=0
