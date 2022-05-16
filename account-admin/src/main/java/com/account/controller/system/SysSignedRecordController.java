@@ -43,7 +43,7 @@ public class SysSignedRecordController extends BaseController {
     })
     public TableDataInfo list(String card, Integer isAdmin) {
         startPage();
-       // startOrderBy();
+        startOrderBy();
         List<SysSignedRecordVo> list = signedRecordService.selectSignedRecordList(card, isAdmin);
         return getDataTable(list);
     }

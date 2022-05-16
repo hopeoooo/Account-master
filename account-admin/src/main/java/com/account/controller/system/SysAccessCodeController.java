@@ -38,7 +38,7 @@ public class SysAccessCodeController extends BaseController {
     @ApiOperation(value = "查询存取码列表")
     public TableDataInfo list(SysAccessCodeSearch accessCodeSearch){
         startPage();
-       // startOrderBy();
+        startOrderBy();
         List<SysAccessCodeVo> sysAccessCodeVos = accessCodeService.selectAccessCodeList(accessCodeSearch);
         return getDataTable(sysAccessCodeVos);
     }

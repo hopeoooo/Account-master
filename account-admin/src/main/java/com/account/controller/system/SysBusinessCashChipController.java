@@ -47,7 +47,7 @@ public class SysBusinessCashChipController extends BaseController {
     })
     public TableDataInfo list(String card, Integer isAdmin) {
         startPage();
-       // startOrderBy();
+        startOrderBy();
         List<Map>list = membersService.selectBusinessCashChipList(card, isAdmin);
         return getDataTable(list);
     }
