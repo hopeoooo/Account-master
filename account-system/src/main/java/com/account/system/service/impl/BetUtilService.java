@@ -97,7 +97,7 @@ public class BetUtilService {
                             pump = amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100));
                         }
                         if(sysOddsConfigure.getBankerWinPumpRounding()==1){//取整
-                            pump = pump.setScale( 0, RoundingMode.HALF_UP);
+                            pump = pump.setScale( 0, RoundingMode.UP);
                         }
                         sysBetInfo.setPump(pump);
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])).subtract(sysBetInfo.getPump()));
