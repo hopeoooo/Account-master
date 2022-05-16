@@ -92,7 +92,10 @@ public class BetUtilService {
                     }
                 } else if ("4".equals(option)) {//庄
                     if (gameResult.contains("4")) {
-                        BigDecimal pump = amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100));
+                        BigDecimal pump = BigDecimal.ZERO;
+                        if(sysMembers.getIsPump()==1){
+                            pump = amount.multiply(sysOddsConfigure.getBaccaratPump()).divide(new BigDecimal(100));
+                        }
                         if(sysOddsConfigure.getBankerWinPumpRounding()==1){//取整
                             pump = pump.setScale( 0, RoundingMode.HALF_UP);
                         }
@@ -294,9 +297,6 @@ public class BetUtilService {
 
     private BigDecimal getBaccaratWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
-        if(sysMembers.getIsPump()==0){
-            return waterAmount;
-        }
         if (type == 0) {
             waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {
@@ -311,9 +311,6 @@ public class BetUtilService {
 
     private BigDecimal getDragonTigerWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
-        if(sysMembers.getIsPump()==0){
-            return waterAmount;
-        }
         if (type == 0) {
             waterAmount = water.multiply(sysMembers.getDragonTigerRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {
