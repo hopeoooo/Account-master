@@ -306,6 +306,7 @@
                create_time      createTime,
                remark,
                chip,
+               is_pump isPump,
                is_cash       as isCash,
                is_out        as isOut,
                is_settlement as isSettlement,

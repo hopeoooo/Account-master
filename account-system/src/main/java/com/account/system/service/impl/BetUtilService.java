@@ -294,6 +294,9 @@ public class BetUtilService {
 
     private BigDecimal getBaccaratWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
+        if(sysMembers.getIsPump()==0){
+            return waterAmount;
+        }
         if (type == 0) {
             waterAmount = water.multiply(sysMembers.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {
@@ -308,6 +311,9 @@ public class BetUtilService {
 
     private BigDecimal getDragonTigerWaterAmount(BigDecimal water, SysMembers sysMembers, Integer type) {
         BigDecimal waterAmount = BigDecimal.ZERO;
+        if(sysMembers.getIsPump()==0){
+            return waterAmount;
+        }
         if (type == 0) {
             waterAmount = water.multiply(sysMembers.getDragonTigerRatioChip()).divide(new BigDecimal(100));
         } else if (type == 1) {

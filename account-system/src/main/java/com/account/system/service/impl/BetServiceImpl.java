@@ -486,10 +486,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setVersion(sysTableManagement.getVersion());
         sysReceipt.setRemark(reckon.getRemark());
 
-        sysReceipt.setChip(checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase())
-                .subtract(checkDecimal(reckon.getChipAdd()))
-                .add(checkDecimal(reckon.getChipSub()))
-                .subtract(sysTableManagement.getChipAdd()));
+        sysReceipt.setChip(checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase()));
         sysReceipt.setChipAdd((sysTableManagement.getChipAdd()).add(checkDecimal(reckon.getChipAdd()))
                 .subtract(checkDecimal(reckon.getChipSub())));
 
@@ -497,10 +494,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setCashAdd((sysTableManagement.getCashAdd()).add(checkDecimal(reckon.getCashAdd()))
                 .subtract(checkDecimal(reckon.getCashSub())));
 
-        sysReceipt.setInsurance(checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase())
-                .subtract(checkDecimal(reckon.getInsuranceAdd()))
-                .add(checkDecimal(reckon.getInsuranceSub()))
-                .subtract(sysTableManagement.getInsuranceAdd()));
+        sysReceipt.setInsurance(checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase()));
         sysReceipt.setInsuranceAdd((sysTableManagement.getInsuranceAdd()).add(checkDecimal(reckon.getInsuranceAdd()))
                 .subtract(checkDecimal(reckon.getInsuranceSub())));
 
@@ -508,10 +502,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setWin(checkDecimal(betMapper.getReceiptWinLose(sysTableManagement)));
         sysReceipt.setInsuranceWin(checkDecimal(betMapper.getReceiptInsuranceWin(sysTableManagement)));
 
-        sysReceipt.setChipTh(checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh())
-                .subtract(checkDecimal(reckon.getChipAddTh()))
-                .add(checkDecimal(reckon.getChipSubTh()))
-                .subtract(sysTableManagement.getChipAddTh()));
+        sysReceipt.setChipTh(checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh()));
         sysReceipt.setChipAddTh((sysTableManagement.getChipAddTh()).add(checkDecimal(reckon.getChipAddTh()))
                 .subtract(checkDecimal(reckon.getChipSubTh())));
 
@@ -519,10 +510,7 @@ public class BetServiceImpl implements BetService {
         sysReceipt.setCashAddTh((sysTableManagement.getCashAddTh()).add(checkDecimal(reckon.getCashAddTh()))
                 .subtract(checkDecimal(reckon.getCashSubTh())));
 
-        sysReceipt.setInsuranceTh(checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh())
-                .subtract(checkDecimal(reckon.getInsuranceAddTh()))
-                .add(checkDecimal(reckon.getInsuranceSubTh()))
-                .subtract(sysTableManagement.getInsuranceAddTh()));
+        sysReceipt.setInsuranceTh(checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh()));
         sysReceipt.setInsuranceAddTh((sysTableManagement.getInsuranceAddTh()).add(checkDecimal(reckon.getInsuranceAddTh()))
                 .subtract(checkDecimal(reckon.getInsuranceSubTh())));
 
