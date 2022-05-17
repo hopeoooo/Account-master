@@ -22,7 +22,7 @@ public class SysBet extends BaseEntity {
 
     private Long gameNum;
 
-    //0 筹码 1现金
+    // 0筹码美元 1现金美元 2筹码泰铢 3现金泰铢 4 保险美元 5保险泰铢
     private Integer type;
 
     private Long gameId;

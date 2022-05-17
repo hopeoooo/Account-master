@@ -131,11 +131,12 @@ public class BetServiceImpl implements BetService {
                 BigDecimal tableChip = (BigDecimal) map.get("tableChip");
                 BigDecimal tableCash = (BigDecimal) map.get("tableCash");
                 BigDecimal tableInsurance = (BigDecimal) map.get("tableInsurance");
-                if (sysBetInfo.getType() == 0) {
+                //投注类型
+                if (sysBetInfo.getType() == 0 || sysBetInfo.getType() == 2) {
                     tableChip = tableChip.add(sysBetInfo.getWinLose());
-                } else if (sysBetInfo.getType() == 1) {
+                } else if (sysBetInfo.getType() == 1 || sysBetInfo.getType() == 3) {
                     tableCash = tableCash.add(sysBetInfo.getWinLose());
-                } else if (sysBetInfo.getType() == 2) {
+                } else if (sysBetInfo.getType() == 4 || sysBetInfo.getType() == 5) {
                     tableInsurance = tableInsurance.add(sysBetInfo.getWinLose());
                 }
                 if (tableChip.compareTo(BigDecimal.ZERO) != 0
@@ -786,14 +787,14 @@ public class BetServiceImpl implements BetService {
 
         //修改 签单
         if (sysBet.getType() == 0 || sysBet.getType() == 1) {
-            tableChip[0] = tableChip[0].subtract(((BigDecimal) map.get("tableChip")));
-            tableCash[0] = tableCash[0].subtract(((BigDecimal) map.get("tableCash")));
-            tableInsurance[0] = tableInsurance[0].subtract(((BigDecimal) map.get("tableInsurance")));
+            tableChip[0] = tableChip[0].add(((BigDecimal) map.get("tableChip")));
+            tableCash[0] = tableCash[0].add(((BigDecimal) map.get("tableCash")));
+            tableInsurance[0] = tableInsurance[0].add(((BigDecimal) map.get("tableInsurance")));
             water[0] = water[0].subtract(newWater);
         } else {
-            tableChipTh[0] = tableChipTh[0].subtract(((BigDecimal) map.get("tableChip")));
-            tableCashTh[0] = tableCashTh[0].subtract(((BigDecimal) map.get("tableCash")));
-            tableInsuranceTh[0] = tableInsuranceTh[0].subtract(((BigDecimal) map.get("tableInsurance")));
+            tableChipTh[0] = tableChipTh[0].add(((BigDecimal) map.get("tableChip")));
+            tableCashTh[0] = tableCashTh[0].add(((BigDecimal) map.get("tableCash")));
+            tableInsuranceTh[0] = tableInsuranceTh[0].add(((BigDecimal) map.get("tableInsurance")));
             waterTh[0] = waterTh[0].subtract(newWater);
         }
         SysPorint sysPorint = porintMapper.getPorint(sysBet.getTableId(), sysBet.getBootNum(), sysBet.getVersion());

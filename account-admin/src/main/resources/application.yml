@@ -38,6 +38,7 @@ spring:
   profiles:
 #    active: dev
     active: test
+#    active: prod
   # 文件上传
   servlet:
      multipart:
