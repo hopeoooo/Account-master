@@ -118,6 +118,12 @@ public class SysPorint extends BaseEntity implements Cloneable {
     @ApiModelProperty("保险输赢 泰铢")
     private BigDecimal insuranceWinTh;
 
+    @ApiModelProperty("明细")
+    private String info;
+
+    @ApiModelProperty("明细 泰铢")
+    private String infoTh;
+
     public SysPorint() {
 
     }

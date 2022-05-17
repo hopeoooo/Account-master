@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,14 +39,14 @@ public class PorintReportController extends BaseController {
     }
 
     @PreAuthorize("@ss.hasPermi('sys:porint:list')")
-    @GetMapping("/reckon")
+    @PostMapping("/reckon")
     @ApiOperation(value = "点码修改 计算差距")
     public AjaxResult reckon(PorintUpdate porintUpdate){
         return AjaxResult.success(sysPorintService.porintReckon(porintUpdate));
     }
 
     @PreAuthorize("@ss.hasPermi('sys:porint:list')")
-    @GetMapping("/edit")
+    @PostMapping("/edit")
     @ApiOperation(value = "点码修改 确认修改")
     public AjaxResult edit(PorintUpdate porintUpdate){
         sysPorintService.editPorint(porintUpdate);

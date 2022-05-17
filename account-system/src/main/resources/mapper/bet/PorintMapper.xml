@@ -12,7 +12,7 @@
                                 sys_chip_th, person_chip_th, chip_gap_th, chip_add_th,
                                 sys_cash_th, person_cash_th,cash_gap_th,cash_add_th,
                                 sys_insurance_th, person_insurance_th,insurance_gap_th,insurance_add_th,
-                                water_th,chip_win_th,insurance_win_th,game_id)
+                                water_th,chip_win_th,insurance_win_th,game_id,info,info_th)
         values (#{tableId}, #{version}, #{bootNum}, #{sysChip}, #{personChip}, #{chipGap}, #{chipAdd},
                 #{sysCash},#{personCash},#{cashGap}, #{cashAdd},
                 #{sysInsurance},#{personInsurance},#{insuranceGap}, #{insuranceAdd},
@@ -20,7 +20,7 @@
                 #{sysChipTh}, #{personChipTh}, #{chipGapTh}, #{chipAddTh},
                 #{sysCashTh},#{personCashTh},#{cashGapTh}, #{cashAddTh},
                 #{sysInsuranceTh},#{personInsuranceTh},#{insuranceGapTh}, #{insuranceAddTh},
-                #{waterTh}, #{chipWinTh}, #{insuranceWinTh},#{gameId})
+                #{waterTh}, #{chipWinTh}, #{insuranceWinTh},#{gameId},#{info},#{infoTh})
     </insert>
 
     <update id="updatePorint">
@@ -89,7 +89,9 @@
         s.insurance_add_th insuranceAddTh,
         s.water_th waterTh,
         s.chip_win_th chipWinTh,
-        s.insurance_win_th insuranceWinTh
+        s.insurance_win_th insuranceWinTh,
+        s.info info,
+        s.info_th infoTh
         FROM
         sys_porint s
         <where>
@@ -173,7 +175,9 @@
             insurance_win_th insuranceWinTh,
             create_time createTime,
             create_by createBy,
-            remark
+            remark,
+            info,
+            info_th infoTh
         FROM
             sys_porint
         where
@@ -185,24 +189,32 @@
         set person_chip = #{personChip},
             chip_add    = #{chipAdd},
             chip_gap    = #{chipGap},
+            sys_chip    = #{sysChip},
             person_cash = #{personCash},
             cash_add    = #{cashAdd},
             cash_gap    = #{cashGap},
+            sys_cash    = #{sysCash},
             person_insurance = #{personInsurance},
             insurance_add    = #{insuranceAdd},
             insurance_gap    = #{insuranceGap},
+            sys_insurance    = #{sysInsurance},
             person_chip_th = #{personChipTh},
             chip_add_th = #{chipAddTh},
             chip_gap_th = #{chipGapTh},
+            sys_chip_th    = #{sysChipTh},
             person_cash_th = #{personCashTh},
             cash_add_th = #{cashAddTh},
             cash_gap_th = #{cashGapTh},
+            sys_cash_th    = #{sysCashTh},
             person_insurance_th = #{personInsuranceTh},
             insurance_add_th = #{insuranceAddTh},
             insurance_gap_th = #{insuranceGapTh},
+            sys_insurance_th = #{sysInsuranceTh},
             <if test="remark != null and remark != ''"> remark = #{remark}, </if>
             update_by   = #{updateBy},
-            update_time = sysdate()
+            update_time = sysdate(),
+            info = #{info},
+            info_th = #{infoTh}
         where id = #{id}
     </update>
 

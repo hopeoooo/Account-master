@@ -75,4 +75,10 @@ public class PorintUpdate {
     @ApiModelProperty("备注")
     private String remark;
 
+    @ApiModelProperty("明细")
+    private String info;
+
+    @ApiModelProperty("明细 泰铢")
+    private String infoTh;
+
 }

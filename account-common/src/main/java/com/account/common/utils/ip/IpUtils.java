@@ -13,6 +13,7 @@ import com.account.common.utils.html.EscapeUtil;
  * @author hope
  */
 public class IpUtils {
+
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) {
             return "unknown";
