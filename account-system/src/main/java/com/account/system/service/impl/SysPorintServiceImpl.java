@@ -76,9 +76,11 @@ public class SysPorintServiceImpl implements SysPorintService {
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
+        map.put("totalGap", chipGap.add(cashGap));
         map.put("insuranceGap", insuranceGap);
         map.put("chipGapTh", chipGapTh);
         map.put("cashGapTh", cashGapTh);
+        map.put("totalGapTh", chipGapTh.add(cashGapTh));
         map.put("insuranceGapTh", insuranceGapTh);
         if (porintUpdate.getGameId() == 2) {//龙虎 计算和钱
             SysTableManagement sysTableManagement = new SysTableManagement(sysPorint.getTableId(),sysPorint.getVersion(),sysPorint.getBootNum());

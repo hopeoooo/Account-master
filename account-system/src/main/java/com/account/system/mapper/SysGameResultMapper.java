@@ -32,7 +32,7 @@ public interface SysGameResultMapper {
     void updateGameResult(SysGameResult sysGameResult);
 
     @Select("select game_result gameResult,id from sys_game_result where game_id = #{gameId} and table_id = #{tableId} " +
-            "and boot_num = #{bootNum} and version = #{version} and game_num = #{gameNum}")
+            "and boot_num = #{bootNum} and version = #{version} and game_num = #{gameNum} order by create_by desc limit 0,1")
     SysGameResult selectGameResult(BetRepair betRepair);
 
     @Select("select g.game_result gameResult,id " +

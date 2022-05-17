@@ -374,9 +374,11 @@ public class BetServiceImpl implements BetService {
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
+        map.put("totalGap", chipGap.add(cashGap));
         map.put("insuranceGap", insuranceGap);
         map.put("chipGapTh", chipGapTh);
         map.put("cashGapTh", cashGapTh);
+        map.put("totalGapTh", chipGapTh.add(cashGapTh));
         map.put("insuranceGapTh", insuranceGapTh);
         if (sysTableManagement.getGameId() == 2) {//龙虎 计算和钱
             BigDecimal tie = checkDecimal(betMapper.selectTie(sysTableManagement));
@@ -550,6 +552,21 @@ public class BetServiceImpl implements BetService {
         if (sysGameResult != null && !betRepair.getGameResult().equals(sysGameResult.getGameResult())) {
             sysGameResult.setGameResult(betRepair.getGameResult());
             updateGameResult(sysGameResult, null);
+        }else if(sysGameResult == null){
+            //记录赛果
+            if (betRepair.getGameResult() != null) {
+                SysGameResult result = new SysGameResult();
+                result.setGameId(betRepair.getGameId());
+                result.setTableId(betRepair.getTableId());
+                result.setVersion(betRepair.getVersion());
+                result.setBootNum(betRepair.getBootNum());
+                result.setGameNum(betRepair.getGameNum());
+                result.setGameResult(betRepair.getGameResult());
+                result.setCreateBy(SecurityUtils.getUsername());
+                sysGameResultMapper.saveGameResult(result);
+            }
+            //修改局号
+            sysTableManagementMapper.updateGameNumByTableId(betRepair.getTableId());
         }
 
         BigDecimal tableChip = BigDecimal.ZERO;
