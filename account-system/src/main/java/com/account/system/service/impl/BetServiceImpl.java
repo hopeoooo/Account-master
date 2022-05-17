@@ -566,7 +566,7 @@ public class BetServiceImpl implements BetService {
                 sysGameResultMapper.saveGameResult(result);
             }
             //修改局号
-            sysTableManagementMapper.updateGameNumByTableId(betRepair.getTableId());
+            sysTableManagementMapper.updateGameNumByTableId(betRepair.getTableId(),betRepair.getGameNum());
         }
 
         BigDecimal tableChip = BigDecimal.ZERO;
