@@ -277,7 +277,7 @@ public class BetServiceImpl implements BetService {
                         sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip, BigDecimal.ZERO);
                     } else {
                         sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                                sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
+                                sysMembers.getChipTh(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
                         //修改会员现有筹码
                         sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, membersChip);
                     }
@@ -622,7 +622,7 @@ public class BetServiceImpl implements BetService {
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip, BigDecimal.ZERO);
             } else {
                 sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                        sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
+                        sysMembers.getChipTh(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
                 //修改会员现有筹码
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, membersChip);
             }
@@ -761,7 +761,7 @@ public class BetServiceImpl implements BetService {
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip, BigDecimal.ZERO);
             } else {
                 sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                        sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
+                        sysMembers.getChipTh(), membersChip.abs(), sysMembers.getChip().add(membersChip), sysBet.getBetId());
                 //修改会员现有筹码
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, membersChip);
             }
