@@ -145,10 +145,18 @@ public class BetServiceImpl implements BetService {
                     SysPorint sysPorint = porintMapper.getPorint(gameResult.getTableId(), gameResult.getBootNum(), gameResult.getVersion());
                     SysReceipt sysReceipt = receiptMapper.getReceipt(gameResult.getTableId(), gameResult.getVersion());
                     if (sysPorint != null) {
-                        porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                            porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        }else {
+                            porintMapper.updatePorintTh(sysPorint.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        }
                     }
                     if (sysReceipt != null) {
-                        receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                            receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        }else {
+                            receiptMapper.updateReceiptTh(sysReceipt.getId(), tableChip, tableCash, tableInsurance, newWater.subtract(oldWater));
+                        }
                     } else {
                         //修改 桌台 累计
                         if (sysBet.getType() == 0 || sysBet.getType() == 1) {
@@ -385,18 +393,18 @@ public class BetServiceImpl implements BetService {
     public Map receiptChip(Reckon reckon, SysTableManagement sysTableManagement) {
         sysTableManagement.setBootNum(null);
         Map map = pointChip(reckon, sysTableManagement);
-        BigDecimal chipReceipt = checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase())
-                .subtract(checkDecimal(reckon.getChipAdd()))
-                .add(checkDecimal(reckon.getChipSub()))
-                .subtract(sysTableManagement.getChipAdd());
+        BigDecimal chipReceipt = checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase());
 
-        BigDecimal cashReceipt = checkDecimal(reckon.getCash()).subtract(sysTableManagement.getCashPointBase())
-                .subtract(checkDecimal(reckon.getCashAdd()))
-                .add(checkDecimal(reckon.getCashSub()))
-                .subtract(sysTableManagement.getCashAdd());
+        BigDecimal cashReceipt = checkDecimal(reckon.getCash()).subtract(sysTableManagement.getCashPointBase());
+
+        BigDecimal chipReceiptTh = checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh());
+
+        BigDecimal cashReceiptTh = checkDecimal(reckon.getCashTh()).subtract(sysTableManagement.getCashPointBaseTh());
 
         map.put("chipReceipt", chipReceipt);
         map.put("cashReceipt", cashReceipt);
+        map.put("chipReceiptTh", chipReceiptTh);
+        map.put("cashReceiptTh", cashReceiptTh);
         return map;
     }
 
@@ -626,14 +634,14 @@ public class BetServiceImpl implements BetService {
             if (sysBet.getType() == 0 || sysBet.getType() == 1) {
                 porintMapper.updatePorint(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
             } else {
-                porintMapper.updatePorintTh(sysPorint.getId(), tableChip, tableCash, tableInsurance, water);
+                porintMapper.updatePorintTh(sysPorint.getId(), tableChipTh, tableCashTh, tableInsuranceTh, water);
             }
         }
         if (sysReceipt != null) {
             if (sysBet.getType() == 0 || sysBet.getType() == 1) {
                 receiptMapper.updateReceipt(sysReceipt.getId(), tableChip, tableCash, tableInsurance, water);
             } else {
-                receiptMapper.updateReceiptTh(sysReceipt.getId(), tableChip, tableCash, tableInsurance, water);
+                receiptMapper.updateReceiptTh(sysReceipt.getId(), tableChipTh, tableCashTh, tableInsuranceTh, water);
             }
         } else {
             //修改 桌台 累计
