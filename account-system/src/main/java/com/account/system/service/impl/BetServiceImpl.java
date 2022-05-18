@@ -177,7 +177,15 @@ public class BetServiceImpl implements BetService {
             if (change.compareTo(new BigDecimal(0)) == 0) {
                 sysChipRecordMapper.deleteChipRecord(sysBet.getCard(), sysBet.getBetId());
             } else {
-                if (StringUtils.isNull(sysChipRecord)) sysChipRecord = new SysChipRecord(sysBet.getCard(), sysBet.getBetId());
+                if (StringUtils.isNull(sysChipRecord)){
+                    SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
+                    sysChipRecord = new SysChipRecord(sysBet.getCard(), sysBet.getBetId());
+                    if (sysBet.getType() == 0 || sysBet.getType() == 1) {
+                        sysChipRecord.setBefore(sysMembers.getChip());
+                    }else{
+                        sysChipRecord.setBeforeTh(sysMembers.getChipTh());
+                    }
+                }
                 if (change.compareTo(new BigDecimal(0)) > 0) {//赢
                     sysChipRecord.setType(ChipChangeEnum.WIN_CHIP.getCode());
                 } else if (change.compareTo(new BigDecimal(0)) < 0) {
@@ -192,7 +200,7 @@ public class BetServiceImpl implements BetService {
                     sysChipRecord.setChange(BigDecimal.ZERO);
                     sysChipRecord.setAfter(BigDecimal.ZERO);
                     sysChipRecord.setChangeTh(change.abs());
-                    sysChipRecord.setAfterTh(sysChipRecord.getBefore().add(change));
+                    sysChipRecord.setAfterTh(sysChipRecord.getBeforeTh().add(change));
                 }
                 if (!StringUtils.isNull(sysChipRecord)) {
                     sysChipRecordMapper.updateChipRecord(sysChipRecord);
