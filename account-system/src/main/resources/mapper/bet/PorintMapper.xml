@@ -31,8 +31,8 @@
             cash_gap      = cash_gap + #{cash},
             sys_insurance = sys_insurance + #{insurance},
             insurance_gap = insurance_gap + #{insurance},
-            chip_win      = chip_win - #{cash} - #{chip},
-            insurance_win = insurance_win - #{insurance},
+            chip_win      = chip_win + #{cash} + #{chip},
+            insurance_win = insurance_win + #{insurance},
             water         = water + #{water},
             update_time   = sysdate()
         where id = #{id}
@@ -46,8 +46,8 @@
             cash_gap_th      = cash_gap_th + #{cash},
             sys_insurance_th = sys_insurance_th + #{insurance},
             insurance_gap_th = insurance_gap_th + #{insurance},
-            chip_win_th      = chip_win_th - #{cash} - #{chip},
-            insurance_win_th = insurance_win_th - #{insurance},
+            chip_win_th      = chip_win_th + #{cash} + #{chip},
+            insurance_win_th = insurance_win_th + #{insurance},
             water_th         = water_th + #{water},
             update_time   = sysdate()
         where id = #{id}
