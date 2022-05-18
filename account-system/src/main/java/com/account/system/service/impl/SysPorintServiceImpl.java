@@ -134,13 +134,13 @@ public class SysPorintServiceImpl implements SysPorintService {
         porint.setSysCashTh(sysPorint.getSysCashTh().subtract(sysPorint.getCashAddTh()).add(porint.getCashAddTh()));
         porint.setSysInsuranceTh(sysPorint.getSysInsuranceTh().subtract(sysPorint.getInsuranceAddTh()).add(porint.getInsuranceAddTh()));
 
-        porint.setChipGap(sysPorint.getSysChip().subtract(porint.getPersonChip()));
-        porint.setCashGap(sysPorint.getSysCash().subtract(porint.getPersonCash()));
-        porint.setInsuranceGap(sysPorint.getSysInsurance().subtract(porint.getPersonInsurance()));
+        porint.setChipGap(porint.getSysChip().subtract(porint.getPersonChip()));
+        porint.setCashGap(porint.getSysCash().subtract(porint.getPersonCash()));
+        porint.setInsuranceGap(porint.getSysInsurance().subtract(porint.getPersonInsurance()));
 
-        porint.setChipGapTh(sysPorint.getSysChipTh().subtract(porint.getPersonChipTh()));
-        porint.setCashGapTh(sysPorint.getSysCashTh().subtract(porint.getPersonCashTh()));
-        porint.setInsuranceGapTh(sysPorint.getSysInsuranceTh().subtract(porint.getPersonInsuranceTh()));
+        porint.setChipGapTh(porint.getSysChipTh().subtract(porint.getPersonChipTh()));
+        porint.setCashGapTh(porint.getSysCashTh().subtract(porint.getPersonCashTh()));
+        porint.setInsuranceGapTh(porint.getSysInsuranceTh().subtract(porint.getPersonInsuranceTh()));
 
         porint.setUpdateBy(SecurityUtils.getUsername());
         porint.setRemark(porintUpdate.getRemark());
