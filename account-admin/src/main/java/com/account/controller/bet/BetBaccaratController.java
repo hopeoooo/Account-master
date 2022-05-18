@@ -87,7 +87,7 @@ public class BetBaccaratController {
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('baccarat:result:update')")
     @PostMapping("/update")
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {

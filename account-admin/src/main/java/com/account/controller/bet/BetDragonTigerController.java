@@ -87,7 +87,7 @@ public class BetDragonTigerController {
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:dragontiger:list')")
+    @PreAuthorize("@ss.hasPermi('dragontiger:result:update')")
     @PostMapping("/update")
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
