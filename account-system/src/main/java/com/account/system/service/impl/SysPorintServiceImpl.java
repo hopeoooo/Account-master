@@ -53,32 +53,32 @@ public class SysPorintServiceImpl implements SysPorintService {
         BigDecimal chipGap = checkDecimal(porintUpdate.getChip()).subtract(sysPorint.getSysChip())
                 .subtract(checkDecimal(porintUpdate.getChipAdd()))
                 .add(checkDecimal(porintUpdate.getChipSub())
-                .add(sysPorint.getChipAdd()));
+                .subtract(sysPorint.getChipAdd()));
 
         BigDecimal cashGap = checkDecimal(porintUpdate.getCash()).subtract(sysPorint.getSysCash())
                 .subtract(checkDecimal(porintUpdate.getCashAdd()))
                 .add(checkDecimal(porintUpdate.getCashSub()))
-                .add(sysPorint.getCashAdd());
+                .subtract(sysPorint.getCashAdd());
 
         BigDecimal insuranceGap = checkDecimal(porintUpdate.getInsurance()).subtract(sysPorint.getSysInsurance())
                 .subtract(checkDecimal(porintUpdate.getInsuranceAdd()))
                 .add(checkDecimal(porintUpdate.getInsuranceSub()))
-                .add(sysPorint.getInsuranceAdd());
+                .subtract(sysPorint.getInsuranceAdd());
 
         BigDecimal chipGapTh = checkDecimal(porintUpdate.getChipTh()).subtract(sysPorint.getSysChipTh())
                 .subtract(checkDecimal(porintUpdate.getChipAddTh()))
                 .add(checkDecimal(porintUpdate.getChipSubTh()))
-                .add(sysPorint.getChipAddTh());
+                .subtract(sysPorint.getChipAddTh());
 
         BigDecimal cashGapTh = checkDecimal(porintUpdate.getCashTh()).subtract(sysPorint.getSysCashTh())
                 .subtract(checkDecimal(porintUpdate.getCashAddTh()))
                 .add(checkDecimal(porintUpdate.getCashSubTh()))
-                .add(sysPorint.getCashAddTh());
+                .subtract(sysPorint.getCashAddTh());
 
         BigDecimal insuranceGapTh = checkDecimal(porintUpdate.getInsuranceTh()).subtract(sysPorint.getSysInsuranceTh())
                 .subtract(checkDecimal(porintUpdate.getInsuranceAddTh()))
                 .add(checkDecimal(porintUpdate.getInsuranceSubTh()))
-                .add(sysPorint.getInsuranceAddTh());
+                .subtract(sysPorint.getInsuranceAddTh());
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
