@@ -390,7 +390,7 @@
                 AND m.is_admin = 0
             </if>
         </where>
-        GROUP BY m.card
+        GROUP BY m.card	,m.NAME
         order by
           ifnull(sum(case type when 0 then b.bet_money when 1 then b.bet_money else 0 end), 0) desc,
           ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc
