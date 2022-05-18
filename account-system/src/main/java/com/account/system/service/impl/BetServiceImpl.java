@@ -349,37 +349,42 @@ public class BetServiceImpl implements BetService {
      */
     public Map pointChip(Reckon reckon, SysTableManagement sysTableManagement) {
         Map map = new HashMap();
-        BigDecimal chipGap = checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase()).subtract(sysTableManagement.getChip())
-                .subtract(sysTableManagement.getChipAdd())
-                .subtract(checkDecimal(reckon.getChipAdd()))
-                .add(checkDecimal(reckon.getChipSub()));
 
-        BigDecimal cashGap = checkDecimal(reckon.getCash()).subtract(sysTableManagement.getCashPointBase()).subtract(sysTableManagement.getCash())
-                .subtract(sysTableManagement.getCashAdd())
-                .subtract(checkDecimal(reckon.getCashAdd()))
-                .add(checkDecimal(reckon.getCashSub()));
+        BigDecimal chipGap = sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
+                .add(sysTableManagement.getChipAdd())
+                .add(checkDecimal(reckon.getChipAdd()))
+                .subtract(checkDecimal(reckon.getChipSub()))
+                .subtract(checkDecimal(reckon.getChip()));
 
-        BigDecimal insuranceGap = checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase())
-                .subtract(sysTableManagement.getInsuranceAdd())
-                .subtract(sysTableManagement.getInsurance())
-                .subtract(checkDecimal(reckon.getInsuranceAdd()))
-                .add(checkDecimal(reckon.getInsuranceSub()));
+        BigDecimal cashGap = sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())
+                .add(sysTableManagement.getCashAdd())
+                .add(checkDecimal(reckon.getCashAdd()))
+                .subtract(checkDecimal(reckon.getCashSub()))
+                .subtract(checkDecimal(reckon.getCash()));
 
-        BigDecimal chipGapTh = checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh()).subtract(sysTableManagement.getChipTh())
-                .subtract(sysTableManagement.getChipAddTh())
-                .subtract(checkDecimal(reckon.getChipAddTh()))
-                .add(checkDecimal(reckon.getChipSubTh()));
+        BigDecimal insuranceGap = sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance())
+                .add(sysTableManagement.getInsuranceAdd())
+                .add(checkDecimal(reckon.getInsuranceAdd()))
+                .subtract(checkDecimal(reckon.getInsuranceSub()))
+                .subtract(checkDecimal(reckon.getInsurance()));
 
-        BigDecimal cashGapTh = checkDecimal(reckon.getCashTh()).subtract(sysTableManagement.getCashPointBaseTh()).subtract(sysTableManagement.getCashTh())
-                .subtract(sysTableManagement.getCashAddTh())
-                .subtract(checkDecimal(reckon.getCashAddTh()))
-                .add(checkDecimal(reckon.getCashSubTh()));
+        BigDecimal chipGapTh = sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh())
+                .add(sysTableManagement.getChipAddTh())
+                .add(checkDecimal(reckon.getChipAddTh()))
+                .subtract(checkDecimal(reckon.getChipSubTh()))
+                .subtract(checkDecimal(reckon.getChipTh()));
 
-        BigDecimal insuranceGapTh = checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh())
-                .subtract(sysTableManagement.getInsuranceAddTh())
-                .subtract(sysTableManagement.getInsuranceTh())
-                .subtract(checkDecimal(reckon.getInsuranceAddTh()))
-                .add(checkDecimal(reckon.getInsuranceSubTh()));
+        BigDecimal cashGapTh = sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh())
+                .add(sysTableManagement.getCashAddTh())
+                .add(checkDecimal(reckon.getCashAddTh()))
+                .subtract(checkDecimal(reckon.getCashSubTh()))
+                .subtract(checkDecimal(reckon.getCashTh()));
+
+        BigDecimal insuranceGapTh = sysTableManagement.getInsurancePointBaseTh().add(sysTableManagement.getInsuranceTh())
+                .add(sysTableManagement.getInsuranceAddTh())
+                .add(checkDecimal(reckon.getInsuranceAddTh()))
+                .subtract(checkDecimal(reckon.getInsuranceSubTh()))
+                .subtract(checkDecimal(reckon.getInsuranceTh()));
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
@@ -445,19 +450,19 @@ public class BetServiceImpl implements BetService {
         sysPorint.setSysChip(sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
                 .add(sysTableManagement.getChipAdd()).add(chipAdd));
         sysPorint.setPersonChip(checkDecimal(reckon.getChip()));
-        sysPorint.setChipGap(sysPorint.getPersonChip().subtract(sysPorint.getSysChip()));
+        sysPorint.setChipGap(sysPorint.getSysChip().subtract(sysPorint.getPersonChip()));
         sysPorint.setChipAdd(chipAdd);
 
         sysPorint.setSysCash(sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())
                 .add(sysTableManagement.getCashAdd()).add(cashAdd));
         sysPorint.setPersonCash(checkDecimal(reckon.getCash()));
-        sysPorint.setCashGap(sysPorint.getPersonCash().subtract(sysPorint.getSysCash()));
+        sysPorint.setCashGap(sysPorint.getSysCash().subtract(sysPorint.getPersonCash()));
         sysPorint.setCashAdd(cashAdd);
 
         sysPorint.setSysInsurance(sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance())
                 .add(sysTableManagement.getInsuranceAdd()).add(insuranceAdd));
         sysPorint.setPersonInsurance(checkDecimal(reckon.getInsurance()));
-        sysPorint.setInsuranceGap(sysPorint.getPersonInsurance().subtract(sysPorint.getSysInsurance()));
+        sysPorint.setInsuranceGap(sysPorint.getSysInsurance().subtract(sysPorint.getPersonInsurance()));
         sysPorint.setInsuranceAdd(insuranceAdd);
 
         sysPorint.setWater(checkDecimal(betMapper.getWater(sysTableManagement)));
@@ -467,19 +472,19 @@ public class BetServiceImpl implements BetService {
         sysPorint.setSysChipTh(sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh())
                 .add(sysTableManagement.getChipAddTh()).add(chipAddTh));
         sysPorint.setPersonChipTh(checkDecimal(reckon.getChipTh()));
-        sysPorint.setChipGapTh(sysPorint.getPersonChipTh().subtract(sysPorint.getSysChipTh()));
+        sysPorint.setChipGapTh(sysPorint.getSysChipTh().subtract(sysPorint.getPersonChipTh()));
         sysPorint.setChipAddTh(chipAddTh);
 
         sysPorint.setSysCashTh(sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh())
                 .add(sysTableManagement.getCashAddTh()).add(cashAddTh));
         sysPorint.setPersonCashTh(checkDecimal(reckon.getCashTh()));
-        sysPorint.setCashGapTh(sysPorint.getPersonCashTh().subtract(sysPorint.getSysCashTh()));
+        sysPorint.setCashGapTh(sysPorint.getSysCashTh().subtract(sysPorint.getPersonCashTh()));
         sysPorint.setCashAddTh(cashAddTh);
 
         sysPorint.setSysInsuranceTh(sysTableManagement.getInsurancePointBaseTh().add(sysTableManagement.getInsuranceTh())
                 .add(sysTableManagement.getInsuranceAddTh()).add(insuranceAddTh));
         sysPorint.setPersonInsuranceTh(checkDecimal(reckon.getInsuranceTh()));
-        sysPorint.setInsuranceGapTh(sysPorint.getPersonInsuranceTh().subtract(sysPorint.getSysInsuranceTh()));
+        sysPorint.setInsuranceGapTh(sysPorint.getSysInsuranceTh().subtract(sysPorint.getPersonInsuranceTh()));
         sysPorint.setInsuranceAddTh(insuranceAddTh);
 
         sysPorint.setWaterTh(checkDecimal(betMapper.getWaterTh(sysTableManagement)));
