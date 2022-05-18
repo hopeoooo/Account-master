@@ -27,7 +27,7 @@
         update sys_porint
         set sys_chip      = sys_chip + #{chip},
             chip_gap      = chip_gap + #{chip},
-            sys_cash      = sys_chip + #{cash},
+            sys_cash      = sys_cash + #{cash},
             cash_gap      = cash_gap + #{cash},
             sys_insurance = sys_insurance + #{insurance},
             insurance_gap = insurance_gap + #{insurance},
@@ -42,7 +42,7 @@
         update sys_porint
         set sys_chip_th      = sys_chip_th + #{chip},
             chip_gap_th      = chip_gap_th + #{chip},
-            sys_cash_th      = sys_chip_th + #{cash},
+            sys_cash_th      = sys_cash_th + #{cash},
             cash_gap_th      = cash_gap_th + #{cash},
             sys_insurance_th = sys_insurance_th + #{insurance},
             insurance_gap_th = insurance_gap_th + #{insurance},
