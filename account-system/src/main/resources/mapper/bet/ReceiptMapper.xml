@@ -9,8 +9,8 @@
         set chip          = chip + #{chip},
             cash          = cash + #{cash},
             insurance     = insurance + #{insurance},
-            win           = win - #{cash} - #{chip},
-            insurance_win = insurance_win - #{insurance},
+            win           = win + #{cash} + #{chip},
+            insurance_win = insurance_win + #{insurance},
             water         = water + #{water},
             update_time   = sysdate()
         where id = #{id}
@@ -21,8 +21,8 @@
         set chip_th          = chip_th + #{chip},
             cash_th          = cash_th + #{cash},
             insurance_th     = insurance_th + #{insurance},
-            win_th           = win_th - #{cash} - #{chip},
-            insurance_win_th = insurance_win_th - #{insurance},
+            win_th           = win_th + #{cash} + #{chip},
+            insurance_win_th = insurance_win_th + #{insurance},
             water_th         = water_th + #{water},
             update_time   = sysdate()
         where id = #{id}
@@ -38,8 +38,8 @@
         r.cash_add AS cashAdd,
         r.insurance_add AS insuranceAdd,
         r.water AS water,
-        r.win AS win,
-        r.insurance_win AS insuranceWin,
+        0-r.win AS win,
+        0-r.insurance_win AS insuranceWin,
         r.create_time AS createTime,
         r.remark AS remark,
         r.chip_th AS chipTh,
