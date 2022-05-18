@@ -42,7 +42,7 @@ public class BetUtilService {
 
     /**
      * 计算百家乐 注单明细
-     * 1：闲 4：庄 7：和 || 5：闲对 8：庄对 || 9：大 6：小 || 0: 闲保险 3:庄保险 2:和保险
+     * 1：闲 4：庄 7：和 || 5：闲对 8：庄对 || 9：大 6：小 || 0: 闲保险 3:庄保险 2:和保险 // a 幸运6（两张牌）b(三张牌)
      */
     private Map getBaccaratBetInfos(JSONObject bet, SysBet sysBet) {
         Map map = new HashMap();
@@ -61,7 +61,7 @@ public class BetUtilService {
         Integer type = sysBet.getType();
         SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
         SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
-        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3", "2"};
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3", "2", "a"};
         String[] odds = {sysOddsConfigure.getBaccaratPlayerWin(),
                 sysOddsConfigure.getBaccaratBankerWin(),
                 sysOddsConfigure.getBaccaratTieWin(),
@@ -153,6 +153,24 @@ public class BetUtilService {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
                     }
                     tableInsurance = tableInsurance.subtract(sysBetInfo.getWinLose());
+                } else if ("a".equals(option)) { //幸运6
+                    //TODO
+                    if (type == 0 || type == 1) {
+                        sysBetInfo.setType(4);
+                    } else if (type == 2 || type == 3) {
+                        sysBetInfo.setType(5);
+                    }
+                    if (gameResult.contains("a")) {//两张牌
+                        amount = amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+                        sysBetInfo.setWinLose(amount);
+                        payout = payout.add(sysBetInfo.getWinLose());
+                    } else if (gameResult.contains("b")) {//三张牌
+                        amount = amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+                        sysBetInfo.setWinLose(amount);
+                        payout = payout.add(sysBetInfo.getWinLose());
+                    } else {
+                        sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                    }
                 } else {
                     if (gameResult.contains(option)) {
                         sysBetInfo.setWinLose(amount.multiply(new BigDecimal(odds[i])));
