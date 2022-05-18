@@ -443,50 +443,44 @@ public class BetServiceImpl implements BetService {
         sysPorint.setInfoTh(reckon.getInfoTh());
 
         sysPorint.setSysChip(sysTableManagement.getChipPointBase().add(sysTableManagement.getChip())
-                .add(sysTableManagement.getChipAdd()).add(checkDecimal(reckon.getChipAdd()))
-                .subtract(checkDecimal(reckon.getChipSub())));
+                .add(sysTableManagement.getChipAdd()).add(chipAdd));
         sysPorint.setPersonChip(checkDecimal(reckon.getChip()));
         sysPorint.setChipGap(sysPorint.getPersonChip().subtract(sysPorint.getSysChip()));
-        sysPorint.setChipAdd(checkDecimal(reckon.getChipAdd()).subtract(checkDecimal(reckon.getChipSub())));
+        sysPorint.setChipAdd(chipAdd);
 
         sysPorint.setSysCash(sysTableManagement.getCashPointBase().add(sysTableManagement.getCash())
-                .add(sysTableManagement.getCashAdd()).add(checkDecimal(reckon.getCashAdd()))
-                .subtract(checkDecimal(reckon.getCashSub())));
+                .add(sysTableManagement.getCashAdd()).add(cashAdd));
         sysPorint.setPersonCash(checkDecimal(reckon.getCash()));
         sysPorint.setCashGap(sysPorint.getPersonCash().subtract(sysPorint.getSysCash()));
-        sysPorint.setCashAdd(checkDecimal(reckon.getCashAdd()).subtract(checkDecimal(reckon.getCashSub())));
+        sysPorint.setCashAdd(cashAdd);
 
         sysPorint.setSysInsurance(sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance())
-                .add(sysTableManagement.getInsuranceAdd()).add(checkDecimal(reckon.getInsuranceAdd()))
-                .subtract(checkDecimal(reckon.getInsuranceSub())));
+                .add(sysTableManagement.getInsuranceAdd()).add(insuranceAdd));
         sysPorint.setPersonInsurance(checkDecimal(reckon.getInsurance()));
         sysPorint.setInsuranceGap(sysPorint.getPersonInsurance().subtract(sysPorint.getSysInsurance()));
-        sysPorint.setInsuranceAdd(checkDecimal(reckon.getInsuranceAdd()).subtract(checkDecimal(reckon.getInsuranceSub())));
+        sysPorint.setInsuranceAdd(insuranceAdd);
 
         sysPorint.setWater(checkDecimal(betMapper.getWater(sysTableManagement)));
         sysPorint.setChipWin(checkDecimal(betMapper.getWinLose(sysTableManagement)));
         sysPorint.setInsuranceWin(checkDecimal(betMapper.getInsuranceWin(sysTableManagement)));
 
         sysPorint.setSysChipTh(sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh())
-                .add(sysTableManagement.getChipAddTh()).add(checkDecimal(reckon.getChipAddTh()))
-                .subtract(checkDecimal(reckon.getChipSubTh())));
+                .add(sysTableManagement.getChipAddTh()).add(chipAddTh));
         sysPorint.setPersonChipTh(checkDecimal(reckon.getChipTh()));
         sysPorint.setChipGapTh(sysPorint.getPersonChipTh().subtract(sysPorint.getSysChipTh()));
-        sysPorint.setChipAddTh(checkDecimal(reckon.getChipAddTh()).subtract(checkDecimal(reckon.getChipSubTh())));
+        sysPorint.setChipAddTh(chipAddTh);
 
         sysPorint.setSysCashTh(sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh())
-                .add(sysTableManagement.getCashAddTh()).add(checkDecimal(reckon.getCashAddTh()))
-                .subtract(checkDecimal(reckon.getCashSubTh())));
+                .add(sysTableManagement.getCashAddTh()).add(cashAddTh));
         sysPorint.setPersonCashTh(checkDecimal(reckon.getCashTh()));
         sysPorint.setCashGapTh(sysPorint.getPersonCashTh().subtract(sysPorint.getSysCashTh()));
-        sysPorint.setCashAddTh(checkDecimal(reckon.getCashAddTh()).subtract(checkDecimal(reckon.getCashSubTh())));
+        sysPorint.setCashAddTh(cashAddTh);
 
         sysPorint.setSysInsuranceTh(sysTableManagement.getInsurancePointBaseTh().add(sysTableManagement.getInsuranceTh())
-                .add(sysTableManagement.getInsuranceAddTh()).add(checkDecimal(reckon.getInsuranceAddTh()))
-                .subtract(checkDecimal(reckon.getInsuranceSubTh())));
+                .add(sysTableManagement.getInsuranceAddTh()).add(insuranceAddTh));
         sysPorint.setPersonInsuranceTh(checkDecimal(reckon.getInsuranceTh()));
         sysPorint.setInsuranceGapTh(sysPorint.getPersonInsuranceTh().subtract(sysPorint.getSysInsuranceTh()));
-        sysPorint.setInsuranceAddTh(checkDecimal(reckon.getInsuranceAddTh()).subtract(checkDecimal(reckon.getInsuranceSubTh())));
+        sysPorint.setInsuranceAddTh(insuranceAddTh);
 
         sysPorint.setWaterTh(checkDecimal(betMapper.getWaterTh(sysTableManagement)));
         sysPorint.setChipWinTh(checkDecimal(betMapper.getWinLoseTh(sysTableManagement)));

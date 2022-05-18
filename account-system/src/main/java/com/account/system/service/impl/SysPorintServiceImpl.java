@@ -50,34 +50,35 @@ public class SysPorintServiceImpl implements SysPorintService {
     public Map porintReckon(PorintUpdate porintUpdate) {
         SysPorint sysPorint = porintMapper.selectPorint(porintUpdate.getId());
         Map map = new HashMap();
-        BigDecimal chipGap = checkDecimal(porintUpdate.getChip()).subtract(sysPorint.getSysChip())
-                .subtract(checkDecimal(porintUpdate.getChipAdd()))
-                .add(checkDecimal(porintUpdate.getChipSub())
-                .subtract(sysPorint.getChipAdd()));
 
-        BigDecimal cashGap = checkDecimal(porintUpdate.getCash()).subtract(sysPorint.getSysCash())
-                .subtract(checkDecimal(porintUpdate.getCashAdd()))
-                .add(checkDecimal(porintUpdate.getCashSub()))
+        BigDecimal chipGap = sysPorint.getSysChip().subtract(checkDecimal(porintUpdate.getChip()))
+                .add(checkDecimal(porintUpdate.getChipAdd()))
+                .subtract(checkDecimal(porintUpdate.getChipSub()))
+                .subtract(sysPorint.getChipAdd());
+
+        BigDecimal cashGap = sysPorint.getSysCash().subtract(checkDecimal(porintUpdate.getCash()))
+                .add(checkDecimal(porintUpdate.getCashAdd()))
+                .subtract(checkDecimal(porintUpdate.getCashSub()))
                 .subtract(sysPorint.getCashAdd());
 
-        BigDecimal insuranceGap = checkDecimal(porintUpdate.getInsurance()).subtract(sysPorint.getSysInsurance())
-                .subtract(checkDecimal(porintUpdate.getInsuranceAdd()))
-                .add(checkDecimal(porintUpdate.getInsuranceSub()))
+        BigDecimal insuranceGap = sysPorint.getSysInsurance().subtract(checkDecimal(porintUpdate.getInsurance()))
+                .add(checkDecimal(porintUpdate.getInsuranceAdd()))
+                .subtract(checkDecimal(porintUpdate.getInsuranceSub()))
                 .subtract(sysPorint.getInsuranceAdd());
 
-        BigDecimal chipGapTh = checkDecimal(porintUpdate.getChipTh()).subtract(sysPorint.getSysChipTh())
-                .subtract(checkDecimal(porintUpdate.getChipAddTh()))
-                .add(checkDecimal(porintUpdate.getChipSubTh()))
+        BigDecimal chipGapTh = sysPorint.getSysChipTh().subtract(checkDecimal(porintUpdate.getChipTh()))
+                .add(checkDecimal(porintUpdate.getChipAddTh()))
+                .subtract(checkDecimal(porintUpdate.getChipSubTh()))
                 .subtract(sysPorint.getChipAddTh());
 
-        BigDecimal cashGapTh = checkDecimal(porintUpdate.getCashTh()).subtract(sysPorint.getSysCashTh())
-                .subtract(checkDecimal(porintUpdate.getCashAddTh()))
-                .add(checkDecimal(porintUpdate.getCashSubTh()))
+        BigDecimal cashGapTh = sysPorint.getSysCashTh().subtract(checkDecimal(porintUpdate.getCashTh()))
+                .add(checkDecimal(porintUpdate.getCashAddTh()))
+                .subtract(checkDecimal(porintUpdate.getCashSubTh()))
                 .subtract(sysPorint.getCashAddTh());
 
-        BigDecimal insuranceGapTh = checkDecimal(porintUpdate.getInsuranceTh()).subtract(sysPorint.getSysInsuranceTh())
-                .subtract(checkDecimal(porintUpdate.getInsuranceAddTh()))
-                .add(checkDecimal(porintUpdate.getInsuranceSubTh()))
+        BigDecimal insuranceGapTh = sysPorint.getSysInsuranceTh().subtract(checkDecimal(porintUpdate.getInsuranceTh()))
+                .add(checkDecimal(porintUpdate.getInsuranceAddTh()))
+                .subtract(checkDecimal(porintUpdate.getInsuranceSubTh()))
                 .subtract(sysPorint.getInsuranceAddTh());
 
         map.put("chipGap", chipGap);
