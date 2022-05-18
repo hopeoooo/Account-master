@@ -350,23 +350,36 @@ public class BetServiceImpl implements BetService {
     public Map pointChip(Reckon reckon, SysTableManagement sysTableManagement) {
         Map map = new HashMap();
         BigDecimal chipGap = checkDecimal(reckon.getChip()).subtract(sysTableManagement.getChipPointBase()).subtract(sysTableManagement.getChip())
-                .subtract(sysTableManagement.getChipAdd());
+                .subtract(sysTableManagement.getChipAdd())
+                .subtract(checkDecimal(reckon.getChipAdd()))
+                .add(checkDecimal(reckon.getChipSub()));
 
         BigDecimal cashGap = checkDecimal(reckon.getCash()).subtract(sysTableManagement.getCashPointBase()).subtract(sysTableManagement.getCash())
-                .subtract(sysTableManagement.getCashAdd());
+                .subtract(sysTableManagement.getCashAdd())
+                .subtract(checkDecimal(reckon.getCashAdd()))
+                .add(checkDecimal(reckon.getCashSub()));
 
         BigDecimal insuranceGap = checkDecimal(reckon.getInsurance()).subtract(sysTableManagement.getInsurancePointBase())
-                .subtract(sysTableManagement.getInsuranceAdd());
+                .subtract(sysTableManagement.getInsuranceAdd())
+                .subtract(sysTableManagement.getInsurance())
+                .subtract(checkDecimal(reckon.getInsuranceAdd()))
+                .add(checkDecimal(reckon.getInsuranceSub()));
 
         BigDecimal chipGapTh = checkDecimal(reckon.getChipTh()).subtract(sysTableManagement.getChipPointBaseTh()).subtract(sysTableManagement.getChipTh())
-                .subtract(sysTableManagement.getChipAddTh());
+                .subtract(sysTableManagement.getChipAddTh())
+                .subtract(checkDecimal(reckon.getChipAddTh()))
+                .add(checkDecimal(reckon.getChipSubTh()));
 
         BigDecimal cashGapTh = checkDecimal(reckon.getCashTh()).subtract(sysTableManagement.getCashPointBaseTh()).subtract(sysTableManagement.getCashTh())
-                .subtract(sysTableManagement.getCashAddTh());
+                .subtract(sysTableManagement.getCashAddTh())
+                .subtract(checkDecimal(reckon.getCashAddTh()))
+                .add(checkDecimal(reckon.getCashSubTh()));
 
         BigDecimal insuranceGapTh = checkDecimal(reckon.getInsuranceTh()).subtract(sysTableManagement.getInsurancePointBaseTh())
                 .subtract(sysTableManagement.getInsuranceAddTh())
-                .subtract(sysTableManagement.getInsuranceTh());
+                .subtract(sysTableManagement.getInsuranceTh())
+                .subtract(checkDecimal(reckon.getInsuranceAddTh()))
+                .add(checkDecimal(reckon.getInsuranceSubTh()));
 
         map.put("chipGap", chipGap);
         map.put("cashGap", cashGap);
