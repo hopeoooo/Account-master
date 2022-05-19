@@ -40,7 +40,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
             sysBetInfos.forEach(sysBetInfo -> {
                 if(option.length()>0) option.append("/");
                 amount[0] = amount[0].add(sysBetInfo.getBetMoney());
-                option.append(changeRelust(sysBetInfo.getBetOption()))
+                option.append(changeOption(sysBetInfo.getBetOption()))
                         .append(":").append(sysBetInfo.getBetMoney().setScale(2));
                 oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
             });
@@ -70,7 +70,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         oldBetInfos.forEach(sysBetInfo -> {
             if(oldOption.length()>0) oldOption.append("/");
             oldAmount[0] = oldAmount[0].add(sysBetInfo.getBetMoney());
-            oldOption.append(changeRelust(sysBetInfo.getBetOption()))
+            oldOption.append(changeOption(sysBetInfo.getBetOption()))
                     .append(":").append(sysBetInfo.getBetMoney().setScale(2));
             oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
         });
@@ -80,7 +80,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         newBetInfos.forEach(sysBetInfo -> {
             if(newOption.length()>0) newOption.append("/");
             newAmount[0] = newAmount[0].add(sysBetInfo.getBetMoney());
-            newOption.append(changeRelust(sysBetInfo.getBetOption()))
+            newOption.append(changeOption(sysBetInfo.getBetOption()))
                     .append(":").append(sysBetInfo.getBetMoney().setScale(2));
             newWin[0] = newWin[0].add(sysBetInfo.getWinLose());
         });
@@ -116,6 +116,20 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
                 .replaceAll("2","和保险")
                 .replaceAll("a","两张牌")
                 .replaceAll("b","三张牌");
+    }
+
+    private String changeOption(String s){
+        return s.replaceAll("1","闲")
+                .replaceAll("4","庄")
+                .replaceAll("7","和")
+                .replaceAll("5","闲对")
+                .replaceAll("8","庄对")
+                .replaceAll("9","大")
+                .replaceAll("6","小")
+                .replaceAll("0","闲保险")
+                .replaceAll("3","庄保险")
+                .replaceAll("2","和保险")
+                .replaceAll("a","幸运6");
     }
 
     private String compare(Object a,Object b){
