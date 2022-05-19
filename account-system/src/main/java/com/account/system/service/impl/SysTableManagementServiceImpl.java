@@ -63,7 +63,7 @@ public class SysTableManagementServiceImpl implements SysTableManagementService 
     }
 
     @Override
-    public List<Map> selectTableIdInfo() {
-        return tableManagementMapper.selectTableIdInfo();
+    public List<Map> selectTableIdInfo(SysTableManagement sysTableManagement) {
+        return tableManagementMapper.selectTableIdInfo(sysTableManagement);
     }
 }

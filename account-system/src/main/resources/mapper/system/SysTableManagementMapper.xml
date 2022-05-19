@@ -70,7 +70,7 @@
     </select>
 
 
-    <select id="selectTableIdInfo"  resultType="java.util.Map">
+    <select id="selectTableIdInfo" parameterType="SysTableManagement"  resultType="java.util.Map">
         SELECT
             t.table_id as tableId
         FROM

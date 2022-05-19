@@ -39,5 +39,5 @@ public interface SysTableManagementMapper {
 
     SysTableManagement getTableByIp(@Param("ip") String ip, @Param("gameId") Long gameId);
 
-    List<Map> selectTableIdInfo();
+    List<Map> selectTableIdInfo(SysTableManagement sysTableManagement);
 }

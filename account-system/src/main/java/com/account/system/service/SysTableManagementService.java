@@ -25,5 +25,5 @@ public interface SysTableManagementService
 
     boolean pingIp(String ip) throws IOException;
 
-    List<Map> selectTableIdInfo();
+    List<Map> selectTableIdInfo(SysTableManagement sysTableManagement);
 }
