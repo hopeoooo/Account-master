@@ -47,7 +47,6 @@ public class SysTableManagementController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('system:table:list')")
     @GetMapping("/tableIdComboBoxInfo")
     @ApiOperation(value = "桌台下拉框")
     public TableDataInfo tableIdComboBoxInfo(){
