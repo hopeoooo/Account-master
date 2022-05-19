@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.account.system.mapper.SysOddsConfigureMapper">
-    
+
     <resultMap type="SysOddsConfigure" id="SysOddsConfigureResult">
     	<id     property="id"      column="id"      />
         <result property="baccaratPump"    column="baccarat_pump"    />
@@ -29,8 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="baccaratRollingRatioCashTh"    column="baccarat_rolling_ratio_cash_th"    />
         <result property="dragonTigerRatioChipTh"    column="dragon_tiger_ratio_chip_th"    />
         <result property="dragonTigerRatioCashTh"    column="dragon_tiger_ratio_cash_th"    />
+
+        <result property="baccaratTwo"    column="baccarat_two"    />
+        <result property="baccaratThere"    column="baccarat_there"    />
     </resultMap>
-    
+
     <sql id="selectOddsConfigureVo">
         SELECT
             id,
@@ -54,7 +57,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             baccarat_rolling_ratio_chip_th,
             baccarat_rolling_ratio_cash_th,
             dragon_tiger_ratio_chip_th,
-            dragon_tiger_ratio_cash_th
+            dragon_tiger_ratio_cash_th,
+            baccarat_two,
+            baccarat_there
         FROM
             sys_odds_configure
     </sql>
@@ -90,6 +95,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="baccaratRollingRatioCashTh != null">baccarat_rolling_ratio_cash_th = #{baccaratRollingRatioCashTh},</if>
             <if test="dragonTigerRatioChipTh != null">dragon_tiger_ratio_chip_th = #{dragonTigerRatioChipTh},</if>
             <if test="dragonTigerRatioCashTh != null">dragon_tiger_ratio_cash_th = #{dragonTigerRatioCashTh},</if>
+
+            <if test="baccaratTwo != null">baccarat_two = #{baccaratTwo},</if>
+            <if test="baccaratThere != null">baccarat_there = #{baccaratThere},</if>
             <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
         </set>
         where id = #{id}

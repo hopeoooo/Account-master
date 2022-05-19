@@ -72,4 +72,10 @@ public class SysOddsConfigure extends BaseEntity {
     @ApiModelProperty( value ="龙虎洗码比例(现金)-泰铢")
     private BigDecimal dragonTigerRatioCashTh;
 
+    @ApiModelProperty(value = "百家乐-幸运6（2张牌）")
+    private String baccaratTwo;
+
+    @ApiModelProperty(value = "百家乐-幸运6（2张牌）")
+    private String baccaratThere;
+
 }

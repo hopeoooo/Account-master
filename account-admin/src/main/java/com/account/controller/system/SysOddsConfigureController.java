@@ -47,7 +47,9 @@ public class SysOddsConfigureController extends BaseController {
                 oddsConfigure.getBaccaratSmall().length()>10||
                 oddsConfigure.getDragonWin().length()>10||
                 oddsConfigure.getTigerWin().length()>10||
-                oddsConfigure.getTieWin().length()>10
+                oddsConfigure.getTieWin().length()>10||
+                oddsConfigure.getBaccaratTwo().length()>10||
+                oddsConfigure.getBaccaratThere().length()>10
         ){
             return AjaxResult.error("请输入正确得配置数据");
         }

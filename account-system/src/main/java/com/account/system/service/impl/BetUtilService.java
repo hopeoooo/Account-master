@@ -154,22 +154,24 @@ public class BetUtilService {
                     }
                     tableInsurance = tableInsurance.subtract(sysBetInfo.getWinLose());
                 } else if ("a".equals(option)) { //幸运6
-                    //TODO
                     if (type == 0 || type == 1) {
                         sysBetInfo.setType(4);
                     } else if (type == 2 || type == 3) {
                         sysBetInfo.setType(5);
                     }
                     if (gameResult.contains("a")) {//两张牌
-                        amount = amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+                        amount = amount.multiply(new BigDecimal(sysOddsConfigure.getBaccaratTwo()));
                         sysBetInfo.setWinLose(amount);
                         payout = payout.add(sysBetInfo.getWinLose());
                     } else if (gameResult.contains("b")) {//三张牌
-                        amount = amount.multiply(sysOddsConfigure.getBaccaratRollingRatioChip()).divide(new BigDecimal(100));
+                        amount = amount.multiply(new BigDecimal(sysOddsConfigure.getBaccaratThere()));
                         sysBetInfo.setWinLose(amount);
                         payout = payout.add(sysBetInfo.getWinLose());
                     } else {
                         sysBetInfo.setWinLose(BigDecimal.ZERO.subtract(amount));
+                        water = water.add(amount);
+                        sysBetInfo.setWater(amount);
+                        sysBetInfo.setWaterAmount(getBaccaratWaterAmount(amount, sysMembers, type));
                     }
                 } else {
                     if (gameResult.contains(option)) {
