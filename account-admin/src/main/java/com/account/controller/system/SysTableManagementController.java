@@ -49,7 +49,7 @@ public class SysTableManagementController extends BaseController {
 
     @GetMapping("/tableIdComboBoxInfo")
     @ApiOperation(value = "桌台下拉框")
-    public TableDataInfo tableIdComboBoxInfo(){
+    public TableDataInfo tableIdComboBoxInfo(SysTableManagement sysTableManagement){
         List<Map> list = tableManagementService.selectTableIdInfo();
         return getDataTable(list);
     }

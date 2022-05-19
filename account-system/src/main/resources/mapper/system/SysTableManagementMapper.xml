@@ -76,6 +76,9 @@
         FROM
             sys_table_management t
         where  t.is_delete=0
+        <if test="gameId != null and gameId != ''">
+            AND t.game_id =#{gameId}
+        </if>
         ORDER BY  t.table_id asc
     </select>
 
