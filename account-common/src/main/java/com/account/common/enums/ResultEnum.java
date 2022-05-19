@@ -106,7 +106,7 @@ public enum ResultEnum {
     // 普通方法
     public static String getResultEnum(String code) {
         for (ResultEnum r : ResultEnum.values()) {
-            if (r.getCode().equals(code)) {
+            if (r.getCode().equals(code.replaceAll("a","").replaceAll("b",""))) {
                 return r.info;
             }
         }

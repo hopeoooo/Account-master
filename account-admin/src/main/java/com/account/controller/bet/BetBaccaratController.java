@@ -97,6 +97,10 @@ public class BetBaccaratController {
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
+        String gameResult = sysGameResult.getGameResult();
+        if (StringUtils.isEmpty(ResultEnum.getResultEnum(gameResult))) {
+            return AjaxResult.error("赛果格式错误");
+        }
         sysGameResult.setUpdateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
