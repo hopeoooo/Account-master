@@ -123,13 +123,13 @@
             <if test="tableId != null and tableId != 0">table_id = #{tableId},</if>
             <if test="gameId != null and gameId != 0">game_id = #{gameId},</if>
             <if test="gameName != null and gameName != ''">game_name = #{gameName},</if>
-            <if test="chipPointBase != null and chipPointBase != ''">chip_point_base = #{chipPointBase},</if>
-            <if test="cashPointBase != null and cashPointBase != ''">cash_point_base = #{cashPointBase},</if>
-            <if test="insurancePointBase != null and insurancePointBase != ''">insurance_point_base =#{insurancePointBase}, </if>
+            <if test="chipPointBase != null ">chip_point_base = #{chipPointBase},</if>
+            <if test="cashPointBase != null ">cash_point_base = #{cashPointBase},</if>
+            <if test="insurancePointBase != null ">insurance_point_base =#{insurancePointBase}, </if>
 
-            <if test="chipPointBaseTh != null and chipPointBaseTh != ''">chip_point_base_th = #{chipPointBaseTh},</if>
-            <if test="cashPointBaseTh != null and cashPointBaseTh != ''">cash_point_base_th = #{cashPointBaseTh},</if>
-            <if test="insurancePointBaseTh != null and insurancePointBaseTh != ''">insurance_point_base_th =#{insurancePointBaseTh}, </if>
+            <if test="chipPointBaseTh != null ">chip_point_base_th = #{chipPointBaseTh},</if>
+            <if test="cashPointBaseTh != null ">cash_point_base_th = #{cashPointBaseTh},</if>
+            <if test="insurancePointBaseTh != null ">insurance_point_base_th =#{insurancePointBaseTh}, </if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>
