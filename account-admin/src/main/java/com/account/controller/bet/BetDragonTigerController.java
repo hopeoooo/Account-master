@@ -62,14 +62,15 @@ public class BetDragonTigerController {
         map.put("version", sysTableManagement.getVersion());
         map.put("bootNum", sysTableManagement.getBootNum());
         map.put("gameNum", sysTableManagement.getGameNum());
-        map.put("chip", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip()).add(sysTableManagement.getChipAdd()));
-        map.put("cash", sysTableManagement.getCashPointBase().add(sysTableManagement.getCash()).add(sysTableManagement.getCashAdd()));
-        map.put("total", sysTableManagement.getChipPointBase().add(sysTableManagement.getChip()).add(sysTableManagement.getChipAdd())
-                .add(sysTableManagement.getCashPointBase()).add(sysTableManagement.getCash()).add(sysTableManagement.getCashAdd()));
-        map.put("chipTh", sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh()).add(sysTableManagement.getChipAddTh()));
-        map.put("cashTh", sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
-        map.put("totalTh", sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh()).add(sysTableManagement.getChipAddTh())
-                .add(sysTableManagement.getCashPointBaseTh()).add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
+
+        map.put("chip", sysTableManagement.getChip().add(sysTableManagement.getChipAdd()));
+        map.put("cash", sysTableManagement.getCash().add(sysTableManagement.getCashAdd()));
+        map.put("total", sysTableManagement.getChip().add(sysTableManagement.getChipAdd())
+                .add(sysTableManagement.getCash()).add(sysTableManagement.getCashAdd()));
+        map.put("chipTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh()));
+        map.put("cashTh", sysTableManagement.getCashTh().add(sysTableManagement.getCashAddTh()));
+        map.put("totalTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh())
+                .add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
         return AjaxResult.success(map);
     }
 
