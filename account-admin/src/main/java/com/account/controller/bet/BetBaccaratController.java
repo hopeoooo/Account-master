@@ -70,6 +70,9 @@ public class BetBaccaratController {
         map.put("cashTh", sysTableManagement.getCashPointBaseTh().add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
         map.put("totalTh", sysTableManagement.getChipPointBaseTh().add(sysTableManagement.getChipTh()).add(sysTableManagement.getChipAddTh())
                 .add(sysTableManagement.getCashPointBaseTh()).add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
+
+        map.put("totalInsurance", sysTableManagement.getInsurancePointBase().add(sysTableManagement.getInsurance()).add(sysTableManagement.getInsuranceAdd()));
+        map.put("totalInsuranceTh", sysTableManagement.getInsurancePointBaseTh().add(sysTableManagement.getInsuranceTh()).add(sysTableManagement.getInsuranceAddTh()));
         return AjaxResult.success(map);
     }
 
