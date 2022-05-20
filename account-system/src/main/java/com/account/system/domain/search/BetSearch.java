@@ -39,4 +39,17 @@ public class BetSearch {
 
     @ApiModelProperty(value = "结束时间", required = false)
     private String endTime;
+
+    @ApiModelProperty(hidden = true)
+    private Long version;
+
+    public BetSearch() {
+    }
+
+    public BetSearch(Long tableId, Long gameId, Long bootNum,Long version) {
+        this.tableId = tableId;
+        this.gameId = gameId;
+        this.bootNum = bootNum;
+        this.version = version;
+    }
 }
