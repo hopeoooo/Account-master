@@ -1,5 +1,6 @@
 package com.account.controller.bet;
 
+import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
@@ -10,6 +11,9 @@ import com.account.system.domain.Reckon;
 import com.account.system.domain.SysGameResult;
 import com.account.system.domain.SysMembers;
 import com.account.system.domain.SysTableManagement;
+import com.account.system.domain.search.BetSearch;
+import com.account.system.domain.vo.BetInfoOptionVo;
+import com.account.system.domain.vo.BetInfoVo;
 import com.account.system.service.BetService;
 import com.account.system.service.SysMembersService;
 import com.alibaba.fastjson.JSON;
@@ -30,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 /**
  * @author hope
@@ -38,7 +43,7 @@ import java.util.TimerTask;
 @RestController
 @RequestMapping("/bet/sangong")
 @Api(tags = "三公注单录入")
-public class BetSanGongController {
+public class BetSanGongController extends BaseController {
 
     @Autowired
     BetService betService;
@@ -72,6 +77,39 @@ public class BetSanGongController {
                 .add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
 
         return AjaxResult.success(map);
+    }
+
+    @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
+    @PostMapping("/record")
+    @ApiOperation(value = "注单记录")
+    public Object record() {
+        //根据ip获取台桌信息
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        startPage();
+        BetSearch betSearch = new BetSearch(sysTableManagement.getTableId(),
+                sysTableManagement.getGameId(),
+                sysTableManagement.getBootNum(),
+                sysTableManagement.getVersion());
+        List<BetInfoVo> sysAccessCodeVos = betService.selectBetInfoList(betSearch);
+        if(StringUtils.isNotEmpty(sysAccessCodeVos)){
+            List<Long> betId = sysAccessCodeVos.stream().map(BetInfoVo::getBetId).collect(Collectors.toList());
+            //玩法
+            Map<Long, List<BetInfoOptionVo>> betOptionList = betService.selectBetOptionList(betId);
+
+            sysAccessCodeVos.forEach(info ->{
+                List<BetInfoOptionVo> betInfoOptionVos = betOptionList.get(info.getBetId());
+                if (betInfoOptionVos!=null){
+                    info.setOption(betInfoOptionVos);
+                }
+
+            });
+        }
+
+        return getDataTable(sysAccessCodeVos);
     }
 
     @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
@@ -151,7 +189,7 @@ public class BetSanGongController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
+    @PreAuthorize("@ss.hasPermi('bet:sangong:edit')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

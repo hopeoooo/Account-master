@@ -2,7 +2,6 @@ package com.account.controller.bet;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
-import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.ResultEnum;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
@@ -238,7 +237,7 @@ public class BetBaccaratController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:edit')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {
