@@ -236,7 +236,7 @@ public class BetServiceImpl implements BetService {
             JSONObject bet = (JSONObject) b;
             String card = bet.getString("card");
             SysMembers sysMembers = sysMembersMapper.selectmembersByCard(card);
-            if(StringUtils.isNotNull(sysMembers)){
+            if(StringUtils.isNotNull(sysMembers) && checkBets(bet)){
                 SysBet sysBet = new SysBet();
                 sysBet.setCard(card);
                 sysBet.setGameId(sysTableManagement.getGameId());
@@ -254,7 +254,7 @@ public class BetServiceImpl implements BetService {
                         sysBet.setGameResult("输");
                     }
                 }
-
+                betMapper.saveBet(sysBet);
                 Map map = betUtilService.getBetInfos(bet, sysBet, sysTableManagement.getGameId());
 
                 //桌台 累计
@@ -271,7 +271,6 @@ public class BetServiceImpl implements BetService {
                 //添加 注单明细
                 List list = (List) map.get("list");
                 if (list.size() > 0) {
-                    betMapper.saveBet(sysBet);
                     betMapper.saveBetInfos(list);
                     BigDecimal membersChip = (BigDecimal) map.get("membersChip");
                     if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
@@ -870,5 +869,16 @@ public class BetServiceImpl implements BetService {
 
     private BigDecimal checkDecimal(BigDecimal bigDecimal) {
         return bigDecimal != null ? bigDecimal : BigDecimal.ZERO;
+    }
+
+    private boolean checkBets(JSONObject bet){
+        String[] betOption = {"1", "4", "7", "5", "8", "9", "6", "0", "3", "2", "a","龙","虎","和","输","赢"};
+        for (int i = 0; i < betOption.length; i++) {
+            BigDecimal amount = bet.getBigDecimal(betOption[i]);
+            if(amount!=null && amount.compareTo(BigDecimal.ZERO)>0){
+                return true;
+            }
+        }
+        return false;
     }
 }
