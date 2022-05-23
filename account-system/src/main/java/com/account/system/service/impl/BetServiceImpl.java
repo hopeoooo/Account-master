@@ -191,6 +191,7 @@ public class BetServiceImpl implements BetService {
                     sysChipRecord.setChangeTh(chipRecord[0].abs());
                     sysChipRecord.setBeforeTh(sysChipRecord.getAfterTh().subtract(chipRecord[0]));
                 }
+                sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
             }
 
@@ -745,7 +746,7 @@ public class BetServiceImpl implements BetService {
         betMapper.saveBetInfos(betInfos);
 
         BigDecimal membersChip = (BigDecimal) map.get("membersChip");
-        if (membersChip.compareTo(BigDecimal.ZERO) != 0) {
+        if (membersChip.subtract(chipRecord[0]).compareTo(BigDecimal.ZERO) != 0) {
             //生成 筹码帐变记录
             SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
             SysChipRecord sysChipRecord;
