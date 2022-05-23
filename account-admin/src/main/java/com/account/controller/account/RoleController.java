@@ -86,8 +86,8 @@ public class RoleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:role:list')")
     @PostMapping("/tree")
     @ApiOperation(value = "获取菜单列表")
-    public AjaxResult treeselect() {
-        return AjaxResult.success(roleService.buildMenuTreeSelect());
+    public AjaxResult treeselect(@RequestHeader("language") String language) {
+        return AjaxResult.success(roleService.buildMenuTreeSelect(language));
     }
 
     /**
@@ -96,10 +96,10 @@ public class RoleController extends BaseController {
     @PreAuthorize("@ss.hasPermi('account:role:list')")
     @GetMapping(value = "/roleMenuTreeselect/{roleId}")
     @ApiOperation(value = "获取角色菜单列表树")
-    public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId) {
+    public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId,@RequestHeader("language") String language) {
         AjaxResult ajax = AjaxResult.success();
         ajax.put("checkedKeys", roleService.selectMenuListByRoleId(roleId));
-        ajax.put("menus", roleService.buildMenuTreeSelect());
+        ajax.put("menus", roleService.buildMenuTreeSelect(language));
         return ajax;
     }
 }
