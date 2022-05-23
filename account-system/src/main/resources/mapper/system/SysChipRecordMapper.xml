@@ -114,6 +114,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                `before`,
                `change`,
                `after`,
+               `before_th` beforeTh,
+               `change_th` changeTh,
+               `after_th` afterTh,
                bet_id betId
         FROM sys_chip_record
         where card = #{card}
