@@ -739,21 +739,21 @@ public class BetServiceImpl implements BetService {
         betMapper.saveBetInfos(betInfos);
 
         BigDecimal membersChip = (BigDecimal) map.get("membersChip");
-        if (membersChip.subtract(chipRecord[0]).compareTo(BigDecimal.ZERO) != 0
-        || membersChip.subtract(chipRecordTh[0]).compareTo(BigDecimal.ZERO) != 0) {
+        if (chipRecord[0].add(membersChip).compareTo(BigDecimal.ZERO) != 0
+        || chipRecordTh[0].subtract(membersChip).compareTo(BigDecimal.ZERO) != 0) {
             //生成 筹码帐变记录
             SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
             SysChipRecord sysChipRecord = null;
             if (type == 0) {
-                sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), membersChip.subtract(chipRecord[0]).abs(), sysMembers.getChip().add(membersChip.subtract(chipRecord[0]))
+                sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), chipRecord[0].add(membersChip).abs(), sysMembers.getChip().add(chipRecord[0].add(membersChip))
                         , BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, sysBet.getBetId());
                 //修改会员现有筹码
-                sysMembersMapper.updateMembersChip(sysBet.getCard(), membersChip.subtract(chipRecord[0]), BigDecimal.ZERO);
+                sysMembersMapper.updateMembersChip(sysBet.getCard(), chipRecord[0].add(membersChip), BigDecimal.ZERO);
             } else if(type == 2){
                 sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                        sysMembers.getChipTh(), membersChip.subtract(chipRecordTh[0]).abs(), sysMembers.getChipTh().add(membersChip.subtract(chipRecordTh[0])), sysBet.getBetId());
+                        sysMembers.getChipTh(), chipRecordTh[0].subtract(membersChip).abs(), sysMembers.getChipTh().add(chipRecordTh[0].subtract(membersChip)), sysBet.getBetId());
                 //修改会员现有筹码
-                sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, membersChip.subtract(chipRecordTh[0]));
+                sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, chipRecordTh[0].subtract(membersChip));
             }
             sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
             sysChipRecord.setCreateBy(SecurityUtils.getUsername());
