@@ -5,7 +5,6 @@ import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
-import com.account.framework.manager.AsyncManager;
 import com.account.system.domain.BetRepair;
 import com.account.system.domain.BetUpdate;
 import com.account.system.domain.SysMembers;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 /**
@@ -97,12 +95,7 @@ public class BetRecordController extends BaseController {
             return AjaxResult.error("卡号："+betUpdate.getCard()+" 不存在");
         }
         betUpdate.setUpdateBy(SecurityUtils.getUsername());
-        AsyncManager.me().execute(new TimerTask() {
-            public void run() {
-                betService.updateBet(betUpdate);
-            }
-        });
-
+        betService.updateBet(betUpdate);
         return AjaxResult.success();
     }
 }
