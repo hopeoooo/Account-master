@@ -156,21 +156,38 @@ public class SysPorintServiceImpl implements SysPorintService {
                 || sysPorint.getInsuranceAddTh().compareTo(porint.getInsuranceAddTh()) != 0) {
 
             List<SysPorint> list = porintMapper.getPorints(sysPorint);
-            if(StringUtils.isNotEmpty(list)){
+            if (StringUtils.isNotEmpty(list)) {
                 //修改后续点码 增减 差距
-                porintMapper.editPorints(list,porint.getChipAdd(),porint.getCashAdd(),porint.getInsuranceAdd()
-                        ,porint.getChipAddTh(),porint.getCashAddTh(),porint.getInsuranceAddTh());
+                porintMapper.editPorints(list, porint.getChipAdd().subtract(sysPorint.getChipAdd())
+                        , porint.getCashAdd().subtract(sysPorint.getCashAdd())
+                        , porint.getInsuranceAdd().subtract(sysPorint.getInsuranceAdd())
+                        , porint.getChipAddTh().subtract(sysPorint.getChipAddTh())
+                        , porint.getCashAddTh().subtract(sysPorint.getCashAddTh())
+                        , porint.getInsuranceAddTh().subtract(sysPorint.getInsuranceAddTh()));
             }
-        }
-        // 修改 收码
-        SysReceipt sysReceipt = receiptMapper.getReceipt(sysPorint.getTableId(), sysPorint.getVersion());
-        if (sysReceipt != null) {
-            receiptMapper.updateReceipt(sysReceipt.getId(), porint.getChipAdd(), porint.getCashAdd(), porint.getInsuranceAdd(), BigDecimal.ZERO);
-            receiptMapper.updateReceiptTh(sysReceipt.getId(), porint.getChipAddTh(), porint.getCashAddTh(), porint.getInsuranceAddTh(), BigDecimal.ZERO);
-        } else {
-            //修改 桌台 累计
-            sysTableManagementMapper.addTableMoney(new SysTableManagement(sysPorint.getTableId(), porint.getChipAdd(), porint.getCashAdd(), porint.getInsuranceAdd()
-                    , porint.getChipAddTh(), porint.getCashAddTh(), porint.getInsuranceAddTh()));
+            // 修改 收码
+            SysReceipt sysReceipt = receiptMapper.getReceipt(sysPorint.getTableId(), sysPorint.getVersion());
+            if (sysReceipt != null) {
+                receiptMapper.updateReceipt(sysReceipt.getId()
+                        , porint.getChipAdd().subtract(sysPorint.getChipAdd())
+                        , porint.getCashAdd().subtract(sysPorint.getCashAdd())
+                        , porint.getInsuranceAdd().subtract(sysPorint.getInsuranceAdd())
+                        , BigDecimal.ZERO);
+                receiptMapper.updateReceiptTh(sysReceipt.getId()
+                        , porint.getChipAddTh().subtract(sysPorint.getChipAddTh())
+                        , porint.getCashAddTh().subtract(sysPorint.getCashAddTh())
+                        , porint.getInsuranceAddTh().subtract(sysPorint.getInsuranceAddTh())
+                        , BigDecimal.ZERO);
+            } else {
+                //修改 桌台 累计
+                sysTableManagementMapper.addTableMoney(new SysTableManagement(sysPorint.getTableId()
+                        , porint.getChipAdd().subtract(sysPorint.getChipAdd())
+                        , porint.getCashAdd().subtract(sysPorint.getCashAdd())
+                        , porint.getInsuranceAdd().subtract(sysPorint.getInsuranceAdd())
+                        , porint.getChipAddTh().subtract(sysPorint.getChipAddTh())
+                        , porint.getCashAddTh().subtract(sysPorint.getCashAddTh())
+                        , porint.getInsuranceAddTh().subtract(sysPorint.getInsuranceAddTh())));
+            }
         }
 
     }
