@@ -1,8 +1,10 @@
 package com.account.system.service.impl;
 
+import com.account.common.constant.CommonConst;
 import com.account.common.enums.ChipChangeEnum;
 import com.account.system.domain.SysAccessCode;
 import com.account.system.domain.SysChipRecord;
+import com.account.system.domain.SysMembers;
 import com.account.system.domain.search.SysAccessCodeAddSearch;
 import com.account.system.domain.SysAccessCodeDetailed;
 import com.account.system.domain.search.SysAccessCodeSearch;
@@ -10,7 +12,9 @@ import com.account.system.domain.vo.SysAccessCodeVo;
 import com.account.system.mapper.SysAccessCodeDetailedMapper;
 import com.account.system.mapper.SysAccessCodeMapper;
 import com.account.system.mapper.SysChipRecordMapper;
+import com.account.system.mapper.SysMembersMapper;
 import com.account.system.service.SysAccessCodeService;
+import com.account.system.service.SysMembersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,13 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     private SysAccessCodeDetailedMapper accessCodeDetailedMapper;
     @Autowired
     private SysChipRecordMapper chipRecordMapper;
+    @Autowired
+    private SysMembersMapper membersMapper;
+
+
+    @Autowired
+    private SysMembersService membersService;
+
 
     @Override
     public List<SysAccessCodeVo> selectAccessCodeList(SysAccessCodeSearch accessCodeSearch) {
@@ -51,6 +62,13 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     @Transactional
     public int insertAccessCode(SysAccessCodeAddSearch accessCode) {
         int i = accessCodeMapper.insertAccessCode(accessCode);
+        if (accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0
+                || accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0) {
+            int mark = accessCode.getMark() == ChipChangeEnum.STORE_CHIP.getCode() ? CommonConst.NUMBER_0 : CommonConst.NUMBER_1;
+            //修改筹码余额
+            membersService.updateChipAmount(accessCode.getCard(), accessCode.getChipAmount(), accessCode.getChipAmountTh(), mark);
+        }
+
         if(i>0){
             //保存存取码明细
             saveAccessCodeDetailed(accessCode);
@@ -61,7 +79,15 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
     @Override
     @Transactional
     public int updateAccessCode(SysAccessCodeAddSearch accessCode) {
-        int i = accessCodeMapper.updateAccessCode(accessCode);
+        //存取码
+        int i =  accessCodeMapper.updateAccessCode(accessCode);
+        if (accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0
+                || accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0) {
+            int mark = accessCode.getMark() == ChipChangeEnum.STORE_CHIP.getCode() ? CommonConst.NUMBER_0 : CommonConst.NUMBER_1;
+            //修改筹码余额
+            membersService.updateChipAmount(accessCode.getCard(), accessCode.getChipAmount(), accessCode.getChipAmountTh(), mark);
+        }
+
         if(i>0){
             //保存存取码明细
             saveAccessCodeDetailed(accessCode);
@@ -76,6 +102,7 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
      * @return
      */
     public void saveAccessCodeDetailed(SysAccessCodeAddSearch accessCode){
+
         //存取码明细
         SysAccessCode sysAccessCode = accessCodeMapper.selectAccessCodeInfo(accessCode.getId(),accessCode.getCard());
         SysAccessCodeDetailed accessCodeDetailed=new SysAccessCodeDetailed();
@@ -83,16 +110,30 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         accessCodeDetailed.setType(accessCode.getMark());
         accessCodeDetailed.setCreateBy(accessCode.getCreateBy());
         accessCodeDetailed.setRemark(accessCode.getRemark());
+
+        //查询总筹码余额
+        SysMembers sysMembers = membersMapper.selectmembersByCard(accessCodeDetailed.getCard());
+        SysChipRecord chipRecord=new SysChipRecord();
+        chipRecord.setCard(accessCodeDetailed.getCard());
+        chipRecord.setType(accessCodeDetailed.getType());
+        chipRecord.setRemark(accessCode.getRemark());
+        chipRecord.setCreateBy(accessCodeDetailed.getCreateBy());
+
         //美金-筹码
         if (accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0){
             BigDecimal chipBalance = sysAccessCode!=null && sysAccessCode.getChipBalance() != null ? sysAccessCode.getChipBalance() :  BigDecimal.ZERO;
+            BigDecimal chipAmount =accessCode.getChipAmount()==null ?BigDecimal.ZERO:accessCode.getChipAmount();
             if (accessCode.getMark()== ChipChangeEnum.STORE_CHIP.getCode()){
-                accessCodeDetailed.setChipAmountBefore(chipBalance.subtract(accessCode.getChipAmount()==null ?BigDecimal.ZERO:accessCode.getChipAmount()));
+                accessCodeDetailed.setChipAmountBefore(chipBalance.subtract(chipAmount));
+                chipRecord.setBefore(sysMembers.getChip().add(chipAmount));
             }else {
-                accessCodeDetailed.setChipAmountBefore(chipBalance.add(accessCode.getChipAmount()==null ?BigDecimal.ZERO:accessCode.getChipAmount()));
+                accessCodeDetailed.setChipAmountBefore(chipBalance.add(chipAmount));
+                chipRecord.setBefore(sysMembers.getChip().subtract(chipAmount));
             }
             accessCodeDetailed.setChipAmount(accessCode.getChipAmount());
             accessCodeDetailed.setChipAmountAfter(chipBalance);
+            chipRecord.setChange(accessCode.getChipAmount());
+            chipRecord.setAfter(sysMembers.getChip());
         }
         //美金-现金
         if (accessCode.getCashAmount()!=null && accessCode.getCashAmount().compareTo(BigDecimal.ZERO)>0) {
@@ -109,13 +150,19 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         //泰铢-筹码
         if (accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0){
             BigDecimal chipBalanceTh = sysAccessCode!=null && sysAccessCode.getChipBalanceTh() != null ? sysAccessCode.getChipBalanceTh() :  BigDecimal.ZERO;
+            BigDecimal chipAmountTh=  accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh();
             if (accessCode.getMark()== ChipChangeEnum.STORE_CHIP.getCode()){
-                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.subtract(accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh()));
+                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.subtract(chipAmountTh));
+                chipRecord.setBeforeTh(sysMembers.getChipTh().add(chipAmountTh));
             }else {
-                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.add(accessCode.getChipAmountTh()==null ?BigDecimal.ZERO:accessCode.getChipAmountTh()));
+                accessCodeDetailed.setChipAmountBeforeTh(chipBalanceTh.add(chipAmountTh));
+                chipRecord.setBeforeTh(sysMembers.getChipTh().subtract(chipAmountTh));
             }
             accessCodeDetailed.setChipAmountTh(accessCode.getChipAmountTh());
             accessCodeDetailed.setChipAmountAfterTh(chipBalanceTh);
+
+            chipRecord.setChangeTh(accessCode.getChipAmountTh());
+            chipRecord.setAfterTh(sysMembers.getChipTh());
 
         }
 
@@ -134,29 +181,27 @@ public class SysAccessCodeServiceImpl implements SysAccessCodeService {
         accessCodeDetailedMapper.insertAccessCodeDetailed(accessCodeDetailed);
 
 
-        /*if ((accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0)
+        if ((accessCode.getChipAmount()!=null && accessCode.getChipAmount().compareTo(BigDecimal.ZERO)>0)
                 || (accessCode.getChipAmountTh()!=null && accessCode.getChipAmountTh().compareTo(BigDecimal.ZERO)>0)){
             //添加筹码变动明细表
-            addChipRecord(accessCodeDetailed);
-        }*/
+            addChipRecord(chipRecord);
+        }
     }
+
+
 
 
     /**
      * 组装筹码明细变动数据
-     * @param accessCodeDetailed
+     * @param chipRecord
      */
-    public void addChipRecord(SysAccessCodeDetailed accessCodeDetailed){
-        SysChipRecord chipRecord=new SysChipRecord();
-        chipRecord.setCard(accessCodeDetailed.getCard());
-        chipRecord.setType(accessCodeDetailed.getType());
-        chipRecord.setBefore(accessCodeDetailed.getChipAmountBefore()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountBefore());
-        chipRecord.setChange(accessCodeDetailed.getChipAmount()==null ? BigDecimal.ZERO :accessCodeDetailed.getChipAmount() );
-        chipRecord.setAfter(accessCodeDetailed.getChipAmountAfter()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountAfter());
-        chipRecord.setBeforeTh(accessCodeDetailed.getChipAmountBeforeTh()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountBeforeTh());
-        chipRecord.setChangeTh(accessCodeDetailed.getChipAmountTh()==null ? BigDecimal.ZERO :accessCodeDetailed.getChipAmountTh() );
-        chipRecord.setAfterTh(accessCodeDetailed.getChipAmountAfterTh()==null ? BigDecimal.ZERO : accessCodeDetailed.getChipAmountAfterTh());
-        chipRecord.setCreateBy(accessCodeDetailed.getCreateBy());
+    public void addChipRecord(SysChipRecord chipRecord){
+        chipRecord.setBefore(chipRecord.getBefore()==null ? BigDecimal.ZERO : chipRecord.getBefore());
+        chipRecord.setChange(chipRecord.getChange()==null ? BigDecimal.ZERO :chipRecord.getChange() );
+        chipRecord.setAfter(chipRecord.getAfter()==null ? BigDecimal.ZERO : chipRecord.getAfter());
+        chipRecord.setBeforeTh(chipRecord.getBeforeTh()==null ? BigDecimal.ZERO : chipRecord.getBeforeTh());
+        chipRecord.setChangeTh(chipRecord.getChangeTh()==null ? BigDecimal.ZERO :chipRecord.getChangeTh() );
+        chipRecord.setAfterTh(chipRecord.getAfterTh()==null ? BigDecimal.ZERO : chipRecord.getAfterTh());
         chipRecordMapper.addChipRecord(chipRecord);
     }
 }
