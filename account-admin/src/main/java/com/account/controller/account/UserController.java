@@ -53,7 +53,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "新增员工")
     public AjaxResult add(SysUser sysUser) {
         if (StringUtils.isNotNull(userService.selectUserByUserName(sysUser.getUserName()))) {
-            return AjaxResult.error("新增会员'" + sysUser.getUserName() + "'失败，工号已存在");
+            return AjaxResult.error("新增会员'" + sysUser.getUserName() + "'失败，卡号已存在");
         }
         sysUser.setCreateBy(SecurityUtils.getUsername());
         userService.addUser(sysUser);

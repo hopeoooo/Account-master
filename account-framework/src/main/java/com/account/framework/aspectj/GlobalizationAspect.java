@@ -42,6 +42,20 @@ public class GlobalizationAspect {
             if (obj instanceof AjaxResult) {
                 AjaxResult ajaxResult = (AjaxResult) obj;
                 String msg = (String) ajaxResult.get("msg");
+
+                msg = msg.replaceAll("新增会员","Add member ");
+                msg = msg.replaceAll("修改会员","Modify member ");
+                msg = msg.replaceAll("失败，卡号已存在","Failed, card number already exists");
+
+                msg = msg.replaceAll("新增角色","Add a new character ");
+                msg = msg.replaceAll("修改角色","Modify character ");
+                msg = msg.replaceAll("失败，角色名称已存在","Failed, character name already exists");
+
+                msg = msg.replaceAll("卡号：","Card number ");
+                msg = msg.replaceAll("不存在：","Does not exist");
+
+                msg = msg.replaceAll("ip地址错误 ip:","Wrong ip address ip:");
+
                 ajaxResult.put("msg", LanguageMagEnum.getEnByZh(msg));
             }
             if (obj instanceof TableDataInfo) {
@@ -53,5 +67,9 @@ public class GlobalizationAspect {
         return obj;
     }
 
-
+    public static void main(String[] args) {
+        String s = "sss";
+        s = s.replaceAll("s","11");
+        System.out.println(s);
+    }
 }

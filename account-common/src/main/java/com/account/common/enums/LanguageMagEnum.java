@@ -62,7 +62,7 @@ public enum LanguageMagEnum {
                 return r.getEn();
             }
         }
-        return "";
+        return zh;
     }
 
     public String getZh() {

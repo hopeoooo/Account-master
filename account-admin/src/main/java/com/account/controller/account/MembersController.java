@@ -67,7 +67,7 @@ public class MembersController extends BaseController {
     @ApiOperation(value = "新增会员")
     public AjaxResult add(SysMembers sysMembers) {
         if (StringUtils.isNotNull(sysMembersService.selectmembersByCard(sysMembers.getCard()))) {
-            return AjaxResult.error("新增会员'" + sysMembers.getCard() + "'失败，卡号已存在");
+            return AjaxResult.error("新增会员" + sysMembers.getCard() + "'失败，卡号已存在");
         }
         sysMembers.setCreateBy(SecurityUtils.getUsername());
         sysMembersService.addMembers(sysMembers);
