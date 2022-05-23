@@ -709,8 +709,13 @@ public class BetServiceImpl implements BetService {
                 }
             }
             SysChipRecord sysChipRecord = sysChipRecordMapper.selectChipRecord(oldBetInfo.getCard(), oldBetInfo.getBetId());
-            chipRecord[0] = sysChipRecord.getAfter().subtract(sysChipRecord.getBefore());
-            chipRecordTh[0] = sysChipRecord.getAfterTh().subtract(sysChipRecord.getBeforeTh());
+            if(sysChipRecord == null){
+                chipRecord[0] = BigDecimal.ZERO.subtract(sysChipRecord.getBefore());
+                chipRecordTh[0] = BigDecimal.ZERO.subtract(sysChipRecord.getBeforeTh());
+            }else {
+                chipRecord[0] = sysChipRecord.getAfter().subtract(sysChipRecord.getBefore());
+                chipRecordTh[0] = sysChipRecord.getAfterTh().subtract(sysChipRecord.getBeforeTh());
+            }
 
             //记录桌台累计
             if (oldBetInfo.getType() == 0) {
