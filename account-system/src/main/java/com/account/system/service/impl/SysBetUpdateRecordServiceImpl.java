@@ -117,6 +117,10 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
                         .replaceAll("庄", "B")
                         .replaceAll("闲", "P")
                         .replaceAll("和", "T")
+                        .replaceAll("龙", "Dragon")
+                        .replaceAll("虎", "Tiger")
+                        .replaceAll("输", "Loss")
+                        .replaceAll("赢", "Win")
                 );
 
                 String type = (String) map.get("type");
@@ -135,7 +139,11 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
                         .replaceAll("小", "S")
                         .replaceAll("庄", "B")
                         .replaceAll("闲", "P")
-                        .replaceAll("和", "T"));
+                        .replaceAll("和", "T")
+                        .replaceAll("龙", "Dragon")
+                        .replaceAll("虎", "Tiger")
+                        .replaceAll("输", "Loss")
+                        .replaceAll("赢", "Win"));
             });
         }
         return list;
