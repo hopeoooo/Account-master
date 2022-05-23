@@ -130,8 +130,8 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<TreeSelect> buildMenuTreeSelect() {
-        List<SysMenu> menuList = roleMapper.selectMenuList();
+    public List<TreeSelect> buildMenuTreeSelect(String language) {
+        List<SysMenu> menuList = roleMapper.selectMenuList(language);
         List<SysMenu> menuTrees = buildMenuTree(menuList);
         return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
     }

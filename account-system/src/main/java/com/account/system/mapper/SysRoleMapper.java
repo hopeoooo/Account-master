@@ -38,7 +38,7 @@ public interface SysRoleMapper {
     @Delete("delete from sys_role where role_id = #{roleId}")
     int deleteRole(@Param("roleId") Long roleId);
 
-    List<SysMenu> selectMenuList();
+    List<SysMenu> selectMenuList(@Param("language")String language);
 
     void editRole(SysRole sysRole);
 

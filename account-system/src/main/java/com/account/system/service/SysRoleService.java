@@ -31,7 +31,7 @@ public interface SysRoleService {
 
     int deleteRole(Long roleId);
 
-    List<TreeSelect> buildMenuTreeSelect();
+    List<TreeSelect> buildMenuTreeSelect(String language);
 
     int editRole(SysRole sysRole);
 

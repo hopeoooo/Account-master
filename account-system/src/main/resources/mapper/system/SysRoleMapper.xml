@@ -83,7 +83,14 @@
     </select>
 
     <select id="selectMenuList" resultType="SysMenu">
-        select menu_id menuId, menu_name menuName, parent_id parentId, order_num orderNum,
+        select menu_id menuId,
+        <if test="language != null and language != 'en_us'">
+            menu_name menuName,
+        </if>
+        <if test="language != null and language == 'en_us'">
+            menu_name_en menuName,
+        </if>
+               parent_id parentId, order_num orderNum,
                path, component, `query`,
                is_frame isFrame, is_cache isCache, menu_type menuType,
                visible, status, ifnull(perms,'') as perms, icon, create_time createTime
