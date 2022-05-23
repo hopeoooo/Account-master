@@ -66,10 +66,4 @@ public class GlobalizationAspect {
         }
         return obj;
     }
-
-    public static void main(String[] args) {
-        String s = "sss";
-        s = s.replaceAll("s","11");
-        System.out.println(s);
-    }
 }

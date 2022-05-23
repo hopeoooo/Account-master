@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hope
@@ -99,23 +100,64 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
     }
 
     @Override
-    public List selectBetUpdateList(BetSearch betSearch) {
-        return sysBetUpdateRecordMapper.selectBetUpdateList(betSearch);
+    public List selectBetUpdateList(BetSearch betSearch,String language) {
+        List list = sysBetUpdateRecordMapper.selectBetUpdateList(betSearch);
+        if("en_us".equals(language)){
+            list.forEach(m->{
+                Map map = (Map) m;
+                String option = (String) map.get("option");
+                map.put("option", option.replaceAll("庄对", "B P")
+                        .replaceAll("闲对", "P P")
+                        .replaceAll("庄保险", "B Ins")
+                        .replaceAll("闲保险", "P Ins")
+                        .replaceAll("和保险", "T Ins")
+                        .replaceAll("幸运6", "Lucky 6")
+                        .replaceAll("大", "B")
+                        .replaceAll("小", "S")
+                        .replaceAll("庄", "B")
+                        .replaceAll("闲", "P")
+                        .replaceAll("和", "T")
+                );
+
+                String type = (String) map.get("type");
+                map.put("type",type.replaceAll("筹码","Chip")
+                        .replaceAll("现金","Cash"));
+
+                String result = (String) map.get("result");
+                map.put("result",result.replaceAll("庄对", "B P")
+                        .replaceAll("闲对", "P P")
+                        .replaceAll("庄保险", "B Ins")
+                        .replaceAll("闲保险", "P Ins")
+                        .replaceAll("和保险", "T Ins")
+                        .replaceAll("幸运6（2张牌）", "Lucky 6(2 Cards)")
+                        .replaceAll("幸运6（3张牌）", "Lucky 6(3 Cards)")
+                        .replaceAll("大", "B")
+                        .replaceAll("小", "S")
+                        .replaceAll("庄", "B")
+                        .replaceAll("闲", "P")
+                        .replaceAll("和", "T"));
+            });
+        }
+        return list;
     }
 
     private String changeRelust(String s){
-        return s.replaceAll("1","闲")
-                .replaceAll("4","庄")
-                .replaceAll("7","和")
-                .replaceAll("5","闲对")
-                .replaceAll("8","庄对")
-                .replaceAll("9","大")
-                .replaceAll("6","小")
-                .replaceAll("0","闲保险")
-                .replaceAll("3","庄保险")
-                .replaceAll("2","和保险")
-                .replaceAll("a","两张牌")
-                .replaceAll("b","三张牌");
+        s =  s.replaceAll("1","闲/")
+                .replaceAll("4","庄/")
+                .replaceAll("7","和/")
+                .replaceAll("5","闲对/")
+                .replaceAll("8","庄对/")
+                .replaceAll("9","大/")
+                .replaceAll("6","小/")
+                .replaceAll("0","闲保险/")
+                .replaceAll("3","庄保险/")
+                .replaceAll("2","和保险/")
+                .replaceAll("a","幸运6（2张牌）/")
+                .replaceAll("b","幸运6（3张牌）/");
+        if(s.length()>1){
+            s = s.substring(0,s.length()-1);
+        }
+        return s;
     }
 
     private String changeOption(String s){

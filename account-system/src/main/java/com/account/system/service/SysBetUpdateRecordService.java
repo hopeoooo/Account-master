@@ -19,5 +19,5 @@ public interface SysBetUpdateRecordService {
 
     void saveBetRecord(BetUpdate betUpdate, List<SysBetInfo> oldBetInfos, List<SysBetInfo> newBetInfos,String gameResult);
 
-    List selectBetUpdateList(BetSearch betSearch);
+    List selectBetUpdateList(BetSearch betSearch,String language);
 }
