@@ -177,14 +177,19 @@
         <if test="reportSearch.gameId != null">
             AND b.game_id = #{reportSearch.gameId}
         </if>
-        and (
+        <if test="list!=null and list.size>0">
+            AND (
             <foreach item="item" index="index" collection="list" separator="or">
                 ( b.version <![CDATA[>=]]> #{item.minVersion}
                 AND b.version <![CDATA[<=]]> #{item.maxVersion}
                 AND table_id = #{item.tableId}
                 )
             </foreach>
-        )
+            )
+        </if>
+        <if test="list.size==0">
+            AND b.version = -1
+        </if>
         <where>
             <if test="reportSearch.cardType == null or reportSearch.cardType == '' or reportSearch.cardType == 0 ">
                 <if test="reportSearch.card != null and reportSearch.card != ''">
