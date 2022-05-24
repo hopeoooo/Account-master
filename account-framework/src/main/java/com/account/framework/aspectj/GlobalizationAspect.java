@@ -52,7 +52,7 @@ public class GlobalizationAspect {
                 msg = msg.replaceAll("失败，角色名称已存在","Failed, character name already exists");
 
                 msg = msg.replaceAll("卡号：","Card number ");
-                msg = msg.replaceAll("不存在：","Does not exist");
+                msg = msg.replaceAll("不存在","Does not exist");
 
                 msg = msg.replaceAll("ip地址错误 ip:","Wrong ip address ip:");
 
