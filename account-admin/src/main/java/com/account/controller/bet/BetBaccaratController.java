@@ -67,17 +67,17 @@ public class BetBaccaratController extends BaseController {
         map.put("version", sysTableManagement.getVersion());
         map.put("bootNum", sysTableManagement.getBootNum());
         map.put("gameNum", sysTableManagement.getGameNum());
-        map.put("chip", sysTableManagement.getChip().add(sysTableManagement.getChipAdd()));
-        map.put("cash", sysTableManagement.getCash().add(sysTableManagement.getCashAdd()));
-        map.put("total", sysTableManagement.getChip().add(sysTableManagement.getChipAdd())
-                .add(sysTableManagement.getCash()).add(sysTableManagement.getCashAdd()));
-        map.put("chipTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh()));
-        map.put("cashTh", sysTableManagement.getCashTh().add(sysTableManagement.getCashAddTh()));
-        map.put("totalTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh())
-                .add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
+        map.put("chip", sysTableManagement.getChip());
+        map.put("cash", sysTableManagement.getCash());
+        map.put("total", sysTableManagement.getChip()
+                .add(sysTableManagement.getCash()));
+        map.put("chipTh", sysTableManagement.getChipTh());
+        map.put("cashTh", sysTableManagement.getCashTh());
+        map.put("totalTh", sysTableManagement.getChipTh()
+                .add(sysTableManagement.getCashTh()));
 
-        map.put("totalInsurance", sysTableManagement.getInsurance().add(sysTableManagement.getInsuranceAdd()));
-        map.put("totalInsuranceTh", sysTableManagement.getInsuranceTh().add(sysTableManagement.getInsuranceAddTh()));
+        map.put("totalInsurance", sysTableManagement.getInsurance());
+        map.put("totalInsuranceTh", sysTableManagement.getInsuranceTh());
         return AjaxResult.success(map);
     }
 

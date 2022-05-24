@@ -68,17 +68,9 @@
     </select>
 
     <select id="selectReceiptTimes" resultType="map">
-        select MIN(s.create_time) startTime ,MAX(s.create_time) endTime , s.table_id tableId
+        select MIN(s.version) minVersion ,MAX(s.version) maxVersion , s.table_id tableId
         from sys_receipt s
-        left join sys_table_management t
-        on s.table_id = t.table_id
         <where>
-            <if test="tableId != null">
-                AND s.table_id = #{tableId}
-            </if>
-            <if test="gameId != null">
-                AND t.game_id = #{gameId}
-            </if>
             <if test="startTime != null and startTime != ''">
                 AND s.create_time <![CDATA[>=]]> #{startTime}
             </if>
@@ -87,6 +79,13 @@
             </if>
         </where>
         group by s.table_id
+    </select>
+
+    <select id="selectTodayReceiptTimes" resultType="map">
+        SELECT MIN(s.version) minVersion, MAX(s.version) maxVersion, s.table_id tableId
+        FROM sys_table_management s
+        WHERE s.is_delete = 0
+        GROUP BY s.table_id
     </select>
 
     <select id="selectWinLoseListByReceiptTimes" resultType="map">
@@ -109,11 +108,20 @@
         from
         sys_members m
         left join sys_bet_info b on b.card = m.card
-        and (
+        <if test="reportSearch.tableId != null">
+            AND b.table_id = #{reportSearch.tableId}
+        </if>
+        <if test="reportSearch.bootNum != null">
+            AND b.boot_num = #{reportSearch.bootNum}
+        </if>
+        <if test="reportSearch.gameId != null">
+            AND b.game_id = #{reportSearch.gameId}
+        </if>
+        AND (
             <foreach item="item" index="index" collection="list" separator="or">
-                ( b.create_time <![CDATA[>=]]> #{item.startTime}
-                    AND b.create_time <![CDATA[<=]]> #{item.endTime}
-                    AND table_id = #{item.tableId}
+                ( b.version <![CDATA[>=]]> #{item.minVersion}
+                AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                AND table_id = #{item.tableId}
                 )
             </foreach>
         )
@@ -155,13 +163,22 @@
         from
         sys_members m
         left join sys_bet_info b on b.card = m.card
+        <if test="reportSearch.tableId != null">
+            AND b.table_id = #{reportSearch.tableId}
+        </if>
+        <if test="reportSearch.bootNum != null">
+            AND b.boot_num = #{reportSearch.bootNum}
+        </if>
+        <if test="reportSearch.gameId != null">
+            AND b.game_id = #{reportSearch.gameId}
+        </if>
         and (
-        <foreach item="item" index="index" collection="list" separator="or">
-            ( b.create_time <![CDATA[>=]]> #{item.startTime}
-            AND b.create_time <![CDATA[<=]]> #{item.endTime}
-            AND table_id = #{item.tableId}
-            )
-        </foreach>
+            <foreach item="item" index="index" collection="list" separator="or">
+                ( b.version <![CDATA[>=]]> #{item.minVersion}
+                AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                AND table_id = #{item.tableId}
+                )
+            </foreach>
         )
         <where>
             <if test="reportSearch.cardType == null or reportSearch.cardType == '' or reportSearch.cardType == 0 ">
@@ -176,6 +193,78 @@
             <if test="reportSearch.isAdmin != null and reportSearch.isAdmin != '' and reportSearch.isAdmin > 0">
                 AND m.is_admin = 0
             </if>
+        </where>
+    </select>
+
+    <select id="selectDailyReportListByReceiptTimes" resultType="map">
+        SELECT
+        m.card                                                                                                    as card,
+        m.`name`                                                                                                  as name,
+        date_format(b.create_time, '%Y-%m-%d')                                                                    as date,
+        ifnull(SUM(case when type in (0,1,4) then b.win_lose else 0 end), 0) as winLose,
+        (select ifnull(SUM(case when type in (0,1,4) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLose,
+        ifnull(SUM(case when type in(0,1,4) then b.water else 0 end), 0)          as water,
+        (select ifnull(SUM(case when type in(0,1,4) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWater,
+
+
+        ifnull(SUM(case when type in (2,3,5) then b.win_lose else 0 end),
+        0)                                                                                                 as winLoseTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.win_lose else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWinLoseTh,
+        ifnull(SUM(case when type in (2,3,5) then b.water else 0 end), 0)          as waterTh,
+        (select ifnull(SUM(case when type in (2,3,5) then a.water else 0 end), 0)
+        from sys_bet_info a
+        WHERE date_format(a.create_time, '%Y-%m-%d') <![CDATA[<=]]> date_format(b.create_time, '%Y-%m-%d')
+        and a.card = b.card)                                                                                   as sumWaterTh
+        FROM
+        sys_bet_info b
+        LEFT JOIN sys_members m ON m.card = b.card
+        <where>
+            <if test="reportSearch.card != null and reportSearch.card != ''">
+                AND b.card = #{reportSearch.card}
+            </if>
+            and (
+            <foreach item="item" index="index" collection="list" separator="or">
+                ( b.version <![CDATA[>=]]> #{item.minVersion}
+                AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                AND b.table_id = #{item.tableId}
+                )
+            </foreach>
+            )
+        </where>
+        GROUP BY m.card,date_format(b.create_time,'%Y-%m-%d')
+        ORDER BY date_format(b.create_time,'%Y-%m-%d') desc
+    </select>
+
+    <select id="selectDailyReportTotalByReceiptTimes" resultType="map">
+        SELECT
+        ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)  as winLose,
+        ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)  as water,
+
+        ifnull(sum(case when type in (2, 3,5) then b.win_lose else 0 end), 0)  as winLoseTh,
+        ifnull(sum(case when type in (2, 3,5) then b.water else 0 end), 0)  as waterTh
+        FROM
+        sys_bet_info b
+        <where>
+            <if test="reportSearch.card != null and reportSearch.card != ''">
+                AND b.card = #{reportSearch.card}
+            </if>
+            and (
+            <foreach item="item" index="index" collection="list" separator="or">
+                ( b.version <![CDATA[>=]]> #{item.minVersion}
+                AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                AND b.table_id = #{item.tableId}
+                )
+            </foreach>
+            )
         </where>
     </select>
 </mapper>

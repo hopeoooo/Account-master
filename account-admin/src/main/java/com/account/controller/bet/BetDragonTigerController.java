@@ -68,14 +68,14 @@ public class BetDragonTigerController extends BaseController {
         map.put("bootNum", sysTableManagement.getBootNum());
         map.put("gameNum", sysTableManagement.getGameNum());
 
-        map.put("chip", sysTableManagement.getChip().add(sysTableManagement.getChipAdd()));
-        map.put("cash", sysTableManagement.getCash().add(sysTableManagement.getCashAdd()));
-        map.put("total", sysTableManagement.getChip().add(sysTableManagement.getChipAdd())
-                .add(sysTableManagement.getCash()).add(sysTableManagement.getCashAdd()));
-        map.put("chipTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh()));
-        map.put("cashTh", sysTableManagement.getCashTh().add(sysTableManagement.getCashAddTh()));
-        map.put("totalTh", sysTableManagement.getChipTh().add(sysTableManagement.getChipAddTh())
-                .add(sysTableManagement.getCashTh()).add(sysTableManagement.getCashAddTh()));
+        map.put("chip", sysTableManagement.getChip());
+        map.put("cash", sysTableManagement.getCash());
+        map.put("total", sysTableManagement.getChip()
+                .add(sysTableManagement.getCash()));
+        map.put("chipTh", sysTableManagement.getChipTh());
+        map.put("cashTh", sysTableManagement.getCashTh());
+        map.put("totalTh", sysTableManagement.getChipTh()
+                .add(sysTableManagement.getCashTh()));
         return AjaxResult.success(map);
     }
 
@@ -168,7 +168,7 @@ public class BetDragonTigerController extends BaseController {
             JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
             if(StringUtils.isEmpty(card)){
-                break;
+                continue;
             }
             SysMembers sysMembers = sysMembersService.selectmembersByCard(card);
             if(StringUtils.isNull(sysMembers)){

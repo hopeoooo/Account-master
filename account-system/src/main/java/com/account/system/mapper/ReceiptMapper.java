@@ -2,6 +2,7 @@ package com.account.system.mapper;
 
 import com.account.system.domain.SysReceipt;
 import com.account.system.domain.search.ReceiptReportSearch;
+import com.account.system.domain.search.ReportSearch;
 import com.account.system.domain.search.WinLoseReportSearch;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -28,7 +29,13 @@ public interface ReceiptMapper {
 
     List selectReceiptTimes(WinLoseReportSearch reportSearch);
 
-    List<Map> selectWinLoseListByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch,@Param("list") List receiptTimes);
+    List<Map> selectWinLoseListByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch, @Param("list") List receiptTimes);
 
-    Map selectWinLoseTotalByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch,@Param("list") List receiptTimes);
+    Map selectWinLoseTotalByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch, @Param("list") List receiptTimes);
+
+    List selectDailyReportListByReceiptTimes(@Param("reportSearch") ReportSearch reportSearch, @Param("list") List receiptTimes);
+
+    List selectTodayReceiptTimes();
+
+    Map selectDailyReportTotalByReceiptTimes(@Param("reportSearch") ReportSearch reportSearch, @Param("list") List receiptTimes);
 }

@@ -23,6 +23,9 @@ public class WinLoseReportSearch {
     @ApiModelProperty(value ="游戏类型")
     private Long gameId;
 
+    @ApiModelProperty(value ="靴号")
+    private Long bootNum;
+
     @ApiModelProperty(value = "币种类型(0:筹码,1:现金)")
     private Integer operationType;
 
@@ -38,4 +41,11 @@ public class WinLoseReportSearch {
     @ApiModelProperty(value = "时间类型 (0:收码时间,1:普通时间,2:今日报表)")
     private String timeType;
 
+    public WinLoseReportSearch() {
+    }
+
+    public WinLoseReportSearch(String startTime, String endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

@@ -181,9 +181,9 @@ public class BetServiceImpl implements BetService {
                     sysMembersMapper.updateMembersChip(sysBet.getCard(), BigDecimal.ZERO, chipRecord[0]);
                 }
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
-                if(StringUtils.isNull(sysGameResult.getUpdateBy())){
+                if (StringUtils.isNull(sysGameResult.getUpdateBy())) {
                     sysChipRecord.setCreateBy(SecurityUtils.getUsername());
-                }else {
+                } else {
                     sysChipRecord.setCreateBy(sysGameResult.getUpdateBy());
                 }
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
@@ -522,12 +522,41 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<Map> selectDailyReportList(ReportSearch reportSearch) {
-        return betMapper.selectDailyReportList(reportSearch);
+        List list = new ArrayList();
+        if ("0".equals(reportSearch.getTimeType())) {
+            List receiptTimes = receiptMapper.selectReceiptTimes(new WinLoseReportSearch(reportSearch.getStartTime(), reportSearch.getEndTime()));
+            if (StringUtils.isNotEmpty(receiptTimes)) {
+                list = receiptMapper.selectDailyReportListByReceiptTimes(reportSearch, receiptTimes);
+            }
+        } else if ("2".equals(reportSearch.getTimeType())) {
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
+            if (StringUtils.isNotEmpty(receiptTimes)) {
+                list = receiptMapper.selectDailyReportListByReceiptTimes(reportSearch, receiptTimes);
+            }
+        } else {
+            list = betMapper.selectDailyReportList(reportSearch);
+        }
+        return list;
     }
 
     @Override
     public Map selectDailyReportTotal(ReportSearch reportSearch) {
-        return betMapper.selectDailyReportTotal(reportSearch);
+
+        Map map = new HashMap();
+        if ("0".equals(reportSearch.getTimeType())) {
+            List receiptTimes = receiptMapper.selectReceiptTimes(new WinLoseReportSearch(reportSearch.getStartTime(), reportSearch.getEndTime()));
+            if (StringUtils.isNotEmpty(receiptTimes)){
+                map = receiptMapper.selectDailyReportTotalByReceiptTimes(reportSearch, receiptTimes);
+            }
+        } else if ("2".equals(reportSearch.getTimeType())) {
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
+            if (StringUtils.isNotEmpty(receiptTimes)){
+                map = receiptMapper.selectDailyReportTotalByReceiptTimes(reportSearch, receiptTimes);
+            }
+        } else {
+            map = betMapper.selectDailyReportTotal(reportSearch);
+        }
+        return map;
     }
 
     /**
@@ -737,7 +766,7 @@ public class BetServiceImpl implements BetService {
 
         BigDecimal membersChip = (BigDecimal) map.get("membersChip");
         if (chipRecord[0].add(membersChip).compareTo(BigDecimal.ZERO) != 0
-        || chipRecordTh[0].subtract(membersChip).compareTo(BigDecimal.ZERO) != 0) {
+                || chipRecordTh[0].subtract(membersChip).compareTo(BigDecimal.ZERO) != 0) {
             //生成 筹码帐变记录
             SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
             SysChipRecord sysChipRecord = null;
@@ -746,7 +775,7 @@ public class BetServiceImpl implements BetService {
                         , BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, sysBet.getBetId());
                 //修改会员现有筹码
                 sysMembersMapper.updateMembersChip(sysBet.getCard(), chipRecord[0].add(membersChip), BigDecimal.ZERO);
-            } else if(type == 2){
+            } else if (type == 2) {
                 sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
                         sysMembers.getChipTh(), chipRecordTh[0].subtract(membersChip).abs(), sysMembers.getChipTh().add(chipRecordTh[0].subtract(membersChip)), sysBet.getBetId());
                 //修改会员现有筹码
@@ -808,7 +837,7 @@ public class BetServiceImpl implements BetService {
                 list = receiptMapper.selectWinLoseListByReceiptTimes(reportSearch,receiptTimes);
             }
         }else if("2".equals(reportSearch.getTimeType())){
-            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
             if(StringUtils.isNotEmpty(receiptTimes)){
                 list = receiptMapper.selectWinLoseListByReceiptTimes(reportSearch,receiptTimes);
             }
@@ -828,7 +857,7 @@ public class BetServiceImpl implements BetService {
                 map = receiptMapper.selectWinLoseTotalByReceiptTimes(reportSearch,receiptTimes);
             }
         }else if("2".equals(reportSearch.getTimeType())){
-            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
             if(StringUtils.isNotEmpty(receiptTimes)){
                 map = receiptMapper.selectWinLoseTotalByReceiptTimes(reportSearch,receiptTimes);
             }

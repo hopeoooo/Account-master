@@ -367,11 +367,14 @@
         <if test="endTime != null and endTime != ''">
             AND b.create_time <![CDATA[<=]]> #{endTime}
         </if>
-        <if test="tableId != null and tableId != ''">
+        <if test="tableId != null">
             AND b.table_id = #{tableId}
         </if>
+        <if test="bootNum != null">
+            AND b.boot_num = #{bootNum}
+        </if>
 
-        <if test="gameId != null and gameId != ''">
+        <if test="gameId != null">
             AND b.game_id = #{gameId}
         </if>
 
@@ -417,16 +420,19 @@
         from
             sys_members m
                 left join sys_bet_info b on b.card = m.card
-        <if test="tableId != null and tableId != ''">
+        <if test="tableId != null">
             AND b.table_id = #{tableId}
         </if>
 
-        <if test="gameId != null and gameId != ''">
+        <if test="gameId != null">
             AND b.game_id = #{gameId}
         </if>
 
         <if test="operationType != null ">
             AND b.type = #{operationType}
+        </if>
+        <if test="bootNum != null">
+            AND b.boot_num = #{bootNum}
         </if>
 
         <if test="startTime != null and startTime != ''">
