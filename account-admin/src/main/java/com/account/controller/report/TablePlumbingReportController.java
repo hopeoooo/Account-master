@@ -52,6 +52,9 @@ public class TablePlumbingReportController extends BaseController {
             @ApiImplicitParam(name = "timeType", value = "0:收码时间,1:普通时间,2:今日报表", required = false)
     })
     public AjaxResult total(String startTime, String endTime,String timeType){
+        if (StrUtil.isBlank(timeType)){
+            timeType="1";
+        }
         Map map = betService.selectTablePlumbingTotal(startTime,endTime,timeType);
         return AjaxResult.success(map);
     }
