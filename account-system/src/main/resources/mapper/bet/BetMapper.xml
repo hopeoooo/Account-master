@@ -594,12 +594,29 @@
         FROM
             sys_table_management t
         LEFT JOIN sys_bet_info b ON b.table_id = t.table_id
-        <if test="startTime != null and startTime != ''">
-            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
+        <if test="timeType != null and timeType != 1">
+            <if test="list.size == 0" >
+                  and b.version=-1
+            </if>
+            <if test="list.size != 0" >
+                and (
+                <foreach item="item" index="index" collection="list" separator="or">
+                    ( b.version <![CDATA[>=]]> #{item.minVersion}
+                    AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                    )
+                </foreach>
+                )
+            </if>
         </if>
-        <if test="endTime != null and endTime != ''">
-            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
+        <if test="timeType != null and timeType == 1">
+            <if test="startTime != null and startTime != ''">
+                AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
+            </if>
         </if>
+
         <where>
             AND  t.is_delete=0
         </where>
@@ -626,12 +643,29 @@
         FROM
         sys_table_management t
         LEFT JOIN sys_bet_info b ON b.table_id = t.table_id
-        <if test="startTime != null and startTime != ''">
-            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
+        <if test="timeType != null and timeType != 1">
+            <if test="list.size == 0" >
+                and b.version=-1
+            </if>
+            <if test="list.size != 0" >
+                and (
+                <foreach item="item" index="index" collection="list" separator="or">
+                    ( b.version <![CDATA[>=]]> #{item.minVersion}
+                    AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                    )
+                </foreach>
+                )
+            </if>
         </if>
-        <if test="endTime != null and endTime != ''">
-            AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
+        <if test="timeType != null and timeType == 1">
+            <if test="startTime != null and startTime != ''">
+                AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format( b.create_time  ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
+            </if>
         </if>
+
         <where>
             AND  t.is_delete=0
 

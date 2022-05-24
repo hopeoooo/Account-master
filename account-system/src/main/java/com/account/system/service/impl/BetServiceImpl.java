@@ -860,13 +860,33 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Map> selectTablePlumbingList(String startTime, String endTime) {
-        return betMapper.selectTablePlumbingList(startTime, endTime);
+    public List<Map> selectTablePlumbingList(String startTime, String endTime,String timeType) {
+        List<Map> list = new ArrayList();
+        if ("0".equals(timeType)) {
+            List receiptTimes = receiptMapper.selectReceiptTablePlumbingTimes(new WinLoseReportSearch(startTime, endTime));
+            list = betMapper.selectTablePlumbingList(startTime, endTime,timeType,receiptTimes);
+        } else if ("2".equals(timeType)) {
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
+                list = betMapper.selectTablePlumbingList(startTime, endTime,timeType,receiptTimes);
+        } else {
+            list = betMapper.selectTablePlumbingList(startTime, endTime,timeType,null);
+        }
+        return list;
     }
 
     @Override
-    public Map selectTablePlumbingTotal(String startTime, String endTime) {
-        return betMapper.selectTablePlumbingTotal(startTime, endTime);
+    public Map selectTablePlumbingTotal(String startTime, String endTime,String timeType) {
+        Map map;
+        if("0".equals(timeType)){
+            List receiptTimes = receiptMapper.selectReceiptTablePlumbingTimes(new WinLoseReportSearch(startTime, endTime));
+            map = betMapper.selectTablePlumbingTotal(startTime, endTime,timeType,receiptTimes);
+        }else if("2".equals(timeType)){
+            List receiptTimes = receiptMapper.selectTodayReceiptTimes();
+            map = betMapper.selectTablePlumbingTotal(startTime, endTime,timeType,receiptTimes);
+        }else {
+            map = betMapper.selectTablePlumbingTotal(startTime, endTime,timeType,null);
+        }
+        return map;
     }
 
     /**

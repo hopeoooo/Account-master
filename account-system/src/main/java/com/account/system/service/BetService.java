@@ -75,7 +75,7 @@ public interface BetService {
      * @param endTime
      * @return
      */
-    List<Map> selectTablePlumbingList(String startTime, String endTime);
+    List<Map> selectTablePlumbingList(String startTime, String endTime,String timeType);
 
-    Map selectTablePlumbingTotal(String startTime, String endTime);
+    Map selectTablePlumbingTotal(String startTime, String endTime,String timeType);
 }

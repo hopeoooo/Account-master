@@ -4,6 +4,7 @@ import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.system.service.BetService;
+import com.github.xiaoymin.knife4j.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,11 +31,15 @@ public class TablePlumbingReportController extends BaseController {
     @ApiOperation(value = "查询台面上下水报表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
-            @ApiImplicitParam(name = "endTime", value = "结束时间", required = false)
+            @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+            @ApiImplicitParam(name = "timeType", value = "0:收码时间,1:普通时间,2:今日报表", required = false)
     })
-    public TableDataInfo list(String startTime, String endTime){
+    public TableDataInfo list(String startTime, String endTime,String timeType){
         startPage();
-        List<Map> list = betService.selectTablePlumbingList(startTime,endTime);
+        if (StrUtil.isBlank(timeType)){
+            timeType="1";
+        }
+        List<Map> list = betService.selectTablePlumbingList(startTime,endTime,timeType);
         return getDataTable(list);
     }
 
@@ -43,10 +48,14 @@ public class TablePlumbingReportController extends BaseController {
     @ApiOperation(value = "总计")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
-            @ApiImplicitParam(name = "endTime", value = "结束时间", required = false)
+            @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+            @ApiImplicitParam(name = "timeType", value = "0:收码时间,1:普通时间,2:今日报表", required = false)
     })
-    public AjaxResult total(String startTime, String endTime){
-        Map map = betService.selectTablePlumbingTotal(startTime,endTime);
+    public AjaxResult total(String startTime, String endTime,String timeType){
+        if (StrUtil.isBlank(timeType)){
+            timeType="1";
+        }
+        Map map = betService.selectTablePlumbingTotal(startTime,endTime,timeType);
         return AjaxResult.success(map);
     }
 
