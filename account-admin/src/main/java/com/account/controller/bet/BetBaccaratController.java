@@ -177,7 +177,7 @@ public class BetBaccaratController extends BaseController {
             JSONObject bet = bets.getJSONObject(i);
             String card = bet.getString("card");
             if(StringUtils.isEmpty(card)){
-                break;
+                continue;
             }
             SysMembers sysMembers = sysMembersService.selectmembersByCard(card);
             if(StringUtils.isNull(sysMembers)){

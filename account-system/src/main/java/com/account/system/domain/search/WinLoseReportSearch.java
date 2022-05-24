@@ -34,4 +34,8 @@ public class WinLoseReportSearch {
 
     @ApiModelProperty(value = "结束时间", required = false)
     private String endTime;
+
+    @ApiModelProperty(value = "时间类型 (0:收码时间,1:普通时间,2:今日报表)")
+    private String timeType;
+
 }

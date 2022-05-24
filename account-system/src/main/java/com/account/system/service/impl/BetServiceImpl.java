@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -804,13 +801,41 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public List<Map> selectWinLoseList(WinLoseReportSearch reportSearch) {
-        return betMapper.selectWinLoseList(reportSearch);
+        List<Map> list = new ArrayList<>();
+        if("0".equals(reportSearch.getTimeType())){
+            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            if(StringUtils.isNotEmpty(receiptTimes)){
+                list = receiptMapper.selectWinLoseListByReceiptTimes(reportSearch,receiptTimes);
+            }
+        }else if("2".equals(reportSearch.getTimeType())){
+            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            if(StringUtils.isNotEmpty(receiptTimes)){
+                list = receiptMapper.selectWinLoseListByReceiptTimes(reportSearch,receiptTimes);
+            }
+        }else {
+            list = betMapper.selectWinLoseList(reportSearch);
+        }
+        return list;
     }
 
 
     @Override
     public Map selectWinLoseTotal(WinLoseReportSearch reportSearch) {
-        return betMapper.selectWinLoseTotal(reportSearch);
+        Map map = new HashMap();
+        if("0".equals(reportSearch.getTimeType())){
+            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            if(StringUtils.isNotEmpty(receiptTimes)){
+                map = receiptMapper.selectWinLoseTotalByReceiptTimes(reportSearch,receiptTimes);
+            }
+        }else if("2".equals(reportSearch.getTimeType())){
+            List receiptTimes = receiptMapper.selectReceiptTimes(reportSearch);
+            if(StringUtils.isNotEmpty(receiptTimes)){
+                map = receiptMapper.selectWinLoseTotalByReceiptTimes(reportSearch,receiptTimes);
+            }
+        }else {
+            map = betMapper.selectWinLoseTotal(reportSearch);
+        }
+        return map;
     }
 
     @Override

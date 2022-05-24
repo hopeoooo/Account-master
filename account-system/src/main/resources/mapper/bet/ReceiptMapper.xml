@@ -66,4 +66,116 @@
     </where>
         ORDER BY r.create_time DESC
     </select>
+
+    <select id="selectReceiptTimes" resultType="map">
+        select MIN(s.create_time) startTime ,MAX(s.create_time) endTime , s.table_id tableId
+        from sys_receipt s
+        left join sys_table_management t
+        on s.table_id = t.table_id
+        <where>
+            <if test="tableId != null">
+                AND s.table_id = #{tableId}
+            </if>
+            <if test="gameId != null">
+                AND t.game_id = #{gameId}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND s.create_time <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND s.create_time <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        group by s.table_id
+    </select>
+
+    <select id="selectWinLoseListByReceiptTimes" resultType="map">
+        select
+        m.card,
+        m.name,
+        ifnull(sum(case when type in (0, 1,4) then b.bet_money else 0 end), 0)               as betMoney,
+        ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)                   as water,
+        ifnull(sum(case when type in (0, 1,4) then b.water_amount else 0 end), 0)            as waterAmount,
+        ifnull(sum(case when type in (0, 1,4) then b.tie else 0 end), 0)                     as tie,
+        ifnull(sum(case when type in (0, 1,4)then b.pump else 0 end), 0)  as pump,
+        ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)                as winLose,
+
+        ifnull(sum(case when type in (2, 3,5) then b.bet_money else 0 end), 0)               as betMoneyTh,
+        ifnull(sum(case when type in (2, 3,5) then b.water else 0 end), 0)                   as waterTh,
+        ifnull(sum(case when type in (2, 3,5) then b.water_amount else 0 end), 0)            as waterAmountTh,
+        ifnull(sum(case when type in (2, 3,5) then b.tie else 0 end), 0)                     as tieTh,
+        ifnull(sum(case when type in (2, 3,5) then b.pump else 0 end), 0)                    as pumpTh,
+        ifnull(sum(case when type in (2, 3,5) then b.win_lose else 0 end), 0)                as winLoseTh
+        from
+        sys_members m
+        left join sys_bet_info b on b.card = m.card
+        and (
+            <foreach item="item" index="index" collection="list" separator="or">
+                ( b.create_time <![CDATA[>=]]> #{item.startTime}
+                    AND b.create_time <![CDATA[<=]]> #{item.endTime}
+                    AND table_id = #{item.tableId}
+                )
+            </foreach>
+        )
+        <where>
+            <if test="reportSearch.cardType == null or reportSearch.cardType == '' or reportSearch.cardType == 0 ">
+                <if test="reportSearch.card != null and reportSearch.card != ''">
+                    AND m.card = #{reportSearch.card}
+                </if>
+            </if>
+
+            <if test="reportSearch.cardType != null and reportSearch.cardType != '' and reportSearch.cardType > 0 ">
+                AND (m.card = #{reportSearch.card} or m.parent_card = #{reportSearch.card})
+            </if>
+            <if test="reportSearch.isAdmin != null and reportSearch.isAdmin != '' and reportSearch.isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+        </where>
+        GROUP BY m.card	,m.NAME
+        order by
+        ifnull(sum(case type when 0 then b.bet_money when 1 then b.bet_money else 0 end), 0) desc,
+        ifnull(sum(case type when 2 then b.bet_money when 3 then b.bet_money else 0 end), 0) desc
+    </select>
+
+    <select id="selectWinLoseTotalByReceiptTimes" resultType="map">
+        select
+        ifnull(sum(case when type in (0, 1,4) then b.bet_money else 0 end), 0)               as betMoney,
+        ifnull(sum(case when type in (0, 1,4) then b.water else 0 end), 0)                   as water,
+        ifnull(sum(case when type in (0, 1,4) then b.water_amount else 0 end), 0)            as waterAmount,
+        ifnull(sum(case when type in (0, 1,4) then b.tie else 0 end), 0)                     as tie,
+        ifnull(sum(case when type in (0, 1,4)then b.pump else 0 end), 0)  as pump,
+        ifnull(sum(case when type in (0, 1,4) then b.win_lose else 0 end), 0)                as winLose,
+
+        ifnull(sum(case when type in (2, 3,5) then b.bet_money else 0 end), 0)               as betMoneyTh,
+        ifnull(sum(case when type in (2, 3,5) then b.water else 0 end), 0)                   as waterTh,
+        ifnull(sum(case when type in (2, 3,5) then b.water_amount else 0 end), 0)            as waterAmountTh,
+        ifnull(sum(case when type in (2, 3,5) then b.tie else 0 end), 0)                     as tieTh,
+        ifnull(sum(case when type in (2, 3,5) then b.pump else 0 end), 0)                    as pumpTh,
+        ifnull(sum(case when type in (2, 3,5) then b.win_lose else 0 end), 0)                as winLoseTh
+        from
+        sys_members m
+        left join sys_bet_info b on b.card = m.card
+        and (
+        <foreach item="item" index="index" collection="list" separator="or">
+            ( b.create_time <![CDATA[>=]]> #{item.startTime}
+            AND b.create_time <![CDATA[<=]]> #{item.endTime}
+            AND table_id = #{item.tableId}
+            )
+        </foreach>
+        )
+        <where>
+            <if test="reportSearch.cardType == null or reportSearch.cardType == '' or reportSearch.cardType == 0 ">
+                <if test="reportSearch.card != null and reportSearch.card != ''">
+                    AND m.card = #{reportSearch.card}
+                </if>
+            </if>
+
+            <if test="reportSearch.cardType != null and reportSearch.cardType != '' and reportSearch.cardType > 0 ">
+                AND (m.card = #{reportSearch.card} or m.parent_card = #{reportSearch.card})
+            </if>
+            <if test="reportSearch.isAdmin != null and reportSearch.isAdmin != '' and reportSearch.isAdmin > 0">
+                AND m.is_admin = 0
+            </if>
+        </where>
+    </select>
 </mapper>
