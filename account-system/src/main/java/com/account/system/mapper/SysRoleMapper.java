@@ -27,9 +27,9 @@ public interface SysRoleMapper {
 
     Set<String> selectMenuPermsByUserId(@Param("userId") Long userId);
 
-    List<SysMenu> selectMenuTreeAll();
+    List<SysMenu> selectMenuTreeAll(@Param("language") String language);
 
-    List<SysMenu> selectMenuTreeByUserId(@Param("userId") Long userId);
+    List<SysMenu> selectMenuTreeByUserId(@Param("userId") Long userId,@Param("language") String language);
 
     @Select("select user_id userId,user_name userName,nick_name nickName,phonenumber,password,sex,role_id roleId " +
             "from sys_user where role_id = #{roleId}")

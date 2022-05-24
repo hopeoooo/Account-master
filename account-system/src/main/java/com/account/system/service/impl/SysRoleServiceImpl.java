@@ -63,12 +63,12 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public List<SysMenu> selectMenuTreeByUserId(Long userId) {
+    public List<SysMenu> selectMenuTreeByUserId(Long userId,String language) {
         List<SysMenu> menus = null;
         if (SecurityUtils.isAdmin(userId)) {
-            menus = roleMapper.selectMenuTreeAll();
+            menus = roleMapper.selectMenuTreeAll(language);
         } else {
-            menus = roleMapper.selectMenuTreeByUserId(userId);
+            menus = roleMapper.selectMenuTreeByUserId(userId,language);
         }
         return getChildPerms(menus, 0);
     }

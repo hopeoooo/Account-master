@@ -37,7 +37,12 @@
     <select id="selectMenuTreeAll" resultType="SysMenu">
         select distinct m.menu_id menuId,
                         m.parent_id parentId,
-                        m.menu_name menuName,
+                        <if test="language != null and language != 'en_us'">
+                            m.menu_name menuName,
+                        </if>
+                        <if test="language != null and language == 'en_us'">
+                            m.menu_name_en menuName,
+                        </if>
                         m.path,
                         m.component,
                         m.`query`,
@@ -59,7 +64,12 @@
     <select id="selectMenuTreeByUserId" parameterType="Long" resultType="SysMenu">
         select distinct m.menu_id menuId,
                         m.parent_id parentId,
-                        m.menu_name menuName,
+                        <if test="language != null and language != 'en_us'">
+                            m.menu_name menuName,
+                        </if>
+                        <if test="language != null and language == 'en_us'">
+                            m.menu_name_en menuName,
+                        </if>
                         m.path,
                         m.component,
                         m.`query`,
