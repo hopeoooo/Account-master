@@ -88,9 +88,9 @@ public interface BetMapper {
 
     Map  selectWinLoseTotal(WinLoseReportSearch reportSearch);
 
-    List<Map> selectTablePlumbingList(@Param("startTime") String startTime, @Param("endTime") String endTime);
+    List<Map> selectTablePlumbingList(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("timeType") String timeType,@Param("list") List receiptTimes);
 
-    Map selectTablePlumbingTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
+    Map selectTablePlumbingTotal(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("timeType") String timeType,@Param("list") List receiptTimes);
 
     @Delete("delete from sys_bet_info where bet_id = #{betId}")
     void deleteBetInfo(@Param("betId") Long betId);

@@ -81,6 +81,20 @@
         group by s.table_id
     </select>
 
+    <select id="selectReceiptTablePlumbingTimes" resultType="map">
+        select MIN(s.version) minVersion ,MAX(s.version) maxVersion , s.table_id tableId
+        from sys_receipt s
+        <where>
+            <if test="startTime != null and startTime != ''">
+                AND date_format( s.create_time ,'%Y-%m-%d') <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format( s.create_time ,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        group by s.table_id
+    </select>
+
     <select id="selectTodayReceiptTimes" resultType="map">
         SELECT MIN(s.version) minVersion, MAX(s.version) maxVersion, s.table_id tableId
         FROM sys_table_management s

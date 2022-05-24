@@ -29,6 +29,8 @@ public interface ReceiptMapper {
 
     List selectReceiptTimes(WinLoseReportSearch reportSearch);
 
+    List selectReceiptTablePlumbingTimes(WinLoseReportSearch reportSearch);
+
     List<Map> selectWinLoseListByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch, @Param("list") List receiptTimes);
 
     Map selectWinLoseTotalByReceiptTimes(@Param("reportSearch") WinLoseReportSearch reportSearch, @Param("list") List receiptTimes);
