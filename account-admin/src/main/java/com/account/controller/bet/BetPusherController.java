@@ -85,7 +85,7 @@ public class BetPusherController extends BaseController {
     public Object record() {
         //根据ip获取台桌信息
         String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
-        SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,5l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
         }
