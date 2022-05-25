@@ -78,4 +78,6 @@ public interface BetService {
     List<Map> selectTablePlumbingList(String startTime, String endTime,String timeType);
 
     Map selectTablePlumbingTotal(String startTime, String endTime,String timeType);
+
+    void nextGameNum(SysTableManagement sysTableManagement);
 }

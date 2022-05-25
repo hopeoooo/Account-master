@@ -889,6 +889,11 @@ public class BetServiceImpl implements BetService {
         return map;
     }
 
+    @Override
+    public void nextGameNum(SysTableManagement sysTableManagement) {
+        sysTableManagementMapper.updateGameNum(sysTableManagement.getId());
+    }
+
     /**
      * 注单记录
      *

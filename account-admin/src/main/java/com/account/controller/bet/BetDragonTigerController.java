@@ -244,4 +244,17 @@ public class BetDragonTigerController extends BaseController {
         }
         return AjaxResult.success();
     }
+
+    @PreAuthorize("@ss.hasPermi('bet:dragontiger:list')")
+    @PostMapping("/next")
+    @ApiOperation(value = "下一局")
+    public AjaxResult next() {
+        String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
+        SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
+        if (StringUtils.isNull(sysTableManagement)) {
+            return AjaxResult.error("ip地址错误");
+        }
+        betService.nextGameNum(sysTableManagement);
+        return AjaxResult.success();
+    }
 }

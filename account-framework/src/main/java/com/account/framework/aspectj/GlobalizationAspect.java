@@ -3,7 +3,6 @@ package com.account.framework.aspectj;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.core.page.TableDataInfo;
 import com.account.common.enums.LanguageMagEnum;
-import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,6 +35,7 @@ public class GlobalizationAspect {
             String name = enumeration.nextElement();
             if("language".equals(name)){
                 language = request.getHeader(name);
+                break;
             }
         }
         if("en_us".equals(language)){
