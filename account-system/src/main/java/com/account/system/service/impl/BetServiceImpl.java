@@ -891,6 +891,13 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public void nextGameNum(SysTableManagement sysTableManagement) {
+        //记录赛果
+        if(sysTableManagement.getGameId()==1 || sysTableManagement.getGameId()==2){
+            SysGameResult sysGameResult = new SysGameResult(sysTableManagement);
+            sysGameResult.setGameResult("");
+            sysGameResult.setCreateBy(sysTableManagement.getCreateBy());
+            sysGameResultMapper.saveGameResult(sysGameResult);
+        }
         sysTableManagementMapper.updateGameNum(sysTableManagement.getId());
     }
 
