@@ -42,7 +42,7 @@ public class SysLoginService {
                     .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
-                throw new UserPasswordNotMatchException();
+                throw new ServiceException("用户不存在/密码错误");
             } else {
                 throw new ServiceException(e.getMessage());
             }

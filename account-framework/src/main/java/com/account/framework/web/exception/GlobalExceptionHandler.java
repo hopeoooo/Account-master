@@ -61,6 +61,7 @@ public class GlobalExceptionHandler
         String language = request.getHeader("language");
         String msg = e.getMessage();
         if("en_us".equals(language)){
+            msg = msg.replaceAll("用户不存在/密码错误","Account not exists/Password not match");
             msg = msg.replaceAll("局号错误!","Game number Incorrect!");
             msg = msg.replaceAll("登录用户","Account");
             msg = msg.replaceAll("不存在","Does not exist");
