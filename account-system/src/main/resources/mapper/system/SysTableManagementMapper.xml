@@ -21,6 +21,9 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="version" column="version"/>
+        <result property="bootNum" column="boot_num"/>
+        <result property="gameNum" column="game_num"/>
     </resultMap>
     <sql id="selectTableVo">
         select id,
@@ -37,7 +40,10 @@
                create_by,
                create_time,
                update_by,
-               update_time
+               update_time,
+               version,
+               boot_num,
+               game_num
         from sys_table_management
     </sql>
 
