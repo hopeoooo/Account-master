@@ -151,7 +151,7 @@ public class BetNiuNiuController extends BaseController {
             @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"bet\":[{\"card\":\"123456\",\"type\":0,\"输\":300}]}",
                     dataType = "string", required = true, paramType = "path")
     })
-    public AjaxResult input(String json) {
+    public AjaxResult input(String json,String dealer) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
         String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
@@ -164,7 +164,7 @@ public class BetNiuNiuController extends BaseController {
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
-                betService.saveBet(sysTableManagement, null, bets);
+                betService.saveBet(sysTableManagement, null, bets, dealer);
             }
         });
         return AjaxResult.success();

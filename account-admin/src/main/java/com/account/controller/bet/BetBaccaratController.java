@@ -196,7 +196,7 @@ public class BetBaccaratController extends BaseController {
             @ApiImplicitParam(name = "json", value = "json格式字符串 eq:{\"gameResult\":\"159\",\"bet\":[{\"card\":\"123456\",\"type\":0,\"1\":300,\"5\":200}]}",
                     dataType = "string", required = true, paramType = "path")
     })
-    public AjaxResult input(String json) {
+    public AjaxResult input(String json,String dealer) {
         JSONObject jsonObject = JSON.parseObject(json);
         //根据ip获取台桌信息
         String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
@@ -213,7 +213,7 @@ public class BetBaccaratController extends BaseController {
         sysTableManagement.setCreateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
             public void run() {
-                betService.saveBet(sysTableManagement, gameResult, bets);
+                betService.saveBet(sysTableManagement, gameResult, bets,dealer);
             }
         });
         return AjaxResult.success();

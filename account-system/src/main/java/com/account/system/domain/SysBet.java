@@ -29,6 +29,8 @@ public class SysBet extends BaseEntity {
 
     private String gameResult;
 
+    private String dealer;
+
     public SysBet() {
     }
 

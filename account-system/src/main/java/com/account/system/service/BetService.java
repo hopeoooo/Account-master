@@ -23,7 +23,7 @@ public interface BetService {
 
     SysTableManagement getTableByIp(String ip, Long gameId);
 
-    void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets);
+    void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets,String dealer);
 
     List<Map> getGameResults(SysTableManagement sysTableManagement);
 

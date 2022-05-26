@@ -25,6 +25,8 @@ public class SysBetInfo extends SysBet{
 
     private BigDecimal pump;
 
+    private String dealer;
+
     public SysBetInfo() {
     }
 }

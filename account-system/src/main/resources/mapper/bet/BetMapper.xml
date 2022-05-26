@@ -21,7 +21,7 @@
     <insert id="saveBetInfos">
         insert into sys_bet_info(bet_id,card,table_id,version,boot_num,game_num,
         type,game_id,bet_option,bet_money,game_result,win_lose,create_time,
-        water,water_amount,pump,create_by)
+        water,water_amount,pump,create_by,dealer)
         values
         <foreach item="item" index="index" collection="list" separator=",">
             (#{item.betId},#{item.card},#{item.tableId},#{item.version},#{item.bootNum},#{item.gameNum}
@@ -58,7 +58,8 @@
                     0,
                 </otherwise>
             </choose>
-             #{item.createBy})
+             #{item.createBy},
+             #{item.dealer})
         </foreach>
     </insert>
 

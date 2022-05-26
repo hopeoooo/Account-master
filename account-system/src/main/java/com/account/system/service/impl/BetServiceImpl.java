@@ -204,7 +204,7 @@ public class BetServiceImpl implements BetService {
      * 注单录入
      */
     @Transactional
-    public void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets) {
+    public void saveBet(SysTableManagement sysTableManagement, String gameResult, JSONArray bets,String dealer) {
         final BigDecimal[] tableChip = {BigDecimal.ZERO};
         final BigDecimal[] tableCash = {BigDecimal.ZERO};
         final BigDecimal[] tableInsurance = {BigDecimal.ZERO};
@@ -220,6 +220,7 @@ public class BetServiceImpl implements BetService {
             if (StringUtils.isNotNull(sysMembers) && checkBets(bet)) {
                 SysBet sysBet = new SysBet();
                 sysBet.setCard(card);
+                sysBet.setDealer(dealer);
                 sysBet.setGameId(sysTableManagement.getGameId());
                 sysBet.setTableId(sysTableManagement.getTableId());
                 sysBet.setBootNum(sysTableManagement.getBootNum());
