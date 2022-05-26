@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.account.system.mapper.SysDealerMapper">
+
+    <select id="selectDealerList" parameterType="SysDealerSearch" resultType="SysDealer">
+        select user_id userId,nick_name nickName,user_name userName,
+        phonenumber,sex,address,join_time joinTime,brithday
+        from
+        sys_dealer
+        <where>
+            <if test="userName != null and userName != ''">
+                AND user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(join_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(join_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectDealerStatisticsList"  resultType="java.util.Map">
+        SELECT
+            d.user_name as userName,
+            d.nick_name as nickName,
+            ifnull(-sum(case when type in (0, 1,4) and b.game_id=1 then b.win_lose else 0 end), 0) as bccaratWnLose,
+            ifnull(-sum(case when type in (2, 3,5) and b.game_id=1 then b.win_lose else 0 end), 0) as bccaratWnLoseTh,
+
+            ifnull(-sum(case when type in (0, 1,4) and b.game_id=2 then b.win_lose else 0 end), 0) as dTWnLose,
+            ifnull(-sum(case when type in (2, 3,5) and b.game_id=2 then b.win_lose else 0 end), 0) as dTWnLoseTh,
+
+            ifnull(-sum(case when type in (0, 1,4) and b.game_id=3 then b.win_lose else 0 end), 0) as niuWnLose,
+            ifnull(-sum(case when type in (2, 3,5) and b.game_id=3 then b.win_lose else 0 end), 0) as niuWnLoseTh,
+
+            ifnull(-sum(case when type in (0, 1,4) and b.game_id=4 then b.win_lose else 0 end), 0) as gongWnLose,
+            ifnull(-sum(case when type in (2, 3,5) and b.game_id=4 then b.win_lose else 0 end), 0)  as gongWnLoseTh,
+
+
+            ifnull(-sum(case when type in (0, 1,4) and b.game_id=5 then b.win_lose else 0 end), 0) as TuiWnLose,
+            ifnull(-sum(case when type in (2, 3,5) and b.game_id=5 then b.win_lose else 0 end), 0)  as TuiWnLoseTh
+        FROM
+            sys_dealer d
+                LEFT JOIN sys_bet_info b ON b.dealer = d.user_name
+            <if test="beginTime != null and beginTime != ''">
+                and date_format(b.join_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and date_format(b.join_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        <where>
+            <if test="userName != null and userName != ''">
+                AND d.user_name like concat('%', #{userName}, '%')
+             </if>
+        </where>
+
+        GROUP BY d.user_name
+        </select>
+
+
+
+    <insert id="addDealer">
+        insert into sys_dealer (
+        <if test="userName != null and userName != '' ">user_name,</if>
+        <if test="nickName != null and nickName != '' ">nick_name,</if>
+        <if test="phonenumber != null and phonenumber != '' ">phonenumber,</if>
+        <if test="sex != null ">sex,</if>
+        <if test="address != null ">address,</if>
+        <if test="joinTime != null ">join_time,</if>
+        <if test="brithday != null ">brithday,</if>
+        <if test="createBy != null and createBy != '' ">create_by,</if>
+        create_time
+        )values(
+        <if test="userName != null and userName != '' ">#{userName},</if>
+        <if test="nickName != null and nickName != '' ">#{nickName},</if>
+        <if test="phonenumber != null and phonenumber != '' ">#{phonenumber},</if>
+        <if test="sex != null ">#{sex},</if>
+        <if test="address != null ">#{address},</if>
+        <if test="joinTime != null ">#{joinTime},</if>
+        <if test="brithday != null ">#{brithday},</if>
+        <if test="createBy != null and createBy != '' ">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+
+
+    <update id="editDealer">
+        update sys_dealer
+        <set>
+            <if test="userName != null and userName != '' ">user_name=#{userName},</if>
+            <if test="nickName != null and nickName != '' ">nick_name=#{nickName},</if>
+            <if test="phonenumber != null and phonenumber != '' ">phonenumber=#{phonenumber},</if>
+            <if test="sex != null ">sex=#{sex},</if>
+            <if test="address != null ">address=#{address},</if>
+            <if test="joinTime != null ">join_time=#{joinTime},</if>
+            <if test="brithday != null ">brithday=#{brithday},</if>
+            update_time = sysdate(),
+            update_by = #{updateBy}
+        </set>
+        where user_id = #{userId}
+    </update>
+
+
+
+    <select id="selectDealerByUserName" parameterType="String" resultType="SysDealer">
+        select user_id   userId,
+               user_name userName,
+               nick_name nickName
+        from sys_dealer
+        where user_name = #{userName}
+    </select>
+</mapper>
