@@ -46,7 +46,7 @@ public class DealerController extends BaseController {
     })
     public AjaxResult checkUserName(String userName) {
         SysDealer sysDealer = dealerService.selectDealerByUserName(userName);
-        if (StringUtils.isNotNull(sysDealer.getUserName())) {
+        if (sysDealer==null || StringUtils.isEmpty(sysDealer.getUserName())) {
             return AjaxResult.error();
         }
         return AjaxResult.success();
