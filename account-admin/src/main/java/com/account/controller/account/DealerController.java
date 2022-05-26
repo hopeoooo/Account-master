@@ -57,7 +57,7 @@ public class DealerController extends BaseController {
     @ApiOperation(value = "新增荷官")
     public AjaxResult add(SysDealer dealer) {
         SysDealer sysDealer = dealerService.selectDealerByUserName(dealer.getUserName());
-        if (StringUtils.isNotNull(sysDealer.getUserName())) {
+        if (sysDealer!=null && StringUtils.isNotNull(sysDealer.getUserName())) {
             return AjaxResult.error("工号已存在");
         }
         dealer.setCreateBy(SecurityUtils.getUsername());
