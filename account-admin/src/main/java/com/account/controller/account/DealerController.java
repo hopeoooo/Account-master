@@ -39,11 +39,25 @@ public class DealerController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/checkUserName")
+    @ApiOperation(value = "校验荷官工号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userName", value = "工号", dataType = "String", required = true, paramType = "path")
+    })
+    public AjaxResult checkUserName(String userName) {
+        SysDealer sysDealer = dealerService.selectDealerByUserName(userName);
+        if (StringUtils.isNotNull(sysDealer.getUserName())) {
+            return AjaxResult.error();
+        }
+        return AjaxResult.success();
+    }
+
     @PreAuthorize("@ss.hasPermi('account:dealer:list')")
     @GetMapping("/add")
     @ApiOperation(value = "新增荷官")
     public AjaxResult add(SysDealer dealer) {
-        if (StringUtils.isNotNull(dealerService.selectDealerByUserName(dealer.getUserName()))) {
+        SysDealer sysDealer = dealerService.selectDealerByUserName(dealer.getUserName());
+        if (StringUtils.isNotNull(sysDealer.getUserName())) {
             return AjaxResult.error("工号已存在");
         }
         dealer.setCreateBy(SecurityUtils.getUsername());
