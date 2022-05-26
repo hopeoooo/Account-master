@@ -1,6 +1,7 @@
 package com.account.system.service.impl;
 
 import com.account.common.enums.ChipChangeEnum;
+import com.account.common.exception.ServiceException;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.StringUtils;
 import com.account.system.domain.*;
@@ -570,20 +571,9 @@ public class BetServiceImpl implements BetService {
             sysGameResult.setGameResult(betRepair.getGameResult());
             updateGameResult(sysGameResult, null);
         } else if (sysGameResult == null) {
-            //记录赛果
-            if (betRepair.getGameResult() != null) {
-                SysGameResult result = new SysGameResult();
-                result.setGameId(betRepair.getGameId());
-                result.setTableId(betRepair.getTableId());
-                result.setVersion(betRepair.getVersion());
-                result.setBootNum(betRepair.getBootNum());
-                result.setGameNum(betRepair.getGameNum());
-                result.setGameResult(betRepair.getGameResult());
-                result.setCreateBy(SecurityUtils.getUsername());
-                sysGameResultMapper.saveGameResult(result);
+            if(betRepair.getGameId()==1 || betRepair.getGameId()==2){
+                throw new ServiceException("局号错误!");
             }
-            //修改局号
-            sysTableManagementMapper.updateGameNumByTableId(betRepair.getTableId(), betRepair.getGameNum());
         }
 
         BigDecimal tableChip = BigDecimal.ZERO;
@@ -690,7 +680,6 @@ public class BetServiceImpl implements BetService {
         SysGameResult sysGameResult = sysGameResultMapper.selectGameResultByBetId(betUpdate.getBetId());
         String oldGameResult = sysGameResult != null ? sysGameResult.getGameResult() : "";
         if (sysGameResult != null && !betUpdate.getGameResult().equals(sysGameResult.getGameResult())) {
-            oldGameResult = sysGameResult.getGameResult();
             sysGameResult.setGameResult(betUpdate.getGameResult());
             updateGameResult(sysGameResult, betUpdate.getBetId());
         }

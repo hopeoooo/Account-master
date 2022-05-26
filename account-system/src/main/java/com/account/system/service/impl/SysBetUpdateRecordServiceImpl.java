@@ -41,7 +41,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
             sysBetInfos.forEach(sysBetInfo -> {
                 if(option.length()>0) option.append("/");
                 amount[0] = amount[0].add(sysBetInfo.getBetMoney());
-                option.append(changeOption(sysBetInfo.getBetOption()))
+                option.append("-".equals(sysBetInfo.getBetOption())?sysBetInfo.getGameResult():changeOption(sysBetInfo.getBetOption()))
                         .append(":").append(sysBetInfo.getBetMoney().setScale(2));
                 oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
             });
@@ -71,7 +71,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         oldBetInfos.forEach(sysBetInfo -> {
             if(oldOption.length()>0) oldOption.append("/");
             oldAmount[0] = oldAmount[0].add(sysBetInfo.getBetMoney());
-            oldOption.append(changeOption(sysBetInfo.getBetOption()))
+            oldOption.append("-".equals(sysBetInfo.getBetOption())?sysBetInfo.getGameResult():changeOption(sysBetInfo.getBetOption()))
                     .append(":").append(sysBetInfo.getBetMoney().setScale(2));
             oldWin[0] = oldWin[0].add(sysBetInfo.getWinLose());
         });
@@ -81,7 +81,7 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         newBetInfos.forEach(sysBetInfo -> {
             if(newOption.length()>0) newOption.append("/");
             newAmount[0] = newAmount[0].add(sysBetInfo.getBetMoney());
-            newOption.append(changeOption(sysBetInfo.getBetOption()))
+            newOption.append("-".equals(sysBetInfo.getBetOption())?sysBetInfo.getGameResult():changeOption(sysBetInfo.getBetOption()))
                     .append(":").append(sysBetInfo.getBetMoney().setScale(2));
             newWin[0] = newWin[0].add(sysBetInfo.getWinLose());
         });
@@ -95,6 +95,9 @@ public class SysBetUpdateRecordServiceImpl implements SysBetUpdateRecordService 
         String oldCreateBy = sysBet.getUpdateBy()==null?sysBet.getCreateBy():sysBet.getUpdateBy();
         sysBetUpdateRecord.setCreateBy(compare(oldCreateBy,betUpdate.getUpdateBy()));
         //结果
+        if("".equals(gameResult)){
+            gameResult = oldBetInfos.get(0).getGameResult();
+        }
         sysBetUpdateRecord.setResult(compare(changeRelust(gameResult),changeRelust(betUpdate.getGameResult())));
         sysBetUpdateRecordMapper.saveUpdateRecord(sysBetUpdateRecord);
     }
