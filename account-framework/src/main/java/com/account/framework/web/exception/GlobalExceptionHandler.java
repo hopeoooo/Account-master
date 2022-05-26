@@ -1,6 +1,8 @@
 package com.account.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.account.common.utils.ServletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,7 +19,7 @@ import com.account.common.utils.StringUtils;
 
 /**
  * 全局异常处理器
- * 
+ *
  * @author hope
  */
 @RestControllerAdvice
@@ -56,7 +58,14 @@ public class GlobalExceptionHandler
     {
         log.error(e.getMessage(), e);
         Integer code = e.getCode();
-        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
+        String language = request.getHeader("language");
+        String msg = e.getMessage();
+        if("en_us".equals(language)){
+            msg = msg.replaceAll("局号错误!","Game number Incorrect!");
+            msg = msg.replaceAll("登录用户","Account");
+            msg = msg.replaceAll("不存在","Does not exist");
+        }
+        return StringUtils.isNotNull(code) ? AjaxResult.error(code, msg) : AjaxResult.error(msg);
     }
 
     /**
