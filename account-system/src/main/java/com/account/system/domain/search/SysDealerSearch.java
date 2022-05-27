@@ -14,7 +14,7 @@ public class SysDealerSearch {
      * 开始时间
      */
     @ApiModelProperty("开始时间")
-    private String beginTime;
+    private String startTime;
 
     /**
      * 结束时间

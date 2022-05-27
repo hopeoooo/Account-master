@@ -13,8 +13,8 @@
             <if test="userName != null and userName != ''">
                 AND user_name like concat('%', #{userName}, '%')
             </if>
-            <if test="beginTime != null and beginTime != ''">
-                AND date_format( join_time ,'%Y-%m-%d')<![CDATA[>=]]> #{beginTime}
+            <if test="startTime != null and startTime != ''">
+                AND date_format( join_time ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
                 AND date_format( join_time ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
@@ -45,8 +45,8 @@
         FROM
             sys_dealer d
                 LEFT JOIN sys_bet_info b ON b.dealer = d.user_name
-            <if test="beginTime != null and beginTime != ''">
-                AND date_format( b.create_time ,'%Y-%m-%d')<![CDATA[>=]]> #{beginTime}
+            <if test="startTime != null and startTime != ''">
+                AND date_format( b.create_time ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
             </if>
             <if test="endTime != null and endTime != ''">
                 AND date_format( b.create_time ,'%Y-%m-%d') <![CDATA[<=]]> #{endTime}
