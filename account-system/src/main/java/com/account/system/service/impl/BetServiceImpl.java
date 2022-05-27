@@ -314,13 +314,16 @@ public class BetServiceImpl implements BetService {
      * 开牌 计算赔码数
      */
     public BigDecimal getPayOut(JSONObject bet, String gameResult, Long gameId) {
-        SysBet sysBet = new SysBet();
-        sysBet.setCard(bet.getString("card"));
-        sysBet.setGameResult(gameResult);
-        sysBet.setType(bet.getInteger("type"));
-        sysBet.setCreateBy(SecurityUtils.getUsername());
-        Map map = betUtilService.getBetInfos(bet, sysBet, gameId);
-        BigDecimal payout = (BigDecimal) map.get("payout");
+        BigDecimal payout = BigDecimal.ZERO;
+        if(checkBets(bet)){
+            SysBet sysBet = new SysBet();
+            sysBet.setCard(bet.getString("card"));
+            sysBet.setGameResult(gameResult);
+            sysBet.setType(bet.getInteger("type"));
+            sysBet.setCreateBy(SecurityUtils.getUsername());
+            Map map = betUtilService.getBetInfos(bet, sysBet, gameId);
+            payout = (BigDecimal) map.get("payout");
+        }
         return payout;
     }
 
