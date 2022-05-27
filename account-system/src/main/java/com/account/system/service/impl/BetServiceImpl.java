@@ -787,17 +787,18 @@ public class BetServiceImpl implements BetService {
         String newCard = sysBet.getCard();
         if(!oldCard.equals(newCard)){
             //生成 旧card 筹码帐变记录
-            if(type == 0){
+            if (chipRecord[0].compareTo(BigDecimal.ZERO) != 0) {
                 SysMembers sysMembers = sysMembersMapper.selectmembersByCard(oldCard);
-                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), chipRecord[0].abs(), sysMembers.getChip().add(chipRecord[0])
+                SysChipRecord sysChipRecord = new SysChipRecord(oldCard, sysMembers.getChip().subtract(chipRecord[0]), chipRecord[0].abs(), sysMembers.getChip()
                         , BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, sysBet.getBetId());
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecord.setCreateBy(SecurityUtils.getUsername());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
-            }else if(type == 2){
+            }
+            if(chipRecordTh[0].compareTo(BigDecimal.ZERO)!=0){
                 SysMembers sysMembers = sysMembersMapper.selectmembersByCard(oldCard);
-                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                        sysMembers.getChipTh(), chipRecordTh[0].abs(), sysMembers.getChipTh().add(chipRecordTh[0]), sysBet.getBetId());
+                SysChipRecord sysChipRecord = new SysChipRecord(oldCard, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                        sysMembers.getChipTh().subtract(chipRecordTh[0]), chipRecordTh[0].abs(),sysMembers.getChipTh(), sysBet.getBetId());
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecord.setCreateBy(SecurityUtils.getUsername());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
@@ -805,15 +806,15 @@ public class BetServiceImpl implements BetService {
             //生成 新card 筹码帐变记录
             if(sysBet.getType() == 0){
                 SysMembers sysMembers = sysMembersMapper.selectmembersByCard(newCard);
-                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), membersChip.abs(), sysMembers.getChip().add(membersChip)
+                SysChipRecord sysChipRecord = new SysChipRecord(newCard, sysMembers.getChip().subtract(membersChip), membersChip.abs(), sysMembers.getChip()
                         , BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, sysBet.getBetId());
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecord.setCreateBy(SecurityUtils.getUsername());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
             }else if(sysBet.getType() == 2){
                 SysMembers sysMembers = sysMembersMapper.selectmembersByCard(newCard);
-                SysChipRecord sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                        sysMembers.getChipTh(), membersChip.abs(), sysMembers.getChipTh().add(membersChip), sysBet.getBetId());
+                SysChipRecord sysChipRecord = new SysChipRecord(newCard, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
+                        sysMembers.getChipTh().subtract(membersChip), membersChip.abs(), sysMembers.getChipTh(), sysBet.getBetId());
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecord.setCreateBy(SecurityUtils.getUsername());
                 sysChipRecordMapper.addChipRecord(sysChipRecord);
@@ -824,12 +825,12 @@ public class BetServiceImpl implements BetService {
                 //生成 筹码帐变记录
                 SysMembers sysMembers = sysMembersMapper.selectmembersByCard(sysBet.getCard());
                 SysChipRecord sysChipRecord = new SysChipRecord();
-                if (sysBet.getType()  == 0 || type == 0) {
-                    sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip(), chipRecord[0].add(membersChip).abs(), sysMembers.getChip().add(chipRecord[0].add(membersChip))
+                if (sysBet.getType() == 0 || type == 0) {
+                    sysChipRecord = new SysChipRecord(sysBet.getCard(), sysMembers.getChip().subtract(chipRecord[0].add(membersChip)), chipRecord[0].add(membersChip).abs(), sysMembers.getChip()
                             , BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, sysBet.getBetId());
-                } else if (sysBet.getType()  == 2  || type == 2) {
+                } else if (sysBet.getType() == 2 || type == 2) {
                     sysChipRecord = new SysChipRecord(sysBet.getCard(), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
-                            sysMembers.getChipTh(), chipRecordTh[0].add(membersChip).abs(), sysMembers.getChipTh().add(chipRecordTh[0].subtract(membersChip)), sysBet.getBetId());
+                            sysMembers.getChipTh().subtract(chipRecordTh[0].add(membersChip)), chipRecordTh[0].add(membersChip).abs(), sysMembers.getChipTh(), sysBet.getBetId());
                 }
                 sysChipRecord.setType(ChipChangeEnum.BET_EDIT_CHIP.getCode());
                 sysChipRecord.setCreateBy(SecurityUtils.getUsername());
