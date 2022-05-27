@@ -65,6 +65,7 @@ public class DealerController extends BaseController {
         return AjaxResult.success();
     }
 
+
     @PreAuthorize("@ss.hasPermi('account:dealer:list')")
     @GetMapping("/edit")
     @ApiOperation(value = "编辑荷官")
