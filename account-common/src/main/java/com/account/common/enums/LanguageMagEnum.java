@@ -8,6 +8,7 @@ public enum LanguageMagEnum {
 
     SUCCESS("操作成功", "success"),
     SEARCH_SUCCESS("查询成功", "success"),
+    JOB_NUMBER_EXISTS("工号已存在", "Job number already exists"),
 
     CARD_NUMBER("参数错误,卡号为空!", "Parameter error, card number is empty!"),
     CARD_NUMBER_DOES("当前卡号不存在!", "Current card number does not exist!"),
