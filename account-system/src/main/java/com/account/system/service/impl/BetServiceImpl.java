@@ -579,22 +579,23 @@ public class BetServiceImpl implements BetService {
             SysTableManagement sysTableManagement = sysTableManagementMapper.selectTableInfo(betRepair.getTableId(),null,null);
             Long sysGameTotalNum = sysTableManagement.getVersion()*10000+sysTableManagement.getBootNum()*100+sysTableManagement.getGameNum();
             Long gameTotalNum = betRepair.getVersion()*10000+betRepair.getBootNum()*100+betRepair.getGameNum();
-            if((betRepair.getGameId()==1 || betRepair.getGameId()==2) && gameTotalNum>sysGameTotalNum){
-                throw new ServiceException("局号错误!");
+            if((betRepair.getGameId()==1 || betRepair.getGameId()==2) ){
+                if(gameTotalNum>sysGameTotalNum){
+                    throw new ServiceException("局号错误!");
+                }
+                //记录赛果
+                if (betRepair.getGameResult() != null) {
+                    SysGameResult result = new SysGameResult();
+                    result.setGameId(betRepair.getGameId());
+                    result.setTableId(betRepair.getTableId());
+                    result.setVersion(betRepair.getVersion());
+                    result.setBootNum(betRepair.getBootNum());
+                    result.setGameNum(betRepair.getGameNum());
+                    result.setGameResult(betRepair.getGameResult());
+                    result.setCreateBy(SecurityUtils.getUsername());
+                    sysGameResultMapper.saveGameResult(result);
+                }
             }
-            //记录赛果
-            if (betRepair.getGameResult() != null) {
-                SysGameResult result = new SysGameResult();
-                result.setGameId(betRepair.getGameId());
-                result.setTableId(betRepair.getTableId());
-                result.setVersion(betRepair.getVersion());
-                result.setBootNum(betRepair.getBootNum());
-                result.setGameNum(betRepair.getGameNum());
-                result.setGameResult(betRepair.getGameResult());
-                result.setCreateBy(SecurityUtils.getUsername());
-                sysGameResultMapper.saveGameResult(result);
-            }
-
         }
 
         BigDecimal tableChip = BigDecimal.ZERO;
