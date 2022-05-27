@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,10 +45,16 @@ public class DealerController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userName", value = "工号", dataType = "String", required = true, paramType = "path")
     })
-    public AjaxResult checkUserName(String userName) {
+    public AjaxResult checkUserName(String userName, @RequestHeader("language") String language) {
         SysDealer sysDealer = dealerService.selectDealerByUserName(userName);
         if (sysDealer==null || StringUtils.isEmpty(sysDealer.getUserName())) {
-            return AjaxResult.error();
+            if("en_us".equals(language)){
+                return AjaxResult.error("There is no account for this dealer");
+            }
+            return AjaxResult.error("不存在该荷官账号");
+        }
+        if("en_us".equals(language)){
+            return AjaxResult.success("Successful Operation");
         }
         return AjaxResult.success();
     }
