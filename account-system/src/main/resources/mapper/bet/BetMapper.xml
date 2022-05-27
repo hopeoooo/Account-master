@@ -554,7 +554,8 @@
                tie,
                pump,
                create_time createTime,
-               create_by createBy
+               create_by createBy,
+               dealer
         from sys_bet_info
         where bet_id = #{betId}
     </select>

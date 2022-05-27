@@ -89,6 +89,7 @@ public class BetServiceImpl implements BetService {
                 jsonObject.put(sysBetInfo.getBetOption(), sysBetInfo.getBetMoney());
 
                 //修改 注单明细
+                sysBet.setDealer(sysBetInfo.getDealer());
                 Map map = betUtilService.getBetInfos(jsonObject, sysBet, gameResult.getGameId());
                 List<SysBetInfo> betInfos = (List) map.get("list");
                 betMapper.updateBetInfos(betInfos.get(0));
@@ -723,6 +724,7 @@ public class BetServiceImpl implements BetService {
         SysBet sysBet = betMapper.getBet(betUpdate.getBetId());
         String oldCard = sysBet.getCard();
         list.forEach(oldBetInfo -> {
+            sysBet.setDealer(oldBetInfo.getDealer());
             //修改 洗码
             if (oldBetInfo.getWater().compareTo(BigDecimal.ZERO) != 0) {
                 if (oldBetInfo.getType() == 0 || oldBetInfo.getType() == 1 || oldBetInfo.getType() == 4) {
