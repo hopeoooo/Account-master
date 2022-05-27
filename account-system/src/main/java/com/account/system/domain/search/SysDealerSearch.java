@@ -9,6 +9,8 @@ public class SysDealerSearch {
 
     @ApiModelProperty("工号")
     private String userName;
+    @ApiModelProperty("姓名")
+    private String nickName;
 
     /**
      * 开始时间

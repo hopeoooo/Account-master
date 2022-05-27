@@ -13,6 +13,9 @@
             <if test="userName != null and userName != ''">
                 AND user_name like concat('%', #{userName}, '%')
             </if>
+            <if test="nickName != null and nickName != ''">
+                AND nick_name like concat('%', #{nickName}, '%')
+            </if>
             <if test="startTime != null and startTime != ''">
                 AND date_format( join_time ,'%Y-%m-%d')<![CDATA[>=]]> #{startTime}
             </if>
