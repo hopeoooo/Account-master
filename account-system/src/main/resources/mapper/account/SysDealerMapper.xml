@@ -6,7 +6,7 @@
 
     <select id="selectDealerList" parameterType="SysDealerSearch" resultType="SysDealer">
         select user_id userId,nick_name nickName,user_name userName,
-        phonenumber,sex,address,join_time joinTime,brithday
+        phonenumber,sex,address,join_time joinTime,brithday,post
         from
         sys_dealer
         <where>
@@ -71,6 +71,7 @@
         <if test="nickName != null and nickName != '' ">nick_name,</if>
         <if test="phonenumber != null and phonenumber != '' ">phonenumber,</if>
         <if test="sex != null ">sex,</if>
+        <if test="post != null ">post,</if>
         <if test="address != null ">address,</if>
         <if test="joinTime != null ">join_time,</if>
         <if test="brithday != null ">brithday,</if>
@@ -81,6 +82,7 @@
         <if test="nickName != null and nickName != '' ">#{nickName},</if>
         <if test="phonenumber != null and phonenumber != '' ">#{phonenumber},</if>
         <if test="sex != null ">#{sex},</if>
+        <if test="post != null ">#{post},</if>
         <if test="address != null ">#{address},</if>
         <if test="joinTime != null ">#{joinTime},</if>
         <if test="brithday != null ">#{brithday},</if>
@@ -96,8 +98,9 @@
         <set>
             <if test="userName != null and userName != '' ">user_name=#{userName},</if>
             <if test="nickName != null and nickName != '' ">nick_name=#{nickName},</if>
-            <if test="phonenumber != null and phonenumber != '' ">phonenumber=#{phonenumber},</if>
+            <if test="phonenumber != null ">phonenumber=#{phonenumber},</if>
             <if test="sex != null ">sex=#{sex},</if>
+            <if test="post != null ">post=#{post},</if>
             <if test="address != null ">address=#{address},</if>
             <if test="joinTime != null ">join_time=#{joinTime},</if>
             <if test="brithday != null ">brithday=#{brithday},</if>
