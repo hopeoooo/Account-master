@@ -14,10 +14,10 @@
                 AND user_name like concat('%', #{userName}, '%')
             </if>
             <if test="beginTime != null and beginTime != ''">
-                and date_format(join_time,'%y%m%d') &gt;= date_format(#{beginTime},'%y%m%d')
+                AND date_format( join_time ,'%Y-%m-%d')<![CDATA[>=]]> #{beginTime}
             </if>
             <if test="endTime != null and endTime != ''">
-                and date_format(join_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+                AND date_format( join_time ,'%Y-%m-%d')<![CDATA[<=]]> #{endTime}
             </if>
         </where>
         order by create_time desc
