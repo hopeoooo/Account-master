@@ -22,6 +22,8 @@ public class SysDealer extends BaseEntity {
 
     @ApiModelProperty("姓名")
     private String nickName;
+    @ApiModelProperty("职位")
+    private String post;
 
     @ApiModelProperty("联系方式")
     private String phonenumber;
