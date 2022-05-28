@@ -530,7 +530,7 @@ public class BetServiceImpl implements BetService {
     public List<Map> selectDailyReportList(ReportSearch reportSearch) {
         List list = new ArrayList();
         if ("0".equals(reportSearch.getTimeType())) {
-            List receiptTimes = receiptMapper.selectReceiptTimes(new WinLoseReportSearch(reportSearch.getStartTime(), reportSearch.getEndTime()));
+            List receiptTimes = receiptMapper.selectReceiptTimes(new WinLoseReportSearch(reportSearch.getStartTime()+" 00:00:00", reportSearch.getEndTime()+" 23:59:59"));
             if (StringUtils.isNotEmpty(receiptTimes)) {
                 list = receiptMapper.selectDailyReportListByReceiptTimes(reportSearch, receiptTimes);
             }
