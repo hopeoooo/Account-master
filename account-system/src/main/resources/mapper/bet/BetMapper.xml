@@ -605,6 +605,7 @@
                 <foreach item="item" index="index" collection="list" separator="or">
                     ( b.version <![CDATA[>=]]> #{item.minVersion}
                     AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                    AND b.table_id = #{item.tableId}
                     )
                 </foreach>
                 )
@@ -654,6 +655,7 @@
                 <foreach item="item" index="index" collection="list" separator="or">
                     ( b.version <![CDATA[>=]]> #{item.minVersion}
                     AND b.version <![CDATA[<=]]> #{item.maxVersion}
+                    AND b.table_id = #{item.tableId}
                     )
                 </foreach>
                 )
