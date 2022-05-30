@@ -189,7 +189,7 @@ public class BetPusherController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:pusher:edit')")
+    @PreAuthorize("@ss.hasPermi('bet:pusher:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

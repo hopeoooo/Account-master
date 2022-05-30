@@ -189,7 +189,7 @@ public class BetSanGongController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:sangong:edit')")
+    @PreAuthorize("@ss.hasPermi('bet:sangong:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

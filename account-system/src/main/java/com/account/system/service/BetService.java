@@ -80,4 +80,6 @@ public interface BetService {
     Map selectTablePlumbingTotal(String startTime, String endTime,String timeType);
 
     void nextGameNum(SysTableManagement sysTableManagement);
+
+    boolean checkPassword(String password);
 }

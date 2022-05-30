@@ -413,6 +413,10 @@ public class BetServiceImpl implements BetService {
      */
     @Transactional
     public void editChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        //验证密码
+        if(reckon.getPassword()==null || !checkPassword(reckon.getPassword())){
+            throw new ServiceException("密码错误");
+        }
         BigDecimal chipAdd = checkDecimal(reckon.getChipAdd()).subtract(checkDecimal(reckon.getChipSub()));
         BigDecimal cashAdd = checkDecimal(reckon.getCashAdd()).subtract(checkDecimal(reckon.getCashSub()));
         BigDecimal insuranceAdd = checkDecimal(reckon.getInsuranceAdd()).subtract(checkDecimal(reckon.getInsuranceSub()));
@@ -484,6 +488,10 @@ public class BetServiceImpl implements BetService {
      */
     @Transactional
     public void receiptEditChip(Reckon reckon, SysTableManagement sysTableManagement) {
+        //验证密码
+        if(reckon.getPassword()==null || !checkPassword(reckon.getPassword())){
+            throw new ServiceException("密码错误");
+        }
         SysReceipt sysReceipt = new SysReceipt();
         sysReceipt.setCreateBy(SecurityUtils.getUsername());
         sysReceipt.setTableId(sysTableManagement.getTableId());
@@ -994,6 +1002,14 @@ public class BetServiceImpl implements BetService {
             if (amount != null && amount.compareTo(BigDecimal.ZERO) > 0) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean checkPassword(String password) {
+        SysOddsConfigure sysOddsConfigure = oddsConfigureMapper.selectConfigInfo();
+        if(password.equals(sysOddsConfigure.getPassword())){
+            return true;
         }
         return false;
     }

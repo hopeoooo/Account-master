@@ -3,6 +3,7 @@ package com.account.controller.bet;
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
 import com.account.common.enums.ResultEnum;
+import com.account.common.exception.ServiceException;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
 import com.account.common.utils.StringUtils;
@@ -132,6 +133,9 @@ public class BetBaccaratController extends BaseController {
     @PostMapping("/update")
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
+        if(sysGameResult.getPassword()==null && betService.checkPassword(sysGameResult.getPassword())){
+            throw new ServiceException("密码错误");
+        }
         //根据ip获取台桌信息
         String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,1l);
@@ -237,7 +241,7 @@ public class BetBaccaratController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:baccarat:edit')")
+    @PreAuthorize("@ss.hasPermi('bet:baccarat:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

@@ -77,4 +77,7 @@ public class Reckon {
 
     @ApiModelProperty("明细 泰铢")
     private String infoTh;
+
+    @ApiModelProperty("密码")
+    private String password;
 }

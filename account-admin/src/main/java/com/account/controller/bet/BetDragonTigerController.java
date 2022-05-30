@@ -2,7 +2,7 @@ package com.account.controller.bet;
 
 import com.account.common.core.controller.BaseController;
 import com.account.common.core.domain.AjaxResult;
-import com.account.common.enums.ResultEnum;
+import com.account.common.exception.ServiceException;
 import com.account.common.utils.SecurityUtils;
 import com.account.common.utils.ServletUtils;
 import com.account.common.utils.StringUtils;
@@ -127,11 +127,18 @@ public class BetDragonTigerController extends BaseController {
     @PostMapping("/update")
     @ApiOperation(value = "路珠修改")
     public AjaxResult update(SysGameResult sysGameResult) {
+        if(sysGameResult.getPassword()==null && betService.checkPassword(sysGameResult.getPassword())){
+            throw new ServiceException("密码错误");
+        }
         //根据ip获取台桌信息
         String ip = IpUtils.checkIpAddr(ServletUtils.getRequest());
         SysTableManagement sysTableManagement = betService.getTableByIp(ip,2l);
         if (StringUtils.isNull(sysTableManagement)) {
             return AjaxResult.error("ip地址错误");
+        }
+        String gameResult = sysGameResult.getGameResult();
+        if (!"龙".equals(gameResult) && !"虎".equals(gameResult) && !"和".equals(gameResult)) {
+            return AjaxResult.error("赛果格式错误");
         }
         sysGameResult.setUpdateBy(SecurityUtils.getUsername());
         AsyncManager.me().execute(new TimerTask() {
@@ -228,7 +235,7 @@ public class BetDragonTigerController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:dragontiger:edit')")
+    @PreAuthorize("@ss.hasPermi('bet:dragontiger:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

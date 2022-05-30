@@ -188,7 +188,7 @@ public class BetNiuNiuController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @PreAuthorize("@ss.hasPermi('bet:niuniu:edit')")
+    @PreAuthorize("@ss.hasPermi('bet:niuniu:list')")
     @PostMapping("/edit")
     @ApiOperation(value = "点码||收码 确认修改")
     public AjaxResult edit(Reckon reckon) {

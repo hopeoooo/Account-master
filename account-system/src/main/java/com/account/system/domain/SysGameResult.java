@@ -31,6 +31,9 @@ public class SysGameResult extends BaseEntity {
     @ApiModelProperty(value ="游戏结果")
     private String gameResult;
 
+    @ApiModelProperty(value ="密码")
+    private String password;
+
     public SysGameResult() {
     }
 
