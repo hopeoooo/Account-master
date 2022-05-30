@@ -78,4 +78,9 @@ public class SysOddsConfigure extends BaseEntity {
     @ApiModelProperty(value = "百家乐-幸运6（2张牌）")
     private String baccaratThere;
 
+
+
+    @ApiModelProperty(value = "操作密码")
+    private String password;
+
 }
