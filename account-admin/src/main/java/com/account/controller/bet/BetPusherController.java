@@ -65,7 +65,7 @@ public class BetPusherController extends BaseController {
         map.put("tableId", sysTableManagement.getTableId());
         map.put("version", sysTableManagement.getVersion());
         map.put("bootNum", sysTableManagement.getBootNum());
-        map.put("gameNum", sysTableManagement.getGameNum());
+        map.put("gameNum", sysTableManagement.getGameNum()+1);
 
         map.put("chip", sysTableManagement.getChip());
         map.put("cash", sysTableManagement.getCash());
